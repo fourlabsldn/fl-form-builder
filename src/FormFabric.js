@@ -1,20 +1,4 @@
 /**
- * Parent class for form components
- * @class FormComponent
- */
-function FormComponent() {
-  if (!(this instanceof FormComponent)) {
-    return new FormComponent();
-  }
-
-  this.container = this.createElement('div');
-}
-
-FormComponent.prototype.destroy = function destroy() {
-  this.container.remove();
-};
-
-/**
  * Singleton to create form components
  * @class FormFabric
  * @param {HTMLElement} el Where the fabric will be put.
@@ -59,35 +43,3 @@ function FormFabric(el) {
 
   this.init();
 }
-
-xController(function flFormBuilder(xDivEl) {
-  xDivEl.innerText = "I'm working, bitches!";
-
-});
-
-
-module.exports = function () {
-  function Aconst() {
-    this.test = ['a', 'b'];
-  }
-
-  Aconst.prototype.list = function list() {
-    this.test.forEach(function (each) {
-      console.log(each);
-    });
-  };
-
-  function AChild() {
-    Aconst.apply(this);
-    this.name = 'achild';
-  }
-
-  AChild.prototype.testIt = function () {
-    console.log('The name is ', this.name);
-  };
-
-  return {
-    Aconst: Aconst,
-    AChild: AChild,
-  };
-};

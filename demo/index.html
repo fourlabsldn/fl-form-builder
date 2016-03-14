@@ -4,13 +4,32 @@
   <meta charset="UTF-8">
   <title>Form Builder - DEMO</title>
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="../bower_components/x-div/js/x-div.js">
+  <script src="../bower_components/x-div/js/x-div.js"> </script>
+  <style>
+    .navbar {
+      height: 40px;
+    }
+    .greyed-out {
+      background-color: #eee;
+    }
+    .sidebar {
+      min-height: 500px;
+    }
+    @media (max-width: 750px) {
+      .sidebar {
+        display: none;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <div class="container">
+    <div class="row navbar greyed-out"></div>
     <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-10">
+      <div class="col-sm-3 sidebar greyed-out">
+      </div>
+      <div class="col-sm-9">
         <x-div data-controller="../dist/fl-form-builder"></x-div>
       </div>
     </div>

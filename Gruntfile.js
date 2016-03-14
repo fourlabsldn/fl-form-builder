@@ -48,6 +48,12 @@ module.exports = function (grunt) {
           livereload: true,
         },
       },
+      demo: {
+        files: 'demo/**/*.*',
+        options: {
+          livereload: true,
+        },
+      },
     },
   });
 
