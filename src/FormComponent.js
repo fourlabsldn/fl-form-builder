@@ -33,3 +33,12 @@ FormComponent.prototype.required = function required(isRequired) {
     el.setAttribute('required', true);
   });
 };
+
+FormComponent.prototype.addPlaceHolder = function addPlaceHolder() {
+  this.placeHolder = this.add('placeholder', 'Insert an option');
+  this.placeHolder.setAttribute('disabled', true);
+};
+
+FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
+  this.placeHolder.remove();
+};

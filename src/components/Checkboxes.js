@@ -81,3 +81,10 @@ Checkboxes.prototype.countBoxes = function () {
 Checkboxes.prototype.getBoxes = function () {
   return [].slice.call(this.element.children);
 };
+
+/**
+ * @override addPlaceHolder
+ */
+Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
+  this.placeHolder = this.add('placeholder', 'Check a box');
+};

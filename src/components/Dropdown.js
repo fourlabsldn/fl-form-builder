@@ -17,18 +17,11 @@ function Dropdown(name) {
  * @return {void}
  */
 Dropdown.prototype.init = function init(name) {
-  var select = document.createElement('select');
-  select.setAttribute('name', name);
+  this.wrapper = document.createElement('select');
+  this.wrapper.setAttribute('name', name);
+  this.element.appendChild(this.wrapper);
 
-  //Create an initial placeholder option
-  var placeHolder = document.createElement('option');
-  placeHolder.innerText = 'Select an option';
-  placeHolder.setAttribute('value', '');
-  placeHolder.setAttribute('disabled', true);
-  placeHolder.setAttribute('selected', true);
-
-  select.appendChild(placeHolder);
-  this.element.appendChild(select);
+  this.addPlaceHolder();
 };
 
 /**
@@ -36,13 +29,24 @@ Dropdown.prototype.init = function init(name) {
  * @method add
  * @param {String} value
  * @param {String} legend [optional]
+ * @return {HTMLElement} the option created
  */
 Dropdown.prototype.add = function add(value, legend) {
   if (!value) {
     throw new Error('Dropdown.add(): ' + value + ' is not a valid "value" value.');
+  } else if (this.placeHolder) {
+    this.removePlaceHolder();
   }
 
   var newOp = document.createElement('option');
   newOp.setAttribute(value, value);
   newOp.innerText = legend || value;
+  this.wrapper.appendChild(newOp);
+  return newOp;
+};
+
+Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
+  this.placeHolder = this.add('placeholder', 'Select an option');
+  this.placeHolder.setAttribute('disabled', true);
+  this.placeHolder.setAttribute('selected', true);
 };
