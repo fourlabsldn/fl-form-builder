@@ -19,6 +19,8 @@ function Dropdown(name) {
 Dropdown.prototype.init = function init(name) {
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
+  this.wrapper.classList.add('fl-dropdown');
+
   this.element.appendChild(this.wrapper);
 
   this.addPlaceHolder();

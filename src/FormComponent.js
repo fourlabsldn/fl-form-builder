@@ -13,6 +13,7 @@ function FormComponent(name) {
   }
 
   this.element = this.createElement('div');
+  this.element.classList.add('fl-form-component');
   this.name = name;
   this.init(name);
 }

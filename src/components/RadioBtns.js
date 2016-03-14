@@ -38,6 +38,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.setAttribute('type', 'radio');
   newRadio.setAttribute('name', this.name);
   newRadio.setAttribute('value', value);
+  newRadio.classList.add('fl-radio-btn');
   newRadio.innerText = legend || value;
 
   this.element.appendChild(newRadio);

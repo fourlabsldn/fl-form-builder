@@ -13,6 +13,7 @@ function FormComponent(name) {
   }
 
   this.element = this.createElement('div');
+  this.element.classList.add('fl-form-component');
   this.name = name;
   this.init(name);
 }
@@ -138,6 +139,8 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('type', 'checkbox');
   newBox.setAttribute('name', this.name);
   newBox.setAttribute('value', value);
+  newBox.classList.add('fl-check-box');
+
   if (this.required) { newBox.setAttribute('required', true); }
 
   var legendNode = document.createTextNode(legend || value);
@@ -210,6 +213,8 @@ function Dropdown(name) {
 Dropdown.prototype.init = function init(name) {
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
+  this.wrapper.classList.add('fl-dropdown');
+
   this.element.appendChild(this.wrapper);
 
   this.addPlaceHolder();
@@ -282,6 +287,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.setAttribute('type', 'radio');
   newRadio.setAttribute('name', this.name);
   newRadio.setAttribute('value', value);
+  newRadio.classList.add('fl-radio-btn');
   newRadio.innerText = legend || value;
 
   this.element.appendChild(newRadio);
@@ -307,8 +313,12 @@ function TextArea(name) {
  * @return {void}
  */
 TextArea.prototype.init = function init(name) {
-
-}
+  var area = document.createElement('textarea');
+  ara.setAttribute('name', name);
+  area.setAttribute('rows', 5);
+  area.classList.add('fl-text-area');
+  this.element.appendChild(area);
+};
 
 /*globals FormComponent*/
 
@@ -329,8 +339,21 @@ function TextBox(name) {
  * @return {void}
  */
 TextBox.prototype.init = function init(name) {
+  var box = document.createElement('input');
+  box.setAttribute('type', 'text');
+  box.setAttribute('name', name);
+  box.classList.add('fl-text-box');
+};
 
-}
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+TextBox.prototype.init = function init(name) {
+
+};
 
 /*globals FormFabric, xController*/
 

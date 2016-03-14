@@ -17,5 +17,9 @@ function TextArea(name) {
  * @return {void}
  */
 TextArea.prototype.init = function init(name) {
-
-}
+  var area = document.createElement('textarea');
+  ara.setAttribute('name', name);
+  area.setAttribute('rows', 5);
+  area.classList.add('fl-text-area');
+  this.element.appendChild(area);
+};

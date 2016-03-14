@@ -38,6 +38,8 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('type', 'checkbox');
   newBox.setAttribute('name', this.name);
   newBox.setAttribute('value', value);
+  newBox.classList.add('fl-check-box');
+
   if (this.required) { newBox.setAttribute('required', true); }
 
   var legendNode = document.createTextNode(legend || value);
