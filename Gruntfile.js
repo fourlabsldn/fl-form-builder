@@ -55,6 +55,14 @@ module.exports = function (grunt) {
         },
       },
     },
+    jasmine: {
+      pivotal: {
+        src: 'src/**/*.js',
+        options: {
+          specs: 'tests/*-specs.js',
+        },
+      },
+    },
   });
 
   grunt.loadNpmTasks('grunt-open');
@@ -62,6 +70,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('default', []);
   grunt.registerTask('demo', ['open']);
