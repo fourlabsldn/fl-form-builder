@@ -1,5 +1,6 @@
 {
   "esversion": 6,
+  "browser": true,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
@@ -9,6 +10,5 @@
   "sub": true,
   "undef": true,
   "boss": true,
-  "eqnull": true,
-  "node": true
+  "eqnull": true
 }
