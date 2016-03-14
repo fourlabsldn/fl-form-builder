@@ -39,8 +39,12 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.setAttribute('name', this.name);
   newRadio.setAttribute('value', value);
   newRadio.classList.add('fl-radio-btn');
-  newRadio.innerText = legend || value;
 
-  this.element.appendChild(newRadio);
+  var newLabel = document.createElement('label');
+  var labelText = document.creteTextNode(legend || value);
+  newLabel.appendChild(newRadio);
+  newLabel.appendChild(labelText);
+
+  this.element.appendChild(newLabel);
   return newRadio;
 };
