@@ -13,6 +13,7 @@ function FormComponent(name) {
   }
 
   this.element = this.createElement('div');
+  this.name = name;
   this.init(name);
 }
 

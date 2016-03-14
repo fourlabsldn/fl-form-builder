@@ -16,8 +16,9 @@ function Dropdown(name) {
  * @param  {String} name
  * @return {void}
  */
-Dropdown.prototype.init = function init() {
+Dropdown.prototype.init = function init(name) {
   var select = document.createElement('select');
+  select.setAttribute('name', name);
 
   //Create an initial placeholder option
   var placeHolder = document.createElement('option');
@@ -30,7 +31,18 @@ Dropdown.prototype.init = function init() {
   this.element.appendChild(select);
 };
 
-
+/**
+ * Adds a new option to the dropdown
+ * @method add
+ * @param {String} value
+ * @param {String} legend [optional]
+ */
 Dropdown.prototype.add = function add(value, legend) {
-  var newOp = document.createElement('option')
-}
+  if (!value) {
+    throw new Error('Dropdown.add(): ' + value + ' is not a valid "value" value.');
+  }
+
+  var newOp = document.createElement('option');
+  newOp.setAttribute(value, value);
+  newOp.innerText = legend || value;
+};
