@@ -56,10 +56,13 @@ module.exports = function (grunt) {
       },
     },
     jasmine: {
-      pivotal: {
-        src: 'src/**/*.js',
+      main: {
+        src: 'dist/fl-form-builder.js',
         options: {
-          specs: 'tests/*-specs.js',
+          specs: 'tests/**/*-specs.js',
+          vendor: [
+            'bower_components/x-div/js/x-div-tester.js'
+          ]
         },
       },
     },
