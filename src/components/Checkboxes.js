@@ -1,25 +1,24 @@
 /*globals FormComponent*/
+
 /**
  * @class Checkboxes
  * @extends FormComponent
  */
 function Checkboxes(name) {
-  if (!(this instanceof Checkboxes)) {
-    return new Checkboxes();
-  }
-
-  this.init = function init(name) {
-    if (typeof name !== 'string') {
-      throw new Error('Checkboxes.init(): ' + name + ' is not a valid "name" parameter.');
-    }
-
-    this.name = name + '[]';
-    this.required = false;
-  };
+  if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
   FormComponent.apply(this); //Inheritance part
   this.init(name);
 }
+
+Checkboxes.prototype.init = function init(name) {
+  if (typeof name !== 'string') {
+    throw new Error('Checkboxes.init(): ' + name + ' is not a valid "name" parameter.');
+  }
+
+  this.name = name + '[]';
+  this.required = false;
+};
 
 /**
  * Adds one checkbox to a group of checkboxes.
@@ -44,12 +43,12 @@ Checkboxes.prototype.add = function add(value, legend) {
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);
-  this.container.appendChild(label);
+  this.element.appendChild(label);
 };
 
 /**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
- * @method required
+ * @override @method required
  * @param  {boolean} isRequired
  * @return {Boolean}      Whether required was set or not.
  */
@@ -71,7 +70,7 @@ Checkboxes.prototype.required = function required(isRequired) {
  * @return {integer} Amount of checkboxes in the component
  */
 Checkboxes.prototype.countBoxes = function () {
-  return this.container.childElementCount;
+  return this.element.childElementCount;
 };
 
 /**
@@ -79,5 +78,5 @@ Checkboxes.prototype.countBoxes = function () {
  * @return {Array} collection of checkbox HTMLElements
  */
 Checkboxes.prototype.getBoxes = function () {
-  return [].slice.call(this.container.children);
+  return [].slice.call(this.element.children);
 };

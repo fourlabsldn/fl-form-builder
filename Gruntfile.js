@@ -1,3 +1,4 @@
+/*globals module*/
 module.exports = function (grunt) {
 
   grunt.initConfig({
@@ -8,7 +9,7 @@ module.exports = function (grunt) {
     },
     concat: {
       dist: {
-        src: ['src/*.js'],
+        src: ['src/**/*.js'],
         dest: 'dist/fl-form-builder.js',
       },
     },

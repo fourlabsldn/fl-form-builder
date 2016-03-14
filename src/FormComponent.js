@@ -7,9 +7,22 @@ function FormComponent() {
     return new FormComponent();
   }
 
-  this.container = this.createElement('div');
+  this.element = this.createElement('div');
 }
 
 FormComponent.prototype.destroy = function destroy() {
-  this.container.remove();
+  this.element.remove();
+};
+
+/**
+ * Sets checkboxes as required. Only does that if there is only one checkbox.
+ * @method required
+ * @param  {boolean} isRequired
+ * @return {Boolean}      Whether required was set or not.
+ */
+FormComponent.prototype.required = function required(isRequired) {
+  var els = this.element.children;
+  els.forEach(function (el) {
+    el.setAttribute('required', true);
+  });
 };
