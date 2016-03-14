@@ -5,12 +5,11 @@
  * @class FormFabric
  * @param {HTMLElement} el Where the fabric will be put.
  */
-function FormFabric() {
+function FormFabric(formBody) {
   if (!(this instanceof FormFabric)) {
     return new FormFabric();
   }
 
-  this.element = document.createElement('div');
   var formComponents = [
     { desc: 'Radio buttons', constr: RadioBtns },
     { desc: 'Checkboxes', constr: Checkboxes },
@@ -18,6 +17,19 @@ function FormFabric() {
     { desc: 'Text area', constr: TextArea },
     { desc: 'Dropdown', constr: Dropdown },
   ];
+
+  function createElement(Constr, formBody) {
+    var name = 'Temp name' + (Math.floor(Math.random() * 1000));
+    var comp = new Constr(name);
+    var ev = new CustomEvent( 'newElement',
+      {
+        detail: {	comp: 'Hello World!' },
+        bubbles: true,
+        cancelable: true,
+      });
+
+    formBody.dispatchEvent(ev);
+  }
 
   /**
    * @function createOptionsDropdown
@@ -37,6 +49,8 @@ function FormFabric() {
   }
 
   this.init = function init() {
+    this.element = document.createElement('div');
+    this.element.classList.add('fl-form-fabric');
     var options = createOptionsDropdown();
 
     var addBtn = document.createElement('button');
@@ -44,11 +58,12 @@ function FormFabric() {
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;
       console.log('Create a ', formComponents[idx].desc);
+      createElement(formComponents[idx].constr, formBody);
     });
 
     this.element.appendChild(addBtn);
     this.element.appendChild(options);
   };
 
-  this.init();
+  this.init(formBody);
 }

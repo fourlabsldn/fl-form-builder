@@ -7,8 +7,10 @@
 function RadioBtns(name) {
   if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+RadioBtns.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -17,6 +19,8 @@ function RadioBtns(name) {
  * @return {void}
  */
 RadioBtns.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
   //Add placeholder
   this.addPlaceHolder();
 };

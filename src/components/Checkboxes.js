@@ -7,8 +7,10 @@
 function Checkboxes(name) {
   if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+Checkboxes.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -17,6 +19,7 @@ function Checkboxes(name) {
  * @return {void}
  */
 Checkboxes.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
   this.name = name + '[]';
   this.required = false;
 };

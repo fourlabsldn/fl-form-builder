@@ -34,13 +34,13 @@ function FormBody() {
         return;
       }
 
-      _this.addElement(e.detail.element);
+      _this.addComponent(e.detail.element);
     });
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
     form.appendChild(submitBtn);
-    this.form = form;
+    this.element = form;
   };
 
   this.init();
@@ -51,20 +51,21 @@ function FormBody() {
  * @abstract
  * @class FormComponent
  */
-function FormComponent(name) {
+function FormComponent() {
   if (!(this instanceof FormComponent)) {
     return new FormComponent();
   }
+}
 
+FormComponent.prototype.init = function init(name) {
   if (typeof name !== 'string') {
     throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
   }
 
-  this.element = this.createElement('div');
+  this.element = document.createElement('div');
   this.element.classList.add('fl-form-component');
   this.name = name;
-  this.init(name);
-}
+};
 
 FormComponent.prototype.destroy = function destroy() {
   this.element.remove();
@@ -99,12 +100,11 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
  * @class FormFabric
  * @param {HTMLElement} el Where the fabric will be put.
  */
-function FormFabric() {
+function FormFabric(formBody) {
   if (!(this instanceof FormFabric)) {
     return new FormFabric();
   }
 
-  this.element = document.createElement('div');
   var formComponents = [
     { desc: 'Radio buttons', constr: RadioBtns },
     { desc: 'Checkboxes', constr: Checkboxes },
@@ -112,6 +112,19 @@ function FormFabric() {
     { desc: 'Text area', constr: TextArea },
     { desc: 'Dropdown', constr: Dropdown },
   ];
+
+  function createElement(Constr, formBody) {
+    var name = 'Temp name' + (Math.floor(Math.random() * 1000));
+    var comp = new Constr(name);
+    var ev = new CustomEvent( 'newElement',
+      {
+        detail: {	comp: 'Hello World!' },
+        bubbles: true,
+        cancelable: true,
+      });
+
+    formBody.dispatchEvent(ev);
+  }
 
   /**
    * @function createOptionsDropdown
@@ -131,6 +144,8 @@ function FormFabric() {
   }
 
   this.init = function init() {
+    this.element = document.createElement('div');
+    this.element.classList.add('fl-form-fabric');
     var options = createOptionsDropdown();
 
     var addBtn = document.createElement('button');
@@ -138,13 +153,14 @@ function FormFabric() {
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;
       console.log('Create a ', formComponents[idx].desc);
+      createElement(formComponents[idx].constr, formBody);
     });
 
     this.element.appendChild(addBtn);
     this.element.appendChild(options);
   };
 
-  this.init();
+  this.init(formBody);
 }
 
 /*globals FormComponent*/
@@ -156,8 +172,10 @@ function FormFabric() {
 function Checkboxes(name) {
   if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+Checkboxes.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -166,6 +184,7 @@ function Checkboxes(name) {
  * @return {void}
  */
 Checkboxes.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
   this.name = name + '[]';
   this.required = false;
 };
@@ -249,8 +268,10 @@ Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
 function Dropdown(name) {
   if (!(this instanceof Dropdown)) { return new Dropdown(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+Dropdown.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -259,6 +280,7 @@ function Dropdown(name) {
  * @return {void}
  */
 Dropdown.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
@@ -304,8 +326,10 @@ Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
 function RadioBtns(name) {
   if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+RadioBtns.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -314,6 +338,8 @@ function RadioBtns(name) {
  * @return {void}
  */
 RadioBtns.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
   //Add placeholder
   this.addPlaceHolder();
 };
@@ -355,8 +381,10 @@ RadioBtns.prototype.add = function add(value, legend) {
 function TextArea(name) {
   if (!(this instanceof TextArea)) { return new TextArea(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+TextArea.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -365,8 +393,10 @@ function TextArea(name) {
  * @return {void}
  */
 TextArea.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
   var area = document.createElement('textarea');
-  ara.setAttribute('name', name);
+  area.setAttribute('name', name);
   area.setAttribute('rows', 5);
   area.classList.add('fl-text-area');
   this.element.appendChild(area);
@@ -381,8 +411,10 @@ TextArea.prototype.init = function init(name) {
 function TextBox(name) {
   if (!(this instanceof TextBox)) { return new TextBox(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+TextBox.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -391,6 +423,8 @@ function TextBox(name) {
  * @return {void}
  */
 TextBox.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
@@ -407,11 +441,14 @@ TextBox.prototype.init = function init(name) {
 
 };
 
-/*globals FormFabric, xController*/
+/*globals FormFabric, FormBody, xController*/
 
 xController(function flFormBuilder(xDivEl) {
   xDivEl.innerText = "I'm working!";
 
-  var fabric = new FormFabric();
+  var formBody = new FormBody();
+  var fabric = new FormFabric(formBody.element);
+
   xDivEl.appendChild(fabric.element);
+  xDivEl.appendChild(formBody.element);
 });

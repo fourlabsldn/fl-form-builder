@@ -7,8 +7,10 @@
 function TextBox(name) {
   if (!(this instanceof TextBox)) { return new TextBox(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+TextBox.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -17,6 +19,8 @@ function TextBox(name) {
  * @return {void}
  */
 TextBox.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);

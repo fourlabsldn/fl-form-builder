@@ -34,13 +34,13 @@ function FormBody() {
         return;
       }
 
-      _this.addElement(e.detail.element);
+      _this.addComponent(e.detail.element);
     });
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
     form.appendChild(submitBtn);
-    this.form = form;
+    this.element = form;
   };
 
   this.init();

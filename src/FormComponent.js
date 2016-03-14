@@ -3,20 +3,21 @@
  * @abstract
  * @class FormComponent
  */
-function FormComponent(name) {
+function FormComponent() {
   if (!(this instanceof FormComponent)) {
     return new FormComponent();
   }
+}
 
+FormComponent.prototype.init = function init(name) {
   if (typeof name !== 'string') {
     throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
   }
 
-  this.element = this.createElement('div');
+  this.element = document.createElement('div');
   this.element.classList.add('fl-form-component');
   this.name = name;
-  this.init(name);
-}
+};
 
 FormComponent.prototype.destroy = function destroy() {
   this.element.remove();

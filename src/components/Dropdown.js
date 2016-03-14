@@ -7,8 +7,10 @@
 function Dropdown(name) {
   if (!(this instanceof Dropdown)) { return new Dropdown(); }
 
-  FormComponent.apply(this); //Inheritance part
+  this.init(name);
 }
+
+Dropdown.prototype = new FormComponent(); //Inheritance part
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -17,6 +19,7 @@ function Dropdown(name) {
  * @return {void}
  */
 Dropdown.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
