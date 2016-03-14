@@ -1,13 +1,19 @@
 /**
  * Parent class for form components
+ * @abstract
  * @class FormComponent
  */
-function FormComponent() {
+function FormComponent(name) {
   if (!(this instanceof FormComponent)) {
     return new FormComponent();
   }
 
+  if (typeof name !== 'string') {
+    throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
+  }
+
   this.element = this.createElement('div');
+  this.init(name);
 }
 
 FormComponent.prototype.destroy = function destroy() {
@@ -92,14 +98,15 @@ function Checkboxes(name) {
   if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init(name);
 }
 
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
 Checkboxes.prototype.init = function init(name) {
-  if (typeof name !== 'string') {
-    throw new Error('Checkboxes.init(): ' + name + ' is not a valid "name" parameter.');
-  }
-
   this.name = name + '[]';
   this.required = false;
 };
@@ -108,7 +115,7 @@ Checkboxes.prototype.init = function init(name) {
  * Adds one checkbox to a group of checkboxes.
  * @method add
  * @param {String} value  value that will be sent on form submit
- * @param {String} legend
+ * @param {String} legend [optional]
  */
 Checkboxes.prototype.add = function add(value, legend) {
   if (!value) {
@@ -123,7 +130,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('value', value);
   if (this.required) { newBox.setAttribute('required', true); }
 
-  var legendNode = document.createTextNode(legend);
+  var legendNode = document.createTextNode(legend || value);
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);
@@ -171,13 +178,18 @@ Checkboxes.prototype.getBoxes = function () {
  * @class Dropdown
  * @extends FormComponent
  */
-function Dropdown() {
+function Dropdown(name) {
   if (!(this instanceof Dropdown)) { return new Dropdown(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
 Dropdown.prototype.init = function init() {
   var select = document.createElement('select');
 
@@ -192,20 +204,30 @@ Dropdown.prototype.init = function init() {
   this.element.appendChild(select);
 };
 
+
+Dropdown.prototype.add = function add(value, legend) {
+  var newOp = document.createElement('option')
+}
+
 /*globals FormComponent*/
 
 /**
  * @class RadioBtns
  * @extends FormComponent
  */
-function RadioBtns() {
+function RadioBtns(name) {
   if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
-RadioBtns.prototype.init = function init() {
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+RadioBtns.prototype.init = function init(name) {
 
 }
 
@@ -215,14 +237,19 @@ RadioBtns.prototype.init = function init() {
  * @class TextArea
  * @extends FormComponent
  */
-function TextArea() {
+function TextArea(name) {
   if (!(this instanceof TextArea)) { return new TextArea(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
-TextArea.prototype.init = function init() {
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+TextArea.prototype.init = function init(name) {
 
 }
 
@@ -232,14 +259,19 @@ TextArea.prototype.init = function init() {
  * @class TextBox
  * @extends FormComponent
  */
-function TextBox() {
+function TextBox(name) {
   if (!(this instanceof TextBox)) { return new TextBox(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
-TextBox.prototype.init = function init() {
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+TextBox.prototype.init = function init(name) {
 
 }
 

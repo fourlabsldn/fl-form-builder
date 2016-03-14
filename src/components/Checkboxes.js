@@ -8,14 +8,15 @@ function Checkboxes(name) {
   if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init(name);
 }
 
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
 Checkboxes.prototype.init = function init(name) {
-  if (typeof name !== 'string') {
-    throw new Error('Checkboxes.init(): ' + name + ' is not a valid "name" parameter.');
-  }
-
   this.name = name + '[]';
   this.required = false;
 };
@@ -24,7 +25,7 @@ Checkboxes.prototype.init = function init(name) {
  * Adds one checkbox to a group of checkboxes.
  * @method add
  * @param {String} value  value that will be sent on form submit
- * @param {String} legend
+ * @param {String} legend [optional]
  */
 Checkboxes.prototype.add = function add(value, legend) {
   if (!value) {
@@ -39,7 +40,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('value', value);
   if (this.required) { newBox.setAttribute('required', true); }
 
-  var legendNode = document.createTextNode(legend);
+  var legendNode = document.createTextNode(legend || value);
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);

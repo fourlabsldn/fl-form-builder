@@ -1,13 +1,19 @@
 /**
  * Parent class for form components
+ * @abstract
  * @class FormComponent
  */
-function FormComponent() {
+function FormComponent(name) {
   if (!(this instanceof FormComponent)) {
     return new FormComponent();
   }
 
+  if (typeof name !== 'string') {
+    throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
+  }
+
   this.element = this.createElement('div');
+  this.init(name);
 }
 
 FormComponent.prototype.destroy = function destroy() {

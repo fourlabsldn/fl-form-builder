@@ -4,13 +4,18 @@
  * @class Dropdown
  * @extends FormComponent
  */
-function Dropdown() {
+function Dropdown(name) {
   if (!(this instanceof Dropdown)) { return new Dropdown(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
 Dropdown.prototype.init = function init() {
   var select = document.createElement('select');
 
@@ -24,3 +29,8 @@ Dropdown.prototype.init = function init() {
   select.appendChild(placeHolder);
   this.element.appendChild(select);
 };
+
+
+Dropdown.prototype.add = function add(value, legend) {
+  var newOp = document.createElement('option')
+}

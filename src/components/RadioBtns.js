@@ -4,13 +4,18 @@
  * @class RadioBtns
  * @extends FormComponent
  */
-function RadioBtns() {
+function RadioBtns(name) {
   if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
 
   FormComponent.apply(this); //Inheritance part
-  this.init();
 }
 
-RadioBtns.prototype.init = function init() {
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+RadioBtns.prototype.init = function init(name) {
 
 }
