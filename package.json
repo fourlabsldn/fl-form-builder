@@ -1,0 +1,15 @@
+{
+  "name": "fl-form-builder",
+  "version": "0.0.1",
+  "description": "A vanilla JS form builder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lazamar @ FourLabs",
+  "license": "ISC",
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "grunt": "^0.4.5"
+  }
+}

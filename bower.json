@@ -1,0 +1,18 @@
+{
+  "name": "fl-form-builder",
+  "description": "A vanilla JS form builder",
+  "main": "index.js",
+  "authors": [
+    "lazamar @ FourLabs"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/fourlabsldn/fl-form-builder",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

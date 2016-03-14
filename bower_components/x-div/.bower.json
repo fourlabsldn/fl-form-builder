@@ -1,0 +1,42 @@
+{
+  "name": "x-div",
+  "description": "Web Component to load encapsulated JavaScript modules",
+  "main": "js/x-div.js",
+  "version": "1.0.3",
+  "authors": [
+    "Four Labs"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "web",
+    "components"
+  ],
+  "homepage": "https://github.com/fourlabsldn/x-div",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "lib",
+    "node_modules/",
+    "bower_components/",
+    "tests/",
+    "bower.json",
+    "package.json",
+    "Gruntfile.js",
+    "*.log",
+    "**/*.log"
+  ],
+  "_release": "1.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.3",
+    "commit": "800ec7e4b1bef750b5c3df612dee40ad7a2f7f19"
+  },
+  "_source": "git://github.com/fourlabsldn/x-div.git",
+  "_target": "~1.0.3",
+  "_originalSource": "x-div",
+  "_direct": true
+}
