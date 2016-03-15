@@ -51,7 +51,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);
-  this.element.appendChild(label);
+  this.content.appendChild(label);
 };
 
 /**
@@ -68,7 +68,11 @@ Checkboxes.prototype.required = function required(isRequired) {
 
   this.isRequired = isRequired;
   var boxes = this.getBoxes();
-  if (boxes[0]) { boxes[0].setAttribute('required', isRequired); }
+  if (isRequired) {
+    boxes.forEach(function (box) { box.setAttribute('required', true); });
+  } else {
+    boxes.forEach(function (box) { box.removeAttribute('required'); });
+  }
 
   return true;
 };
@@ -78,7 +82,7 @@ Checkboxes.prototype.required = function required(isRequired) {
  * @return {integer} Amount of checkboxes in the component
  */
 Checkboxes.prototype.countBoxes = function () {
-  return this.element.childElementCount;
+  return this.content.childElementCount;
 };
 
 /**
@@ -86,7 +90,7 @@ Checkboxes.prototype.countBoxes = function () {
  * @return {Array} collection of checkbox HTMLElements
  */
 Checkboxes.prototype.getBoxes = function () {
-  return [].slice.call(this.element.children);
+  return [].slice.call(this.content.querySelectorAll('input'));
 };
 
 /**

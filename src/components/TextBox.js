@@ -39,7 +39,7 @@ TextBox.prototype.init = function init(name) {
   box.classList.add('form-control');
   labelEl.appendChild(box);
 
-  this.element.appendChild(labelEl);
+  this.content.appendChild(labelEl);
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {

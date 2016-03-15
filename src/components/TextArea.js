@@ -37,7 +37,7 @@ TextArea.prototype.init = function init(name) {
   area.classList.add('form-control');
   labelEl.appendChild(area);
 
-  this.element.appendChild(labelEl);
+  this.content.appendChild(labelEl);
 };
 
 TextArea.prototype.setLabel = function setLabel(desc) {

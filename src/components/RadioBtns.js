@@ -49,6 +49,6 @@ RadioBtns.prototype.add = function add(value, legend) {
   newLabel.appendChild(newRadio);
   newLabel.appendChild(labelText);
 
-  this.element.appendChild(newLabel);
+  this.content.appendChild(newLabel);
   return newRadio;
 };

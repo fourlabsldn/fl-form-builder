@@ -26,7 +26,7 @@ Dropdown.prototype.init = function init(name) {
   this.wrapper.classList.add('fl-dropdown');
   this.wrapper.classList.add('form-control');
 
-  this.element.appendChild(this.wrapper);
+  this.content.appendChild(this.wrapper);
 
   this.addPlaceHolder();
 };

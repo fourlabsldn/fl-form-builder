@@ -70,6 +70,11 @@ FormComponent.prototype.init = function init(name) {
   this.element.classList.add('fl-component');
   this.element.classList.add('col-md-12');
   this.element.classList.add('form-group');
+
+  this.content = document.createElement('div');
+  this.content.classList.add('fl-form-content');
+  this.element.appendChild(this.content);
+
   this.name = name;
   this.createControls();
 };
@@ -145,15 +150,17 @@ FormComponent.prototype.createControls = function createControls() {
   switchInput.classList.add('cmn-toggle');
   switchInput.classList.add('cmn-toggle-round');
   switchInput.setAttribute('type', 'checkbox');
-  switchInput.id = 'cmn-toggle-1';
-  switchInput.addEventListener('change', function () {
-    _this.required(true);
+  switchInput.id = 'cmn-toggle-' + Date.now();
+  switchInput.addEventListener('change', function (e) {
+    var checked = e.target.checked;
+    var wasChanged = _this.required(checked);
+    if (!wasChanged) { e.target.checked = !checked; }
   });
 
   requiredSwitch.appendChild(switchInput);
 
   var switchLabel = document.createElement('label');
-  switchLabel.setAttribute('for', 'cmn-toggle-1');
+  switchLabel.setAttribute('for', switchInput.id);
   requiredSwitch.appendChild(switchLabel);
 
   requiredLabel.appendChild(requiredSwitch);
@@ -224,15 +231,14 @@ FormComponent.prototype.destroy = function destroy() {
  * @return {Boolean}      Whether required was set or not.
  */
 FormComponent.prototype.required = function required(isRequired) {
-  var inputs = this.element.querySelectorAll('input');
-  var textAreas = this.element.querySelectorAll('textarea');
-  var checkboxes = this.element.querySelectorAll('checkboxes');
+  var inputs = this.content.querySelectorAll('input');
+  var textAreas = this.content.querySelectorAll('textarea');
+  inputs = [].slice.call(inputs);
+  textAreas = [].slice.call(textAreas);
 
-  var els = [].concat.call(inputs, textAreas, checkboxes);
+  var els = [].concat.call(inputs, textAreas);
   [].forEach.call(els, function (el) {
-    if (el.nodeName === 'INPUT' || el.nodeName === 'TEXTAREA') {
-      el.setAttribute('required', true);
-    }
+    el.setAttribute('required', true);
   });
 };
 
@@ -374,7 +380,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);
-  this.element.appendChild(label);
+  this.content.appendChild(label);
 };
 
 /**
@@ -391,7 +397,11 @@ Checkboxes.prototype.required = function required(isRequired) {
 
   this.isRequired = isRequired;
   var boxes = this.getBoxes();
-  if (boxes[0]) { boxes[0].setAttribute('required', isRequired); }
+  if (isRequired) {
+    boxes.forEach(function (box) { box.setAttribute('required', true); });
+  } else {
+    boxes.forEach(function (box) { box.removeAttribute('required'); });
+  }
 
   return true;
 };
@@ -401,7 +411,7 @@ Checkboxes.prototype.required = function required(isRequired) {
  * @return {integer} Amount of checkboxes in the component
  */
 Checkboxes.prototype.countBoxes = function () {
-  return this.element.childElementCount;
+  return this.content.childElementCount;
 };
 
 /**
@@ -409,7 +419,7 @@ Checkboxes.prototype.countBoxes = function () {
  * @return {Array} collection of checkbox HTMLElements
  */
 Checkboxes.prototype.getBoxes = function () {
-  return [].slice.call(this.element.children);
+  return [].slice.call(this.content.querySelectorAll('input'));
 };
 
 /**
@@ -447,7 +457,7 @@ Dropdown.prototype.init = function init(name) {
   this.wrapper.classList.add('fl-dropdown');
   this.wrapper.classList.add('form-control');
 
-  this.element.appendChild(this.wrapper);
+  this.content.appendChild(this.wrapper);
 
   this.addPlaceHolder();
 };
@@ -530,7 +540,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newLabel.appendChild(newRadio);
   newLabel.appendChild(labelText);
 
-  this.element.appendChild(newLabel);
+  this.content.appendChild(newLabel);
   return newRadio;
 };
 
@@ -573,7 +583,7 @@ TextArea.prototype.init = function init(name) {
   area.classList.add('form-control');
   labelEl.appendChild(area);
 
-  this.element.appendChild(labelEl);
+  this.content.appendChild(labelEl);
 };
 
 TextArea.prototype.setLabel = function setLabel(desc) {
@@ -623,7 +633,7 @@ TextBox.prototype.init = function init(name) {
   box.classList.add('form-control');
   labelEl.appendChild(box);
 
-  this.element.appendChild(labelEl);
+  this.content.appendChild(labelEl);
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {
