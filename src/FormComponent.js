@@ -16,7 +16,7 @@ FormComponent.prototype.init = function init(name) {
 
   this.element = document.createElement('div');
   this.element.classList.add('fl-component');
-  this.element.classList.add('col-md-11');
+  this.element.classList.add('col-md-12');
   this.element.classList.add('form-group');
   this.name = name;
   this.createControls();
@@ -105,9 +105,29 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
   }
 
   var configShowing = this.configShowing;
-  var paragraphs = this.element.querySelectorAll('.fl-editable');
-  [].forEach.call(paragraphs, function (p) {
-    p.setAttribute('contenteditable', configShowing);
+  var editables = this.element.querySelectorAll('.fl-editable');
+  var placeholderMessage = 'Set a placeholder text.';
+
+  [].forEach.call(editables, function (el) {
+    el.setAttribute('contenteditable', configShowing);
+
+    //Show message to input placeholder text if there is no placeholder already
+    //in place. Remove the message if placeholder wasn't set.
+    if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
+      var placeholderText = el.getAttribute('placeholder');
+      var value = el.value;
+
+      if (configShowing) {
+        var newContent = (placeholderText) ? placeholderText : placeholderMessage;
+        el.setAttribute('placeholder', newContent);
+      } else if (value) {
+        el.setAttribute('placeholder', value);
+      }else if (placeholderText ===  placeholderMessage) {
+        el.removeAttribute('placeholder');
+      }
+
+      el.value = '';
+    }
   });
 };
 
