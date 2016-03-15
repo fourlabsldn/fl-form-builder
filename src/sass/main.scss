@@ -2,17 +2,49 @@
   width: 100%;
 }
 
-.fl-form-component{
-  input[type=radio],
-  input[type=checkbox] {
-    margin-right: 5px;
-  }
-}
-
 .fl-form-fabric {
   margin-bottom: 10px;
 
   button {
     margin-right: 5px;
+  }
+}
+
+.fl-form-component{
+  input[type=radio],
+  input[type=checkbox] {
+    margin-right: 5px;
+  }
+
+  &:hover .fl-form-component-control {
+    display: block;
+  }
+}
+
+
+.fl-form-component-control {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: rgba(230,230,230,0.7);
+  border-radius: 0 5px 5px 0;
+  padding: 0px 10px;
+  min-height: 100%;
+  text-align: center;
+
+  * {
+    display: block;
+    position: relative;
+    margin: 5px;
+  }
+  i, button {
+    color: #999;
+    background-color: transparent;
+    border: none;
+
+    &:hover {
+      color: #444;
+    }
   }
 }

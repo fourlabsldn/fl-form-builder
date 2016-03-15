@@ -71,6 +71,34 @@ FormComponent.prototype.init = function init(name) {
   this.element.classList.add('col-md-11');
   this.element.classList.add('form-group');
   this.name = name;
+  this.createControls();
+};
+
+FormComponent.prototype.createControls = function createControls() {
+  var controls = document.createElement('div');
+  controls.classList.add('fl-form-component-control');
+
+  var dragBtn = document.createElement('i');
+  dragBtn.classList.add('glyphicon');
+  dragBtn.classList.add('glyphicon-menu-hamburger');
+  controls.appendChild(dragBtn);
+
+  var moreConfigBtn = document.createElement('button');
+  moreConfigBtn.classList.add('glyphicon');
+  moreConfigBtn.classList.add('glyphicon-cog');
+
+  var _this = this;
+  moreConfigBtn.addEventListener('click', function () {
+    _this.showMoreConfig(); //To be implemented in classes.
+  });
+
+  controls.appendChild(moreConfigBtn);
+  this.element.appendChild(controls);
+};
+
+//To be implemented in child classes
+FormComponent.prototype.showMoreConfig = function showMoreConfig() {
+  console.log('No handler attached to "more config"');
 };
 
 FormComponent.prototype.destroy = function destroy() {
