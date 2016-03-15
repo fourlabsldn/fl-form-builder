@@ -37,6 +37,10 @@ function FormFabric(formBody) {
    */
   function createOptionsDropdown() {
     var select = document.createElement('select');
+    select.classList.add('form-control');
+    select.style.display = 'inline';
+    select.style.minWidth = '0';
+    select.style.maxWidth = '200px';
 
     formComponents.forEach(function (component, idx) {
       var op = document.createElement('option');
@@ -54,6 +58,7 @@ function FormFabric(formBody) {
     var options = createOptionsDropdown();
 
     var addBtn = document.createElement('button');
+    addBtn.classList.add('btn');
     addBtn.innerText = 'Add';
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;

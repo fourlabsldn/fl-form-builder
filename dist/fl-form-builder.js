@@ -22,9 +22,11 @@ function FormBody() {
 
   this.init = function () {
     form = document.createElement('form');
+    form.classList.add('form-horizontal');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
+      console.dir(components);
     });
 
     var _this = this;
@@ -39,6 +41,8 @@ function FormBody() {
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
+    submitBtn.classList.add('btn');
+    submitBtn.classList.add('col-sm-12');
     form.appendChild(submitBtn);
     this.element = form;
   };
@@ -64,6 +68,8 @@ FormComponent.prototype.init = function init(name) {
 
   this.element = document.createElement('div');
   this.element.classList.add('fl-form-component');
+  this.element.classList.add('col-md-11');
+  this.element.classList.add('form-group');
   this.name = name;
 };
 
@@ -132,6 +138,10 @@ function FormFabric(formBody) {
    */
   function createOptionsDropdown() {
     var select = document.createElement('select');
+    select.classList.add('form-control');
+    select.style.display = 'inline';
+    select.style.minWidth = '0';
+    select.style.maxWidth = '200px';
 
     formComponents.forEach(function (component, idx) {
       var op = document.createElement('option');
@@ -149,6 +159,7 @@ function FormFabric(formBody) {
     var options = createOptionsDropdown();
 
     var addBtn = document.createElement('button');
+    addBtn.classList.add('btn');
     addBtn.innerText = 'Add';
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;
@@ -185,6 +196,7 @@ Checkboxes.prototype = new FormComponent(); //Inheritance part
  */
 Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+  this.element.classList.add('checkbox');
   this.name = name + '[]';
   this.required = false;
   this.addPlaceHolder();
@@ -282,9 +294,11 @@ Dropdown.prototype = new FormComponent(); //Inheritance part
  */
 Dropdown.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
+  this.wrapper.classList.add('form-control');
 
   this.element.appendChild(this.wrapper);
 
@@ -340,6 +354,7 @@ RadioBtns.prototype = new FormComponent(); //Inheritance part
  */
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+  this.element.classList.add('radio');
 
   //Add placeholder
   this.addPlaceHolder();
@@ -404,6 +419,7 @@ TextArea.prototype.init = function init(name) {
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
   area.classList.add('fl-text-area');
+  area.classList.add('form-control');
   labelEl.appendChild(area);
 
   this.element.appendChild(labelEl);
@@ -447,6 +463,7 @@ TextBox.prototype.init = function init(name) {
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
   box.classList.add('fl-text-box');
+  box.classList.add('form-control');
   labelEl.appendChild(box);
 
   this.element.appendChild(labelEl);
@@ -466,6 +483,7 @@ xController(function flFormBuilder(xDivEl) {
   var formBody = new FormBody();
   var fabric = new FormFabric(formBody.element);
 
+  xDivEl.classList.add('container');
   xDivEl.appendChild(fabric.element);
   xDivEl.appendChild(formBody.element);
 });

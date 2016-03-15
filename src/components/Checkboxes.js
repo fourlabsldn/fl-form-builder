@@ -20,6 +20,7 @@ Checkboxes.prototype = new FormComponent(); //Inheritance part
  */
 Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+  this.element.classList.add('checkbox');
   this.name = name + '[]';
   this.required = false;
   this.addPlaceHolder();

@@ -16,6 +16,8 @@ FormComponent.prototype.init = function init(name) {
 
   this.element = document.createElement('div');
   this.element.classList.add('fl-form-component');
+  this.element.classList.add('col-md-11');
+  this.element.classList.add('form-group');
   this.name = name;
 };
 

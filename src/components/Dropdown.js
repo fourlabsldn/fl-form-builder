@@ -20,9 +20,11 @@ Dropdown.prototype = new FormComponent(); //Inheritance part
  */
 Dropdown.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
+  this.wrapper.classList.add('form-control');
 
   this.element.appendChild(this.wrapper);
 

@@ -29,6 +29,7 @@ TextArea.prototype.init = function init(name) {
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
   area.classList.add('fl-text-area');
+  area.classList.add('form-control');
   labelEl.appendChild(area);
 
   this.element.appendChild(labelEl);

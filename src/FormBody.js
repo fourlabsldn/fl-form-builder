@@ -22,9 +22,11 @@ function FormBody() {
 
   this.init = function () {
     form = document.createElement('form');
+    form.classList.add('form-horizontal');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
+      console.dir(components);
     });
 
     var _this = this;
@@ -39,6 +41,8 @@ function FormBody() {
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
+    submitBtn.classList.add('btn');
+    submitBtn.classList.add('col-sm-12');
     form.appendChild(submitBtn);
     this.element = form;
   };
