@@ -76,7 +76,7 @@ FormComponent.prototype.init = function init(name) {
 
 FormComponent.prototype.createControls = function createControls() {
 
-  //Create side control bar
+  //Create side control bar -----------------------------
   var controls = document.createElement('div');
   controls.classList.add('fl-component-side-control');
 
@@ -95,7 +95,7 @@ FormComponent.prototype.createControls = function createControls() {
     _this.configToggle();
   });
 
-  //Create configuration box
+  //Create configuration box -----------------------------
   var configBox = document.createElement('div');
   configBox.classList.add('fl-component-config');
   this.configBox = configBox;
@@ -134,6 +134,31 @@ FormComponent.prototype.createControls = function createControls() {
   });
 
   buttonsContainer.appendChild(okBtn);
+  var requiredLabel = document.createElement('label');
+  requiredLabel.innerText = 'Required';
+
+  //Switch for whether the field is required or not.
+  var requiredSwitch = document.createElement('div');
+  requiredSwitch.classList.add('switch');
+
+  var switchInput = document.createElement('input');
+  switchInput.classList.add('cmn-toggle');
+  switchInput.classList.add('cmn-toggle-round');
+  switchInput.setAttribute('type', 'checkbox');
+  switchInput.id = 'cmn-toggle-1';
+  switchInput.addEventListener('change', function () {
+    _this.required(true);
+  });
+
+  requiredSwitch.appendChild(switchInput);
+
+  var switchLabel = document.createElement('label');
+  switchLabel.setAttribute('for', 'cmn-toggle-1');
+  requiredSwitch.appendChild(switchLabel);
+
+  requiredLabel.appendChild(requiredSwitch);
+  buttonsContainer.appendChild(requiredLabel);
+
   configBox.appendChild(buttonsContainer);
 
   this.element.appendChild(configBox);
@@ -199,9 +224,15 @@ FormComponent.prototype.destroy = function destroy() {
  * @return {Boolean}      Whether required was set or not.
  */
 FormComponent.prototype.required = function required(isRequired) {
-  var els = this.element.children;
-  els.forEach(function (el) {
-    el.setAttribute('required', true);
+  var inputs = this.element.querySelectorAll('input');
+  var textAreas = this.element.querySelectorAll('textarea');
+  var checkboxes = this.element.querySelectorAll('checkboxes');
+
+  var els = [].concat.call(inputs, textAreas, checkboxes);
+  [].forEach.call(els, function (el) {
+    if (el.nodeName === 'INPUT' || el.nodeName === 'TEXTAREA') {
+      el.setAttribute('required', true);
+    }
   });
 };
 
@@ -314,7 +345,7 @@ Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   this.name = name + '[]';
-  this.required = false;
+  this.isRequired = false;
   this.addPlaceHolder();
 };
 
@@ -327,7 +358,7 @@ Checkboxes.prototype.init = function init(name) {
 Checkboxes.prototype.add = function add(value, legend) {
   if (!value) {
     throw new Error('Checkboxes.add(): No value parameter provided.');
-  } else if (this.required && this.countBoxes() > 1) {
+  } else if (this.isRequired && this.countBoxes() > 1) {
     console.error('Checkboxes: To be "required" there can only be one checkbox in the group');
   }
 
@@ -337,7 +368,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('value', value);
   newBox.classList.add('fl-check-box');
 
-  if (this.required) { newBox.setAttribute('required', true); }
+  if (this.isRequired) { newBox.setAttribute('required', true); }
 
   var legendNode = document.createTextNode(legend || value);
   var label = document.createElement('label');
@@ -358,7 +389,7 @@ Checkboxes.prototype.required = function required(isRequired) {
     return false;
   }
 
-  this.required = isRequired;
+  this.isRequired = isRequired;
   var boxes = this.getBoxes();
   if (boxes[0]) { boxes[0].setAttribute('required', isRequired); }
 

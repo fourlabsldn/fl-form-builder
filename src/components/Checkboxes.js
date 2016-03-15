@@ -22,7 +22,7 @@ Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   this.name = name + '[]';
-  this.required = false;
+  this.isRequired = false;
   this.addPlaceHolder();
 };
 
@@ -35,7 +35,7 @@ Checkboxes.prototype.init = function init(name) {
 Checkboxes.prototype.add = function add(value, legend) {
   if (!value) {
     throw new Error('Checkboxes.add(): No value parameter provided.');
-  } else if (this.required && this.countBoxes() > 1) {
+  } else if (this.isRequired && this.countBoxes() > 1) {
     console.error('Checkboxes: To be "required" there can only be one checkbox in the group');
   }
 
@@ -45,7 +45,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   newBox.setAttribute('value', value);
   newBox.classList.add('fl-check-box');
 
-  if (this.required) { newBox.setAttribute('required', true); }
+  if (this.isRequired) { newBox.setAttribute('required', true); }
 
   var legendNode = document.createTextNode(legend || value);
   var label = document.createElement('label');
@@ -66,7 +66,7 @@ Checkboxes.prototype.required = function required(isRequired) {
     return false;
   }
 
-  this.required = isRequired;
+  this.isRequired = isRequired;
   var boxes = this.getBoxes();
   if (boxes[0]) { boxes[0].setAttribute('required', isRequired); }
 
