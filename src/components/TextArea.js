@@ -20,16 +20,19 @@ TextArea.prototype = new FormComponent(); //Inheritance part
  */
 TextArea.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  var labelEl = document.createElement('label');
+  var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createTextNode('Text Area ');
+  var labelText = document.createElement('label');
+  labelText.innerText = 'Text Area ';
+  labelText.classList.add('fl-editable');
   this.labelText = labelText;
   labelEl.appendChild(labelText);
 
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
+  area.classList.add('fl-editable');
   area.classList.add('fl-text-area');
   area.classList.add('form-control');
   labelEl.appendChild(area);

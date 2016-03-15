@@ -92,13 +92,23 @@ FormComponent.prototype.createControls = function createControls() {
 
   var _this = this;
   moreConfigBtn.addEventListener('click', function () {
-    _this.moreConfigToggle();
+    _this.configToggle();
   });
 
   //Create configuration box
   var configBox = document.createElement('div');
   configBox.classList.add('fl-component-config');
   this.configBox = configBox;
+
+  //Component-specific content wrapper
+  var configContent = document.createElement('div');
+  configContent.classList.add('full-width');
+  this.configContent = configContent;
+  configBox.appendChild(configContent);
+
+  //Bottom buttons container
+  var buttonsContainer = document.createElement('div');
+  buttonsContainer.classList.add('col-sm-12');
 
   var deleteBtn = document.createElement('button');
   deleteBtn.classList.add('btn');
@@ -110,7 +120,7 @@ FormComponent.prototype.createControls = function createControls() {
     _this.destroy();
   });
 
-  configBox.appendChild(deleteBtn);
+  buttonsContainer.appendChild(deleteBtn);
 
   var okBtn = document.createElement('button');
   okBtn.classList.add('btn');
@@ -120,26 +130,37 @@ FormComponent.prototype.createControls = function createControls() {
   okBtn.innerText = 'Ok';
   okBtn.addEventListener('click', function () {
     _this.saveConfig();
-    _this.moreConfigToggle();
+    _this.configToggle();
   });
 
-  configBox.appendChild(okBtn);
+  buttonsContainer.appendChild(okBtn);
+  configBox.appendChild(buttonsContainer);
+
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
 };
 
-FormComponent.prototype.moreConfigToggle = function moreConfigToggle(showHide) {
+FormComponent.prototype.configToggle = function configToggle(showHide) {
   if (!this.configBox) {
-    throw new Error('FormComponent.moreConfigToggle(): No configBox initialised');
+    throw new Error('FormComponent.configToggle(): No configBox initialised');
   }
 
   if (showHide === true) {
     this.element.classList.add('fl-form-config-visible');
+    this.configShowing = true;
   } else if (showHide === false) {
     this.element.classList.remove('fl-form-config-visible');
+    this.configShowing = false;
   } else {
     this.element.classList.toggle('fl-form-config-visible');
+    this.configShowing = !this.configShowing;
   }
+
+  var configShowing = this.configShowing;
+  var paragraphs = this.element.querySelectorAll('.fl-editable');
+  [].forEach.call(paragraphs, function (p) {
+    p.setAttribute('contenteditable', configShowing);
+  });
 };
 
 //To be implemented by child clases
@@ -484,16 +505,19 @@ TextArea.prototype = new FormComponent(); //Inheritance part
  */
 TextArea.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  var labelEl = document.createElement('label');
+  var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createTextNode('Text Area ');
+  var labelText = document.createElement('label');
+  labelText.innerText = 'Text Area ';
+  labelText.classList.add('fl-editable');
   this.labelText = labelText;
   labelEl.appendChild(labelText);
 
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
+  area.classList.add('fl-editable');
   area.classList.add('fl-text-area');
   area.classList.add('form-control');
   labelEl.appendChild(area);
@@ -530,16 +554,20 @@ TextBox.prototype = new FormComponent(); //Inheritance part
 TextBox.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
-  var labelEl = document.createElement('label');
+  //Create the text box
+  var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createTextNode('Text ');
+  var labelText = document.createElement('label');
+  labelText.classList.add('fl-editable');
+  labelText.innerText = 'Text ';
   this.labelText = labelText;
   labelEl.appendChild(labelText);
 
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
+  box.classList.add('fl-editable');
   box.classList.add('fl-text-box');
   box.classList.add('form-control');
   labelEl.appendChild(box);
