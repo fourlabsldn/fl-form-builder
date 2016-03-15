@@ -23,6 +23,8 @@ Checkboxes.prototype.init = function init(name) {
 
   this.name = name + '[]';
   this.isRequired = false;
+
+  this.createConfigInputField();
   this.addPlaceHolder();
 };
 
@@ -37,6 +39,8 @@ Checkboxes.prototype.add = function add(value, legend) {
     throw new Error('Checkboxes.add(): No value parameter provided.');
   } else if (this.isRequired && this.countBoxes() > 1) {
     console.error('Checkboxes: To be "required" there can only be one checkbox in the group');
+  } else if (this.placeHolder) {
+    this.removePlaceHolder();
   }
 
   var newBox = document.createElement('input');
@@ -55,6 +59,7 @@ Checkboxes.prototype.add = function add(value, legend) {
   label.appendChild(newBox);
   label.appendChild(legendNode);
   this.content.appendChild(label);
+  return label;
 };
 
 /**

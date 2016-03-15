@@ -21,46 +21,7 @@ RadioBtns.prototype = new FormComponent(); //Inheritance part
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
-  var legend = document.createElement('input');
-  legend.setAttribute('placeholder', 'Description');
-  legend.setAttribute('type', 'text');
-  this.focusElement = legend;
-
-  var addBtn = document.createElement('i');
-  addBtn.classList.add('glyphicon');
-  addBtn.classList.add('glyphicon-plus-sign');
-  addBtn.classList.add('fl-grey-btn');
-
-  var _this = this;
-  addBtn.addEventListener('click', function () {
-
-    //Blink red and return if no value was provided
-    if (!legend.value.trim()) {
-      legend.classList.add('fl-blink-red');
-      setTimeout(function () {
-        legend.classList.remove('fl-blink-red');
-      }, 1500);
-
-      return;
-    }
-
-    _this.add(legend.value);
-    legend.value = '';
-  });
-
-  legend.addEventListener('keypress', function (e) {
-    if (e.which === 13) {
-      var click = new Event('click');
-      addBtn.dispatchEvent(click);
-      e.preventDefault();
-      return false; // returning false will prevent the event from bubbling up.
-    } else {
-      return true;
-    }
-  });
-
-  this.configContent.appendChild(addBtn);
-  this.configContent.appendChild(legend);
+  this.createConfigInputField();
 
   //Add placeholder
   this.addPlaceHolder();

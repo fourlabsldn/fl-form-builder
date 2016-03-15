@@ -38,6 +38,7 @@ Dropdown.prototype.init = function init(name) {
 
   this.content.appendChild(labelEl);
 
+  this.createConfigInputField();
   this.addPlaceHolder();
 };
 

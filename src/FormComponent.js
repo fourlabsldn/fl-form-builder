@@ -167,10 +167,59 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
     if (focusElement) {
       //NOTE: There is a bug that for some reason it doesn't focus if you just
       //call focus() straight away. setTimeout solves it.
-      //see http://stackoverflow.com/questions/1096436/document-getelementbyidid-focus-is-not-working-for-firefox-or-chrome
+      //see http://goo.gl/UjKOk5
       setTimeout(function () { focusElement.focus(); }, 15);
     }
   }
+};
+
+/**
+ * Creates an input field in the configContent which will call this.add with
+ * its content value
+ * @method createConfigInputField
+ * @return {HTMLElement} The cretated element
+ */
+FormComponent.prototype.createConfigInputField = function createConfigInputField() {
+  var legend = document.createElement('input');
+  legend.setAttribute('placeholder', 'Description');
+  legend.setAttribute('type', 'text');
+  this.focusElement = legend;
+
+  var addBtn = document.createElement('i');
+  addBtn.classList.add('glyphicon');
+  addBtn.classList.add('glyphicon-plus-sign');
+  addBtn.classList.add('fl-grey-btn');
+
+  var _this = this;
+  addBtn.addEventListener('click', function () {
+
+    //Blink red and return if no value was provided
+    if (!legend.value.trim()) {
+      legend.classList.add('fl-blink-red');
+      setTimeout(function () {
+        legend.classList.remove('fl-blink-red');
+      }, 1500);
+
+      return;
+    }
+
+    _this.add(legend.value);
+    legend.value = '';
+  });
+
+  legend.addEventListener('keypress', function (e) {
+    if (e.which === 13) {
+      var click = new Event('click');
+      addBtn.dispatchEvent(click);
+      e.preventDefault();
+      return false; // returning false will prevent the event from bubbling up.
+    } else {
+      return true;
+    }
+  });
+
+  this.configContent.appendChild(addBtn);
+  this.configContent.appendChild(legend);
 };
 
 //To be implemented by child clases
@@ -212,4 +261,5 @@ FormComponent.prototype.addPlaceHolder = function addPlaceHolder() {
 
 FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
   this.placeHolder.remove();
+  this.placeHolder = null;
 };

@@ -59,6 +59,10 @@ $active-blue: #63A8EB;
     margin-right: 5px;
   }
 
+  input[type=radio] {
+    margin-left: 15px;
+  }
+
   &:hover .fl-component-side-control {
     @extend .fl-showing;
   }
