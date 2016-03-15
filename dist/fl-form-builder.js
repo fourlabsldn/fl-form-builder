@@ -237,9 +237,14 @@ FormComponent.prototype.required = function required(isRequired) {
   textAreas = [].slice.call(textAreas);
 
   var els = [].concat.call(inputs, textAreas);
-  [].forEach.call(els, function (el) {
-    el.setAttribute('required', true);
-  });
+
+  if (isRequired) {
+    els.forEach(function (el) { el.setAttribute('required', true); });
+  } else {
+    els.forEach(function (el) { el.removeAttribute('required'); });
+  }
+
+  return true;
 };
 
 FormComponent.prototype.addPlaceHolder = function addPlaceHolder() {
