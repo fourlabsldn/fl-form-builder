@@ -35,7 +35,7 @@ function FormFabric(formBody) {
    * @function createOptionsDropdown
    * @return {HTMLElement} The dropdown menu
    */
-  function createOptionsDropdown() {
+  function createOptions() {
     var select = document.createElement('select');
     select.classList.add('form-control');
     select.style.display = 'inline';
@@ -55,10 +55,11 @@ function FormFabric(formBody) {
   this.init = function init() {
     this.element = document.createElement('div');
     this.element.classList.add('fl-form-fabric');
-    var options = createOptionsDropdown();
+    var options = createOptions();
 
     var addBtn = document.createElement('button');
     addBtn.classList.add('btn');
+    addBtn.classList.add('slight-margin-right');
     addBtn.innerText = 'Add';
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;

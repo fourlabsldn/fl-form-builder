@@ -20,7 +20,6 @@ RadioBtns.prototype = new FormComponent(); //Inheritance part
  */
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  this.element.classList.add('radio');
 
   //Add placeholder
   this.addPlaceHolder();

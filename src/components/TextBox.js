@@ -22,6 +22,8 @@ TextBox.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   var labelEl = document.createElement('label');
+  labelEl.classList.add('full-width');
+
   var labelText = document.createTextNode('Text ');
   this.labelText = labelText;
   labelEl.appendChild(labelText);

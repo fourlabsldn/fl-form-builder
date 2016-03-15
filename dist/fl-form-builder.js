@@ -136,7 +136,7 @@ function FormFabric(formBody) {
    * @function createOptionsDropdown
    * @return {HTMLElement} The dropdown menu
    */
-  function createOptionsDropdown() {
+  function createOptions() {
     var select = document.createElement('select');
     select.classList.add('form-control');
     select.style.display = 'inline';
@@ -156,10 +156,11 @@ function FormFabric(formBody) {
   this.init = function init() {
     this.element = document.createElement('div');
     this.element.classList.add('fl-form-fabric');
-    var options = createOptionsDropdown();
+    var options = createOptions();
 
     var addBtn = document.createElement('button');
     addBtn.classList.add('btn');
+    addBtn.classList.add('slight-margin-right');
     addBtn.innerText = 'Add';
     addBtn.addEventListener('click', function () {
       var idx = options.selectedIndex;
@@ -196,7 +197,7 @@ Checkboxes.prototype = new FormComponent(); //Inheritance part
  */
 Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  this.element.classList.add('checkbox');
+
   this.name = name + '[]';
   this.required = false;
   this.addPlaceHolder();
@@ -354,7 +355,6 @@ RadioBtns.prototype = new FormComponent(); //Inheritance part
  */
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  this.element.classList.add('radio');
 
   //Add placeholder
   this.addPlaceHolder();
@@ -411,6 +411,8 @@ TextArea.prototype = new FormComponent(); //Inheritance part
 TextArea.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
   var labelEl = document.createElement('label');
+  labelEl.classList.add('full-width');
+
   var labelText = document.createTextNode('Text Area ');
   this.labelText = labelText;
   labelEl.appendChild(labelText);
@@ -455,6 +457,8 @@ TextBox.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   var labelEl = document.createElement('label');
+  labelEl.classList.add('full-width');
+
   var labelText = document.createTextNode('Text ');
   this.labelText = labelText;
   labelEl.appendChild(labelText);
