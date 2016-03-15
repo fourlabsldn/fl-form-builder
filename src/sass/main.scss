@@ -17,6 +17,36 @@ $active-blue: #63A8EB;
   opacity: 0 !important;
   transition: all 0.2s ease, visibility 0s;
 }
+.fl-grey-btn {
+  color: $font-grey;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: $font-dark-grey;
+  }
+}
+
+.fl-blink-red {
+  // transition: all 0.2s ease;
+  animation-name: blinkOutline;
+  animation-duration: 0.4s;
+  animation-iteration-count: 2;
+  animation-direction: reverse;
+}
+
+@keyframes blinkOutline {
+  0% {outline: 1px solid rgba(250,0,0,0);}
+  50% {outline: 1px solid rgba(250,0,0,0.8);}
+  100% {outline: 1px solid rgba(250,0,0,0);}
+};
+
+@-webkit-keyframes blinkOutline {
+  0% {outline: 1px solid rgba(250,0,0,0);}
+  50% {outline: 1px solid rgba(250,0,0,0.8);}
+  100% {outline: 1px solid rgba(250,0,0,0);}
+};
+
 .fl-form-fabric {
   margin-bottom: 10px;
   button {
@@ -67,12 +97,7 @@ $active-blue: #63A8EB;
   }
   i,
   button {
-    color: $font-grey;
-    background-color: transparent;
-    border: none;
-    &:hover {
-      color: $font-dark-grey;
-    }
+    @extend .fl-grey-btn;
   }
 }
 .fl-component-config {
@@ -101,6 +126,15 @@ $active-blue: #63A8EB;
   }
   .switch {
     margin: 0 5px;
+  }
+
+  i {
+    margin: 0 5px;
+  }
+
+  input[type=text]{
+    min-width: 300px;
+    margin: 0 5px 10px 5px;
   }
 }
 .fl-form-config-visible {

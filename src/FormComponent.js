@@ -40,7 +40,7 @@ FormComponent.prototype.createControls = function createControls() {
 
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.classList.add('glyphicon');
-  moreConfigBtn.classList.add('glyphicon-cog');
+  moreConfigBtn.classList.add('glyphicon-pencil');
   controls.appendChild(moreConfigBtn);
 
   var _this = this;
@@ -161,6 +161,16 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
       el.value = '';
     }
   });
+
+  if (configShowing) {
+    var focusElement = this.focusElement || this.configBox.querySelector('switch');
+    if (focusElement) {
+      //NOTE: There is a bug that for some reason it doesn't focus if you just
+      //call focus() straight away. setTimeout solves it.
+      //see http://stackoverflow.com/questions/1096436/document-getelementbyidid-focus-is-not-working-for-firefox-or-chrome
+      setTimeout(function () { focusElement.focus(); }, 15);
+    }
+  }
 };
 
 //To be implemented by child clases

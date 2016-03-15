@@ -14,6 +14,47 @@
   transition: all 0.2s ease, visibility 0s;
 }
 
+.fl-grey-btn, .fl-component-side-control i,
+.fl-component-side-control button {
+  color: #999;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.fl-grey-btn:hover, .fl-component-side-control i:hover,
+.fl-component-side-control button:hover {
+  color: #444;
+}
+
+.fl-blink-red {
+  animation-name: blinkOutline;
+  animation-duration: 0.4s;
+  animation-iteration-count: 2;
+  animation-direction: reverse;
+}
+
+@keyframes blinkOutline {
+  0% {
+    outline: 1px solid rgba(250, 0, 0, 0);
+  }
+  50% {
+    outline: 1px solid rgba(250, 0, 0, 0.8);
+  }
+  100% {
+    outline: 1px solid rgba(250, 0, 0, 0);
+  }
+}
+@-webkit-keyframes blinkOutline {
+  0% {
+    outline: 1px solid rgba(250, 0, 0, 0);
+  }
+  50% {
+    outline: 1px solid rgba(250, 0, 0, 0.8);
+  }
+  100% {
+    outline: 1px solid rgba(250, 0, 0, 0);
+  }
+}
 .fl-form-fabric {
   margin-bottom: 10px;
 }
@@ -55,16 +96,6 @@
   position: relative;
   margin: 5px;
 }
-.fl-component-side-control i,
-.fl-component-side-control button {
-  color: #999;
-  background-color: transparent;
-  border: none;
-}
-.fl-component-side-control i:hover,
-.fl-component-side-control button:hover {
-  color: #444;
-}
 
 .fl-component-config {
   visibility: hidden;
@@ -92,6 +123,13 @@
 }
 .fl-component-config .switch {
   margin: 0 5px;
+}
+.fl-component-config i {
+  margin: 0 5px;
+}
+.fl-component-config input[type=text] {
+  min-width: 300px;
+  margin: 0 5px 10px 5px;
 }
 
 .fl-form-config-visible .fl-component-side-control {
