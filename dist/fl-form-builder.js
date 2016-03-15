@@ -381,7 +381,10 @@ Checkboxes.prototype.add = function add(value, legend) {
 
   if (this.isRequired) { newBox.setAttribute('required', true); }
 
-  var legendNode = document.createTextNode(legend || value);
+  var legendNode = document.createElement('span');
+  legendNode.innerText = legend || value;
+  legendNode.classList.add('fl-editable');
+
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);

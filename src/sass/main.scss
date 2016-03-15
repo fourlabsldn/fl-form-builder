@@ -40,8 +40,13 @@ $active-blue: #63A8EB;
     }
   }
 
+  .fl-editable{
+    min-width: 30px;
+    display: inline-block;
+  }
+
   label{
-    display:block;
+    display: inline-block;
   }
 }
 .fl-component-side-control {

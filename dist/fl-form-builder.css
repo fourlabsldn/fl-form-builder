@@ -31,8 +31,12 @@
 .fl-component [contenteditable=true]:focus {
   outline: none;
 }
+.fl-component .fl-editable {
+  min-width: 30px;
+  display: inline-block;
+}
 .fl-component label {
-  display: block;
+  display: inline-block;
 }
 
 .fl-component-side-control {
