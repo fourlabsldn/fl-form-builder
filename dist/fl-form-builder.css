@@ -65,8 +65,6 @@
 .fl-component input[type=radio],
 .fl-component input[type=checkbox] {
   margin-right: 5px;
-}
-.fl-component input[type=radio] {
   margin-left: 15px;
 }
 .fl-component [contenteditable=true] {
