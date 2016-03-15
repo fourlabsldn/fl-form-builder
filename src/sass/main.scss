@@ -17,13 +17,16 @@
   }
 
   &:hover .fl-form-component-control {
-    display: block;
+    visibility: visible;
+    opacity: 1;
   }
 }
 
 
 .fl-form-component-control {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease, visibility 0s;
   position: absolute;
   right: 0;
   top: 0;
