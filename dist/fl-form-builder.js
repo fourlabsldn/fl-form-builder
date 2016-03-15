@@ -567,6 +567,17 @@ RadioBtns.prototype.init = function init(name) {
     legend.value = '';
   });
 
+  legend.addEventListener('keypress', function (e) {
+    if (e.which === 13) {
+      var click = new Event('click');
+      addBtn.dispatchEvent(click);
+      e.preventDefault();
+      return false; // returning false will prevent the event from bubbling up.
+    } else {
+      return true;
+    }
+  });
+
   this.configContent.appendChild(addBtn);
   this.configContent.appendChild(legend);
 
