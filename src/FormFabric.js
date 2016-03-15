@@ -21,9 +21,9 @@ function FormFabric(formBody) {
   function createElement(Constr, formBody) {
     var name = 'Temp name' + (Math.floor(Math.random() * 1000));
     var comp = new Constr(name);
-    var ev = new CustomEvent( 'newElement',
+    var ev = new CustomEvent('newElement',
       {
-        detail: {	comp: 'Hello World!' },
+        detail: {	comp: comp },
         bubbles: true,
         cancelable: true,
       });

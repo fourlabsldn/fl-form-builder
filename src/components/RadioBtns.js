@@ -45,7 +45,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.classList.add('fl-radio-btn');
 
   var newLabel = document.createElement('label');
-  var labelText = document.creteTextNode(legend || value);
+  var labelText = document.createTextNode(legend || value);
   newLabel.appendChild(newRadio);
   newLabel.appendChild(labelText);
 

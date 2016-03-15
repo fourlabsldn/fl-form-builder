@@ -34,7 +34,7 @@ function FormBody() {
         return;
       }
 
-      _this.addComponent(e.detail.element);
+      _this.addComponent(e.detail.comp);
     });
 
     submitBtn = document.createElement('input');
@@ -116,9 +116,9 @@ function FormFabric(formBody) {
   function createElement(Constr, formBody) {
     var name = 'Temp name' + (Math.floor(Math.random() * 1000));
     var comp = new Constr(name);
-    var ev = new CustomEvent( 'newElement',
+    var ev = new CustomEvent('newElement',
       {
-        detail: {	comp: 'Hello World!' },
+        detail: {	comp: comp },
         bubbles: true,
         cancelable: true,
       });
@@ -187,6 +187,7 @@ Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
   this.name = name + '[]';
   this.required = false;
+  this.addPlaceHolder();
 };
 
 /**
@@ -364,7 +365,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.classList.add('fl-radio-btn');
 
   var newLabel = document.createElement('label');
-  var labelText = document.creteTextNode(legend || value);
+  var labelText = document.createTextNode(legend || value);
   newLabel.appendChild(newRadio);
   newLabel.appendChild(labelText);
 
@@ -394,12 +395,24 @@ TextArea.prototype = new FormComponent(); //Inheritance part
  */
 TextArea.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
+  var labelEl = document.createElement('label');
+  var labelText = document.createTextNode('Text Area ');
+  this.labelText = labelText;
+  labelEl.appendChild(labelText);
 
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
   area.classList.add('fl-text-area');
-  this.element.appendChild(area);
+  labelEl.appendChild(area);
+
+  this.element.appendChild(labelEl);
+};
+
+TextArea.prototype.setLabel = function setLabel(desc) {
+  if (!desc || !this.labelText) { return; }
+
+  this.labelText.innerText = desc;
 };
 
 /*globals FormComponent*/
@@ -425,20 +438,24 @@ TextBox.prototype = new FormComponent(); //Inheritance part
 TextBox.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
+  var labelEl = document.createElement('label');
+  var labelText = document.createTextNode('Text ');
+  this.labelText = labelText;
+  labelEl.appendChild(labelText);
+
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
   box.classList.add('fl-text-box');
+  labelEl.appendChild(box);
+
+  this.element.appendChild(labelEl);
 };
 
-/**
- * init() is automatically called in construction by FormComponent, the parent class
- * @override @method init
- * @param  {String} name
- * @return {void}
- */
-TextBox.prototype.init = function init(name) {
+TextBox.prototype.setLabel = function setLabel(desc) {
+  if (!desc || !this.labelText) { return; }
 
+  this.labelText.innerText = desc;
 };
 
 /*globals FormFabric, FormBody, xController*/

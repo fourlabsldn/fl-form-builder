@@ -34,7 +34,7 @@ function FormBody() {
         return;
       }
 
-      _this.addComponent(e.detail.element);
+      _this.addComponent(e.detail.comp);
     });
 
     submitBtn = document.createElement('input');
