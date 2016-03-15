@@ -15,7 +15,7 @@ FormComponent.prototype.init = function init(name) {
   }
 
   this.element = document.createElement('div');
-  this.element.classList.add('fl-form-component');
+  this.element.classList.add('fl-component');
   this.element.classList.add('col-md-11');
   this.element.classList.add('form-group');
   this.name = name;
@@ -23,8 +23,10 @@ FormComponent.prototype.init = function init(name) {
 };
 
 FormComponent.prototype.createControls = function createControls() {
+
+  //Create side control bar
   var controls = document.createElement('div');
-  controls.classList.add('fl-form-component-control');
+  controls.classList.add('fl-component-side-control');
 
   var dragBtn = document.createElement('i');
   dragBtn.classList.add('glyphicon');
@@ -34,19 +36,63 @@ FormComponent.prototype.createControls = function createControls() {
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.classList.add('glyphicon');
   moreConfigBtn.classList.add('glyphicon-cog');
+  controls.appendChild(moreConfigBtn);
 
   var _this = this;
   moreConfigBtn.addEventListener('click', function () {
-    _this.showMoreConfig(); //To be implemented in classes.
+    _this.moreConfigToggle();
   });
 
-  controls.appendChild(moreConfigBtn);
+  //Create configuration box
+  var configBox = document.createElement('div');
+  configBox.classList.add('fl-component-config');
+  this.configBox = configBox;
+
+  var deleteBtn = document.createElement('button');
+  deleteBtn.classList.add('btn');
+  deleteBtn.classList.add('btn-danger');
+  deleteBtn.classList.add('btn-sm');
+  deleteBtn.classList.add('fl-bottom-btn');
+  deleteBtn.innerText = 'Delete';
+  deleteBtn.addEventListener('click', function () {
+    _this.destroy();
+  });
+
+  configBox.appendChild(deleteBtn);
+
+  var okBtn = document.createElement('button');
+  okBtn.classList.add('btn');
+  okBtn.classList.add('btn-default');
+  okBtn.classList.add('btn-sm');
+  okBtn.classList.add('fl-bottom-btn');
+  okBtn.innerText = 'Ok';
+  okBtn.addEventListener('click', function () {
+    _this.saveConfig();
+    _this.moreConfigToggle();
+  });
+
+  configBox.appendChild(okBtn);
+  this.element.appendChild(configBox);
   this.element.appendChild(controls);
 };
 
-//To be implemented in child classes
-FormComponent.prototype.showMoreConfig = function showMoreConfig() {
-  console.log('No handler attached to "more config"');
+FormComponent.prototype.moreConfigToggle = function moreConfigToggle(showHide) {
+  if (!this.configBox) {
+    throw new Error('FormComponent.moreConfigToggle(): No configBox initialised');
+  }
+
+  if (showHide === true) {
+    this.element.classList.add('fl-form-config-visible');
+  } else if (showHide === false) {
+    this.element.classList.remove('fl-form-config-visible');
+  } else {
+    this.element.classList.toggle('fl-form-config-visible');
+  }
+};
+
+//To be implemented by child clases
+FormComponent.prototype.saveConfig = function saveConfig() {
+
 };
 
 FormComponent.prototype.destroy = function destroy() {

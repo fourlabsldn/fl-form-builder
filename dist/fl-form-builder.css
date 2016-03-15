@@ -2,6 +2,18 @@
   width: 100%;
 }
 
+.fl-showing, .fl-component:hover .fl-component-side-control, .fl-form-config-visible .fl-component-side-control,
+.fl-form-config-visible .fl-component-config {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.fl-hidden, .fl-component-side-control, .fl-form-config-visible .fl-component-side-control button {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: all 0.2s ease, visibility 0s;
+}
+
 .fl-form-fabric {
   margin-bottom: 10px;
 }
@@ -9,40 +21,62 @@
   margin-right: 5px;
 }
 
-.fl-form-component input[type=radio],
-.fl-form-component input[type=checkbox] {
+.fl-component input[type=radio],
+.fl-component input[type=checkbox] {
   margin-right: 5px;
 }
-.fl-form-component:hover .fl-form-component-control {
-  visibility: visible;
-  opacity: 1;
-}
 
-.fl-form-component-control {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.2s ease, visibility 0s;
+.fl-component-side-control {
+  transition: all 0.1s ease, visibility 0s;
   position: absolute;
   right: 0;
   top: 0;
   background-color: rgba(230, 230, 230, 0.7);
   border-radius: 0 5px 5px 0;
-  padding: 0px 10px;
+  padding: 0 10px;
   min-height: 100%;
   text-align: center;
 }
-.fl-form-component-control * {
+.fl-component-side-control * {
   display: block;
   position: relative;
   margin: 5px;
 }
-.fl-form-component-control i, .fl-form-component-control button {
+.fl-component-side-control i,
+.fl-component-side-control button {
   color: #999;
   background-color: transparent;
   border: none;
 }
-.fl-form-component-control i:hover, .fl-form-component-control button:hover {
+.fl-component-side-control i:hover,
+.fl-component-side-control button:hover {
   color: #444;
+}
+
+.fl-component-config {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease, visibility 0s;
+  border-radius: 0 0 5px 5px;
+  background-color: #eee;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  min-width: 100%;
+  transform: translateY(100%);
+  padding: 15px;
+}
+.fl-component-config * {
+  float: left;
+}
+.fl-component-config .fl-bottom-btn {
+  float: right;
+  margin-left: 5px;
+}
+
+.fl-form-config-visible .fl-component-side-control {
+  border-radius: 0 5px 0 0;
 }
 
 /*# sourceMappingURL=fl-form-builder.css.map */
