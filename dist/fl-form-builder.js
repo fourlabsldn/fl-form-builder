@@ -610,7 +610,7 @@ RadioBtns.prototype.add = function add(value, legend) {
   newLabel.appendChild(labelText);
 
   this.content.appendChild(newLabel);
-  return newRadio;
+  return newLabel;
 };
 
 /*globals FormComponent*/
