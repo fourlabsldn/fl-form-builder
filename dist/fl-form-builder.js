@@ -457,12 +457,22 @@ Dropdown.prototype = new FormComponent(); //Inheritance part
 Dropdown.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
+  var labelEl = document.createElement('div');
+  labelEl.classList.add('full-width');
+
+  var labelText = document.createElement('label');
+  labelText.innerText = 'Dropdown ';
+  labelText.classList.add('fl-editable');
+  this.labelText = labelText;
+  labelEl.appendChild(labelText);
+
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
   this.wrapper.classList.add('form-control');
+  labelEl.appendChild(this.wrapper);
 
-  this.content.appendChild(this.wrapper);
+  this.content.appendChild(labelEl);
 
   this.addPlaceHolder();
 };
