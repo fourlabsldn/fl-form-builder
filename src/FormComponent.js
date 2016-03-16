@@ -39,6 +39,7 @@ FormComponent.prototype.createControls = function createControls() {
   controls.appendChild(dragBtn);
 
   var moreConfigBtn = document.createElement('button');
+  moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon');
   moreConfigBtn.classList.add('glyphicon-pencil');
   controls.appendChild(moreConfigBtn);
@@ -64,6 +65,7 @@ FormComponent.prototype.createControls = function createControls() {
   buttonsContainer.classList.add('col-sm-12');
 
   var deleteBtn = document.createElement('button');
+  deleteBtn.setAttribute('type', 'button');
   deleteBtn.classList.add('btn');
   deleteBtn.classList.add('btn-danger');
   deleteBtn.classList.add('btn-sm');
@@ -76,6 +78,7 @@ FormComponent.prototype.createControls = function createControls() {
   buttonsContainer.appendChild(deleteBtn);
 
   var okBtn = document.createElement('button');
+  okBtn.setAttribute('type', 'button');
   okBtn.classList.add('btn');
   okBtn.classList.add('btn-default');
   okBtn.classList.add('btn-sm');
@@ -121,28 +124,29 @@ FormComponent.prototype.createControls = function createControls() {
 };
 
 FormComponent.prototype.configToggle = function configToggle(showHide) {
+  if (showHide === true) {
+    this.showConfig();
+  } else if (showHide === false) {
+    this.hideConfig();
+  } else { //toggle
+    var configShowing = this.configShowing
+    this.showConfig(!configShowing);
+  }
+};
+
+FormComponent.prototype.hideConfig = function hideConfig() {
   if (!this.configBox) {
     throw new Error('FormComponent.configToggle(): No configBox initialised');
   }
 
-  //Show config box and change configShowing value
-  if (showHide === true) {
-    this.element.classList.add('fl-form-config-visible');
-    this.configShowing = true;
-  } else if (showHide === false) {
-    this.element.classList.remove('fl-form-config-visible');
-    this.configShowing = false;
-  } else {
-    this.element.classList.toggle('fl-form-config-visible');
-    this.configShowing = !this.configShowing;
-  }
+  this.element.classList.remove('fl-form-config-visible');
+  this.configShowing = false;
 
-  var configShowing = this.configShowing;
   var editables = this.element.querySelectorAll('.fl-editable');
   var placeholderMessage = 'Set a placeholder text.';
 
   [].forEach.call(editables, function (el) {
-    el.setAttribute('contenteditable', configShowing);
+    el.setAttribute('contenteditable', false);
 
     //Show message to input placeholder text if there is no placeholder already
     //in place. Remove the message if placeholder wasn't set.
@@ -150,10 +154,7 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
       var placeholderText = el.getAttribute('placeholder');
       var value = el.value;
 
-      if (configShowing) {
-        var newContent = (placeholderText) ? placeholderText : placeholderMessage;
-        el.setAttribute('placeholder', newContent);
-      } else if (value) {
+      if (value) {
         el.setAttribute('placeholder', value);
       }else if (placeholderText ===  placeholderMessage) {
         el.removeAttribute('placeholder');
@@ -162,32 +163,56 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
       el.value = '';
     }
   });
+};
 
-  if (configShowing) {
-    var focusElement = this.focusElement || this.configBox.querySelector('switch');
-    if (focusElement) {
-      //NOTE: There is a bug that for some reason it doesn't focus if you just
-      //call focus() straight away. setTimeout solves it.
-      //see http://goo.gl/UjKOk5
-      setTimeout(function () { focusElement.focus(); }, 15);
-    }
-
-    var _this = this;
-    var listenerTarget = document.body;
-    var clickOutOfComponent = function (e) {
-      console.log('Listener called');
-      var clickX = e.clientX;
-      var clickY = e.clientY;
-
-      //If clicked outside of the component.
-      if (!_this.isAtPoint(clickX, clickY)) {
-        listenerTarget.removeEventListener('click', clickOutOfComponent);
-        _this.configToggle(false);
-      }
-    };
-
-    document.body.addEventListener('click', clickOutOfComponent, true);
+FormComponent.prototype.showConfig = function showConfing() {
+  if (!this.configBox) {
+    throw new Error('FormComponent.showConfing(): No configBox initialised');
   }
+
+  //Show config box and change configShowing value
+  this.element.classList.add('fl-form-config-visible');
+  this.configShowing = true;
+
+  //Make appropriate elements editable.
+  var editables = this.element.querySelectorAll('.fl-editable');
+  var placeholderMessage = 'Set a placeholder text.';
+  [].forEach.call(editables, function (el) {
+    el.setAttribute('contenteditable', true);
+
+    //Show message to input placeholder text if there is no placeholder already
+    //in place. Remove the message if placeholder wasn't set.
+    if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
+      var placeholderText = el.getAttribute('placeholder');
+      var newContent = (placeholderText) ? placeholderText : placeholderMessage;
+      el.setAttribute('placeholder', newContent);
+      el.value = '';
+    }
+  });
+
+  //Focus on the appropriate element
+  var focusElement = this.focusElement || this.configBox.querySelector('switch');
+  if (focusElement) {
+    //NOTE: There is a bug that for some reason it doesn't focus if you just
+    //call focus() straight away. setTimeout solves it.
+    //see http://goo.gl/UjKOk5
+    setTimeout(function () { focusElement.focus(); }, 15);
+  }
+
+  //Set a listener to hide the configuration when the user clicks somewhere else.
+  var _this = this;
+  var listenerTarget = document.body;
+  listenerTarget.addEventListener('click', function clickOutOfComponent(e) {
+    console.log('Listener called');
+    var clickX = e.clientX;
+    var clickY = e.clientY;
+
+    //If clicked outside of the component.
+    if (!_this.isAtPoint(clickX, clickY)) {
+      listenerTarget.removeEventListener('click', clickOutOfComponent);
+      _this.hideConfig();
+    }
+  }, true);
 };
 
 /**

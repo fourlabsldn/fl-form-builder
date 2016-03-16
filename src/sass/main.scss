@@ -54,14 +54,20 @@ $active-blue: #63A8EB;
   }
 }
 .fl-component {
-  input[type=radio],
-  input[type=checkbox] {
-    margin-right: 5px;
-    margin-left: 15px;
+  padding-bottom: 5px;
+
+  &:hover {
+    background-color: lighten($active-blue, 30%);
   }
 
   &:hover .fl-component-side-control {
     @extend .fl-showing;
+  }
+
+  input[type=radio],
+  input[type=checkbox] {
+    margin-right: 5px;
+    margin-left: 15px;
   }
 
   [contenteditable=true] {
