@@ -53,6 +53,10 @@ $active-blue: #63A8EB;
     margin-right: 5px;
   }
 }
+.fl-form-builder {
+  display: block;
+  padding:10px;
+}
 .fl-component {
   padding-bottom: 5px;
 
@@ -117,7 +121,7 @@ $active-blue: #63A8EB;
   right: 0;
   bottom: 0;
   z-index: 99;
-  min-width: calc(100% - 15px);
+  width: 100%;
   transform: translateY(100%);
   padding: 15px;
 
