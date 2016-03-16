@@ -1,38 +1,43 @@
-.full-width {
+.fl-form-builder {
+  display: block;
+  padding: 10px;
+  /* ============================================================
+  COMMON
+============================================================ */
+  /* ============================================================
+  SWITCH 1 - ROUND
+============================================================ */
+}
+.fl-form-builder .full-width {
   width: 100%;
 }
-
-.fl-showing, .fl-component:hover .fl-component-side-control, .fl-form-config-visible .fl-component-side-control,
-.fl-form-config-visible .fl-component-config {
+.fl-form-builder .fl-showing, .fl-form-builder .fl-component:hover .fl-component-side-control, .fl-form-builder .fl-form-config-visible .fl-component-side-control,
+.fl-form-builder .fl-form-config-visible .fl-component-config {
   visibility: visible !important;
   opacity: 1 !important;
 }
-
-.fl-hidden, .fl-component-side-control, .fl-form-config-visible .fl-component-side-control button {
+.fl-form-builder .fl-hidden, .fl-form-builder .fl-component-side-control, .fl-form-builder .fl-form-config-visible .fl-component-side-control button {
   visibility: hidden !important;
   opacity: 0 !important;
   transition: all 0.2s ease, visibility 0s;
 }
-
-.fl-grey-btn, .fl-component-side-control i,
-.fl-component-side-control button {
+.fl-form-builder .fl-grey-btn, .fl-form-builder .fl-component-side-control i,
+.fl-form-builder .fl-component-side-control button {
   color: #999;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
-.fl-grey-btn:hover, .fl-component-side-control i:hover,
-.fl-component-side-control button:hover {
+.fl-form-builder .fl-grey-btn:hover, .fl-form-builder .fl-component-side-control i:hover,
+.fl-form-builder .fl-component-side-control button:hover {
   color: #444;
 }
-
-.fl-blink-red {
+.fl-form-builder .fl-blink-red {
   animation-name: blinkOutline;
   animation-duration: 0.4s;
   animation-iteration-count: 2;
   animation-direction: reverse;
 }
-
 @keyframes blinkOutline {
   0% {
     outline: 1px solid rgba(250, 0, 0, 0);
@@ -55,44 +60,37 @@
     outline: 1px solid rgba(250, 0, 0, 0);
   }
 }
-.fl-form-fabric {
+.fl-form-builder .fl-form-fabric {
   margin-bottom: 10px;
 }
-.fl-form-fabric button {
+.fl-form-builder .fl-form-fabric button {
   margin-right: 5px;
 }
-
-.fl-form-builder {
-  display: block;
-  padding: 10px;
-}
-
-.fl-component {
+.fl-form-builder .fl-component {
   padding-bottom: 5px;
 }
-.fl-component:hover {
+.fl-form-builder .fl-component:hover {
   background-color: #ebf4fc;
 }
-.fl-component input[type=radio],
-.fl-component input[type=checkbox] {
+.fl-form-builder .fl-component input[type=radio],
+.fl-form-builder .fl-component input[type=checkbox] {
   margin-right: 5px;
   margin-left: 15px;
 }
-.fl-component [contenteditable=true] {
+.fl-form-builder .fl-component [contenteditable=true] {
   border-bottom: 1px solid #999;
 }
-.fl-component [contenteditable=true]:focus {
+.fl-form-builder .fl-component [contenteditable=true]:focus {
   outline: none;
 }
-.fl-component .fl-editable {
+.fl-form-builder .fl-component .fl-editable {
   min-width: 30px;
   display: inline-block;
 }
-.fl-component label {
+.fl-form-builder .fl-component label {
   display: inline-block;
 }
-
-.fl-component-side-control {
+.fl-form-builder .fl-component-side-control {
   transition: all 0.1s ease, visibility 0s;
   position: absolute;
   right: 0;
@@ -103,13 +101,12 @@
   min-height: 100%;
   text-align: center;
 }
-.fl-component-side-control * {
+.fl-form-builder .fl-component-side-control * {
   display: block;
   position: relative;
   margin: 5px;
 }
-
-.fl-component-config {
+.fl-form-builder .fl-component-config {
   visibility: hidden;
   opacity: 0;
   transition: all 0.2s ease, visibility 0s;
@@ -123,41 +120,36 @@
   transform: translateY(100%);
   padding: 15px;
 }
-.fl-component-config .fl-bottom-btn {
+.fl-form-builder .fl-component-config .fl-bottom-btn {
   margin-left: 5px;
   float: right;
 }
-.fl-component-config .row {
+.fl-form-builder .fl-component-config .row {
   width: 100%;
 }
-.fl-component-config label, .fl-component-config .switch {
+.fl-form-builder .fl-component-config label,
+.fl-form-builder .fl-component-config .switch {
   display: inline-block;
 }
-.fl-component-config .switch {
+.fl-form-builder .fl-component-config .switch {
   margin: 0 5px;
 }
-.fl-component-config i {
+.fl-form-builder .fl-component-config i {
   margin: 0 5px;
 }
-.fl-component-config input[type=text] {
+.fl-form-builder .fl-component-config input[type=text] {
   min-width: 300px;
-  margin: 0 5px 10px 5px;
+  margin: 0 5px 10px;
 }
-
-.fl-form-config-visible .fl-component-side-control {
+.fl-form-builder .fl-form-config-visible .fl-component-side-control {
   border-radius: 0 5px 0 0;
 }
-
-/* ============================================================
-  COMMON
-============================================================ */
-.cmn-toggle {
+.fl-form-builder .cmn-toggle {
   position: absolute;
   margin-left: -9999px;
   visibility: hidden;
 }
-
-.cmn-toggle + label {
+.fl-form-builder .cmn-toggle + label {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -168,11 +160,7 @@
   -ms-user-select: none;
   user-select: none;
 }
-
-/* ============================================================
-  SWITCH 1 - ROUND
-============================================================ */
-input.cmn-toggle-round + label {
+.fl-form-builder input.cmn-toggle-round + label {
   padding: 2px;
   width: calc( 20px * 2);
   height: 20px;
@@ -183,8 +171,8 @@ input.cmn-toggle-round + label {
   -o-border-radius: 20px;
   border-radius: 20px;
 }
-
-input.cmn-toggle-round + label:before, input.cmn-toggle-round + label:after {
+.fl-form-builder input.cmn-toggle-round + label:before,
+.fl-form-builder input.cmn-toggle-round + label:after {
   display: block;
   position: absolute;
   top: 1px;
@@ -192,8 +180,7 @@ input.cmn-toggle-round + label:before, input.cmn-toggle-round + label:after {
   bottom: 1px;
   content: "";
 }
-
-input.cmn-toggle-round + label:before {
+.fl-form-builder input.cmn-toggle-round + label:before {
   right: 1px;
   background-color: #f1f1f1;
   -webkit-border-radius: 20px;
@@ -206,8 +193,7 @@ input.cmn-toggle-round + label:before {
   -o-transition: background 0.4s;
   transition: background 0.4s;
 }
-
-input.cmn-toggle-round + label:after {
+.fl-form-builder input.cmn-toggle-round + label:after {
   width: calc( 20px - 2px);
   background-color: #fff;
   -webkit-border-radius: 100%;
@@ -223,12 +209,10 @@ input.cmn-toggle-round + label:after {
   -o-transition: margin 0.4s;
   transition: margin 0.4s;
 }
-
-input.cmn-toggle-round:checked + label:before {
+.fl-form-builder input.cmn-toggle-round:checked + label:before {
   background-color: #63A8EB;
 }
-
-input.cmn-toggle-round:checked + label:after {
+.fl-form-builder input.cmn-toggle-round:checked + label:after {
   margin-left: 20px;
 }
 
