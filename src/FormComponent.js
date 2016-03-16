@@ -36,6 +36,11 @@ FormComponent.prototype.init = function init(name) {
   this.createControls();
 };
 
+/**
+ * Creates the config box
+ * @method createControls
+ * @return {void}
+ */
 FormComponent.prototype.createControls = function createControls() {
 
   //Create side control bar -----------------------------
@@ -132,6 +137,12 @@ FormComponent.prototype.createControls = function createControls() {
   this.element.appendChild(controls);
 };
 
+/**
+ * Toggle the configuration mode for the component
+ * @method configToggle
+ * @param  {boolean} showHide
+ * @return {void}
+ */
 FormComponent.prototype.configToggle = function configToggle(showHide) {
   showHide = showHide || !this.configShowing;
   if (showHide) {
@@ -141,6 +152,11 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
   }
 };
 
+/**
+ * Hides the config box and make the content non-editable
+ * @method hideConfig
+ * @return {void}
+ */
 FormComponent.prototype.hideConfig = function hideConfig() {
   if (!this.configBox) {
     throw new Error('FormComponent.configToggle(): No configBox initialised');
@@ -174,6 +190,11 @@ FormComponent.prototype.hideConfig = function hideConfig() {
   });
 };
 
+/**
+ * Displays the configuration box and makes appropriate fields editable.
+ * @method showConfig
+ * @return {void}
+ */
 FormComponent.prototype.showConfig = function showConfing() {
   if (!this.configBox) {
     throw new Error('FormComponent.showConfing(): No configBox initialised');
