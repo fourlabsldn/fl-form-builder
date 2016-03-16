@@ -25,12 +25,6 @@ TextBox.prototype.init = function init(name) {
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createElement('label');
-  labelText.classList.add('fl-editable');
-  labelText.innerText = 'Text ';
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
@@ -43,7 +37,7 @@ TextBox.prototype.init = function init(name) {
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {
-  if (!desc || !this.labelText) { return; }
+  if (!desc || !this.title) { return; }
 
-  this.labelText.innerText = desc;
+  this.title.innerText = desc;
 };

@@ -23,12 +23,6 @@ TextArea.prototype.init = function init(name) {
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createElement('label');
-  labelText.innerText = 'Text Area ';
-  labelText.classList.add('fl-editable');
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
@@ -40,8 +34,8 @@ TextArea.prototype.init = function init(name) {
   this.content.appendChild(labelEl);
 };
 
-TextArea.prototype.setLabel = function setLabel(desc) {
-  if (!desc || !this.labelText) { return; }
+TextArea.prototype.setTitle = function setTitle(desc) {
+  if (!desc || !this.title) { return; }
 
-  this.labelText.innerText = desc;
+  this.title.innerText = desc;
 };

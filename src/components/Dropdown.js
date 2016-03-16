@@ -23,13 +23,6 @@ Dropdown.prototype.init = function init(name) {
 
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
-
-  var labelText = document.createElement('label');
-  labelText.innerText = 'Dropdown ';
-  labelText.classList.add('fl-editable');
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');

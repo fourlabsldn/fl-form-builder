@@ -22,8 +22,6 @@ RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   this.createConfigInputField();
-
-  //Add placeholder
   this.addPlaceHolder();
 };
 

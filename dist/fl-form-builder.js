@@ -67,14 +67,23 @@ FormComponent.prototype.init = function init(name) {
     throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
   }
 
+  //Create wrapper element
   this.element = document.createElement('div');
   this.element.classList.add('fl-component');
   this.element.classList.add('col-md-12');
   this.element.classList.add('form-group');
 
+  //Create div where content will go
   this.content = document.createElement('div');
   this.content.classList.add('fl-form-content');
   this.element.appendChild(this.content);
+
+  //Create a title
+  var title = document.createElement('h3');
+  title.innerText = 'Add a title';
+  title.classList.add('fl-editable');
+  this.title = title;
+  this.content.appendChild(title);
 
   this.name = name;
   this.createControls();
@@ -606,13 +615,6 @@ Dropdown.prototype.init = function init(name) {
 
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
-
-  var labelText = document.createElement('label');
-  labelText.innerText = 'Dropdown ';
-  labelText.classList.add('fl-editable');
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   this.wrapper = document.createElement('select');
   this.wrapper.setAttribute('name', name);
   this.wrapper.classList.add('fl-dropdown');
@@ -676,8 +678,6 @@ RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   this.createConfigInputField();
-
-  //Add placeholder
   this.addPlaceHolder();
 };
 
@@ -734,12 +734,6 @@ TextArea.prototype.init = function init(name) {
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createElement('label');
-  labelText.innerText = 'Text Area ';
-  labelText.classList.add('fl-editable');
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
@@ -751,10 +745,10 @@ TextArea.prototype.init = function init(name) {
   this.content.appendChild(labelEl);
 };
 
-TextArea.prototype.setLabel = function setLabel(desc) {
-  if (!desc || !this.labelText) { return; }
+TextArea.prototype.setTitle = function setTitle(desc) {
+  if (!desc || !this.title) { return; }
 
-  this.labelText.innerText = desc;
+  this.title.innerText = desc;
 };
 
 /*globals FormComponent*/
@@ -784,12 +778,6 @@ TextBox.prototype.init = function init(name) {
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
 
-  var labelText = document.createElement('label');
-  labelText.classList.add('fl-editable');
-  labelText.innerText = 'Text ';
-  this.labelText = labelText;
-  labelEl.appendChild(labelText);
-
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
@@ -802,9 +790,9 @@ TextBox.prototype.init = function init(name) {
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {
-  if (!desc || !this.labelText) { return; }
+  if (!desc || !this.title) { return; }
 
-  this.labelText.innerText = desc;
+  this.title.innerText = desc;
 };
 
 /*globals FormFabric, FormBody, xController*/

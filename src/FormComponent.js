@@ -14,14 +14,23 @@ FormComponent.prototype.init = function init(name) {
     throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
   }
 
+  //Create wrapper element
   this.element = document.createElement('div');
   this.element.classList.add('fl-component');
   this.element.classList.add('col-md-12');
   this.element.classList.add('form-group');
 
+  //Create div where content will go
   this.content = document.createElement('div');
   this.content.classList.add('fl-form-content');
   this.element.appendChild(this.content);
+
+  //Create a title
+  var title = document.createElement('h3');
+  title.innerText = 'Add a title';
+  title.classList.add('fl-editable');
+  this.title = title;
+  this.content.appendChild(title);
 
   this.name = name;
   this.createControls();
