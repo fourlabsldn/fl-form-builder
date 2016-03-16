@@ -221,6 +221,8 @@ FormComponent.prototype.hideConfig = function hideConfig() {
 FormComponent.prototype.showConfig = function showConfing() {
   if (!this.configBox) {
     throw new Error('FormComponent.showConfing(): No configBox initialised');
+  } else if (this.configShowing) {
+    return;
   }
 
   //Show config box and change configShowing value
@@ -255,17 +257,19 @@ FormComponent.prototype.showConfig = function showConfing() {
   //Set a listener to hide the configuration when the user clicks somewhere else.
   var _this = this;
   var listenerTarget = document.body;
-  listenerTarget.addEventListener('click', function clickOutOfComponent(e) {
+  var useCapture = true;
+  listenerTarget.addEventListener('mousedown', function clickOutOfComponent(e) {
     console.log('Listener called');
+    var func = clickOutOfComponent;
     var clickX = e.clientX;
     var clickY = e.clientY;
 
     //If clicked outside of the component.
     if (!_this.isAtPoint(clickX, clickY)) {
-      listenerTarget.removeEventListener('click', clickOutOfComponent);
+      listenerTarget.removeEventListener('mousedown', func, useCapture);
       _this.hideConfig();
     }
-  }, true);
+  }, useCapture);
 };
 
 /**
