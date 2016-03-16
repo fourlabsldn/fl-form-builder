@@ -177,19 +177,19 @@ FormComponent.prototype.createControls = function createControls() {
 };
 
 FormComponent.prototype.configToggle = function configToggle(showHide) {
-  if (showHide === true) {
+  showHide = showHide || !this.configShowing;
+  if (showHide) {
     this.showConfig();
-  } else if (showHide === false) {
+  } else {
     this.hideConfig();
-  } else { //toggle
-    var configShowing = this.configShowing
-    this.showConfig(!configShowing);
   }
 };
 
 FormComponent.prototype.hideConfig = function hideConfig() {
   if (!this.configBox) {
     throw new Error('FormComponent.configToggle(): No configBox initialised');
+  } else if (!this.configShowing) {
+    return;
   }
 
   this.element.classList.remove('fl-form-config-visible');
