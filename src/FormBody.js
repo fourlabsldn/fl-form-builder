@@ -17,6 +17,7 @@ function FormBody() {
     } else {
       components.push(comp);
       form.insertBefore(comp.element, submitBtn);
+      comp.configToggle(true);
     }
   };
 

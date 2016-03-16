@@ -125,6 +125,7 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
     throw new Error('FormComponent.configToggle(): No configBox initialised');
   }
 
+  //Show config box and change configShowing value
   if (showHide === true) {
     this.element.classList.add('fl-form-config-visible');
     this.configShowing = true;
@@ -170,6 +171,46 @@ FormComponent.prototype.configToggle = function configToggle(showHide) {
       //see http://goo.gl/UjKOk5
       setTimeout(function () { focusElement.focus(); }, 15);
     }
+
+    var _this = this;
+    var listenerTarget = document.body;
+    var clickOutOfComponent = function (e) {
+      console.log('Listener called');
+      var clickX = e.clientX;
+      var clickY = e.clientY;
+
+      //If clicked outside of the component.
+      if (!_this.isAtPoint(clickX, clickY)) {
+        listenerTarget.removeEventListener('click', clickOutOfComponent);
+        _this.configToggle(false);
+      }
+    };
+
+    document.body.addEventListener('click', clickOutOfComponent, true);
+  }
+};
+
+/**
+ * Checks whether a point is inside a component or outside of it.
+ * @method isAtPoint
+ * @param  {integer}  x
+ * @param  {integer}  y
+ * @return {Boolean}   Whether point is inside component or not
+ */
+FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
+  var configPosition = this.configBox.getBoundingClientRect();
+  var componentPosition = this.element.getBoundingClientRect();
+
+  var top = componentPosition.top;
+  var bottom = configPosition.bottom;
+  var right = Math.max(configPosition.right, componentPosition.right);
+  var left = Math.min(configPosition.left, componentPosition.left);
+
+  //If point is outside of the component
+  if (x < left || right < x || y < top || bottom < y) {
+    return false;
+  } else {
+    return true;
   }
 };
 
