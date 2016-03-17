@@ -98,9 +98,12 @@ function FormBody() {
         resetElementsTranslation();
         comp.element.style.transform = 'translate3d(0, 0, 0)';
         comp.element.dataset.yStart = e.pageY;
-        comp.element.classList.remove('fl-dragging');
         comp.dragvars.initialTop = null;
       }, throttleDelay);
+
+      setTimeout(function () {
+        comp.element.classList.remove('fl-dragging');
+      }, throttleDelay + 200);
     });
 
     dragBtn.addEventListener('drag', utils.throttle(throttleDelay, function dragging(e) {
