@@ -123,7 +123,6 @@ FormComponent.prototype.createControls = function createControls() {
   switchInput.addEventListener('change', function (e) {
     var checked = e.target.checked;
     var wasChanged = _this.required(checked);
-    if (!wasChanged) { e.target.checked = !checked; }
   });
 
   this.requiredSwitch = switchInput;

@@ -176,7 +176,6 @@ FormComponent.prototype.createControls = function createControls() {
   switchInput.addEventListener('change', function (e) {
     var checked = e.target.checked;
     var wasChanged = _this.required(checked);
-    if (!wasChanged) { e.target.checked = !checked; }
   });
 
   this.requiredSwitch = switchInput;
@@ -546,7 +545,6 @@ Checkboxes.prototype.add = function add(value, legend) {
 
   if (this.isRequired && this.getElements().length > 0) {
     this.required(false);
-    if (this.requiredSwitch) { this.requiredSwitch.checked = false; }
   }
 
   var newBox = document.createElement('input');
@@ -578,9 +576,15 @@ Checkboxes.prototype.add = function add(value, legend) {
  * @return {Boolean}      Whether required was set or not.
  */
 Checkboxes.prototype.required = function required(isRequired) {
-  if (this.placeHolder ||
+  if (this.isRequired === isRequired) {
+    return true;
+  } else if (!this.requiredSwitch) {
+    throw new Error('Checkboxes.required(): No required button in place.');
+  } else if (this.placeHolder ||
       this.getElements().length > 1 && isRequired) {
-    console.error('Checkboxes: To be "required" there can only be one checkbox in the group and no placeholder');
+    console.error('Checkboxes: To be "required" there can only ' +
+                  'be one checkbox in the group and no placeholder');
+    this.requiredSwitch.checked = false;
     return false;
   }
 
@@ -598,23 +602,16 @@ Checkboxes.prototype.required = function required(isRequired) {
     });
   }
 
+  this.requiredSwitch.checked = isRequired;
   return true;
 };
 
 /**
- * @method countBoxes
- * @return {integer} Amount of checkboxes in the component
- */
-Checkboxes.prototype.countBoxes = function () {
-  return this.content.childElementCount;
-};
-
-/**
- * @method getBoxes
+ * @method getElements
  * @return {Array} collection of HTMLElements which contain the
  *                            	checkboxes and their title.
  */
-Checkboxes.prototype.getElements = function () {
+Checkboxes.prototype.getElements = function getElements() {
   return [].slice.call(this.content.querySelectorAll('label'));
 };
 
@@ -641,7 +638,7 @@ Checkboxes.prototype.createControls = function createControls() {
 
   var _this = this;
   removeBtn.addEventListener('click', function removeOption() {
-    var boxes = _this.getBoxes();
+    var boxes = _this.getElements();
     var atLeastOneBox = (boxes.length > 0);
     if (!atLeastOneBox || _this.placeHolder) {
       utils.blinkRed(_this.content);
