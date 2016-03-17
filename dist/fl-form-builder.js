@@ -558,6 +558,9 @@ Checkboxes.prototype.add = function add(value, legend) {
   legendNode.innerText = legend || value;
   legendNode.classList.add('fl-editable');
 
+  //Let's already make it contenteditable as the config box is currently open.
+  legendNode.setAttribute('contenteditable', true);
+
   var label = document.createElement('label');
   label.appendChild(newBox);
   label.appendChild(legendNode);
