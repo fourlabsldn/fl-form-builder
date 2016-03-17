@@ -280,11 +280,12 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * Creates an input field in the configContent which will call this.add with
  * its content value
  * @method createConfigInputField
+ * @param {String} placeHolderText    text to show in the input field
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createConfigInputField = function createConfigInputField() {
+FormComponent.prototype.createConfigInputField = function createConfigInputField(placeHolderText) {
   var legend = document.createElement('input');
-  legend.setAttribute('placeholder', 'Description');
+  legend.setAttribute('placeholder', placeHolderText || 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
 
