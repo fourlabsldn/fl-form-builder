@@ -66,6 +66,7 @@
 .fl-form-builder .fl-component {
   padding-bottom: 5px;
   border-radius: 5px;
+  transition: transform 0.2s ease-out;
 }
 .fl-form-builder .fl-component:hover {
   background-color: #ebf4fc;

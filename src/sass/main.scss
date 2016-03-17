@@ -68,6 +68,7 @@ $highlight-blue: lighten($active-blue, 30%);
   .fl-component {
     padding-bottom: 5px;
     border-radius: 5px;
+    transition: transform 0.2s ease-out; 
 
     &:hover {
       background-color: $highlight-blue;

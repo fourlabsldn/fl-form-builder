@@ -1,3 +1,5 @@
+/*globals utils*/
+
 function FormBody() {
   if (!(this instanceof FormBody)) {
     return new FormBody();
@@ -7,6 +9,50 @@ function FormBody() {
   var submitBtn;
   var components = [];
 
+  function addReorderButton(comp) {
+    var controls = comp.element.querySelector('.fl-component-side-control');
+    if (!controls) {
+      throw new Error('FormBody.addReorderButton(): No side control bar defined');
+    }
+
+    var dragBtn = document.createElement('i');
+    dragBtn.classList.add('glyphicon');
+    dragBtn.classList.add('glyphicon-menu-hamburger');
+    dragBtn.setAttribute('draggable', true);
+
+    dragBtn.addEventListener('dragstart', function (e) {
+      e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+      comp.element.dataset.yStart = e.pageY;
+    });
+
+    var throttleDelay = 50;
+    dragBtn.addEventListener('dragend', function (e) {
+      setTimeout(function () {
+        comp.element.style.transform = 'translate3d(0, 0, 0)';
+        comp.element.dataset.yStart = e.pageY;
+      }, throttleDelay);
+    });
+
+    dragBtn.addEventListener('drag', utils.throttle(throttleDelay, function dragging(e) {
+      console.log('dragging');
+      console.log(comp.element);
+
+      var yStart = comp.element.dataset.yStart;
+      var currY = e.pageY;
+      if (currY === 0) { return; } //correct weird behaviour when mouse goes up
+
+      var diff = currY - yStart;
+      comp.element.style.transform = 'translate3d(0, ' + diff + 'px, 0)';
+    }));
+
+    //prepend to side control bar
+    if (controls.children.length > 0) {
+      controls.insertBefore(dragBtn, controls.children[0]);
+    } else {
+      controls.appendChild(dragBtn);
+    }
+  }
+
   this.addComponent = function addComponent(comp) {
     if (!form) {
       console.error('FormBody: Form not initialised.');
@@ -15,6 +61,7 @@ function FormBody() {
       console.error('FormBody: No element to be added included.');
       return;
     } else {
+      addReorderButton(comp);
       components.push(comp);
       form.insertBefore(comp.element, submitBtn);
       comp.configToggle(true);
@@ -101,11 +148,6 @@ FormComponent.prototype.createControls = function createControls() {
   //Create side control bar -----------------------------
   var controls = document.createElement('div');
   controls.classList.add('fl-component-side-control');
-
-  var dragBtn = document.createElement('i');
-  dragBtn.classList.add('glyphicon');
-  dragBtn.classList.add('glyphicon-menu-hamburger');
-  controls.appendChild(dragBtn);
 
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.setAttribute('type', 'button');
@@ -950,7 +992,46 @@ var utils = (function utils() {
     }, 1500);
   }
 
+  /**
+   * @function throttle
+   * @param  {integer}   FuncDelay
+   * @param  {Function} callback
+   * @return {Function}                  the throttled function
+   */
+  function throttle(FuncDelay, callback) {
+    var lastCall = +new Date();
+    var delay = FuncDelay;
+    var params;
+    var context = {};
+    var calledDuringDelay = false;
+
+    return function () {
+      var now = +new Date();
+      var diff = now - lastCall;
+      var timeToEndOfDelay;
+
+      params = arguments;
+
+      if (diff > delay) {
+        callback.apply(context, params); //Call function with latest parameters
+        calledDuringDelay = false;
+        lastCall = now;
+      } else if (!calledDuringDelay) {
+        // If it wasn't called yet, call it when there is enough delay.
+        timeToEndOfDelay = delay - diff;
+
+        setTimeout(function () {
+          callback.apply(context, params); //Call function with latest parameters
+        }, timeToEndOfDelay);
+
+        calledDuringDelay = true;
+        lastCall = now + timeToEndOfDelay;
+      } // Otherwise do nothing.
+    };
+  }
+
   return {
     blinkRed: blinkRed,
+    throttle: throttle,
   };
 }());

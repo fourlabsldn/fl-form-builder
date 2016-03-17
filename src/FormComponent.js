@@ -49,11 +49,6 @@ FormComponent.prototype.createControls = function createControls() {
   var controls = document.createElement('div');
   controls.classList.add('fl-component-side-control');
 
-  var dragBtn = document.createElement('i');
-  dragBtn.classList.add('glyphicon');
-  dragBtn.classList.add('glyphicon-menu-hamburger');
-  controls.appendChild(dragBtn);
-
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon');
