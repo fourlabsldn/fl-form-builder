@@ -55,7 +55,7 @@ FormComponent.prototype.createControls = function createControls() {
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon');
-  moreConfigBtn.classList.add('glyphicon-pencil');
+  moreConfigBtn.classList.add('glyphicon-cog');
   controls.appendChild(moreConfigBtn);
 
   var _this = this;
