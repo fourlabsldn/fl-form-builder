@@ -126,6 +126,7 @@ FormComponent.prototype.createControls = function createControls() {
     if (!wasChanged) { e.target.checked = !checked; }
   });
 
+  this.requiredSwitch = switchInput;
   requiredSwitch.appendChild(switchInput);
 
   var switchLabel = document.createElement('label');

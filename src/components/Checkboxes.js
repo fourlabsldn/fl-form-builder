@@ -1,4 +1,4 @@
-/*globals FormComponent*/
+/*globals FormComponent, utils*/
 
 /**
  * @class Checkboxes
@@ -24,7 +24,6 @@ Checkboxes.prototype.init = function init(name) {
   this.name = name + '[]';
   this.isRequired = false;
 
-  this.createConfigInputField();
   this.addPlaceHolder();
 };
 
@@ -37,10 +36,13 @@ Checkboxes.prototype.init = function init(name) {
 Checkboxes.prototype.add = function add(value, legend) {
   if (!value) {
     throw new Error('Checkboxes.add(): No value parameter provided.');
-  } else if (this.isRequired && this.countBoxes() > 1) {
-    console.error('Checkboxes: To be "required" there can only be one checkbox in the group');
   } else if (this.placeHolder) {
     this.removePlaceHolder();
+  }
+
+  if (this.isRequired && this.getElements().length > 0) {
+    this.required(false);
+    if (this.requiredSwitch) { this.requiredSwitch.checked = false; }
   }
 
   var newBox = document.createElement('input');
@@ -72,17 +74,24 @@ Checkboxes.prototype.add = function add(value, legend) {
  * @return {Boolean}      Whether required was set or not.
  */
 Checkboxes.prototype.required = function required(isRequired) {
-  if (this.countBoxes() > 1 && isRequired) {
-    console.error('Checkboxes: To be "required" there can only be one checkbox in the group');
+  if (this.placeHolder ||
+      this.getElements().length > 1 && isRequired) {
+    console.error('Checkboxes: To be "required" there can only be one checkbox in the group and no placeholder');
     return false;
   }
 
   this.isRequired = isRequired;
-  var boxes = this.getBoxes();
+  var boxes = this.getElements();
   if (isRequired) {
-    boxes.forEach(function (box) { box.setAttribute('required', true); });
+    boxes.forEach(function (el) {
+      var box = el.querySelector('input') || this;
+      box.setAttribute('required', true);
+    });
   } else {
-    boxes.forEach(function (box) { box.removeAttribute('required'); });
+    boxes.forEach(function (el) {
+      var box = el.querySelector('input') || this;
+      box.removeAttribute('required');
+    });
   }
 
   return true;
@@ -98,10 +107,11 @@ Checkboxes.prototype.countBoxes = function () {
 
 /**
  * @method getBoxes
- * @return {Array} collection of checkbox HTMLElements
+ * @return {Array} collection of HTMLElements which contain the
+ *                            	checkboxes and their title.
  */
-Checkboxes.prototype.getBoxes = function () {
-  return [].slice.call(this.content.querySelectorAll('input'));
+Checkboxes.prototype.getElements = function () {
+  return [].slice.call(this.content.querySelectorAll('label'));
 };
 
 /**
@@ -109,4 +119,35 @@ Checkboxes.prototype.getBoxes = function () {
  */
 Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
   this.placeHolder = this.add('placeholder', 'Check a box');
+};
+
+/**
+ * Creates the config box
+ * @method @override createControls
+ * @return {void}
+ */
+Checkboxes.prototype.createControls = function createControls() {
+  this.constructor.prototype.createControls.call(this);
+
+  var removeBtn = document.createElement('i');
+  removeBtn.classList.add('glyphicon');
+  removeBtn.classList.add('glyphicon-minus-sign');
+  removeBtn.classList.add('fl-grey-btn');
+  removeBtn.setAttribute('alt', 'Remove one of the checkboxes');
+
+  var _this = this;
+  removeBtn.addEventListener('click', function removeOption() {
+    var boxes = _this.getBoxes();
+    var atLeastOneBox = (boxes.length > 0);
+    if (!atLeastOneBox || _this.placeHolder) {
+      utils.blinkRed(_this.content);
+      return;
+    }
+
+    var lastEl = boxes.pop();
+    lastEl.remove();
+  });
+
+  this.configContent.appendChild(removeBtn);
+  this.createConfigInputField();
 };
