@@ -81,6 +81,6 @@ module.exports = function (grunt) {
   grunt.registerTask('js-build', ['concat', 'uglify']);
   grunt.registerTask('css-build', ['sass']);
   grunt.registerTask('build', ['js-build', 'css-build']);
-  grunt.registerTask('dev', ['build', 'watch', 'open']);
+  grunt.registerTask('dev', ['build', 'open', 'watch']);
 
 };

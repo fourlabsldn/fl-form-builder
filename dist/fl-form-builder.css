@@ -2,11 +2,8 @@
   display: block;
   padding: 10px;
   /* ============================================================
-  COMMON
-============================================================ */
-  /* ============================================================
-  SWITCH 1 - ROUND
-============================================================ */
+    SWITCH
+  ============================================================ */
 }
 .fl-form-builder .full-width {
   width: 100%;
@@ -68,6 +65,7 @@
 }
 .fl-form-builder .fl-component {
   padding-bottom: 5px;
+  border-radius: 5px;
 }
 .fl-form-builder .fl-component:hover {
   background-color: #ebf4fc;
@@ -83,12 +81,15 @@
 .fl-form-builder .fl-component [contenteditable=true]:focus {
   outline: none;
 }
-.fl-form-builder .fl-component .fl-editable {
-  min-width: 30px;
-  display: inline-block;
+.fl-form-builder .fl-component .fl-deletable:before {
+  content: 'delete me';
+  background-color: red;
+  font-weight: bold;
+  color: white;
 }
 .fl-form-builder .fl-component label {
   display: inline-block;
+  min-width: 30px;
 }
 .fl-form-builder .fl-component-side-control {
   transition: all 0.1s ease, visibility 0s;
@@ -140,6 +141,9 @@
 .fl-form-builder .fl-component-config input[type=text] {
   min-width: 300px;
   margin: 0 5px 10px;
+}
+.fl-form-builder .fl-form-config-visible {
+  background-color: #ebf4fc;
 }
 .fl-form-builder .fl-form-config-visible .fl-component-side-control {
   border-radius: 0 5px 0 0;

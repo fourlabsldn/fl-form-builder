@@ -3,6 +3,8 @@ $font-grey: #999;
 $font-dark-grey: #444;
 $background-grey: #eee;
 $active-blue: #63A8EB;
+$highlight-blue: lighten($active-blue, 30%);
+
 .fl-form-builder {
   display: block;
   padding: 10px;
@@ -65,9 +67,12 @@ $active-blue: #63A8EB;
   }
   .fl-component {
     padding-bottom: 5px;
+    border-radius: 5px;
+
     &:hover {
-      background-color: lighten($active-blue, 30%);
+      background-color: $highlight-blue;
     }
+
     &:hover .fl-component-side-control {
       @extend .fl-showing;
     }
@@ -82,12 +87,15 @@ $active-blue: #63A8EB;
         outline: none;
       }
     }
-    .fl-editable {
-      min-width: 30px;
-      display: inline-block;
+    .fl-deletable:before {
+      content: 'delete me';
+      background-color: red;
+      font-weight: bold;
+      color:white;
     }
     label {
       display: inline-block;
+      min-width: 30px;
     }
   }
   .fl-component-side-control {
@@ -147,6 +155,8 @@ $active-blue: #63A8EB;
     }
   }
   .fl-form-config-visible {
+    background-color: $highlight-blue;
+
     .fl-component-side-control,
     .fl-component-config {
       @extend .fl-showing;
@@ -160,8 +170,8 @@ $active-blue: #63A8EB;
   }
 
   /* ============================================================
-  COMMON
-============================================================ */
+    SWITCH
+  ============================================================ */
   .cmn-toggle {
     position: absolute;
     margin-left: -9999px;
@@ -179,9 +189,6 @@ $active-blue: #63A8EB;
     user-select: none;
   }
 
-  /* ============================================================
-  SWITCH 1 - ROUND
-============================================================ */
   $switch-height: 20px;
   $switch-width: calc( #{$switch-height} * 2);
   input.cmn-toggle-round + label {
