@@ -66,7 +66,7 @@
 .fl-form-builder .fl-component {
   padding-bottom: 5px;
   border-radius: 5px;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 .fl-form-builder .fl-component:hover {
   background-color: #ebf4fc;
@@ -91,7 +91,7 @@
   min-width: 30px;
 }
 .fl-form-builder .fl-component-side-control {
-  transition: all 0.1s ease, visibility 0s;
+  transition: all 0.1s ease, visibility 0s, box-shadow 0.2s;
   position: absolute;
   right: 0;
   top: 0;
@@ -143,9 +143,15 @@
 }
 .fl-form-builder .fl-form-config-visible {
   background-color: #ebf4fc;
+  z-index: 5;
+  border-radius: 5px 5px 0 0;
 }
 .fl-form-builder .fl-form-config-visible .fl-component-side-control {
   border-radius: 0 5px 0 0;
+}
+.fl-form-builder .fl-dragging {
+  box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
+  z-index: 5;
 }
 .fl-form-builder .cmn-toggle {
   position: absolute;

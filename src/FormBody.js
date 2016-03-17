@@ -22,12 +22,14 @@ function FormBody() {
 
     dragBtn.addEventListener('dragstart', function (e) {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+      comp.element.classList.add('fl-dragging');
       comp.element.dataset.yStart = e.pageY;
     });
 
     var throttleDelay = 50;
     dragBtn.addEventListener('dragend', function (e) {
       setTimeout(function () {
+        comp.element.classList.remove('fl-dragging');
         comp.element.style.transform = 'translate3d(0, 0, 0)';
         comp.element.dataset.yStart = e.pageY;
       }, throttleDelay);
