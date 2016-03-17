@@ -31,7 +31,7 @@
 }
 .fl-form-builder .fl-blink-red {
   animation-name: blinkOutline;
-  animation-duration: 0.4s;
+  animation-duration: 0.3s;
   animation-iteration-count: 2;
   animation-direction: reverse;
 }

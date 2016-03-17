@@ -240,7 +240,6 @@ FormComponent.prototype.showConfig = function showConfing() {
   var listenerTarget = document.body;
   var useCapture = true;
   listenerTarget.addEventListener('mousedown', function clickOutOfComponent(e) {
-    console.log('Listener called');
     var func = clickOutOfComponent;
     var clickX = e.clientX;
     var clickY = e.clientY;
