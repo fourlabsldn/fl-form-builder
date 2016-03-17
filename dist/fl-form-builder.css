@@ -81,6 +81,10 @@
 .fl-form-builder .fl-component [contenteditable=true]:focus {
   outline: none;
 }
+.fl-form-builder .fl-component span[contenteditable=true] {
+  display: inline-block;
+  min-width: 30px;
+}
 .fl-form-builder .fl-component .fl-deletable:before {
   content: 'delete me';
   background-color: red;

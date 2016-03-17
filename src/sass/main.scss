@@ -87,12 +87,19 @@ $highlight-blue: lighten($active-blue, 30%);
         outline: none;
       }
     }
+
+    span[contenteditable=true]{
+      display: inline-block;
+      min-width: 30px;
+    }
+
     .fl-deletable:before {
       content: 'delete me';
       background-color: red;
       font-weight: bold;
       color:white;
     }
+
     label {
       display: inline-block;
       min-width: 30px;
