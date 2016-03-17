@@ -150,6 +150,7 @@
   border-radius: 0 5px 0 0;
 }
 .fl-form-builder .fl-dragging {
+  background-color: #ebf4fc;
   box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
   z-index: 5;
 }

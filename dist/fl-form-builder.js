@@ -9,6 +9,62 @@ function FormBody() {
   var submitBtn;
   var components = [];
 
+  function getAllComponents() {
+    var comps = form.querySelectorAll('.fl-component');
+    return [].slice.call(comps);
+  }
+
+  function getTopOfAllComponents() {
+    var tops = [];
+    var comps = getAllComponents();
+    comps.forEach(function (comp) {
+      var top = comp.getBoundingClientRect().top;
+      tops.push(top);
+    });
+
+    return tops;
+  }
+
+  function resetElementsTranslation() {
+    var comps = getAllComponents();
+    comps.forEach(function (comp) {
+      comp.style.transform = 'translate3d(0, 0, 0)';
+    });
+  }
+
+  function rearrangeForDrag(tops, els, mainEl, mainElInitialTop) {
+    var mainBottom = mainEl.getBoundingClientRect().bottom;
+    var mainTop = mainEl.getBoundingClientRect().top;
+    var mainSize = mainEl.clientHeight;
+
+    var movedUp = (mainTop < mainElInitialTop);
+
+    var i;
+    if (movedUp) {
+      i = 0;
+      while (tops[i]) {
+        if (mainTop < tops[i + 1] && tops[i] < mainElInitialTop) {
+          els[i].style.transform = 'translate3d(0, ' + mainSize + 'px, 0)';
+        } else {
+          els[i].style.transform = 'translate3d(0, 0, 0)';
+        }
+
+        i++;
+      }
+    } else { //moving down
+      i = 0;
+      while (tops[i]) {
+        if (mainTop > tops[i] && tops[i] > mainElInitialTop) {
+          els[i].style.transform = 'translate3d(0, -' + mainSize + 'px, 0)';
+        } else {
+          els[i].style.transform = 'translate3d(0, 0, 0)';
+        }
+
+        i++;
+      }
+    }
+  }
+
   function addReorderButton(comp) {
     var controls = comp.element.querySelector('.fl-component-side-control');
     if (!controls) {
@@ -20,24 +76,41 @@ function FormBody() {
     dragBtn.classList.add('glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
 
+    comp.dragvars = {};
     dragBtn.addEventListener('dragstart', function (e) {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
       comp.element.classList.add('fl-dragging');
       comp.element.dataset.yStart = e.pageY;
+
+      comp.dragvars.initialTop = comp.element.getBoundingClientRect().top;
+      comp.dragvars.elements = getAllComponents();
+      comp.dragvars.tops = getTopOfAllComponents();
     });
 
     var throttleDelay = 50;
     dragBtn.addEventListener('dragend', function (e) {
       setTimeout(function () {
-        comp.element.classList.remove('fl-dragging');
+        // var topStart = comp.element.getBoundingClientRect().top;
+        // form.appendChild(comp.element);
+        // var topAfterMoving = comp.element.getBoundingClientRect().top;
+        // var diff = topAfterMoving - topStart;
+
+        resetElementsTranslation();
         comp.element.style.transform = 'translate3d(0, 0, 0)';
         comp.element.dataset.yStart = e.pageY;
+        comp.element.classList.remove('fl-dragging');
+        comp.dragvars.initialTop = null;
       }, throttleDelay);
     });
 
     dragBtn.addEventListener('drag', utils.throttle(throttleDelay, function dragging(e) {
       console.log('dragging');
-      console.log(comp.element);
+
+      rearrangeForDrag(
+        comp.dragvars.tops,
+        comp.dragvars.elements,
+        comp.element,
+        comp.dragvars.initialTop);
 
       var yStart = comp.element.dataset.yStart;
       var currY = e.pageY;
