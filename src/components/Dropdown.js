@@ -1,4 +1,4 @@
-/*globals FormComponent*/
+/*globals FormComponent, utils*/
 
 /**
  * @class Dropdown
@@ -23,15 +23,13 @@ Dropdown.prototype.init = function init(name) {
 
   var labelEl = document.createElement('div');
   labelEl.classList.add('full-width');
-  this.wrapper = document.createElement('select');
-  this.wrapper.setAttribute('name', name);
-  this.wrapper.classList.add('fl-dropdown');
-  this.wrapper.classList.add('form-control');
-  labelEl.appendChild(this.wrapper);
+  this.selector = document.createElement('select');
+  this.selector.setAttribute('name', name);
+  this.selector.classList.add('fl-dropdown');
+  this.selector.classList.add('form-control');
+  labelEl.appendChild(this.selector);
 
   this.content.appendChild(labelEl);
-
-  this.createConfigInputField();
   this.addPlaceHolder();
 };
 
@@ -50,14 +48,83 @@ Dropdown.prototype.add = function add(value, legend) {
   }
 
   var newOp = document.createElement('option');
-  newOp.setAttribute(value, value);
   newOp.innerText = legend || value;
-  this.wrapper.appendChild(newOp);
+  this.selector.appendChild(newOp);
   return newOp;
 };
 
+/**
+ * Adds a placeholder and saves it in this.placeHolder
+ * @method @override addPlaceHolder
+ */
 Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
   this.placeHolder = this.add('placeholder', 'Select an option');
   this.placeHolder.setAttribute('disabled', true);
   this.placeHolder.setAttribute('selected', true);
+};
+
+/**
+ * Hides the config panel and makes the selectable a dropdown again
+ * @method @override hideConfig
+ * @return {void}
+ */
+Dropdown.prototype.hideConfig = function hideConfig() {
+  this.constructor.prototype.hideConfig.call(this);
+
+  if (!this.selector) {
+    console.error('Dropdown.hideConfig(): Selector not specified');
+    return;
+  }
+
+  //Make selector not multiple
+  this.selector.removeAttribute('multiple');
+};
+
+/**
+ * Shows the config panes and allows the selection of multiple elements
+ * @method @override showConfig
+ * @return {void}
+ */
+Dropdown.prototype.showConfig = function showConfig() {
+  this.constructor.prototype.showConfig.call(this);
+
+  if (!this.selector) {
+    console.error('Dropdown.showConfig(): Selector not specified');
+    return;
+  }
+
+  //Make selector multiple;
+  this.selector.setAttribute('multiple', true);
+};
+
+/**
+ * Creates the config box
+ * @method @override createControls
+ * @return {void}
+ */
+Dropdown.prototype.createControls = function createControls() {
+  this.constructor.prototype.createControls.call(this);
+
+  var removeBtn = document.createElement('i');
+  removeBtn.classList.add('glyphicon');
+  removeBtn.classList.add('glyphicon-minus-sign');
+  removeBtn.classList.add('fl-grey-btn');
+  removeBtn.setAttribute('alt', 'Remove one of the dropdown options');
+
+  var _this = this;
+  removeBtn.addEventListener('click', function removeOption() {
+    var hasIndexSelected = (_this.selector.selectedIndex >= 0);
+    if (!hasIndexSelected || _this.placeHolder) {
+      utils.blinkRed(_this.selector);
+      return;
+    }
+
+    var index = _this.selector.selectedIndex;
+    var selectedElement = _this.selector.children[index];
+    selectedElement.remove();
+  });
+
+  this.configContent.appendChild(removeBtn);
+
+  this.createConfigInputField();
 };

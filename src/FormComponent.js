@@ -1,3 +1,5 @@
+/*globals utils*/
+
 /**
  * Parent class for form components
  * @abstract
@@ -84,7 +86,8 @@ FormComponent.prototype.createControls = function createControls() {
   deleteBtn.classList.add('btn-danger');
   deleteBtn.classList.add('btn-sm');
   deleteBtn.classList.add('fl-bottom-btn');
-  deleteBtn.innerText = 'Delete';
+  deleteBtn.classList.add('glyphicon');
+  deleteBtn.classList.add('glyphicon-trash');
   deleteBtn.addEventListener('click', function () {
     _this.destroy();
   });
@@ -97,7 +100,8 @@ FormComponent.prototype.createControls = function createControls() {
   okBtn.classList.add('btn-default');
   okBtn.classList.add('btn-sm');
   okBtn.classList.add('fl-bottom-btn');
-  okBtn.innerText = 'Ok';
+  okBtn.classList.add('glyphicon');
+  okBtn.classList.add('glyphicon-ok');
   okBtn.addEventListener('click', function () {
     _this.saveConfig();
     _this.configToggle();
@@ -295,10 +299,7 @@ FormComponent.prototype.createConfigInputField = function createConfigInputField
 
     //Blink red and return if no value was provided
     if (!legend.value.trim()) {
-      legend.classList.add('fl-blink-red');
-      setTimeout(function () {
-        legend.classList.remove('fl-blink-red');
-      }, 1500);
+      utils.blinkRed(legend);
 
       return;
     }
