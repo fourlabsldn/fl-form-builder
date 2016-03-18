@@ -9,7 +9,11 @@ module.exports = function (grunt) {
     },
     concat: {
       dist: {
-        src: ['src/**/*.js'],
+        src: [
+          'src/utils/utils.js',
+          'src/utils/*.js',
+          'src/**/*.js'
+        ],
         dest: 'dist/fl-form-builder.js',
       },
     },
