@@ -14,57 +14,6 @@ function FormBody() {
     return [].slice.call(comps);
   }
 
-  function getTopOfAllComponents() {
-    var tops = [];
-    var comps = getAllComponents();
-    comps.forEach(function (comp) {
-      var top = comp.getBoundingClientRect().top;
-      tops.push(top);
-    });
-
-    return tops;
-  }
-
-  function resetElementsTranslation() {
-    var comps = getAllComponents();
-    comps.forEach(function (comp) {
-      comp.style.transform = 'translate3d(0, 0, 0)';
-    });
-  }
-
-  function rearrangeForDrag(tops, els, mainEl, mainElInitialTop) {
-    var mainBottom = mainEl.getBoundingClientRect().bottom;
-    var mainTop = mainEl.getBoundingClientRect().top;
-    var mainSize = mainEl.clientHeight;
-
-    var movedUp = (mainTop < mainElInitialTop);
-
-    var i;
-    if (movedUp) {
-      i = 0;
-      while (tops[i]) {
-        if (mainTop < tops[i + 1] && tops[i] < mainElInitialTop) {
-          els[i].style.transform = 'translate3d(0, ' + mainSize + 'px, 0)';
-        } else {
-          els[i].style.transform = 'translate3d(0, 0, 0)';
-        }
-
-        i++;
-      }
-    } else { //moving down
-      i = 0;
-      while (tops[i]) {
-        if (mainTop > tops[i] && tops[i] > mainElInitialTop) {
-          els[i].style.transform = 'translate3d(0, -' + mainSize + 'px, 0)';
-        } else {
-          els[i].style.transform = 'translate3d(0, 0, 0)';
-        }
-
-        i++;
-      }
-    }
-  }
-
   function addReorderButton(comp) {
     var controls = comp.element.querySelector('.fl-component-side-control');
     if (!controls) {
@@ -76,52 +25,20 @@ function FormBody() {
     dragBtn.classList.add('glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
 
-    comp.dragvars = {};
     dragBtn.addEventListener('dragstart', function (e) {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
       comp.element.classList.add('fl-dragging');
-      comp.element.dataset.yStart = e.pageY;
 
-      comp.dragvars.initialTop = comp.element.getBoundingClientRect().top;
-      comp.dragvars.elements = getAllComponents();
-      comp.dragvars.tops = getTopOfAllComponents();
+      var elements = getAllComponents();
+      utils.trackReorderDrag(e, comp.element, elements);
     });
 
     var throttleDelay = 50;
     dragBtn.addEventListener('dragend', function (e) {
       setTimeout(function () {
-        // var topStart = comp.element.getBoundingClientRect().top;
-        // form.appendChild(comp.element);
-        // var topAfterMoving = comp.element.getBoundingClientRect().top;
-        // var diff = topAfterMoving - topStart;
-
-        resetElementsTranslation();
-        comp.element.style.transform = 'translate3d(0, 0, 0)';
-        comp.element.dataset.yStart = e.pageY;
-        comp.dragvars.initialTop = null;
-      }, throttleDelay);
-
-      setTimeout(function () {
         comp.element.classList.remove('fl-dragging');
       }, throttleDelay + 200);
     });
-
-    dragBtn.addEventListener('drag', utils.throttle(throttleDelay, function dragging(e) {
-      console.log('dragging');
-
-      rearrangeForDrag(
-        comp.dragvars.tops,
-        comp.dragvars.elements,
-        comp.element,
-        comp.dragvars.initialTop);
-
-      var yStart = comp.element.dataset.yStart;
-      var currY = e.pageY;
-      if (currY === 0) { return; } //correct weird behaviour when mouse goes up
-
-      var diff = currY - yStart;
-      comp.element.style.transform = 'translate3d(0, ' + diff + 'px, 0)';
-    }));
 
     //prepend to side control bar
     if (controls.children.length > 0) {
@@ -1108,8 +1025,144 @@ var utils = (function utils() {
     };
   }
 
+  //Tracks a drag and reorders a list of elements
+  var trackReorderDrag = function trackReorderDrag(e, el, elements) {
+
+    function setTranslation(el, val) {
+      el.style.transform = 'translate3d(0, ' + val + 'px, 0)';
+    }
+
+    /**
+     * @function resetElementsPositions
+     * @param {Array[HTMLElement]} els Elements being tracked
+     */
+    function resetElementsPositions(els) {
+      els.forEach(function (el) {
+        setTranslation(el, 0);
+      });
+    }
+
+    /**
+     * @function createDragMover
+     * @param  {Array[HTMLElements]} els         [description]
+     * @param  {Array[Integer]} tops        Initial tops
+     * @param  {Integer} targetIndex Index of element being dragged around
+     * @return {function}             The function to translate elements in the
+     *                                  list to make room for the dragged element
+     */
+    function createDragMover(els, tops, targetIndex) {
+      var target = els[targetIndex];
+      var targetInitialTop = tops[targetIndex];
+      return function doDragMove() {
+        var targetTop = target.getBoundingClientRect().top;
+        var targetHeight = target.clientHeight;
+        var movedUp = (targetTop < targetInitialTop);
+
+        var i;
+        for (i = 0; i < tops.length; i++) {
+          if (i === targetIndex) {
+            continue;
+          } else
+          if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
+            setTranslation(els[i], -targetHeight);
+          } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
+            setTranslation(els[i], targetHeight);
+          } else {
+            setTranslation(els[i], 0);
+          }
+        }
+      };
+    }
+
+    function createDragListener(els, tops, targetIndex, initialY) {
+      var target = els[targetIndex];
+      var targetInitialTop = target.getBoundingClientRect().top;
+      var doDragMove = createDragMover(els, tops, targetIndex);
+      var shouldStopListening;
+      function dragListener(e) {
+        if (shouldStopListening) { return; }
+
+        doDragMove();
+        var newY = e.pageY;
+        if (newY === 0) { return; } //correct weird behaviour when mouse goes up
+
+        var diff = newY - initialY;
+        setTranslation(target, diff);
+      }
+
+      dragListener.stop = function () {
+        shouldStopListening = true;
+      };
+
+      return dragListener;
+    }
+
+    function insertTargetInRightPlace(target, els, initialTops) {
+      var targetTop = target.getBoundingClientRect().top;
+      var i = 0;
+
+      //Pass by all elements that are above the target
+      while (initialTops[i] && initialTops[i] < targetTop) { i++; }
+
+      var targetIndex = els.indexOf(target);
+      var indexToInsertEl = (i > targetIndex) ? i - 1 : i;
+      var futureTop = initialTops[indexToInsertEl];
+      var displacement = targetTop - futureTop;
+      setTranslation(target, displacement);
+
+      var parent;
+      parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
+      if (!parent || !parent.appendChild) {
+        throw new Error('trackReorderDrag(): No parent found in element list.');
+      } else if (els[i]) {
+        parent.insertBefore(target, els[i]);
+      } else {
+        parent.appendChild(target);
+      }
+    }
+
+    function init(e, el, elements) {
+      if (typeof el !== 'object') {
+        throw new Error('trackReorderDrag(): Invalid parameter');
+      }
+
+      //Reorder elements
+      elements.sort(function (el1, el2) {
+        return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
+      });
+
+      //Set initial states
+      var initialTops = [];
+      elements.forEach(function (element) {
+        initialTops.push(element.getBoundingClientRect().top);
+      });
+
+      var elIndex = elements.indexOf(el);
+      var elInitialTop = initialTops[elIndex];
+
+      //Create throttled drag listener
+      var initialY = e.pageY;
+      var dragListener = createDragListener(elements, initialTops, elIndex, initialY);
+      var throttledDragListener = throttle(50, dragListener);
+
+      //Listen to drags
+      var eventTarget = e.target;
+      eventTarget.addEventListener('drag', throttledDragListener);
+      eventTarget.addEventListener('dragend', function dragEndListener() {
+        // insertTargetInRightPlace(el, elements, initialTops);
+        eventTarget.removeEventListener('drag', throttledDragListener);
+        eventTarget.removeEventListener('dragend', dragEndListener);
+        dragListener.stop();
+        resetElementsPositions(elements);
+      });
+    }
+
+    init(e, el, elements);
+  };
+
   return {
     blinkRed: blinkRed,
     throttle: throttle,
+    trackReorderDrag: trackReorderDrag,
   };
 }());
