@@ -1051,18 +1051,25 @@ var utils = (function utils() {
      * @return {void}
      */
     function calculateElementHeight(els, elIndex) {
-      var height;
+      var spaceOccupied;
 
       //If not the last element
       if (elIndex < els.length - 1) {
         var elTop = els[elIndex].getBoundingClientRect().top;
         var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
-        height = nextElTop - elTop;
+        spaceOccupied = nextElTop - elTop;
       } else {
-        height = els[elIndex].clientHeight;
+        //let's estimate the general vertical distance between elements by
+        //subtracting the size of the first element from the distance between
+        //its top and the next element.
+        var firstElSpaceOccupied =
+            els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+        var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
+        var height = els[elIndex].clientHeight;
+        spaceOccupied = height + verticalDistance;
       }
 
-      return height;
+      return spaceOccupied;
     }
 
     /**
