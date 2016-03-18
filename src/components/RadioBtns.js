@@ -11,6 +11,7 @@ function RadioBtns(name) {
 }
 
 RadioBtns.prototype = new FormComponent(); //Inheritance part
+RadioBtns.prototype.componentType = 'RadioBtns';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -44,10 +45,16 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.setAttribute('value', value);
   newRadio.classList.add('fl-radio-btn');
 
+  //FIXME: Radio button labels allow you to delete the radio btn. Fix that.
   var newLabel = document.createElement('label');
-  var labelText = document.createTextNode(legend || value);
+
+  var legendNode = document.createElement('span');
+  legendNode.innerText = legend || value;
+  legendNode.classList.add('fl-editable');
+  legendNode.setAttribute('contenteditable', true);
+
   newLabel.appendChild(newRadio);
-  newLabel.appendChild(labelText);
+  newLabel.appendChild(legendNode);
 
   this.content.appendChild(newLabel);
   return newLabel;
