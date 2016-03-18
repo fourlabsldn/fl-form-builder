@@ -138,9 +138,9 @@ var utils = (function utils() {
 
     function insertTargetInRightPlace(els, initialTops, targetIndex) {
       var target = els[targetIndex];
-      var targetTop = target.getBoundingClientRect().top;
-      var i = 0;
       var topsBeforeInsertion = getElementsCurrentTop(els);
+      var targetTop = topsBeforeInsertion[targetIndex];
+      var i = 0;
 
       //Pass by all elements that are above the target
       while ((topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop) ||
