@@ -11,6 +11,7 @@ function Dropdown(name) {
 }
 
 Dropdown.prototype = new FormComponent(); //Inheritance part
+Dropdown.prototype.componentType = 'Dropdown';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -127,4 +128,37 @@ Dropdown.prototype.createControls = function createControls() {
   this.configContent.appendChild(removeBtn);
 
   this.createConfigInputField();
+};
+
+/**
+ * @method @override getElements
+ * @return {HTMLElement}
+ */
+Dropdown.prototype.getElements = function getElements() {
+  return [this.selector];
+};
+
+/**
+ * Method to be called by JSON.stringify
+ * @method @override toJSON
+ * @return {void}
+ */
+Dropdown.prototype.toJSON = function toJSON() {
+  var json = this.constructor.prototype.toJSON.call(this);
+  json.multiple = this.selector.getAttribute('multiple') || undefined;
+
+  //Add options
+  var elJson = json.content[0];
+  elJson.options = [];
+  var options = this.content.querySelectorAll('option');
+  options = [].slice.call(options);
+  options.forEach(function (op) {
+    var opJson = {};
+    opJson.nodeName = 'option';
+    opJson.value = op.innerText;
+    elJson.options.push(opJson);
+  });
+
+  json.content.push(elJson);
+  return json;
 };

@@ -359,3 +359,37 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
   this.placeHolder.remove();
   this.placeHolder = null;
 };
+
+FormComponent.prototype.getElements = function getElements() {
+  //FIXME: this is returning titles too.
+  return this.content.querySelectorAll('.fl-editable');
+};
+
+//Method to be called by JSON.stringify
+//This method is augmented in the relevant classes.
+FormComponent.prototype.toJSON = function toJSON() {
+  var json = {};
+  var content = this.content;
+
+  if (this.title && this.title.innerText) {
+    json.title = this.title.innerText;
+  }
+
+  json.componentType = this.componentType;
+  json.required = this.isRequired || false;
+
+  json.content = [];
+  var contentEls = this.getElements();
+  contentEls = [].slice.call(contentEls);
+  contentEls.forEach(function (el) {
+    var elJson = {};
+    elJson.nodeName = el.nodeName.toLowerCase();
+    elJson.type = el.getAttribute('type') || undefined;
+    elJson.name = el.getAttribute('name') || undefined;
+    elJson.placeholder = el.getAttribute('placeholder') || undefined;
+    elJson.label = el.innerText;
+    json.content.push(elJson);
+  });
+
+  return json;
+};

@@ -18,13 +18,13 @@ utils.blinkRed = function blinkRed(el) {
 
 /**
  * Will take care of the dragging and reordering a list for one drag.
- * @function listReorder
+ * @function trackReorderDrag
  * @param  {event} param_e        The dragstart event, from which this should be called.
  * @param  {HTMLElement} param_el       The main Element being dragged
  * @param  {Array} param_elements Array of elements to be tracked.
  * @return {void}
  */
-utils.listReorder = function listReorder(param_e, param_el, param_elements) {
+utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elements) {
 
   function setTranslation(el, val) {
     el.style.transform = 'translate3d(0, ' + val + 'px, 0)';
@@ -350,7 +350,16 @@ function FormBody() {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
-      console.dir(components);
+
+      //Reorder components array according to their vertical position
+      components.sort(function (com1, com2) {
+        return com1.element.getBoundingClientRect().top >
+               com2.element.getBoundingClientRect().top;
+      });
+
+      var string = JSON.stringify(components);
+      var ob = JSON.parse(string);
+      console.dir(ob);
     });
 
     var _this = this;
@@ -736,6 +745,40 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
   this.placeHolder = null;
 };
 
+FormComponent.prototype.getElements = function getElements() {
+  //FIXME: this is returning titles too.
+  return this.content.querySelectorAll('.fl-editable');
+};
+
+//Method to be called by JSON.stringify
+//This method is augmented in the relevant classes.
+FormComponent.prototype.toJSON = function toJSON() {
+  var json = {};
+  var content = this.content;
+
+  if (this.title && this.title.innerText) {
+    json.title = this.title.innerText;
+  }
+
+  json.componentType = this.componentType;
+  json.required = this.isRequired || false;
+
+  json.content = [];
+  var contentEls = this.getElements();
+  contentEls = [].slice.call(contentEls);
+  contentEls.forEach(function (el) {
+    var elJson = {};
+    elJson.nodeName = el.nodeName.toLowerCase();
+    elJson.type = el.getAttribute('type') || undefined;
+    elJson.name = el.getAttribute('name') || undefined;
+    elJson.placeholder = el.getAttribute('placeholder') || undefined;
+    elJson.label = el.innerText;
+    json.content.push(elJson);
+  });
+
+  return json;
+};
+
 /*globals RadioBtns, Checkboxes, TextBox, TextArea, Dropdown*/
 
 /**
@@ -833,7 +876,7 @@ function Checkboxes(name) {
 }
 
 Checkboxes.prototype = new FormComponent(); //Inheritance part
-
+Checkboxes.prototype.componentType = 'Checkboxes';
 /**
  * init() is automatically called in construction by FormComponent, the parent class
  * @override @method init
@@ -926,15 +969,6 @@ Checkboxes.prototype.required = function required(isRequired) {
 };
 
 /**
- * @method getElements
- * @return {Array} collection of HTMLElements which contain the
- *                            	checkboxes and their title.
- */
-Checkboxes.prototype.getElements = function getElements() {
-  return [].slice.call(this.content.querySelectorAll('label'));
-};
-
-/**
  * @override addPlaceHolder
  */
 Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
@@ -985,6 +1019,7 @@ function Dropdown(name) {
 }
 
 Dropdown.prototype = new FormComponent(); //Inheritance part
+Dropdown.prototype.componentType = 'Dropdown';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -1103,6 +1138,39 @@ Dropdown.prototype.createControls = function createControls() {
   this.createConfigInputField();
 };
 
+/**
+ * @method @override getElements
+ * @return {HTMLElement}
+ */
+Dropdown.prototype.getElements = function getElements() {
+  return [this.selector];
+};
+
+/**
+ * Method to be called by JSON.stringify
+ * @method @override toJSON
+ * @return {void}
+ */
+Dropdown.prototype.toJSON = function toJSON() {
+  var json = this.constructor.prototype.toJSON.call(this);
+  json.multiple = this.selector.getAttribute('multiple') || undefined;
+
+  //Add options
+  var elJson = json.content[0];
+  elJson.options = [];
+  var options = this.content.querySelectorAll('option');
+  options = [].slice.call(options);
+  options.forEach(function (op) {
+    var opJson = {};
+    opJson.nodeName = 'option';
+    opJson.value = op.innerText;
+    elJson.options.push(opJson);
+  });
+
+  json.content.push(elJson);
+  return json;
+};
+
 /*globals FormComponent*/
 
 /**
@@ -1116,6 +1184,7 @@ function RadioBtns(name) {
 }
 
 RadioBtns.prototype = new FormComponent(); //Inheritance part
+RadioBtns.prototype.componentType = 'RadioBtns';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -1149,10 +1218,16 @@ RadioBtns.prototype.add = function add(value, legend) {
   newRadio.setAttribute('value', value);
   newRadio.classList.add('fl-radio-btn');
 
+  //FIXME: Radio button labels allow you to delete the radio btn. Fix that.
   var newLabel = document.createElement('label');
-  var labelText = document.createTextNode(legend || value);
+
+  var legendNode = document.createElement('span');
+  legendNode.innerText = legend || value;
+  legendNode.classList.add('fl-editable');
+  legendNode.setAttribute('contenteditable', true);
+
   newLabel.appendChild(newRadio);
-  newLabel.appendChild(labelText);
+  newLabel.appendChild(legendNode);
 
   this.content.appendChild(newLabel);
   return newLabel;
@@ -1171,6 +1246,7 @@ function TextArea(name) {
 }
 
 TextArea.prototype = new FormComponent(); //Inheritance part
+TextArea.prototype.componentType = 'TextArea';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class
@@ -1213,6 +1289,7 @@ function TextBox(name) {
 }
 
 TextBox.prototype = new FormComponent(); //Inheritance part
+TextBox.prototype.componentType = 'TextBox';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class

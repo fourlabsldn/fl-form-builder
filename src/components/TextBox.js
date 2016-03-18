@@ -11,6 +11,7 @@ function TextBox(name) {
 }
 
 TextBox.prototype = new FormComponent(); //Inheritance part
+TextBox.prototype.componentType = 'TextBox';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class

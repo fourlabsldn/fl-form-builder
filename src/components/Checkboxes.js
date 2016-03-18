@@ -11,7 +11,7 @@ function Checkboxes(name) {
 }
 
 Checkboxes.prototype = new FormComponent(); //Inheritance part
-
+Checkboxes.prototype.componentType = 'Checkboxes';
 /**
  * init() is automatically called in construction by FormComponent, the parent class
  * @override @method init
@@ -101,15 +101,6 @@ Checkboxes.prototype.required = function required(isRequired) {
 
   this.requiredSwitch.checked = isRequired;
   return true;
-};
-
-/**
- * @method getElements
- * @return {Array} collection of HTMLElements which contain the
- *                            	checkboxes and their title.
- */
-Checkboxes.prototype.getElements = function getElements() {
-  return [].slice.call(this.content.querySelectorAll('label'));
 };
 
 /**

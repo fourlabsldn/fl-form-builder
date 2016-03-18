@@ -11,6 +11,7 @@ function TextArea(name) {
 }
 
 TextArea.prototype = new FormComponent(); //Inheritance part
+TextArea.prototype.componentType = 'TextArea';
 
 /**
  * init() is automatically called in construction by FormComponent, the parent class

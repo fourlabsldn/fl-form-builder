@@ -71,7 +71,16 @@ function FormBody() {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
-      console.dir(components);
+
+      //Reorder components array according to their vertical position
+      components.sort(function (com1, com2) {
+        return com1.element.getBoundingClientRect().top >
+               com2.element.getBoundingClientRect().top;
+      });
+
+      var string = JSON.stringify(components);
+      var ob = JSON.parse(string);
+      console.dir(ob);
     });
 
     var _this = this;
