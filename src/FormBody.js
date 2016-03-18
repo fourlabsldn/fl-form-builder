@@ -29,6 +29,7 @@ function FormBody() {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
       comp.element.classList.add('fl-dragging');
 
+      //Take care of moving and reordering
       var elements = getAllComponents();
       utils.trackReorderDrag(e, comp.element, elements);
     });

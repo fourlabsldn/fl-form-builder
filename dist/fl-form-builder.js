@@ -29,6 +29,7 @@ function FormBody() {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
       comp.element.classList.add('fl-dragging');
 
+      //Take care of moving and reordering
       var elements = getAllComponents();
       utils.trackReorderDrag(e, comp.element, elements);
     });
@@ -1026,7 +1027,7 @@ var utils = (function utils() {
   }
 
   //Tracks a drag and reorders a list of elements
-  var trackReorderDrag = function trackReorderDrag(e, el, elements) {
+  var trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elements) {
 
     function setTranslation(el, val) {
       el.style.transform = 'translate3d(0, ' + val + 'px, 0)';
@@ -1097,14 +1098,33 @@ var utils = (function utils() {
       return dragListener;
     }
 
-    function insertTargetInRightPlace(target, els, initialTops) {
+    function getElementsCurrentTop(els) {
+      var tops = [];
+      els.forEach(function (el) { tops.push(el.getBoundingClientRect().top); });
+
+      return tops;
+    }
+
+    function adjustElementsToTops(els, tops) {
+      var currentTops = getElementsCurrentTop(els);
+      els.forEach(function (el, i) {
+        var diff =  currentTops[i] - tops[i];
+        setTranslation(el, diff);
+      });
+    }
+
+    function insertTargetInRightPlace(els, initialTops, targetIndex) {
+      var target = els[targetIndex];
       var targetTop = target.getBoundingClientRect().top;
       var i = 0;
+      var topsBeforeInsertion = getElementsCurrentTop(els);
 
       //Pass by all elements that are above the target
-      while (initialTops[i] && initialTops[i] < targetTop) { i++; }
+      while ((topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop) ||
+                (i === targetIndex)) {
+        i++;
+      }
 
-      var targetIndex = els.indexOf(target);
       var indexToInsertEl = (i > targetIndex) ? i - 1 : i;
       var futureTop = initialTops[indexToInsertEl];
       var displacement = targetTop - futureTop;
@@ -1114,11 +1134,11 @@ var utils = (function utils() {
       parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
       if (!parent || !parent.appendChild) {
         throw new Error('trackReorderDrag(): No parent found in element list.');
-      } else if (els[i]) {
-        parent.insertBefore(target, els[i]);
       } else {
-        parent.appendChild(target);
+        parent.insertBefore(target, els[i]);
       }
+
+      // adjustElementsToTops(els, topsBeforeInsertion);
     }
 
     function init(e, el, elements) {
@@ -1149,7 +1169,7 @@ var utils = (function utils() {
       var eventTarget = e.target;
       eventTarget.addEventListener('drag', throttledDragListener);
       eventTarget.addEventListener('dragend', function dragEndListener() {
-        // insertTargetInRightPlace(el, elements, initialTops);
+        insertTargetInRightPlace(elements, initialTops, elIndex);
         eventTarget.removeEventListener('drag', throttledDragListener);
         eventTarget.removeEventListener('dragend', dragEndListener);
         dragListener.stop();
@@ -1157,7 +1177,7 @@ var utils = (function utils() {
       });
     }
 
-    init(e, el, elements);
+    init(param_e, param_el, param_elements);
   };
 
   return {
