@@ -63,6 +63,9 @@
 .fl-form-builder .fl-form-fabric button {
   margin-right: 5px;
 }
+.fl-form-builder .fl-form-body * {
+  transition: transform 0.2s ease-out;
+}
 .fl-form-builder .fl-component {
   padding-bottom: 5px;
   border-radius: 5px;

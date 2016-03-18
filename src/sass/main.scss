@@ -65,6 +65,9 @@ $highlight-blue: lighten($active-blue, 30%);
       margin-right: 5px;
     }
   }
+  .fl-form-body * {
+    transition: transform 0.2s ease-out;
+  }
   .fl-component {
     padding-bottom: 5px;
     border-radius: 5px;

@@ -67,6 +67,7 @@ function FormBody() {
   this.init = function () {
     form = document.createElement('form');
     form.classList.add('form-horizontal');
+    form.classList.add('fl-form-body');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
