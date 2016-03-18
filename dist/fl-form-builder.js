@@ -1149,34 +1149,48 @@ var utils = (function utils() {
 
       var indexToInsertEl = (i > targetIndex) ? i - 1 : i;
 
+      //Take away transitions from all elements and save them
       var initialTransitions = [];
       els.forEach(function (anEl) {
         initialTransitions.push(anEl.style.transition);
         anEl.style.transition = 'none';
       });
 
+      //Put everyone at translate3d(0,0,0) without transitions
       resetElementsPositions(els);
 
+      //Add the element in the appropriate place. This will displace everyone else.
       var parent;
       parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
       if (!parent || !parent.appendChild) {
         throw new Error('trackReorderDrag(): No parent found in element list.');
-      } else {
+      } else if (els[i]) {
         parent.insertBefore(target, els[i]);
+      } else {
+        var lastEl = els[els.length - 1];
+        parent.insertBefore(target, lastEl);
+        parent.insertBefore(lastEl, target);
       }
 
+      //Now let's translate it to where it was just before it was repositioned
+      //All without transitions. It will seem like it never left that spot.
       var futureTop = target.getBoundingClientRect().top;
       var displacement = targetTop - futureTop;
       setTranslation(target, displacement);
 
-      //Go after the CSS renderer in the execution queue
+      //Let's add a timeout to get the last place in the UI queue and let the
+      //CSS renderer to process the fact that all these elements do not have
+      //transitions and should appear wherever their coordinates say immediately.
       setTimeout(function () {
+
+        //Restore all transitions
         els.forEach(function (anEl, k) {
-          if (k === targetIndex) {
-            setTranslation(target, 0);
-          }
           anEl.style.transition = initialTransitions[k];
         });
+
+        //Now transition the target can transition smoothly from where it
+        //was dropped to its final position at translate value 0.
+        setTranslation(target, 0);
       }, 15);
 
       // adjustElementsToTops(els, topsBeforeInsertion);
@@ -1210,10 +1224,10 @@ var utils = (function utils() {
       var eventTarget = e.target;
       eventTarget.addEventListener('drag', throttledDragListener);
       eventTarget.addEventListener('dragend', function dragEndListener() {
+        dragListener.stop();
         insertTargetInRightPlace(elements, initialTops, elIndex);
         eventTarget.removeEventListener('drag', throttledDragListener);
         eventTarget.removeEventListener('dragend', dragEndListener);
-        dragListener.stop();
       });
     }
 
