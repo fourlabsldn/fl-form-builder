@@ -1044,6 +1044,27 @@ var utils = (function utils() {
     }
 
     /**
+     * @function calculateElementHeight
+     * @param  {Array[HTMLElement]} els    Elements ordered by vertical position
+     * @param  {Integer} elIndex
+     * @return {void}
+     */
+    function calculateElementHeight(els, elIndex) {
+      var height;
+
+      //If not the last element
+      if (elIndex < els.length - 1) {
+        var elTop = els[elIndex].getBoundingClientRect().top;
+        var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
+        height = nextElTop - elTop;
+      } else {
+        height = els[elIndex].clientHeight;
+      }
+
+      return height;
+    }
+
+    /**
      * @function createDragMover
      * @param  {Array[HTMLElements]} els         [description]
      * @param  {Array[Integer]} tops        Initial tops
@@ -1054,9 +1075,9 @@ var utils = (function utils() {
     function createDragMover(els, tops, targetIndex) {
       var target = els[targetIndex];
       var targetInitialTop = tops[targetIndex];
+      var targetHeight = calculateElementHeight(els, targetIndex);
       return function doDragMove() {
         var targetTop = target.getBoundingClientRect().top;
-        var targetHeight = target.clientHeight;
         var movedUp = (targetTop < targetInitialTop);
 
         var i;
@@ -1126,9 +1147,14 @@ var utils = (function utils() {
       }
 
       var indexToInsertEl = (i > targetIndex) ? i - 1 : i;
-      var futureTop = initialTops[indexToInsertEl];
-      var displacement = targetTop - futureTop;
-      setTranslation(target, displacement);
+
+      var initialTransitions = [];
+      els.forEach(function (anEl) {
+        initialTransitions.push(anEl.style.transition);
+        anEl.style.transition = 'none';
+      });
+
+      resetElementsPositions(els);
 
       var parent;
       parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
@@ -1137,6 +1163,20 @@ var utils = (function utils() {
       } else {
         parent.insertBefore(target, els[i]);
       }
+
+      var futureTop = target.getBoundingClientRect().top;
+      var displacement = targetTop - futureTop;
+      setTranslation(target, displacement);
+
+      //Go after the CSS renderer in the execution queue
+      setTimeout(function () {
+        els.forEach(function (anEl, k) {
+          if (k === targetIndex) {
+            setTranslation(target, 0);
+          }
+          anEl.style.transition = initialTransitions[k];
+        });
+      }, 15);
 
       // adjustElementsToTops(els, topsBeforeInsertion);
     }
@@ -1173,7 +1213,6 @@ var utils = (function utils() {
         eventTarget.removeEventListener('drag', throttledDragListener);
         eventTarget.removeEventListener('dragend', dragEndListener);
         dragListener.stop();
-        resetElementsPositions(elements);
       });
     }
 
