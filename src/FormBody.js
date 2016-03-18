@@ -31,7 +31,7 @@ function FormBody() {
 
       //Take care of moving and reordering
       var elements = getAllComponents();
-      utils.trackReorderDrag(e, comp.element, elements);
+      listReorder(e, comp.element, elements);
     });
 
     var throttleDelay = 50;
