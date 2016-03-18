@@ -8,7 +8,7 @@
  * @param  {Array} param_elements Array of elements to be tracked.
  * @return {void}
  */
-function listReorder(param_e, param_el, param_elements) {
+utils.listReorder = function listReorder(param_e, param_el, param_elements) {
 
   function setTranslation(el, val) {
     el.style.transform = 'translate3d(0, ' + val + 'px, 0)';
@@ -219,4 +219,4 @@ function listReorder(param_e, param_el, param_elements) {
   }
 
   init(param_e, param_el, param_elements);
-}
+};
