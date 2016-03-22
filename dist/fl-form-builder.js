@@ -1,3 +1,8 @@
+//---Controller head---
+xController(function flFormBuilder(xDivEl) {
+  'use strict';
+//---------------------
+
 //Yep. Just that.
 var utils = {};
 
@@ -1327,9 +1332,7 @@ TextBox.prototype.setLabel = function setLabel(desc) {
   this.title.innerText = desc;
 };
 
-/*globals FormFabric, FormBody, xController*/
-
-xController(function flFormBuilder(xDivEl) {
+//---Controller tail---
   var formBody = new FormBody();
   var fabric = new FormFabric(formBody.element);
 
@@ -1337,3 +1340,4 @@ xController(function flFormBuilder(xDivEl) {
   xDivEl.appendChild(fabric.element);
   xDivEl.appendChild(formBody.element);
 });
+//---------------------

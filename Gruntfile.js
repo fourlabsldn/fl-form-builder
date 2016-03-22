@@ -1,5 +1,6 @@
 /*globals module*/
 module.exports = function (grunt) {
+  'use strict';
 
   grunt.initConfig({
     open: {
@@ -10,9 +11,11 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         src: [
+          'src/controller-head.js',
           'src/utils/utils.js',
           'src/utils/*.js',
-          'src/**/*.js'
+          'src/**/*.js',
+          'src/controller-tail.js',
         ],
         dest: 'dist/fl-form-builder.js',
       },
