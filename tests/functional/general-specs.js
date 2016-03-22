@@ -1,4 +1,5 @@
-/*globals xDivTester, describe, it, xit, expect*/
+/*globals xDivTester, describe, it, xit, expect, afterAll*/
+
 'use strict'; //jshint ignore:line
 
 describe('A Form Builder should', function () {
@@ -10,7 +11,18 @@ describe('A Form Builder should', function () {
 });
 
 describe('After initialised, a FormBuilder should', function () {
-  xit('be empty of components');
+  var target = document.createElement('div');
+  xDivTester.callWith(target);
+
+  afterAll(function () {
+    target.remove();
+  });
+
+  xit('be empty of components', function () {
+    var components = document.querySelector('.fl-component');
+    expect(components.length).toBe(0);
+  });
+
   xit('show the factory bar');
   xit('show the submit button');
 });

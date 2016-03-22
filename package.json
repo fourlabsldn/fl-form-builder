@@ -4,7 +4,7 @@
   "description": "A vanilla JS form builder",
   "main": "index.js",
   "scripts": {
-    "test": "grunt jasmine",
+    "test": "grunt test",
     "demo": "grunt demo",
     "dev": "grunt dev",
     "build": "grunt build"

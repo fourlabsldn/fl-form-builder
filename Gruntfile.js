@@ -7,6 +7,9 @@ module.exports = function (grunt) {
       demo: {
         path: './demo/index.html',
       },
+      test: {
+        path: './_SpecRunner.html',
+      },
     },
     concat: {
       dist: {
@@ -84,10 +87,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('default', []);
-  grunt.registerTask('demo', ['open']);
+  grunt.registerTask('demo', ['open:demo']);
   grunt.registerTask('js-build', ['concat', 'uglify']);
   grunt.registerTask('css-build', ['sass']);
   grunt.registerTask('build', ['js-build', 'css-build']);
   grunt.registerTask('dev', ['build', 'open', 'watch']);
-
+  grunt.registerTask('test', ['jasmine']);
+  grunt.registerTask('test-debug', ['jasmine:main:build', 'open']);
 };
