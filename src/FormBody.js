@@ -1,6 +1,8 @@
 /*globals utils*/
 
 function FormBody() {
+  'use strict';
+
   if (!(this instanceof FormBody)) {
     return new FormBody();
   }
@@ -35,7 +37,7 @@ function FormBody() {
     });
 
     var throttleDelay = 50;
-    dragBtn.addEventListener('dragend', function (e) {
+    dragBtn.addEventListener('dragend', function () {
       setTimeout(function () {
         comp.element.classList.remove('fl-dragging');
       }, throttleDelay + 200);
@@ -79,8 +81,7 @@ function FormBody() {
       });
 
       var string = JSON.stringify(components);
-      var ob = JSON.parse(string);
-      console.dir(ob);
+      console.dir(string);
     });
 
     var _this = this;

@@ -66,6 +66,22 @@ Checkboxes.prototype.add = function add(value, legend) {
 };
 
 /**
+ *
+ * Returns label elements that contain both the checkbox and its text.
+ * @method @override getElements
+ * @return {Array[HTMLElement]}
+ */
+Checkboxes.prototype.getElements = function getElements() {
+  var allElements = this.content.children;
+  var checkboxContainers = [];
+  [].forEach.call(allElements, function (el) {
+    if (el.nodeName !== 'H3') { checkboxContainers.push(el); }
+  });
+
+  return checkboxContainers;
+};
+
+/**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
  * @override @method required
  * @param  {boolean} isRequired
@@ -76,10 +92,9 @@ Checkboxes.prototype.required = function required(isRequired) {
     return true;
   } else if (!this.requiredSwitch) {
     throw new Error('Checkboxes.required(): No required button in place.');
-  } else if (this.placeHolder ||
-      this.getElements().length > 1 && isRequired) {
+  } else if (this.getElements().length > 1 && isRequired) {
     console.error('Checkboxes: To be "required" there can only ' +
-                  'be one checkbox in the group and no placeholder');
+                  'be one checkbox in the group.');
     this.requiredSwitch.checked = false;
     return false;
   }
