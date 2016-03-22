@@ -796,6 +796,8 @@ FormComponent.prototype.toJSON = function toJSON() {
  * @param {HTMLElement} el Where the fabric will be put.
  */
 function FormFabric(formBody) {
+  'use strict';
+
   if (!(this instanceof FormFabric)) {
     return new FormFabric();
   }
@@ -826,11 +828,6 @@ function FormFabric(formBody) {
    * @return {HTMLElement} The dropdown menu
    */
   function createOptions() {
-    // var select = document.createElement('select');
-    // select.classList.add('form-control');
-    // select.style.display = 'inline';
-    // select.style.minWidth = '0';
-    // select.style.maxWidth = '200px';
     var frag = document.createDocumentFragment();
     formComponents.forEach(function (component, idx) {
       var op = document.createElement('button');
@@ -838,7 +835,7 @@ function FormFabric(formBody) {
       op.className = component.class;
       op.classList.add('btn');
       op.classList.add('btn-default');
-      op.addEventListener('click', function (e) {
+      op.addEventListener('click', function () {
         var idx = op.value;
         createElement(formComponents[idx].constr, formBody);
       });
@@ -853,18 +850,6 @@ function FormFabric(formBody) {
     this.element = document.createElement('div');
     this.element.classList.add('fl-form-fabric');
     var options = createOptions();
-
-    // var addBtn = document.createElement('button');
-    // addBtn.classList.add('btn');
-    // addBtn.classList.add('slight-margin-right');
-    // addBtn.innerText = 'Add';
-    // addBtn.addEventListener('click', function () {
-    //   var idx = options.selectedIndex;
-    //   console.log('Create a ', formComponents[idx].desc);
-    //   createElement(formComponents[idx].constr, formBody);
-    // });
-    //
-    // this.element.appendChild(addBtn);
     this.element.appendChild(options);
   };
 
