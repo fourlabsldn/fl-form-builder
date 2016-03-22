@@ -359,8 +359,10 @@ function FormBody() {
                com2.element.getBoundingClientRect().top;
       });
 
-      var string = JSON.stringify(components);
-      console.dir(string);
+      // NOTE: Components are prepared to expose the appropriate values
+      // when stringified. To export them they need to be stringified.
+      var readyToExport = JSON.stringify(components);
+      console.dir(readyToExport);
     });
 
     var _this = this;
