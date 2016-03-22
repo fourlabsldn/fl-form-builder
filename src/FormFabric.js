@@ -50,7 +50,6 @@ function FormFabric(formBody) {
       op.classList.add('btn-default');
       op.addEventListener('click', function (e) {
         var idx = op.value;
-        console.log('Create a ', formComponents[idx].desc);
         createElement(formComponents[idx].constr, formBody);
       });
 
@@ -64,7 +63,7 @@ function FormFabric(formBody) {
     this.element = document.createElement('div');
     this.element.classList.add('fl-form-fabric');
     var options = createOptions();
-    //
+
     // var addBtn = document.createElement('button');
     // addBtn.classList.add('btn');
     // addBtn.classList.add('slight-margin-right');

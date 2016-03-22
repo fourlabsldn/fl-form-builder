@@ -1,4 +1,5 @@
 /*globals utils*/
+'use strict'; //jshint ignore:line
 
 /**
  * Parent class for form components
@@ -35,6 +36,7 @@ FormComponent.prototype.init = function init(name) {
   this.content.appendChild(title);
 
   this.name = name;
+  this.isRequired = false;
   this.createControls();
 };
 
@@ -117,7 +119,7 @@ FormComponent.prototype.createControls = function createControls() {
   switchInput.id = 'cmn-toggle-' + Date.now();
   switchInput.addEventListener('change', function (e) {
     var checked = e.target.checked;
-    var wasChanged = _this.required(checked);
+    _this.required(checked);
   });
 
   this.requiredSwitch = switchInput;
@@ -347,6 +349,7 @@ FormComponent.prototype.required = function required(isRequired) {
     els.forEach(function (el) { el.removeAttribute('required'); });
   }
 
+  this.isRequired = isRequired;
   return true;
 };
 
@@ -361,15 +364,19 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
 };
 
 FormComponent.prototype.getElements = function getElements() {
-  //FIXME: this is returning titles too.
-  return this.content.querySelectorAll('.fl-editable');
+  var editables = this.content.querySelectorAll('.fl-editable');
+  var elements = [];
+  [].forEach.call(editables, function (el) {
+    if (el.nodeName !== 'H3') { elements.push(el); }
+  });
+
+  return elements;
 };
 
 //Method to be called by JSON.stringify
 //This method is augmented in the relevant classes.
 FormComponent.prototype.toJSON = function toJSON() {
   var json = {};
-  var content = this.content;
 
   if (this.title && this.title.innerText) {
     json.title = this.title.innerText;

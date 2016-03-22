@@ -1,4 +1,5 @@
 /*globals FormComponent, utils*/
+'use strict'; //jshint ignore:line
 
 /**
  * @class Checkboxes
@@ -22,8 +23,6 @@ Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
 
   this.name = name + '[]';
-  this.isRequired = false;
-
   this.addPlaceHolder();
 };
 
