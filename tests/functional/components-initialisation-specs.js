@@ -102,23 +102,101 @@ componentsArray.forEach(function (comp) {
       });
 
       //No text-box or text-area for this spec
-      if (!/text/i.test(comp.name)) {
+      if (comp.optionQuery) {
         it('add an option when the add option button is clicked', function () {
           //Write option text
-          var optionText = "Testing option insertion";
+          var optionText = 'Testing option insertion';
           var inputBar = compEl.querySelector('.fl-component-config input[type=text]');
           inputBar.value = optionText;
 
-          //Add click the add button
-          // clickButton()
+          //Click the add button
+          var addBtn = compEl.querySelector('.fl-component-config [name=add]');
+          addBtn.click();
+
+          //Check that it has at least one option
+          var formContent = compEl.querySelector('.fl-form-content');
+          var options = formContent.querySelectorAll(comp.optionQuery);
+          expect(options.length).toBeGreaterThan(0);
+
+          //Check that there is at least one option with the right text.
+          var found = 0;
+          for (var i = 0; i < options.length; i++) {
+            if (options[i].innerHTML.indexOf(optionText) >= 0) { found++; }
+          }
+
+          expect(found).toBe(1);
+        });
+
+        it('not add an option if the option text-box is empty', function () {
+          //register number of options before clicking the add button
+          var formContent = compEl.querySelector('.fl-form-content');
+          var optionsBefore = formContent.querySelectorAll(comp.optionQuery);
+          var optionsCountBefore = optionsBefore.length;
+
+          //Click the add button
+          var addBtn = compEl.querySelector('.fl-component-config [name=add]');
+          addBtn.click();
+
+          //Compare with the number of options after
+          var optionsAfter = formContent.querySelectorAll(comp.optionQuery);
+          var optionsCountAfter = optionsAfter.length;
+          expect(optionsCountAfter).toEqual(optionsCountBefore);
         });
       }
 
-      xit('not add an option if the option text-box is empty');
-      xit('make content non-editable when hiding');
-      xit('hide when clicking the OK button');
-      xit('hide when clicking outside the box');
-      xit('remove the component when clicking in the delete button');
+      it('make content non-editable when hiding', function () {
+        var elementsBeforeHiding = compEl.querySelectorAll('[contenteditable=true]');
+        var elementCountBeforeHiding = elementsBeforeHiding.length;
+        expect(elementCountBeforeHiding).toBeGreaterThan(0);
+
+        //Click OK btn;
+        var okBtn = compEl.querySelector('.fl-component-config button[name=ok]');
+        okBtn.click();
+
+        var elementsAfterHiding = compEl.querySelectorAll('[contenteditable=true]');
+        var elementCountAfterHiding = elementsAfterHiding.length;
+        expect(elementCountAfterHiding).toBe(0);
+      });
+
+      it('hide when clicking the OK button', function () {
+        //Click OK btn;
+        var okBtn = compEl.querySelector('.fl-component-config button[name=ok]');
+        okBtn.click();
+        var config = compEl.querySelector('.fl-component-config');
+        var configStyles = window.getComputedStyle(config);
+
+        var configVisibility = configStyles.visibility;
+        expect(configVisibility).toBe('hidden');
+      });
+
+      xit('hide when clicking outside the box', function () {
+        var config = compEl.querySelector('.fl-component-config');
+
+        //Visible before clicking out
+        var configStyles = window.getComputedStyle(config);
+        var configVisibility = configStyles.visibility;
+        expect(configVisibility).toBe('visible');
+
+        //Click a button outside of the form builder
+        var button = document.createElement('button');
+        document.body.insertBefore(button, document.body.children[0]);
+        button.dispatchEvent(new MouseEvent('mousedown', { clickX: 0, clickY: 0 }));
+
+        //Hidden after clicking out
+        configStyles = window.getComputedStyle(config);
+        configVisibility = configStyles.visibility;
+        expect(configVisibility).toBe('hidden');
+        button.delete();
+      });
+
+      it('remove the component when clicking in the delete button', function () {
+        var deleteBtn = compEl.querySelector('.fl-component-config button[name=delete]');
+        deleteBtn.click();
+
+        compEl = container.querySelector('.fl-component');
+        expect(compEl).toBeFalsy();
+      });
+
       xit('remove option when clicking the "minus" button');
     });
 

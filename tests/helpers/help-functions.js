@@ -1,3 +1,5 @@
+//jshint -W098
+
 function clickButton(buttonName, container) {
   'use strict';
 

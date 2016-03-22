@@ -472,6 +472,7 @@ FormComponent.prototype.createControls = function createControls() {
 
   var deleteBtn = document.createElement('button');
   deleteBtn.setAttribute('type', 'button');
+  deleteBtn.setAttribute('name', 'delete');
   deleteBtn.classList.add('btn');
   deleteBtn.classList.add('btn-danger');
   deleteBtn.classList.add('btn-sm');
@@ -486,6 +487,7 @@ FormComponent.prototype.createControls = function createControls() {
 
   var okBtn = document.createElement('button');
   okBtn.setAttribute('type', 'button');
+  okBtn.setAttribute('name', 'ok');
   okBtn.classList.add('btn');
   okBtn.classList.add('btn-default');
   okBtn.classList.add('btn-sm');
