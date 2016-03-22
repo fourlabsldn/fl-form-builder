@@ -83,7 +83,7 @@ function FormBody() {
       // NOTE: Components are prepared to expose the appropriate values
       // when stringified. To export them they need to be stringified.
       var readyToExport = JSON.stringify(components);
-      console.dir(readyToExport);
+      console.dir(JSON.parse(readyToExport));
     });
 
     var _this = this;

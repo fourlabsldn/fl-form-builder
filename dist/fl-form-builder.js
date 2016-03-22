@@ -362,7 +362,7 @@ function FormBody() {
       // NOTE: Components are prepared to expose the appropriate values
       // when stringified. To export them they need to be stringified.
       var readyToExport = JSON.stringify(components);
-      console.dir(readyToExport);
+      console.dir(JSON.parse(readyToExport));
     });
 
     var _this = this;
@@ -1015,6 +1015,7 @@ Checkboxes.prototype.createControls = function createControls() {
 };
 
 /*globals FormComponent, utils*/
+'use strict'; //jshint ignore:line
 
 /**
  * @class Dropdown
@@ -1164,18 +1165,15 @@ Dropdown.prototype.toJSON = function toJSON() {
   json.multiple = this.selector.getAttribute('multiple') || undefined;
 
   //Add options
-  var elJson = json.content[0];
-  elJson.options = [];
+  json.content = [];
   var options = this.content.querySelectorAll('option');
-  options = [].slice.call(options);
-  options.forEach(function (op) {
+  [].forEach.call(options, function (op) {
     var opJson = {};
     opJson.nodeName = 'option';
     opJson.value = op.innerText;
-    elJson.options.push(opJson);
+    json.content.push(opJson);
   });
 
-  json.content.push(elJson);
   return json;
 };
 
