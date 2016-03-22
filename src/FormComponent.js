@@ -336,6 +336,8 @@ FormComponent.prototype.destroy = function destroy() {
  * @return {Boolean}      Whether required was set or not.
  */
 FormComponent.prototype.required = function required(isRequired) {
+  if (this.isRequired === isRequired) { return true; }
+
   var inputs = this.content.querySelectorAll('input');
   var textAreas = this.content.querySelectorAll('textarea');
   inputs = [].slice.call(inputs);

@@ -85,15 +85,13 @@ Checkboxes.prototype.required = function required(isRequired) {
   }
 
   this.isRequired = isRequired;
-  var boxes = this.getElements();
+  var boxes = this.content.querySelectorAll('input');
   if (isRequired) {
-    boxes.forEach(function (el) {
-      var box = el.querySelector('input') || this;
+    [].forEach.call(boxes, function (box) {
       box.setAttribute('required', true);
     });
   } else {
-    boxes.forEach(function (el) {
-      var box = el.querySelector('input') || this;
+    [].forEach.call(boxes, function (box) {
       box.removeAttribute('required');
     });
   }
