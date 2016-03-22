@@ -841,6 +841,7 @@ function FormFabric(formBody) {
       var op = document.createElement('button');
       op.setAttribute('value', idx);
       op.className = component.class;
+      op.name = component.desc;
       op.classList.add('btn');
       op.classList.add('btn-default');
       op.addEventListener('click', function () {
