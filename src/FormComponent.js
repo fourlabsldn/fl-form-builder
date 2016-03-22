@@ -278,18 +278,34 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * its content value
  * @method createConfigInputField
  * @param {String} placeHolderText    text to show in the input field
+ * @param {Function} removeFunction    function to be called when removing an option
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createConfigInputField = function createConfigInputField(placeHolderText) {
+FormComponent.prototype.createConfigInputField =
+function createConfigInputField(placeHolderText, removeFunction) {
+
+  if (removeFunction) {
+    var removeBtn = document.createElement('i');
+    removeBtn.setAttribute('name', 'remove');
+    removeBtn.classList.add('glyphicon');
+    removeBtn.classList.add('glyphicon-minus-sign');
+    removeBtn.classList.add('fl-grey-btn');
+    removeBtn.addEventListener('click', removeFunction);
+    this.configContent.appendChild(removeBtn);
+  }
+
+  var addBtn = document.createElement('i');
+  addBtn.setAttribute('name', 'add');
+  addBtn.classList.add('glyphicon');
+  addBtn.classList.add('glyphicon-plus-sign');
+  addBtn.classList.add('fl-grey-btn');
+  this.configContent.appendChild(addBtn);
+
   var legend = document.createElement('input');
   legend.setAttribute('placeholder', placeHolderText || 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
-
-  var addBtn = document.createElement('i');
-  addBtn.classList.add('glyphicon');
-  addBtn.classList.add('glyphicon-plus-sign');
-  addBtn.classList.add('fl-grey-btn');
+  this.configContent.appendChild(legend);
 
   var _this = this;
   addBtn.addEventListener('click', function () {
@@ -315,9 +331,6 @@ FormComponent.prototype.createConfigInputField = function createConfigInputField
       return true;
     }
   });
-
-  this.configContent.appendChild(addBtn);
-  this.configContent.appendChild(legend);
 };
 
 //To be implemented by child clases
@@ -368,9 +381,9 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
 };
 
 FormComponent.prototype.getElements = function getElements() {
-  var editables = this.content.querySelectorAll('.fl-editable');
+  var allContent = this.content.children;
   var elements = [];
-  [].forEach.call(editables, function (el) {
+  [].forEach.call(allContent, function (el) {
     if (el.nodeName !== 'H3') { elements.push(el); }
   });
 

@@ -1,4 +1,5 @@
-/*globals FormComponent*/
+/*globals FormComponent, utils*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class RadioBtns
@@ -21,8 +22,6 @@ RadioBtns.prototype.componentType = 'RadioBtns';
  */
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-
-  this.createConfigInputField();
   this.addPlaceHolder();
 };
 
@@ -58,4 +57,28 @@ RadioBtns.prototype.add = function add(value, legend) {
 
   this.content.appendChild(newLabel);
   return newLabel;
+};
+
+/**
+ * Creates the config box
+ * @method @override createControls
+ * @return {void}
+ */
+RadioBtns.prototype.createControls = function createControls() {
+  this.constructor.prototype.createControls.call(this);
+
+  var _this = this;
+  function removeOption() {
+    var radioBtns = _this.getElements();
+    var atLeastOneBtn = (radioBtns.length > 0);
+    if (!atLeastOneBtn || _this.placeHolder) {
+      utils.blinkRed(_this.content);
+      return;
+    }
+
+    var lastEl = radioBtns.pop();
+    lastEl.remove();
+  }
+
+  this.createConfigInputField(null, removeOption);
 };

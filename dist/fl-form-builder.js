@@ -671,18 +671,34 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * its content value
  * @method createConfigInputField
  * @param {String} placeHolderText    text to show in the input field
+ * @param {Function} removeFunction    function to be called when removing an option
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createConfigInputField = function createConfigInputField(placeHolderText) {
+FormComponent.prototype.createConfigInputField =
+function createConfigInputField(placeHolderText, removeFunction) {
+
+  if (removeFunction) {
+    var removeBtn = document.createElement('i');
+    removeBtn.setAttribute('name', 'remove');
+    removeBtn.classList.add('glyphicon');
+    removeBtn.classList.add('glyphicon-minus-sign');
+    removeBtn.classList.add('fl-grey-btn');
+    removeBtn.addEventListener('click', removeFunction);
+    this.configContent.appendChild(removeBtn);
+  }
+
+  var addBtn = document.createElement('i');
+  addBtn.setAttribute('name', 'add');
+  addBtn.classList.add('glyphicon');
+  addBtn.classList.add('glyphicon-plus-sign');
+  addBtn.classList.add('fl-grey-btn');
+  this.configContent.appendChild(addBtn);
+
   var legend = document.createElement('input');
   legend.setAttribute('placeholder', placeHolderText || 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
-
-  var addBtn = document.createElement('i');
-  addBtn.classList.add('glyphicon');
-  addBtn.classList.add('glyphicon-plus-sign');
-  addBtn.classList.add('fl-grey-btn');
+  this.configContent.appendChild(legend);
 
   var _this = this;
   addBtn.addEventListener('click', function () {
@@ -708,9 +724,6 @@ FormComponent.prototype.createConfigInputField = function createConfigInputField
       return true;
     }
   });
-
-  this.configContent.appendChild(addBtn);
-  this.configContent.appendChild(legend);
 };
 
 //To be implemented by child clases
@@ -761,9 +774,9 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
 };
 
 FormComponent.prototype.getElements = function getElements() {
-  var editables = this.content.querySelectorAll('.fl-editable');
+  var allContent = this.content.children;
   var elements = [];
-  [].forEach.call(editables, function (el) {
+  [].forEach.call(allContent, function (el) {
     if (el.nodeName !== 'H3') { elements.push(el); }
   });
 
@@ -935,22 +948,6 @@ Checkboxes.prototype.add = function add(value, legend) {
 };
 
 /**
- *
- * Returns label elements that contain both the checkbox and its text.
- * @method @override getElements
- * @return {Array[HTMLElement]}
- */
-Checkboxes.prototype.getElements = function getElements() {
-  var allElements = this.content.children;
-  var checkboxContainers = [];
-  [].forEach.call(allElements, function (el) {
-    if (el.nodeName !== 'H3') { checkboxContainers.push(el); }
-  });
-
-  return checkboxContainers;
-};
-
-/**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
  * @override @method required
  * @param  {boolean} isRequired
@@ -999,14 +996,8 @@ Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
 Checkboxes.prototype.createControls = function createControls() {
   this.constructor.prototype.createControls.call(this);
 
-  var removeBtn = document.createElement('i');
-  removeBtn.classList.add('glyphicon');
-  removeBtn.classList.add('glyphicon-minus-sign');
-  removeBtn.classList.add('fl-grey-btn');
-  removeBtn.setAttribute('alt', 'Remove one of the checkboxes');
-
   var _this = this;
-  removeBtn.addEventListener('click', function removeOption() {
+  function removeOption() {
     var boxes = _this.getElements();
     var atLeastOneBox = (boxes.length > 0);
     if (!atLeastOneBox || _this.placeHolder) {
@@ -1016,10 +1007,9 @@ Checkboxes.prototype.createControls = function createControls() {
 
     var lastEl = boxes.pop();
     lastEl.remove();
-  });
+  }
 
-  this.configContent.appendChild(removeBtn);
-  this.createConfigInputField();
+  this.createConfigInputField(null, removeOption);
 };
 
 /*globals FormComponent, utils*/
@@ -1131,14 +1121,8 @@ Dropdown.prototype.showConfig = function showConfig() {
 Dropdown.prototype.createControls = function createControls() {
   this.constructor.prototype.createControls.call(this);
 
-  var removeBtn = document.createElement('i');
-  removeBtn.classList.add('glyphicon');
-  removeBtn.classList.add('glyphicon-minus-sign');
-  removeBtn.classList.add('fl-grey-btn');
-  removeBtn.setAttribute('alt', 'Remove one of the dropdown options');
-
   var _this = this;
-  removeBtn.addEventListener('click', function removeOption() {
+  function removeOption() {
     var hasIndexSelected = (_this.selector.selectedIndex >= 0);
     if (!hasIndexSelected || _this.placeHolder) {
       utils.blinkRed(_this.selector);
@@ -1148,11 +1132,9 @@ Dropdown.prototype.createControls = function createControls() {
     var index = _this.selector.selectedIndex;
     var selectedElement = _this.selector.children[index];
     selectedElement.remove();
-  });
+  }
 
-  this.configContent.appendChild(removeBtn);
-
-  this.createConfigInputField();
+  this.createConfigInputField(null, removeOption);
 };
 
 /**
@@ -1160,32 +1142,12 @@ Dropdown.prototype.createControls = function createControls() {
  * @return {HTMLElement}
  */
 Dropdown.prototype.getElements = function getElements() {
-  return [this.selector];
+  var allOptions = this.content.querySelectorAll('option');
+  return [].slice.call(allOptions);
 };
 
-/**
- * Method to be called by JSON.stringify
- * @method @override toJSON
- * @return {void}
- */
-Dropdown.prototype.toJSON = function toJSON() {
-  var json = this.constructor.prototype.toJSON.call(this);
-  json.multiple = this.selector.getAttribute('multiple') || undefined;
-
-  //Add options
-  json.content = [];
-  var options = this.content.querySelectorAll('option');
-  [].forEach.call(options, function (op) {
-    var opJson = {};
-    opJson.nodeName = 'option';
-    opJson.value = op.innerText;
-    json.content.push(opJson);
-  });
-
-  return json;
-};
-
-/*globals FormComponent*/
+/*globals FormComponent, utils*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class RadioBtns
@@ -1208,8 +1170,6 @@ RadioBtns.prototype.componentType = 'RadioBtns';
  */
 RadioBtns.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-
-  this.createConfigInputField();
   this.addPlaceHolder();
 };
 
@@ -1245,6 +1205,30 @@ RadioBtns.prototype.add = function add(value, legend) {
 
   this.content.appendChild(newLabel);
   return newLabel;
+};
+
+/**
+ * Creates the config box
+ * @method @override createControls
+ * @return {void}
+ */
+RadioBtns.prototype.createControls = function createControls() {
+  this.constructor.prototype.createControls.call(this);
+
+  var _this = this;
+  function removeOption() {
+    var radioBtns = _this.getElements();
+    var atLeastOneBtn = (radioBtns.length > 0);
+    if (!atLeastOneBtn || _this.placeHolder) {
+      utils.blinkRed(_this.content);
+      return;
+    }
+
+    var lastEl = radioBtns.pop();
+    lastEl.remove();
+  }
+
+  this.createConfigInputField(null, removeOption);
 };
 
 /*globals FormComponent*/

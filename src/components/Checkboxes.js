@@ -66,22 +66,6 @@ Checkboxes.prototype.add = function add(value, legend) {
 };
 
 /**
- *
- * Returns label elements that contain both the checkbox and its text.
- * @method @override getElements
- * @return {Array[HTMLElement]}
- */
-Checkboxes.prototype.getElements = function getElements() {
-  var allElements = this.content.children;
-  var checkboxContainers = [];
-  [].forEach.call(allElements, function (el) {
-    if (el.nodeName !== 'H3') { checkboxContainers.push(el); }
-  });
-
-  return checkboxContainers;
-};
-
-/**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
  * @override @method required
  * @param  {boolean} isRequired
@@ -130,14 +114,8 @@ Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
 Checkboxes.prototype.createControls = function createControls() {
   this.constructor.prototype.createControls.call(this);
 
-  var removeBtn = document.createElement('i');
-  removeBtn.classList.add('glyphicon');
-  removeBtn.classList.add('glyphicon-minus-sign');
-  removeBtn.classList.add('fl-grey-btn');
-  removeBtn.setAttribute('alt', 'Remove one of the checkboxes');
-
   var _this = this;
-  removeBtn.addEventListener('click', function removeOption() {
+  function removeOption() {
     var boxes = _this.getElements();
     var atLeastOneBox = (boxes.length > 0);
     if (!atLeastOneBox || _this.placeHolder) {
@@ -147,8 +125,7 @@ Checkboxes.prototype.createControls = function createControls() {
 
     var lastEl = boxes.pop();
     lastEl.remove();
-  });
+  }
 
-  this.configContent.appendChild(removeBtn);
-  this.createConfigInputField();
+  this.createConfigInputField(null, removeOption);
 };

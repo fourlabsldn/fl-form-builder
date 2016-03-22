@@ -101,7 +101,19 @@ componentsArray.forEach(function (comp) {
         expect(requiredElements.length).toBeGreaterThan(0);
       });
 
-      xit('add an option when the add option button is clicked');
+      //No text-box or text-area for this spec
+      if (!/text/i.test(comp.name)) {
+        it('add an option when the add option button is clicked', function () {
+          //Write option text
+          var optionText = "Testing option insertion";
+          var inputBar = compEl.querySelector('.fl-component-config input[type=text]');
+          inputBar.value = optionText;
+
+          //Add click the add button
+          // clickButton()
+        });
+      }
+
       xit('not add an option if the option text-box is empty');
       xit('make content non-editable when hiding');
       xit('hide when clicking the OK button');

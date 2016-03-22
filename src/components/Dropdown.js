@@ -107,14 +107,8 @@ Dropdown.prototype.showConfig = function showConfig() {
 Dropdown.prototype.createControls = function createControls() {
   this.constructor.prototype.createControls.call(this);
 
-  var removeBtn = document.createElement('i');
-  removeBtn.classList.add('glyphicon');
-  removeBtn.classList.add('glyphicon-minus-sign');
-  removeBtn.classList.add('fl-grey-btn');
-  removeBtn.setAttribute('alt', 'Remove one of the dropdown options');
-
   var _this = this;
-  removeBtn.addEventListener('click', function removeOption() {
+  function removeOption() {
     var hasIndexSelected = (_this.selector.selectedIndex >= 0);
     if (!hasIndexSelected || _this.placeHolder) {
       utils.blinkRed(_this.selector);
@@ -124,11 +118,9 @@ Dropdown.prototype.createControls = function createControls() {
     var index = _this.selector.selectedIndex;
     var selectedElement = _this.selector.children[index];
     selectedElement.remove();
-  });
+  }
 
-  this.configContent.appendChild(removeBtn);
-
-  this.createConfigInputField();
+  this.createConfigInputField(null, removeOption);
 };
 
 /**
@@ -136,27 +128,6 @@ Dropdown.prototype.createControls = function createControls() {
  * @return {HTMLElement}
  */
 Dropdown.prototype.getElements = function getElements() {
-  return [this.selector];
-};
-
-/**
- * Method to be called by JSON.stringify
- * @method @override toJSON
- * @return {void}
- */
-Dropdown.prototype.toJSON = function toJSON() {
-  var json = this.constructor.prototype.toJSON.call(this);
-  json.multiple = this.selector.getAttribute('multiple') || undefined;
-
-  //Add options
-  json.content = [];
-  var options = this.content.querySelectorAll('option');
-  [].forEach.call(options, function (op) {
-    var opJson = {};
-    opJson.nodeName = 'option';
-    opJson.value = op.innerText;
-    json.content.push(opJson);
-  });
-
-  return json;
+  var allOptions = this.content.querySelectorAll('option');
+  return [].slice.call(allOptions);
 };
