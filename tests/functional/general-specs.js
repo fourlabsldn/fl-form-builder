@@ -18,7 +18,7 @@ describe('After initialised, a FormBuilder should', function () {
     target.remove();
   });
 
-  xit('be empty of components', function () {
+  it('be empty of components', function () {
     var components = document.querySelector('.fl-component');
     expect(components.length).toBe(0);
   });

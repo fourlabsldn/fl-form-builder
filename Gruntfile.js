@@ -65,12 +65,19 @@ module.exports = function (grunt) {
           livereload: true,
         },
       },
+      tests: {
+        files: 'tests/**/*.*',
+        options: {
+          livereload: true,
+        },
+      },
     },
     jasmine: {
       main: {
         src: 'dist/fl-form-builder.js',
         options: {
           specs: 'tests/**/*-specs.js',
+          helpers: './tests/helpers/*.js',
           vendor: [
             'bower_components/x-div/js/x-div-tester.js'
           ]
@@ -91,7 +98,7 @@ module.exports = function (grunt) {
   grunt.registerTask('js-build', ['concat', 'uglify']);
   grunt.registerTask('css-build', ['sass']);
   grunt.registerTask('build', ['js-build', 'css-build']);
-  grunt.registerTask('dev', ['build', 'open', 'watch']);
+  grunt.registerTask('dev', ['build', 'jasmine:main:build', 'open', 'watch']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('test-debug', ['jasmine:main:build', 'open']);
 };
