@@ -340,10 +340,12 @@ FormComponent.prototype.required = function required(isRequired) {
 
   var inputs = this.content.querySelectorAll('input');
   var textAreas = this.content.querySelectorAll('textarea');
+  var selects = this.content.querySelectorAll('select');
   inputs = [].slice.call(inputs);
   textAreas = [].slice.call(textAreas);
+  selects = [].slice.call(selects);
 
-  var els = [].concat.call(inputs, textAreas);
+  var els = [].concat.call(inputs, textAreas, selects);
 
   if (isRequired) {
     els.forEach(function (el) { el.setAttribute('required', true); });
