@@ -59,18 +59,48 @@ componentsArray.forEach(function (comp) {
       function (done) {
         setTimeout(function () {
           var focusedElement = document.activeElement;
-          expect(focusedElement.nodeName).toBe('INPUT');
+          var focusedExpectedNodeName = comp.focusElementNodeName || 'INPUT';
+          focusedExpectedNodeName = focusedExpectedNodeName.toUpperCase();
+          expect(focusedElement.nodeName).toBe(focusedExpectedNodeName);
           expect(focusedElement.hasAttribute('placeholder')).toBe(true);
           done();
         }, 50);
       });
 
-      xit('have the title editable');
-      xit('have options editable');
+      it('have the title editable', function () {
+        var title = compEl.querySelector('h3');
+        expect(title.hasAttribute('contenteditable')).toBe(true);
+
+        var editableValue = title.getAttribute('contenteditable');
+        expect(editableValue).not.toBe(false);
+        expect(editableValue).not.toBe(null);
+        expect(editableValue).not.toBe('false');
+      });
+
+      if (comp.name === 'Dropdown') {
+        it('show the select as multiple', function () {
+          var selector = compEl.querySelector('select');
+          expect(selector.hasAttribute('multiple')).toBe(true);
+        });
+      } else {
+        it('have options editable', function () {
+          var editables = compEl.querySelectorAll('[contenteditable]');
+
+          //Has to have at least 2. The title and one more.
+          expect(editables.length).toBeGreaterThan(1);
+        });
+      }
     });
 
     describe('config box should', function () {
-      xit('set elements as required when the required switch is changed');
+      it('set elements as required when the required switch is changed', function () {
+        var requiredInputElement = compEl.querySelector('.fl-component-config .switch input');
+        requiredInputElement.click();
+
+        var requiredElements = compEl.querySelectorAll('[required]');
+        expect(requiredElements.length).toBeGreaterThan(0);
+      });
+
       xit('add an option when the add option button is clicked');
       xit('not add an option if the option text-box is empty');
       xit('make content non-editable when hiding');

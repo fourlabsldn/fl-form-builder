@@ -1,4 +1,5 @@
 /*globals FormComponent*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class TextArea
@@ -33,6 +34,7 @@ TextArea.prototype.init = function init(name) {
   labelEl.appendChild(area);
 
   this.content.appendChild(labelEl);
+  this.focusElement = area;
 };
 
 TextArea.prototype.setTitle = function setTitle(desc) {

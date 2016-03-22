@@ -1,7 +1,7 @@
 var componentsArray = [{
   name: 'Checkbox',
   buttonName: 'Check',
-  contentQuery: 'input[type=checkbox]'
+  contentQuery: 'input[type=checkbox]',
 }, {
   name: 'Radio button',
   buttonName: 'Radio',
@@ -17,6 +17,6 @@ var componentsArray = [{
 }, {
   name: 'Text area',
   buttonName: '"Text area"',
-  contentQuery: 'textarea'
-},
-];
+  contentQuery: 'textarea',
+  focusElementNodeName: 'textarea',
+}, ];

@@ -1,4 +1,5 @@
 /*globals FormComponent*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class TextBox
@@ -35,6 +36,7 @@ TextBox.prototype.init = function init(name) {
   labelEl.appendChild(box);
 
   this.content.appendChild(labelEl);
+  this.focusElement = box;
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {

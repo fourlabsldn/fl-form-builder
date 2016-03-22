@@ -1246,6 +1246,7 @@ RadioBtns.prototype.add = function add(value, legend) {
 };
 
 /*globals FormComponent*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class TextArea
@@ -1280,6 +1281,7 @@ TextArea.prototype.init = function init(name) {
   labelEl.appendChild(area);
 
   this.content.appendChild(labelEl);
+  this.focusElement = area;
 };
 
 TextArea.prototype.setTitle = function setTitle(desc) {
@@ -1289,6 +1291,7 @@ TextArea.prototype.setTitle = function setTitle(desc) {
 };
 
 /*globals FormComponent*/
+'use strict'; //jshint ignore: line
 
 /**
  * @class TextBox
@@ -1325,6 +1328,7 @@ TextBox.prototype.init = function init(name) {
   labelEl.appendChild(box);
 
   this.content.appendChild(labelEl);
+  this.focusElement = box;
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {
