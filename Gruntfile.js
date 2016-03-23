@@ -14,11 +14,9 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         src: [
-          'src/controller-head.js',
           'src/utils/utils.js',
           'src/utils/*.js',
           'src/**/*.js',
-          'src/controller-tail.js',
         ],
         dest: 'dist/fl-form-builder.js',
       },
@@ -84,10 +82,10 @@ module.exports = function (grunt) {
         },
       },
       unit: {
-        src: 'src/fl-form-builder.js',
+        src: 'dist/fl-form-builder.js',
         options: {
           specs: 'tests/unit/**/*-specs.js',
-          helpers: ['./tests/common-helpers/*.js'],
+          helpers: ['./tests/common-helpers/*.js', './tests/unit/helpers/*.js'],
           vendor: [
             'bower_components/x-div/js/x-div-tester.js'
           ]
