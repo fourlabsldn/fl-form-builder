@@ -59,6 +59,10 @@ RadioBtns.prototype.addOption = function addOption(value, legend) {
   return newLabel;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 RadioBtns.prototype.removeOption = function removeOption() {
   var radioBtns = this.getElements();
   var atLeastOneBtn = (radioBtns.length > 0);

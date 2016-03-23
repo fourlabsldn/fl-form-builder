@@ -527,8 +527,9 @@ FormComponent.prototype.createControls = function createControls() {
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
 
+  //If it adds options, let's create the option adding field.
   if (typeof this.addOption === 'function') {
-    this.createConfigInputField();
+    this.createAddOptionField();
   }
 };
 
@@ -670,13 +671,13 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
 /**
  * Creates an input field in the configContent which will call this.add with
  * its content value
- * @method createConfigInputField
+ * @method createAddOptionField
  * @param {String} placeHolderText    text to show in the input field
  * @param {Function} removeFunction    function to be called when removing an option
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createConfigInputField =
-function createConfigInputField() {
+FormComponent.prototype.createAddOptionField =
+function createAddOptionField() {
 
   var _this = this;
   if (typeof this.removeOption === 'function') {
@@ -951,6 +952,10 @@ Checkboxes.prototype.addOption = function addOption(value, legend) {
   return label;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 Checkboxes.prototype.removeOption = function removeOption() {
   var boxes = this.getElements();
   var atLeastOneBox = (boxes.length > 0);
@@ -1060,6 +1065,10 @@ Dropdown.prototype.addOption = function addOption(value, legend) {
   return newOp;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 Dropdown.prototype.removeOption = function removeOption() {
   var options = this.getElements();
   var hasAtLeastOneOption = options.length > 0;
@@ -1188,6 +1197,10 @@ RadioBtns.prototype.addOption = function addOption(value, legend) {
   return newLabel;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 RadioBtns.prototype.removeOption = function removeOption() {
   var radioBtns = this.getElements();
   var atLeastOneBtn = (radioBtns.length > 0);

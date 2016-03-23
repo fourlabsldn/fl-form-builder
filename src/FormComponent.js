@@ -139,8 +139,9 @@ FormComponent.prototype.createControls = function createControls() {
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
 
+  //If it adds options, let's create the option adding field.
   if (typeof this.addOption === 'function') {
-    this.createConfigInputField();
+    this.createAddOptionField();
   }
 };
 
@@ -282,13 +283,13 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
 /**
  * Creates an input field in the configContent which will call this.add with
  * its content value
- * @method createConfigInputField
+ * @method createAddOptionField
  * @param {String} placeHolderText    text to show in the input field
  * @param {Function} removeFunction    function to be called when removing an option
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createConfigInputField =
-function createConfigInputField() {
+FormComponent.prototype.createAddOptionField =
+function createAddOptionField() {
 
   var _this = this;
   if (typeof this.removeOption === 'function') {

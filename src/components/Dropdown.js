@@ -55,6 +55,10 @@ Dropdown.prototype.addOption = function addOption(value, legend) {
   return newOp;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 Dropdown.prototype.removeOption = function removeOption() {
   var options = this.getElements();
   var hasAtLeastOneOption = options.length > 0;

@@ -65,6 +65,10 @@ Checkboxes.prototype.addOption = function addOption(value, legend) {
   return label;
 };
 
+/**
+ * @method removeOption
+ * @return {void}
+ */
 Checkboxes.prototype.removeOption = function removeOption() {
   var boxes = this.getElements();
   var atLeastOneBox = (boxes.length > 0);
