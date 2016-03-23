@@ -87,7 +87,13 @@ FormComponent.prototype.createControls = function createControls() {
   deleteBtn.classList.add('glyphicon');
   deleteBtn.classList.add('glyphicon-trash');
   deleteBtn.addEventListener('click', function () {
-    _this.destroy();
+    var ev = new CustomEvent('removeComponent', {
+      detail: { comp: _this },
+      bubbles: true,
+      cancelable: true,
+    });
+
+    _this.element.dispatchEvent(ev);
   });
 
   buttonsContainer.appendChild(deleteBtn);

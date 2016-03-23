@@ -66,6 +66,17 @@ function FormBody() {
     }
   };
 
+  this.removeComponent = function removeComponent(comp) {
+    var compIndex = components.indexOf(comp);
+    if (compIndex < 0) {
+      throw new Error('FormBody.removeComponent(): ' +
+          'Component being destroyed is not registered in FormBody.');
+    }
+
+    components.splice(compIndex, 1);
+    comp.destroy();
+  };
+
   this.init = function () {
     form = document.createElement('form');
     form.classList.add('form-horizontal');
@@ -87,13 +98,23 @@ function FormBody() {
     });
 
     var _this = this;
-    form.addEventListener('newElement', function (e) {
+
+    //Listen to new components being created
+    form.addEventListener('addComponent', function (e) {
       if (!e.detail) {
-        console.error('No data in "newElement" event.');
-        return;
+        throw new Error('No data in "newElement" event.');
       }
 
       _this.addComponent(e.detail.comp);
+    });
+
+    //Listen to delete buttons being pressed
+    form.addEventListener('removeComponent', function (e) {
+      if (!e.detail) {
+        throw new Error('No data in "removeElement" event.');
+      }
+
+      _this.removeComponent(e.detail.comp);
     });
 
     submitBtn = document.createElement('input');
