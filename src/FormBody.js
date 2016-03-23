@@ -95,6 +95,15 @@ function FormBody() {
       // when stringified. To export them they need to be stringified.
       var readyToExport = JSON.stringify(components);
       console.dir(JSON.parse(readyToExport));
+
+      //For now let's emmit an event with the result.
+      var ev = new CustomEvent('formSubmitted',
+        { detail: {	json: readyToExport },
+          bubbles: true,
+          cancelable: true,
+        });
+
+      this.dispatchEvent(ev);
     });
 
     var _this = this;

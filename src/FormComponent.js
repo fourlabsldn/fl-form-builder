@@ -427,7 +427,7 @@ FormComponent.prototype.toJSON = function toJSON() {
     elJson.type = el.getAttribute('type') || undefined;
     elJson.name = el.getAttribute('name') || undefined;
     elJson.placeholder = el.getAttribute('placeholder') || undefined;
-    elJson.label = el.innerText;
+    elJson.label = el.innerText || el.innerHTML;
     json.content.push(elJson);
   });
 
