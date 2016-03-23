@@ -113,6 +113,20 @@ describe('The save button should', function () {
     submitBtn.click();
   });
 
-  xit('export titles correctly');
+  it('export titles correctly', function (done) {
+    var titles = container.querySelectorAll('h3[contenteditable]');
+    container.addEventListener('formSubmitted', function (e) {
+      var json = e.detail.json;
+      var exportObj = JSON.parse(json);
+      for (var i = 0; i < exportObj.length; i++) {
+        expect(exportObj[i].title).toBe(titles[i].innerText);
+      }
+
+      done();
+    });
+
+    submitBtn.click();
+  });
+
   xit('export placeholders correctly');
 });
