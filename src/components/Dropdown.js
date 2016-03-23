@@ -109,15 +109,17 @@ Dropdown.prototype.createControls = function createControls() {
 
   var _this = this;
   function removeOption() {
-    var hasIndexSelected = (_this.selector.selectedIndex >= 0);
-    if (!hasIndexSelected || _this.placeHolder) {
+    var options = _this.getElements();
+    var hasAtLeastOneOption = options.length > 0;
+    if (!hasAtLeastOneOption || _this.placeHolder) {
       utils.blinkRed(_this.selector);
       return;
     }
 
-    var index = _this.selector.selectedIndex;
-    var selectedElement = _this.selector.children[index];
-    selectedElement.remove();
+    var selectedIndex = _this.selector.selectedIndex;
+    var index = (selectedIndex >= 0) ? selectedIndex : 0;
+    var optionToBeRemoved = _this.selector.children[index];
+    optionToBeRemoved.remove();
   }
 
   this.createConfigInputField(null, removeOption);

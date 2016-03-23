@@ -73,11 +73,21 @@ module.exports = function (grunt) {
       },
     },
     jasmine: {
-      main: {
+      functional: {
         src: 'dist/fl-form-builder.js',
         options: {
-          specs: 'tests/**/*-specs.js',
-          helpers: './tests/helpers/*.js',
+          specs: 'tests/functional/**/*-specs.js',
+          helpers: ['./tests/common-helpers/*.js', './tests/functional/helpers/*.js'],
+          vendor: [
+            'bower_components/x-div/js/x-div-tester.js'
+          ]
+        },
+      },
+      unit: {
+        src: 'src/fl-form-builder.js',
+        options: {
+          specs: 'tests/unit/**/*-specs.js',
+          helpers: ['./tests/common-helpers/*.js'],
           vendor: [
             'bower_components/x-div/js/x-div-tester.js'
           ]
@@ -98,7 +108,6 @@ module.exports = function (grunt) {
   grunt.registerTask('js-build', ['concat', 'uglify']);
   grunt.registerTask('css-build', ['sass']);
   grunt.registerTask('build', ['js-build', 'css-build']);
-  grunt.registerTask('dev', ['build', 'jasmine:main:build', 'open', 'watch']);
+  grunt.registerTask('dev', ['build', 'jasmine:functional:build', 'open', 'watch']);
   grunt.registerTask('test', ['jasmine']);
-  grunt.registerTask('test-debug', ['jasmine:main:build', 'open']);
 };

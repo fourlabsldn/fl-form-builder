@@ -1,5 +1,5 @@
 //Helpers
-/*globals xDivTester, clickButton, componentsArray*/
+/*globals xDivTester, clickButton, componentsArray, addOption*/
 'use strict'; //jshint ignore: line
 
 componentsArray.forEach(function (comp) {
@@ -103,15 +103,11 @@ componentsArray.forEach(function (comp) {
 
       //No text-box or text-area for this spec
       if (comp.optionQuery) {
+
         it('add an option when the add option button is clicked', function () {
           //Write option text
           var optionText = 'Testing option insertion';
-          var inputBar = compEl.querySelector('.fl-component-config input[type=text]');
-          inputBar.value = optionText;
-
-          //Click the add button
-          var addBtn = compEl.querySelector('.fl-component-config [name=add]');
-          addBtn.click();
+          addOption(optionText, compEl);
 
           //Check that it has at least one option
           var formContent = compEl.querySelector('.fl-form-content');
@@ -141,6 +137,21 @@ componentsArray.forEach(function (comp) {
           var optionsAfter = formContent.querySelectorAll(comp.optionQuery);
           var optionsCountAfter = optionsAfter.length;
           expect(optionsCountAfter).toEqual(optionsCountBefore);
+        });
+
+        it('remove option when clicking the "minus" button', function () {
+          //Add option
+          var optionText = 'Testing option insertion';
+          addOption(optionText, compEl);
+
+          //Click the delete button
+          var removeBtn = compEl.querySelector('.fl-component-config [name=remove]');
+          removeBtn.click();
+
+          //Check that it disappeared
+          var indexOfOptionText = compEl.innerHTML.indexOf(optionText);
+
+          expect(indexOfOptionText).toBeLessThan(0);
         });
       }
 
@@ -196,16 +207,6 @@ componentsArray.forEach(function (comp) {
         compEl = container.querySelector('.fl-component');
         expect(compEl).toBeFalsy();
       });
-
-      xit('remove option when clicking the "minus" button');
-    });
-
-    describe('The save button should', function () {
-      xit('export the right amount of components');
-      xit('export the right type of components');
-      xit('export the right number of options in a dropdown');
-      xit('export titles correctly');
-      xit('export placeholders correctly');
     });
   });
 });
