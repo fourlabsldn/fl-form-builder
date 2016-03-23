@@ -1,4 +1,4 @@
-/*globals module*/
+/*globals module, require*/
 module.exports = function (grunt) {
   'use strict';
 
@@ -45,6 +45,18 @@ module.exports = function (grunt) {
         files: {
           'dist/fl-form-builder.min.js': ['dist/fl-form-builder.js'],
         },
+      },
+    },
+    postcss: {
+      options: {
+        processors: [
+          require('autoprefixer')({
+            browsers: ['last 2 versions']
+          })
+        ]
+      },
+      dist: {
+        src: 'dist/fl-form-builder.css'
       },
     },
     watch: {
@@ -109,13 +121,14 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-postcss');
 
   grunt.registerTask('default', []);
   grunt.registerTask('demo', ['open:demo']);
 
   //Building
   grunt.registerTask('js-build', ['concat', 'uglify']);
-  grunt.registerTask('css-build', ['sass']);
+  grunt.registerTask('css-build', ['sass', 'postcss']);
   grunt.registerTask('build', ['js-build', 'css-build']);
 
   //Developing

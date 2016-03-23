@@ -30,10 +30,14 @@
   color: #444;
 }
 .fl-form-builder .fl-blink-red {
-  animation-name: blinkOutline;
-  animation-duration: 0.3s;
-  animation-iteration-count: 2;
-  animation-direction: reverse;
+  -webkit-animation-name: blinkOutline;
+          animation-name: blinkOutline;
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-iteration-count: 2;
+          animation-iteration-count: 2;
+  -webkit-animation-direction: reverse;
+          animation-direction: reverse;
 }
 @keyframes blinkOutline {
   0% {
@@ -64,12 +68,16 @@
   margin-right: 5px;
 }
 .fl-form-builder .fl-form-body * {
+  transition: -webkit-transform 0.2s ease-out;
   transition: transform 0.2s ease-out;
+  transition: transform 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
 .fl-form-builder .fl-component {
   padding-bottom: 5px;
   border-radius: 5px;
+  transition: box-shadow 0.2s ease-out, background-color 0.2s ease-out, -webkit-transform 0.2s ease-out;
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out, -webkit-transform 0.2s ease-out;
 }
 .fl-form-builder .fl-component:hover {
   background-color: #ebf4fc;
@@ -120,7 +128,8 @@
   bottom: 0;
   z-index: 99;
   width: 100%;
-  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+          transform: translateY(100%);
   padding: 15px;
 }
 .fl-form-builder .fl-component-config .fl-bottom-btn {
@@ -178,10 +187,6 @@
   width: calc( 20px * 2);
   height: 20px;
   background-color: #dddddd;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
   border-radius: 20px;
 }
 .fl-form-builder input.cmn-toggle-round + label:before,
@@ -196,30 +201,14 @@
 .fl-form-builder input.cmn-toggle-round + label:before {
   right: 1px;
   background-color: #f1f1f1;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
   border-radius: 20px;
-  -webkit-transition: background 0.4s;
-  -moz-transition: background 0.4s;
-  -o-transition: background 0.4s;
   transition: background 0.4s;
 }
 .fl-form-builder input.cmn-toggle-round + label:after {
   width: calc( 20px - 2px);
   background-color: #fff;
-  -webkit-border-radius: 100%;
-  -moz-border-radius: 100%;
-  -ms-border-radius: 100%;
-  -o-border-radius: 100%;
   border-radius: 100%;
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  -webkit-transition: margin 0.4s;
-  -moz-transition: margin 0.4s;
-  -o-transition: margin 0.4s;
   transition: margin 0.4s;
 }
 .fl-form-builder input.cmn-toggle-round:checked + label:before {
@@ -228,5 +217,3 @@
 .fl-form-builder input.cmn-toggle-round:checked + label:after {
   margin-left: 20px;
 }
-
-/*# sourceMappingURL=fl-form-builder.css.map */

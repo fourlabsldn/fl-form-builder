@@ -12,9 +12,11 @@
   "author": "lazamar @ FourLabs",
   "license": "ISC",
   "devDependencies": {
+    "autoprefixer": "^6.3.4",
     "bower": "^1.7.7",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
-    "grunt-contrib-jasmine": "^1.0.0"
+    "grunt-contrib-jasmine": "^1.0.0",
+    "grunt-postcss": "^0.8.0"
   }
 }
