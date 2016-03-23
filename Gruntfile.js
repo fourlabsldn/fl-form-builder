@@ -105,9 +105,18 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', []);
   grunt.registerTask('demo', ['open:demo']);
+
+  //Building
   grunt.registerTask('js-build', ['concat', 'uglify']);
   grunt.registerTask('css-build', ['sass']);
   grunt.registerTask('build', ['js-build', 'css-build']);
+
+  //Developing
   grunt.registerTask('dev', ['build', 'jasmine:functional:build', 'open', 'watch']);
-  grunt.registerTask('test', ['jasmine']);
+  grunt.registerTask('test-functional', ['dev']);
+  grunt.registerTask('test-unit', ['build', 'jasmine:unit:build', 'open', 'watch']);
+
+  //Test
+  grunt.registerTask('test', ['jamine']);
+
 };
