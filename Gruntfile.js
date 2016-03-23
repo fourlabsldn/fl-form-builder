@@ -115,6 +115,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test-unit', ['build', 'jasmine:unit:build', 'open', 'watch']);
 
   //Test
-  grunt.registerTask('test', ['jamine']);
+  grunt.registerTask('test', ['jasmine']);
 
 };
