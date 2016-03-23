@@ -12,6 +12,11 @@ module.exports = function (grunt) {
       },
     },
     concat: {
+      options: {
+        banner: '(function () {',
+        footer: '}());',
+        separator: '\n',
+      },
       dist: {
         src: [
           'src/utils/utils.js',
@@ -82,7 +87,11 @@ module.exports = function (grunt) {
         },
       },
       unit: {
-        src: 'dist/fl-form-builder.js',
+        src: [
+          'src/utils/utils.js',
+          'src/utils/*.js',
+          'src/**/*.js',
+        ],
         options: {
           specs: 'tests/unit/**/*-specs.js',
           helpers: ['./tests/common-helpers/*.js', './tests/unit/helpers/*.js'],

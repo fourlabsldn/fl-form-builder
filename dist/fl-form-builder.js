@@ -1,4 +1,4 @@
-//Yep. Just that.
+(function () {//Yep. Just that.
 var utils = {};
 
 /*globals utils*/
@@ -1350,3 +1350,4 @@ xController(function flFormBuilder(xDivEl) {
   xDivEl.appendChild(fabric.element);
   xDivEl.appendChild(formBody.element);
 });
+}());
