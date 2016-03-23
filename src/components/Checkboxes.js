@@ -32,9 +32,9 @@ Checkboxes.prototype.init = function init(name) {
  * @param {String} value  value that will be sent on form submit
  * @param {String} legend [optional]
  */
-Checkboxes.prototype.add = function add(value, legend) {
+Checkboxes.prototype.addOption = function addOption(value, legend) {
   if (!value) {
-    throw new Error('Checkboxes.add(): No value parameter provided.');
+    throw new Error('Checkboxes.addOption(): No value parameter provided.');
   } else if (this.placeHolder) {
     this.removePlaceHolder();
   }
@@ -65,6 +65,17 @@ Checkboxes.prototype.add = function add(value, legend) {
   return label;
 };
 
+Checkboxes.prototype.removeOption = function removeOption() {
+  var boxes = this.getElements();
+  var atLeastOneBox = (boxes.length > 0);
+  if (!atLeastOneBox || this.placeHolder) {
+    utils.blinkRed(this.content);
+    return;
+  }
+
+  var lastEl = boxes.pop();
+  lastEl.remove();
+};
 /**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
  * @override @method required
@@ -103,29 +114,5 @@ Checkboxes.prototype.required = function required(isRequired) {
  * @override addPlaceHolder
  */
 Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Check a box');
-};
-
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-Checkboxes.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var boxes = _this.getElements();
-    var atLeastOneBox = (boxes.length > 0);
-    if (!atLeastOneBox || _this.placeHolder) {
-      utils.blinkRed(_this.content);
-      return;
-    }
-
-    var lastEl = boxes.pop();
-    lastEl.remove();
-  }
-
-  this.createConfigInputField(null, removeOption);
+  this.placeHolder = this.addOption('placeholder', 'Check a box');
 };

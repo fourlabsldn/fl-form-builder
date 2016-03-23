@@ -138,6 +138,10 @@ FormComponent.prototype.createControls = function createControls() {
 
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
+
+  if (typeof this.addOption === 'function') {
+    this.createConfigInputField();
+  }
 };
 
 /**
@@ -284,15 +288,19 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * @return {HTMLElement} The cretated element
  */
 FormComponent.prototype.createConfigInputField =
-function createConfigInputField(placeHolderText, removeFunction) {
+function createConfigInputField() {
 
-  if (removeFunction) {
+  var _this = this;
+  if (typeof this.removeOption === 'function') {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
     removeBtn.classList.add('glyphicon');
     removeBtn.classList.add('glyphicon-minus-sign');
     removeBtn.classList.add('fl-grey-btn');
-    removeBtn.addEventListener('click', removeFunction);
+    removeBtn.addEventListener('click', function () {
+      _this.removeOption();
+    });
+
     this.configContent.appendChild(removeBtn);
   }
 
@@ -304,12 +312,11 @@ function createConfigInputField(placeHolderText, removeFunction) {
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');
-  legend.setAttribute('placeholder', placeHolderText || 'Type a new option');
+  legend.setAttribute('placeholder', 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
   this.configContent.appendChild(legend);
 
-  var _this = this;
   addBtn.addEventListener('click', function () {
 
     //Blink red and return if no value was provided
@@ -319,7 +326,7 @@ function createConfigInputField(placeHolderText, removeFunction) {
       return;
     }
 
-    _this.add(legend.value);
+    _this.addOption(legend.value);
     legend.value = '';
   });
 
@@ -373,7 +380,7 @@ FormComponent.prototype.required = function required(isRequired) {
 };
 
 FormComponent.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Insert an option');
+  this.placeHolder = this.addOption('placeholder', 'Insert an option');
   this.placeHolder.setAttribute('disabled', true);
 };
 

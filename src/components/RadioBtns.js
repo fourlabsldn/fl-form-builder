@@ -31,7 +31,7 @@ RadioBtns.prototype.init = function init(name) {
  * @param {String} legend [optional]
  * @return HTMLElement the element added
  */
-RadioBtns.prototype.add = function add(value, legend) {
+RadioBtns.prototype.addOption = function addOption(value, legend) {
   if (!value) {
     throw new Error('RadioBtns.add(): ' + value + ' is not a valid "value" parameter');
   } else if (this.placeHolder) {
@@ -59,26 +59,14 @@ RadioBtns.prototype.add = function add(value, legend) {
   return newLabel;
 };
 
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-RadioBtns.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var radioBtns = _this.getElements();
-    var atLeastOneBtn = (radioBtns.length > 0);
-    if (!atLeastOneBtn || _this.placeHolder) {
-      utils.blinkRed(_this.content);
-      return;
-    }
-
-    var lastEl = radioBtns.pop();
-    lastEl.remove();
+RadioBtns.prototype.removeOption = function removeOption() {
+  var radioBtns = this.getElements();
+  var atLeastOneBtn = (radioBtns.length > 0);
+  if (!atLeastOneBtn || this.placeHolder) {
+    utils.blinkRed(this.content);
+    return;
   }
 
-  this.createConfigInputField(null, removeOption);
+  var lastEl = radioBtns.pop();
+  lastEl.remove();
 };

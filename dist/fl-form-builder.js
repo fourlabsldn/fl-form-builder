@@ -526,6 +526,10 @@ FormComponent.prototype.createControls = function createControls() {
 
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
+
+  if (typeof this.addOption === 'function') {
+    this.createConfigInputField();
+  }
 };
 
 /**
@@ -672,15 +676,19 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * @return {HTMLElement} The cretated element
  */
 FormComponent.prototype.createConfigInputField =
-function createConfigInputField(placeHolderText, removeFunction) {
+function createConfigInputField() {
 
-  if (removeFunction) {
+  var _this = this;
+  if (typeof this.removeOption === 'function') {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
     removeBtn.classList.add('glyphicon');
     removeBtn.classList.add('glyphicon-minus-sign');
     removeBtn.classList.add('fl-grey-btn');
-    removeBtn.addEventListener('click', removeFunction);
+    removeBtn.addEventListener('click', function () {
+      _this.removeOption();
+    });
+
     this.configContent.appendChild(removeBtn);
   }
 
@@ -692,12 +700,11 @@ function createConfigInputField(placeHolderText, removeFunction) {
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');
-  legend.setAttribute('placeholder', placeHolderText || 'Type a new option');
+  legend.setAttribute('placeholder', 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
   this.configContent.appendChild(legend);
 
-  var _this = this;
   addBtn.addEventListener('click', function () {
 
     //Blink red and return if no value was provided
@@ -707,7 +714,7 @@ function createConfigInputField(placeHolderText, removeFunction) {
       return;
     }
 
-    _this.add(legend.value);
+    _this.addOption(legend.value);
     legend.value = '';
   });
 
@@ -761,7 +768,7 @@ FormComponent.prototype.required = function required(isRequired) {
 };
 
 FormComponent.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Insert an option');
+  this.placeHolder = this.addOption('placeholder', 'Insert an option');
   this.placeHolder.setAttribute('disabled', true);
 };
 
@@ -911,9 +918,9 @@ Checkboxes.prototype.init = function init(name) {
  * @param {String} value  value that will be sent on form submit
  * @param {String} legend [optional]
  */
-Checkboxes.prototype.add = function add(value, legend) {
+Checkboxes.prototype.addOption = function addOption(value, legend) {
   if (!value) {
-    throw new Error('Checkboxes.add(): No value parameter provided.');
+    throw new Error('Checkboxes.addOption(): No value parameter provided.');
   } else if (this.placeHolder) {
     this.removePlaceHolder();
   }
@@ -944,6 +951,17 @@ Checkboxes.prototype.add = function add(value, legend) {
   return label;
 };
 
+Checkboxes.prototype.removeOption = function removeOption() {
+  var boxes = this.getElements();
+  var atLeastOneBox = (boxes.length > 0);
+  if (!atLeastOneBox || this.placeHolder) {
+    utils.blinkRed(this.content);
+    return;
+  }
+
+  var lastEl = boxes.pop();
+  lastEl.remove();
+};
 /**
  * Sets checkboxes as required. Only does that if there is only one checkbox.
  * @override @method required
@@ -982,31 +1000,7 @@ Checkboxes.prototype.required = function required(isRequired) {
  * @override addPlaceHolder
  */
 Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Check a box');
-};
-
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-Checkboxes.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var boxes = _this.getElements();
-    var atLeastOneBox = (boxes.length > 0);
-    if (!atLeastOneBox || _this.placeHolder) {
-      utils.blinkRed(_this.content);
-      return;
-    }
-
-    var lastEl = boxes.pop();
-    lastEl.remove();
-  }
-
-  this.createConfigInputField(null, removeOption);
+  this.placeHolder = this.addOption('placeholder', 'Check a box');
 };
 
 /*globals FormComponent, utils*/
@@ -1053,9 +1047,9 @@ Dropdown.prototype.init = function init(name) {
  * @param {String} legend [optional]
  * @return {HTMLElement} the option created
  */
-Dropdown.prototype.add = function add(value, legend) {
+Dropdown.prototype.addOption = function addOption(value, legend) {
   if (!value) {
-    throw new Error('Dropdown.add(): ' + value + ' is not a valid "value" value.');
+    throw new Error('Dropdown.addOption(): ' + value + ' is not a valid "value" value.');
   } else if (this.placeHolder) {
     this.removePlaceHolder();
   }
@@ -1066,12 +1060,26 @@ Dropdown.prototype.add = function add(value, legend) {
   return newOp;
 };
 
+Dropdown.prototype.removeOption = function removeOption() {
+  var options = this.getElements();
+  var hasAtLeastOneOption = options.length > 0;
+  if (!hasAtLeastOneOption || this.placeHolder) {
+    utils.blinkRed(this.selector);
+    return;
+  }
+
+  var selectedIndex = this.selector.selectedIndex;
+  var index = (selectedIndex >= 0) ? selectedIndex : 0;
+  var optionToBeRemoved = this.selector.children[index];
+  optionToBeRemoved.remove();
+};
+
 /**
  * Adds a placeholder and saves it in this.placeHolder
  * @method @override addPlaceHolder
  */
 Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Select an option');
+  this.placeHolder = this.addOption('placeholder', 'Select an option');
   this.placeHolder.setAttribute('disabled', true);
   this.placeHolder.setAttribute('selected', true);
 };
@@ -1108,32 +1116,6 @@ Dropdown.prototype.showConfig = function showConfig() {
 
   //Make selector multiple;
   this.selector.setAttribute('multiple', true);
-};
-
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-Dropdown.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var options = _this.getElements();
-    var hasAtLeastOneOption = options.length > 0;
-    if (!hasAtLeastOneOption || _this.placeHolder) {
-      utils.blinkRed(_this.selector);
-      return;
-    }
-
-    var selectedIndex = _this.selector.selectedIndex;
-    var index = (selectedIndex >= 0) ? selectedIndex : 0;
-    var optionToBeRemoved = _this.selector.children[index];
-    optionToBeRemoved.remove();
-  }
-
-  this.createConfigInputField(null, removeOption);
 };
 
 /**
@@ -1178,7 +1160,7 @@ RadioBtns.prototype.init = function init(name) {
  * @param {String} legend [optional]
  * @return HTMLElement the element added
  */
-RadioBtns.prototype.add = function add(value, legend) {
+RadioBtns.prototype.addOption = function addOption(value, legend) {
   if (!value) {
     throw new Error('RadioBtns.add(): ' + value + ' is not a valid "value" parameter');
   } else if (this.placeHolder) {
@@ -1206,28 +1188,16 @@ RadioBtns.prototype.add = function add(value, legend) {
   return newLabel;
 };
 
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-RadioBtns.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var radioBtns = _this.getElements();
-    var atLeastOneBtn = (radioBtns.length > 0);
-    if (!atLeastOneBtn || _this.placeHolder) {
-      utils.blinkRed(_this.content);
-      return;
-    }
-
-    var lastEl = radioBtns.pop();
-    lastEl.remove();
+RadioBtns.prototype.removeOption = function removeOption() {
+  var radioBtns = this.getElements();
+  var atLeastOneBtn = (radioBtns.length > 0);
+  if (!atLeastOneBtn || this.placeHolder) {
+    utils.blinkRed(this.content);
+    return;
   }
 
-  this.createConfigInputField(null, removeOption);
+  var lastEl = radioBtns.pop();
+  lastEl.remove();
 };
 
 /*globals FormComponent*/

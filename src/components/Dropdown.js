@@ -42,9 +42,9 @@ Dropdown.prototype.init = function init(name) {
  * @param {String} legend [optional]
  * @return {HTMLElement} the option created
  */
-Dropdown.prototype.add = function add(value, legend) {
+Dropdown.prototype.addOption = function addOption(value, legend) {
   if (!value) {
-    throw new Error('Dropdown.add(): ' + value + ' is not a valid "value" value.');
+    throw new Error('Dropdown.addOption(): ' + value + ' is not a valid "value" value.');
   } else if (this.placeHolder) {
     this.removePlaceHolder();
   }
@@ -55,12 +55,26 @@ Dropdown.prototype.add = function add(value, legend) {
   return newOp;
 };
 
+Dropdown.prototype.removeOption = function removeOption() {
+  var options = this.getElements();
+  var hasAtLeastOneOption = options.length > 0;
+  if (!hasAtLeastOneOption || this.placeHolder) {
+    utils.blinkRed(this.selector);
+    return;
+  }
+
+  var selectedIndex = this.selector.selectedIndex;
+  var index = (selectedIndex >= 0) ? selectedIndex : 0;
+  var optionToBeRemoved = this.selector.children[index];
+  optionToBeRemoved.remove();
+};
+
 /**
  * Adds a placeholder and saves it in this.placeHolder
  * @method @override addPlaceHolder
  */
 Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.add('placeholder', 'Select an option');
+  this.placeHolder = this.addOption('placeholder', 'Select an option');
   this.placeHolder.setAttribute('disabled', true);
   this.placeHolder.setAttribute('selected', true);
 };
@@ -97,32 +111,6 @@ Dropdown.prototype.showConfig = function showConfig() {
 
   //Make selector multiple;
   this.selector.setAttribute('multiple', true);
-};
-
-/**
- * Creates the config box
- * @method @override createControls
- * @return {void}
- */
-Dropdown.prototype.createControls = function createControls() {
-  this.constructor.prototype.createControls.call(this);
-
-  var _this = this;
-  function removeOption() {
-    var options = _this.getElements();
-    var hasAtLeastOneOption = options.length > 0;
-    if (!hasAtLeastOneOption || _this.placeHolder) {
-      utils.blinkRed(_this.selector);
-      return;
-    }
-
-    var selectedIndex = _this.selector.selectedIndex;
-    var index = (selectedIndex >= 0) ? selectedIndex : 0;
-    var optionToBeRemoved = _this.selector.children[index];
-    optionToBeRemoved.remove();
-  }
-
-  this.createConfigInputField(null, removeOption);
 };
 
 /**
