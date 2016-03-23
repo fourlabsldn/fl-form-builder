@@ -4,7 +4,7 @@
 componentsArray.forEach(function (compHelper) {
   'use strict';
 
-  describe('A ' + compHelper.name + ' Component should', function () {
+  describe('A ' + compHelper.name + ' Component', function () {
     describe('when initialised should', function () {
       var comp;
       var name = 'My Component';
@@ -61,6 +61,7 @@ componentsArray.forEach(function (compHelper) {
           expect(comp.addOption).toBeDefined();
           expect(typeof comp.addOption).toBe('function');
         });
+
         it('have a removeOption function', function () {
           expect(comp.removeOption).toBeDefined();
           expect(typeof comp.removeOption).toBe('function');
