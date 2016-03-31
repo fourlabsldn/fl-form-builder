@@ -1,4 +1,6 @@
-node_modules/
-bower_components/
-.sass-cache/
-_SpecRunner.html
+/**/node_modules/
+/**/bower_components/
+/.sass-cache/
+/_SpecRunner.html
+/.grunt/
+
