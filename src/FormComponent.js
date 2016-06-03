@@ -19,9 +19,7 @@ FormComponent.prototype.init = function init(name) {
 
   //Create wrapper element
   this.element = document.createElement('div');
-  this.element.classList.add('fl-component');
-  this.element.classList.add('col-md-12');
-  this.element.classList.add('form-group');
+  this.element.classList.add('fl-component', 'col-md-12', 'form-group');
 
   //Create div where content will go
   this.content = document.createElement('div');
@@ -53,8 +51,7 @@ FormComponent.prototype.createControls = function createControls() {
 
   var moreConfigBtn = document.createElement('button');
   moreConfigBtn.setAttribute('type', 'button');
-  moreConfigBtn.classList.add('glyphicon');
-  moreConfigBtn.classList.add('glyphicon-cog');
+  moreConfigBtn.classList.add('glyphicon', 'glyphicon-cog');
   moreConfigBtn.title = 'Configure form group';
   controls.appendChild(moreConfigBtn);
 
@@ -81,12 +78,7 @@ FormComponent.prototype.createControls = function createControls() {
   var deleteBtn = document.createElement('button');
   deleteBtn.setAttribute('type', 'button');
   deleteBtn.setAttribute('name', 'delete');
-  deleteBtn.classList.add('btn');
-  deleteBtn.classList.add('btn-danger');
-  deleteBtn.classList.add('btn-sm');
-  deleteBtn.classList.add('fl-bottom-btn');
-  deleteBtn.classList.add('glyphicon');
-  deleteBtn.classList.add('glyphicon-trash');
+  deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-trash');
   deleteBtn.addEventListener('click', function () {
     var ev = new CustomEvent('removeComponent', {
       detail: { comp: _this },
