@@ -44,8 +44,7 @@ function FormFabric(formBody) {
       op.setAttribute('value', idx);
       op.className = component.class;
       op.name = component.desc;
-      op.classList.add('btn');
-      op.classList.add('btn-default');
+      op.classList.add('btn', 'btn-default');
       op.addEventListener('click', function () {
         var idx = op.value;
         createElement(formComponents[idx].constr, formBody);

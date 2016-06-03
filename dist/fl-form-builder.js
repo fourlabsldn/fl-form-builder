@@ -302,8 +302,7 @@ function FormBody() {
     }
 
     var dragBtn = document.createElement('i');
-    dragBtn.classList.add('glyphicon');
-    dragBtn.classList.add('glyphicon-menu-hamburger');
+    dragBtn.classList.add('glyphicon', 'glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
 
     dragBtn.addEventListener('dragstart', function (e) {
@@ -358,8 +357,7 @@ function FormBody() {
 
   this.init = function () {
     form = document.createElement('form');
-    form.classList.add('form-horizontal');
-    form.classList.add('fl-form-body');
+    form.classList.add('form-horizontal', 'fl-form-body');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
@@ -407,8 +405,7 @@ function FormBody() {
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
-    submitBtn.classList.add('btn');
-    submitBtn.classList.add('col-sm-12');
+    submitBtn.classList.add('btn', 'col-sm-12');
     form.appendChild(submitBtn);
     this.element = form;
   };
@@ -519,12 +516,7 @@ FormComponent.prototype.createControls = function createControls() {
   var okBtn = document.createElement('button');
   okBtn.setAttribute('type', 'button');
   okBtn.setAttribute('name', 'ok');
-  okBtn.classList.add('btn');
-  okBtn.classList.add('btn-default');
-  okBtn.classList.add('btn-sm');
-  okBtn.classList.add('fl-bottom-btn');
-  okBtn.classList.add('glyphicon');
-  okBtn.classList.add('glyphicon-ok');
+  okBtn.classList.add('btn', 'btn-default', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-ok');
   okBtn.addEventListener('click', function () {
     _this.saveConfig();
     _this.configToggle();
@@ -539,8 +531,7 @@ FormComponent.prototype.createControls = function createControls() {
   requiredSwitch.classList.add('switch');
 
   var switchInput = document.createElement('input');
-  switchInput.classList.add('cmn-toggle');
-  switchInput.classList.add('cmn-toggle-round');
+  switchInput.classList.add('cmn-toggle', 'cmn-toggle-round');
   switchInput.setAttribute('type', 'checkbox');
   switchInput.id = 'cmn-toggle-' + Date.now();
   switchInput.addEventListener('change', function (e) {
@@ -719,9 +710,7 @@ function createAddOptionField() {
   if (typeof this.removeOption === 'function') {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
-    removeBtn.classList.add('glyphicon');
-    removeBtn.classList.add('glyphicon-minus-sign');
-    removeBtn.classList.add('fl-grey-btn');
+    removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
     removeBtn.addEventListener('click', function () {
       _this.removeOption();
     });
@@ -731,9 +720,7 @@ function createAddOptionField() {
 
   var addBtn = document.createElement('i');
   addBtn.setAttribute('name', 'add');
-  addBtn.classList.add('glyphicon');
-  addBtn.classList.add('glyphicon-plus-sign');
-  addBtn.classList.add('fl-grey-btn');
+  addBtn.classList.add('glyphicon', 'glyphicon-plus-sign', 'fl-grey-btn');
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');
@@ -898,8 +885,7 @@ function FormFabric(formBody) {
       op.setAttribute('value', idx);
       op.className = component.class;
       op.name = component.desc;
-      op.classList.add('btn');
-      op.classList.add('btn-default');
+      op.classList.add('btn', 'btn-default');
       op.addEventListener('click', function () {
         var idx = op.value;
         createElement(formComponents[idx].constr, formBody);
@@ -1073,8 +1059,7 @@ Dropdown.prototype.init = function init(name) {
   labelEl.classList.add('full-width');
   this.selector = document.createElement('select');
   this.selector.setAttribute('name', name);
-  this.selector.classList.add('fl-dropdown');
-  this.selector.classList.add('form-control');
+  this.selector.classList.add('fl-dropdown', 'form-control');
   labelEl.appendChild(this.selector);
 
   this.content.appendChild(labelEl);
@@ -1279,9 +1264,7 @@ TextArea.prototype.init = function init(name) {
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
-  area.classList.add('fl-editable');
-  area.classList.add('fl-text-area');
-  area.classList.add('form-control');
+  area.classList.add('fl-editable', 'fl-text-area', 'form-control');
   labelEl.appendChild(area);
 
   this.content.appendChild(labelEl);
@@ -1326,9 +1309,7 @@ TextBox.prototype.init = function init(name) {
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
-  box.classList.add('fl-editable');
-  box.classList.add('fl-text-box');
-  box.classList.add('form-control');
+  box.classList.add('fl-editable', 'fl-text-box', 'form-control');
   labelEl.appendChild(box);
 
   this.content.appendChild(labelEl);

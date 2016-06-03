@@ -30,9 +30,7 @@ TextBox.prototype.init = function init(name) {
   var box = document.createElement('input');
   box.setAttribute('type', 'text');
   box.setAttribute('name', name);
-  box.classList.add('fl-editable');
-  box.classList.add('fl-text-box');
-  box.classList.add('form-control');
+  box.classList.add('fl-editable', 'fl-text-box', 'form-control');
   labelEl.appendChild(box);
 
   this.content.appendChild(labelEl);

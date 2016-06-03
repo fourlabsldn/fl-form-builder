@@ -28,9 +28,7 @@ TextArea.prototype.init = function init(name) {
   var area = document.createElement('textarea');
   area.setAttribute('name', name);
   area.setAttribute('rows', 5);
-  area.classList.add('fl-editable');
-  area.classList.add('fl-text-area');
-  area.classList.add('form-control');
+  area.classList.add('fl-editable', 'fl-text-area', 'form-control');
   labelEl.appendChild(area);
 
   this.content.appendChild(labelEl);

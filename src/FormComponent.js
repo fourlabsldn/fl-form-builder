@@ -101,12 +101,7 @@ FormComponent.prototype.createControls = function createControls() {
   var okBtn = document.createElement('button');
   okBtn.setAttribute('type', 'button');
   okBtn.setAttribute('name', 'ok');
-  okBtn.classList.add('btn');
-  okBtn.classList.add('btn-default');
-  okBtn.classList.add('btn-sm');
-  okBtn.classList.add('fl-bottom-btn');
-  okBtn.classList.add('glyphicon');
-  okBtn.classList.add('glyphicon-ok');
+  okBtn.classList.add('btn', 'btn-default', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-ok');
   okBtn.addEventListener('click', function () {
     _this.saveConfig();
     _this.configToggle();
@@ -121,8 +116,7 @@ FormComponent.prototype.createControls = function createControls() {
   requiredSwitch.classList.add('switch');
 
   var switchInput = document.createElement('input');
-  switchInput.classList.add('cmn-toggle');
-  switchInput.classList.add('cmn-toggle-round');
+  switchInput.classList.add('cmn-toggle', 'cmn-toggle-round');
   switchInput.setAttribute('type', 'checkbox');
   switchInput.id = 'cmn-toggle-' + Date.now();
   switchInput.addEventListener('change', function (e) {
@@ -301,9 +295,7 @@ function createAddOptionField() {
   if (typeof this.removeOption === 'function') {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
-    removeBtn.classList.add('glyphicon');
-    removeBtn.classList.add('glyphicon-minus-sign');
-    removeBtn.classList.add('fl-grey-btn');
+    removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
     removeBtn.addEventListener('click', function () {
       _this.removeOption();
     });
@@ -313,9 +305,7 @@ function createAddOptionField() {
 
   var addBtn = document.createElement('i');
   addBtn.setAttribute('name', 'add');
-  addBtn.classList.add('glyphicon');
-  addBtn.classList.add('glyphicon-plus-sign');
-  addBtn.classList.add('fl-grey-btn');
+  addBtn.classList.add('glyphicon', 'glyphicon-plus-sign', 'fl-grey-btn');
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');

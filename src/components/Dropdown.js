@@ -27,8 +27,7 @@ Dropdown.prototype.init = function init(name) {
   labelEl.classList.add('full-width');
   this.selector = document.createElement('select');
   this.selector.setAttribute('name', name);
-  this.selector.classList.add('fl-dropdown');
-  this.selector.classList.add('form-control');
+  this.selector.classList.add('fl-dropdown', 'form-control');
   labelEl.appendChild(this.selector);
 
   this.content.appendChild(labelEl);

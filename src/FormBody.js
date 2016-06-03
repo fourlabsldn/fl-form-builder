@@ -23,8 +23,7 @@ function FormBody() {
     }
 
     var dragBtn = document.createElement('i');
-    dragBtn.classList.add('glyphicon');
-    dragBtn.classList.add('glyphicon-menu-hamburger');
+    dragBtn.classList.add('glyphicon', 'glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
 
     dragBtn.addEventListener('dragstart', function (e) {
@@ -79,8 +78,7 @@ function FormBody() {
 
   this.init = function () {
     form = document.createElement('form');
-    form.classList.add('form-horizontal');
-    form.classList.add('fl-form-body');
+    form.classList.add('form-horizontal', 'fl-form-body');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Submit button clicked.');
@@ -128,8 +126,7 @@ function FormBody() {
 
     submitBtn = document.createElement('input');
     submitBtn.setAttribute('type', 'submit');
-    submitBtn.classList.add('btn');
-    submitBtn.classList.add('col-sm-12');
+    submitBtn.classList.add('btn', 'col-sm-12');
     form.appendChild(submitBtn);
     this.element = form;
   };
