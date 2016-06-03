@@ -304,6 +304,7 @@ function FormBody() {
     var dragBtn = document.createElement('i');
     dragBtn.classList.add('glyphicon', 'glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
+    dragBtn.title = 'Drag to reorder';
 
     dragBtn.addEventListener('dragstart', function (e) {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
@@ -470,6 +471,7 @@ FormComponent.prototype.createControls = function createControls() {
   moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon');
   moreConfigBtn.classList.add('glyphicon-cog');
+  moreConfigBtn.title = 'Configure form group';
   controls.appendChild(moreConfigBtn);
 
   var _this = this;
@@ -711,6 +713,7 @@ function createAddOptionField() {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
     removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
+    removeBtn.title = 'Remove last option';
     removeBtn.addEventListener('click', function () {
       _this.removeOption();
     });
@@ -721,6 +724,7 @@ function createAddOptionField() {
   var addBtn = document.createElement('i');
   addBtn.setAttribute('name', 'add');
   addBtn.classList.add('glyphicon', 'glyphicon-plus-sign', 'fl-grey-btn');
+  addBtn.title = 'Add this option';
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');
@@ -885,6 +889,7 @@ function FormFabric(formBody) {
       op.setAttribute('value', idx);
       op.className = component.class;
       op.name = component.desc;
+      op.title = component.desc;
       op.classList.add('btn', 'btn-default');
       op.addEventListener('click', function () {
         var idx = op.value;

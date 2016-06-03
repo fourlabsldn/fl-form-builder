@@ -25,6 +25,7 @@ function FormBody() {
     var dragBtn = document.createElement('i');
     dragBtn.classList.add('glyphicon', 'glyphicon-menu-hamburger');
     dragBtn.setAttribute('draggable', true);
+    dragBtn.title = 'Drag to reorder';
 
     dragBtn.addEventListener('dragstart', function (e) {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);

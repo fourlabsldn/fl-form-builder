@@ -55,6 +55,7 @@ FormComponent.prototype.createControls = function createControls() {
   moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon');
   moreConfigBtn.classList.add('glyphicon-cog');
+  moreConfigBtn.title = 'Configure form group';
   controls.appendChild(moreConfigBtn);
 
   var _this = this;
@@ -296,6 +297,7 @@ function createAddOptionField() {
     var removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
     removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
+    removeBtn.title = 'Remove last option';
     removeBtn.addEventListener('click', function () {
       _this.removeOption();
     });
@@ -306,6 +308,7 @@ function createAddOptionField() {
   var addBtn = document.createElement('i');
   addBtn.setAttribute('name', 'add');
   addBtn.classList.add('glyphicon', 'glyphicon-plus-sign', 'fl-grey-btn');
+  addBtn.title = 'Add this option';
   this.configContent.appendChild(addBtn);
 
   var legend = document.createElement('input');
