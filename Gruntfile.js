@@ -124,7 +124,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-postcss');
 
   grunt.registerTask('default', []);
-  grunt.registerTask('demo', ['open:demo']);
+  grunt.registerTask('demo', ['open:demo', 'watch']);
 
   //Building
   grunt.registerTask('js-build', ['concat', 'uglify']);

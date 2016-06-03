@@ -16,7 +16,12 @@
     "bower": "^1.7.7",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-jasmine": "^1.0.0",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-open": "^0.2.3",
     "grunt-postcss": "^0.8.0"
   }
 }

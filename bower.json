@@ -17,5 +17,8 @@
   ],
   "dependencies": {
     "x-div": "~1.0.3"
+  },
+  "devDependencies": {
+    "bootstrap": "^3.3.6"
   }
 }
