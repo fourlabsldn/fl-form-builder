@@ -17,7 +17,7 @@ export default function FormFabric(formBody) {
     return new FormFabric();
   }
 
-  var formComponents = [
+  const formComponents = [
     { desc: 'Radio buttons', constr: RadioBtns, class: 'glyphicon glyphicon-ok-circle' },
     { desc: 'Checkboxes', constr: Checkboxes, class: 'glyphicon glyphicon-check' },
     { desc: 'Dropdown', constr: Dropdown, class: 'glyphicon glyphicon-collapse-down' },
@@ -25,17 +25,17 @@ export default function FormFabric(formBody) {
     { desc: 'Text area', constr: TextArea, class: 'glyphicon glyphicon-text-height' },
   ];
 
-  function createElement(Constr, formBody) {
-    var name = 'Temp name' + (Math.floor(Math.random() * 1000));
-    var comp = new Constr(name);
-    var ev = new CustomEvent('addComponent',
+  function createElement(Constr, fBody) {
+    const name = `Temp name ${Math.floor(Math.random() * 1000)}`;
+    const comp = new Constr(name);
+    const ev = new CustomEvent('addComponent',
       {
-        detail: {	comp: comp },
+        detail: {	comp },
         bubbles: true,
         cancelable: true,
       });
 
-    formBody.dispatchEvent(ev);
+    fBody.dispatchEvent(ev);
   }
 
   /**
@@ -43,17 +43,17 @@ export default function FormFabric(formBody) {
    * @return {HTMLElement} The dropdown menu
    */
   function createOptions() {
-    var frag = document.createDocumentFragment();
-    formComponents.forEach(function (component, idx) {
-      var op = document.createElement('button');
+    const frag = document.createDocumentFragment();
+    formComponents.forEach((component, idx) => {
+      const op = document.createElement('button');
       op.setAttribute('value', idx);
       op.className = component.class;
       op.name = component.desc;
       op.title = component.desc;
       op.classList.add('btn', 'btn-default');
-      op.addEventListener('click', function () {
-        var idx = op.value;
-        createElement(formComponents[idx].constr, formBody);
+      op.addEventListener('click', () => {
+        const index = op.value;
+        createElement(formComponents[index].constr, formBody);
       });
 
       frag.appendChild(op);
@@ -65,7 +65,7 @@ export default function FormFabric(formBody) {
   this.init = function init() {
     this.element = document.createElement('div');
     this.element.classList.add('fl-form-fabric');
-    var options = createOptions();
+    const options = createOptions();
     this.element.appendChild(options);
   };
 

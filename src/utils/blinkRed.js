@@ -4,7 +4,7 @@ export default function blinkRed(el) {
   }
 
   el.classList.add('fl-blink-red');
-  setTimeout(function () {
+  setTimeout(() => {
     el.classList.remove('fl-blink-red');
   }, 1500);
-};
+}

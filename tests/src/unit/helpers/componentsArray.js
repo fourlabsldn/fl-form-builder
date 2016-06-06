@@ -1,6 +1,4 @@
-/*globals Checkboxes, Dropdown, RadioBtns, TextBox, TextArea*/
-
-var componentsArray = [//jshint ignore:line
+export default [
   {
     name: 'Checkbox',
     constructorName: 'Checkboxes',

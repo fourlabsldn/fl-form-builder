@@ -13,20 +13,20 @@ export default function FormComponent() {
 
 FormComponent.prototype.init = function init(name) {
   if (typeof name !== 'string') {
-    throw new Error('FormComponent: ' + name + ' is not a valid "name" parameter.');
+    throw new Error(`FormComponent: ${name} is not a valid "name" parameter.`);
   }
 
-  //Create wrapper element
+  // Create wrapper element
   this.element = document.createElement('div');
   this.element.classList.add('fl-component', 'col-md-12', 'form-group');
 
-  //Create div where content will go
+  // Create div where content will go
   this.content = document.createElement('div');
   this.content.classList.add('fl-form-content');
   this.element.appendChild(this.content);
 
-  //Create a title
-  var title = document.createElement('h3');
+  // Create a title
+  const title = document.createElement('h3');
   title.innerText = 'Add a title';
   title.classList.add('fl-editable');
   this.title = title;
@@ -43,83 +43,88 @@ FormComponent.prototype.init = function init(name) {
  * @return {void}
  */
 FormComponent.prototype.createControls = function createControls() {
-
-  //Create side control bar -----------------------------
-  var controls = document.createElement('div');
+  // Create side control bar -----------------------------
+  const controls = document.createElement('div');
   controls.classList.add('fl-component-side-control');
 
-  var moreConfigBtn = document.createElement('button');
+  const moreConfigBtn = document.createElement('button');
   moreConfigBtn.setAttribute('type', 'button');
   moreConfigBtn.classList.add('glyphicon', 'glyphicon-cog');
   moreConfigBtn.title = 'Configure form group';
   controls.appendChild(moreConfigBtn);
 
-  var _this = this;
-  moreConfigBtn.addEventListener('click', function () {
-    _this.configToggle();
+  moreConfigBtn.addEventListener('click', () => {
+    this.configToggle();
   });
 
-  //Create configuration box -----------------------------
-  var configBox = document.createElement('div');
+  // Create configuration box -----------------------------
+  const configBox = document.createElement('div');
   configBox.classList.add('fl-component-config');
   this.configBox = configBox;
 
-  //Component-specific content wrapper
-  var configContent = document.createElement('div');
+  // Component-specific content wrapper
+  const configContent = document.createElement('div');
   configContent.classList.add('full-width');
   this.configContent = configContent;
   configBox.appendChild(configContent);
 
-  //Bottom buttons container
-  var buttonsContainer = document.createElement('div');
+  // Bottom buttons container
+  const buttonsContainer = document.createElement('div');
   buttonsContainer.classList.add('col-sm-12');
 
-  var deleteBtn = document.createElement('button');
+  const deleteBtn = document.createElement('button');
   deleteBtn.setAttribute('type', 'button');
   deleteBtn.setAttribute('name', 'delete');
-  deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-trash');
-  deleteBtn.addEventListener('click', function () {
-    var ev = new CustomEvent('removeComponent', {
-      detail: { comp: _this },
+  deleteBtn.classList.add(
+    'btn',
+    'btn-danger',
+    'btn-sm',
+    'fl-bottom-btn',
+    'glyphicon',
+    'glyphicon-trash'
+  );
+  deleteBtn.addEventListener('click', () => {
+    const ev = new CustomEvent('removeComponent', {
+      detail: { comp: this },
       bubbles: true,
       cancelable: true,
     });
 
-    _this.element.dispatchEvent(ev);
+    this.element.dispatchEvent(ev);
   });
 
   buttonsContainer.appendChild(deleteBtn);
 
-  var okBtn = document.createElement('button');
+  const okBtn = document.createElement('button');
   okBtn.setAttribute('type', 'button');
   okBtn.setAttribute('name', 'ok');
   okBtn.classList.add('btn', 'btn-default', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-ok');
-  okBtn.addEventListener('click', function () {
-    _this.saveConfig();
-    _this.configToggle();
+  okBtn.addEventListener('click', () => {
+    this.saveConfig();
+    this.configToggle();
   });
 
   buttonsContainer.appendChild(okBtn);
-  var requiredLabel = document.createElement('label');
+  const requiredLabel = document.createElement('label');
   requiredLabel.innerText = 'Required';
 
-  //Switch for whether the field is required or not.
-  var requiredSwitch = document.createElement('div');
+  // Switch for whether the field is required or not.
+  const requiredSwitch = document.createElement('div');
   requiredSwitch.classList.add('switch');
 
-  var switchInput = document.createElement('input');
+  const switchInput = document.createElement('input');
   switchInput.classList.add('cmn-toggle', 'cmn-toggle-round');
   switchInput.setAttribute('type', 'checkbox');
-  switchInput.id = 'cmn-toggle-' + Date.now();
-  switchInput.addEventListener('change', function (e) {
-    var checked = e.target.checked;
-    _this.required(checked);
+  switchInput.id = `cmn-toggle-${Date.now()}`;
+  switchInput.addEventListener('change', (e) => {
+    const checked = e.target.checked;
+    this.required(checked);
   });
 
   this.requiredSwitch = switchInput;
   requiredSwitch.appendChild(switchInput);
 
-  var switchLabel = document.createElement('label');
+  const switchLabel = document.createElement('label');
   switchLabel.setAttribute('for', switchInput.id);
   requiredSwitch.appendChild(switchLabel);
 
@@ -131,7 +136,7 @@ FormComponent.prototype.createControls = function createControls() {
   this.element.appendChild(configBox);
   this.element.appendChild(controls);
 
-  //If it adds options, let's create the option adding field.
+  // If it adds options, let's create the option adding field.
   if (typeof this.addOption === 'function') {
     this.createAddOptionField();
   }
@@ -144,7 +149,7 @@ FormComponent.prototype.createControls = function createControls() {
  * @return {void}
  */
 FormComponent.prototype.configToggle = function configToggle(showHide) {
-  showHide = showHide || !this.configShowing;
+  showHide = showHide || !this.configShowing; // eslint-disable-line no-param-reassign
   if (showHide) {
     this.showConfig();
   } else {
@@ -167,25 +172,25 @@ FormComponent.prototype.hideConfig = function hideConfig() {
   this.element.classList.remove('fl-form-config-visible');
   this.configShowing = false;
 
-  var editables = this.element.querySelectorAll('.fl-editable');
-  var placeholderMessage = 'Set a placeholder text.';
+  const editables = this.element.querySelectorAll('.fl-editable');
+  const placeholderMessage = 'Set a placeholder text.';
 
-  [].forEach.call(editables, function (el) {
+  [].forEach.call(editables, (el) => {
     el.setAttribute('contenteditable', false);
 
-    //Show message to input placeholder text if there is no placeholder already
-    //in place. Remove the message if placeholder wasn't set.
+    // Show message to input placeholder text if there is no placeholder already
+    // in place. Remove the message if placeholder wasn't set.
     if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
-      var placeholderText = el.getAttribute('placeholder');
-      var value = el.value;
+      const placeholderText = el.getAttribute('placeholder');
+      const value = el.value;
 
       if (value) {
         el.setAttribute('placeholder', value);
-      }else if (placeholderText ===  placeholderMessage) {
+      } else if (placeholderText === placeholderMessage) {
         el.removeAttribute('placeholder');
       }
 
-      el.value = '';
+      el.value = ''; // eslint-disable-line no-param-reassign
     }
   });
 };
@@ -202,48 +207,47 @@ FormComponent.prototype.showConfig = function showConfing() {
     return;
   }
 
-  //Show config box and change configShowing value
+  // Show config box and change configShowing value
   this.element.classList.add('fl-form-config-visible');
   this.configShowing = true;
 
-  //Make appropriate elements editable.
-  var editables = this.element.querySelectorAll('.fl-editable');
-  var placeholderMessage = 'Set a placeholder text.';
-  [].forEach.call(editables, function (el) {
+  // Make appropriate elements editable.
+  const editables = this.element.querySelectorAll('.fl-editable');
+  const placeholderMessage = 'Set a placeholder text.';
+  [].forEach.call(editables, (el) => {
     el.setAttribute('contenteditable', true);
 
-    //Show message to input placeholder text if there is no placeholder already
-    //in place. Remove the message if placeholder wasn't set.
+    // Show message to input placeholder text if there is no placeholder already
+    // in place. Remove the message if placeholder wasn't set.
     if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
-      var placeholderText = el.getAttribute('placeholder');
-      var newContent = (placeholderText) ? placeholderText : placeholderMessage;
+      const placeholderText = el.getAttribute('placeholder');
+      const newContent = placeholderText || placeholderMessage;
       el.setAttribute('placeholder', newContent);
-      el.value = '';
+      el.value = ''; // eslint-disable-line no-param-reassign
     }
   });
 
-  //Focus on the appropriate element
-  var focusElement = this.focusElement || this.configBox.querySelector('switch');
+  // Focus on the appropriate element
+  const focusElement = this.focusElement || this.configBox.querySelector('switch');
   if (focusElement) {
-    //NOTE: There is a bug that for some reason it doesn't focus if you just
-    //call focus() straight away. setTimeout solves it.
-    //see http://goo.gl/UjKOk5
-    setTimeout(function () { focusElement.focus(); }, 15);
+    // NOTE: There is a bug that for some reason it doesn't focus if you just
+    // call focus() straight away. setTimeout solves it.
+    // see http:// goo.gl/UjKOk5
+    setTimeout(() => { focusElement.focus(); }, 15);
   }
 
-  //Set a listener to hide the configuration when the user clicks somewhere else.
-  var _this = this;
-  var listenerTarget = document.body;
-  var useCapture = true;
+  // Set a listener to hide the configuration when the user clicks somewhere else.
+  const listenerTarget = document.body;
+  const useCapture = true;
   listenerTarget.addEventListener('mousedown', function clickOutOfComponent(e) {
-    var func = clickOutOfComponent;
-    var clickX = e.clientX;
-    var clickY = e.clientY;
+    const func = clickOutOfComponent;
+    const clickX = e.clientX;
+    const clickY = e.clientY;
 
-    //If clicked outside of the component.
-    if (!_this.isAtPoint(clickX, clickY)) {
+    // If clicked outside of the component.
+    if (!this.isAtPoint(clickX, clickY)) {
       listenerTarget.removeEventListener('mousedown', func, useCapture);
-      _this.hideConfig();
+      this.hideConfig();
     }
   }, useCapture);
 };
@@ -256,20 +260,19 @@ FormComponent.prototype.showConfig = function showConfing() {
  * @return {Boolean}   Whether point is inside component or not
  */
 FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
-  var configPosition = this.configBox.getBoundingClientRect();
-  var componentPosition = this.element.getBoundingClientRect();
+  const configPosition = this.configBox.getBoundingClientRect();
+  const componentPosition = this.element.getBoundingClientRect();
 
-  var top = componentPosition.top;
-  var bottom = configPosition.bottom;
-  var right = Math.max(configPosition.right, componentPosition.right);
-  var left = Math.min(configPosition.left, componentPosition.left);
+  const top = componentPosition.top;
+  const bottom = configPosition.bottom;
+  const right = Math.max(configPosition.right, componentPosition.right);
+  const left = Math.min(configPosition.left, componentPosition.left);
 
-  //If point is outside of the component
+  // If point is outside of the component
   if (x < left || right < x || y < top || bottom < y) {
     return false;
-  } else {
-    return true;
   }
+  return true;
 };
 
 /**
@@ -282,58 +285,54 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  */
 FormComponent.prototype.createAddOptionField =
 function createAddOptionField() {
-
-  var _this = this;
   if (typeof this.removeOption === 'function') {
-    var removeBtn = document.createElement('i');
+    const removeBtn = document.createElement('i');
     removeBtn.setAttribute('name', 'remove');
     removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
     removeBtn.title = 'Remove last option';
-    removeBtn.addEventListener('click', function () {
-      _this.removeOption();
+    removeBtn.addEventListener('click', () => {
+      this.removeOption();
     });
 
     this.configContent.appendChild(removeBtn);
   }
 
-  var addBtn = document.createElement('i');
+  const addBtn = document.createElement('i');
   addBtn.setAttribute('name', 'add');
   addBtn.classList.add('glyphicon', 'glyphicon-plus-sign', 'fl-grey-btn');
   addBtn.title = 'Add this option';
   this.configContent.appendChild(addBtn);
 
-  var legend = document.createElement('input');
+  const legend = document.createElement('input');
   legend.setAttribute('placeholder', 'Type a new option');
   legend.setAttribute('type', 'text');
   this.focusElement = legend;
   this.configContent.appendChild(legend);
 
-  addBtn.addEventListener('click', function () {
-
-    //Blink red and return if no value was provided
+  addBtn.addEventListener('click', () => {
+    // Blink red and return if no value was provided
     if (!legend.value.trim()) {
       utils.blinkRed(legend);
 
       return;
     }
 
-    _this.addOption(legend.value);
+    this.addOption(legend.value);
     legend.value = '';
   });
 
-  legend.addEventListener('keypress', function (e) {
+  legend.addEventListener('keypress', (e) => {
     if (e.which === 13) {
-      var click = new Event('click');
+      const click = new Event('click');
       addBtn.dispatchEvent(click);
       e.preventDefault();
-      return false; // returning false will prevent the event from bubbling up.
-    } else {
-      return true;
+      return false; //  returning false will prevent the event from bubbling up.
     }
+    return true;
   });
 };
 
-//To be implemented by child clases
+// To be implemented by child clases
 FormComponent.prototype.saveConfig = function saveConfig() {
 
 };
@@ -351,19 +350,19 @@ FormComponent.prototype.destroy = function destroy() {
 FormComponent.prototype.required = function required(isRequired) {
   if (this.isRequired === isRequired) { return true; }
 
-  var inputs = this.content.querySelectorAll('input');
-  var textAreas = this.content.querySelectorAll('textarea');
-  var selects = this.content.querySelectorAll('select');
+  let inputs = this.content.querySelectorAll('input');
+  let textAreas = this.content.querySelectorAll('textarea');
+  let selects = this.content.querySelectorAll('select');
   inputs = [].slice.call(inputs);
   textAreas = [].slice.call(textAreas);
   selects = [].slice.call(selects);
 
-  var els = [].concat.call(inputs, textAreas, selects);
+  const els = [].concat.call(inputs, textAreas, selects);
 
   if (isRequired) {
-    els.forEach(function (el) { el.setAttribute('required', true); });
+    els.forEach((el) => { el.setAttribute('required', true); });
   } else {
-    els.forEach(function (el) { el.removeAttribute('required'); });
+    els.forEach((el) => { el.removeAttribute('required'); });
   }
 
   this.isRequired = isRequired;
@@ -381,19 +380,19 @@ FormComponent.prototype.removePlaceHolder = function removePlaceHolder() {
 };
 
 FormComponent.prototype.getElements = function getElements() {
-  var allContent = this.content.children;
-  var elements = [];
-  [].forEach.call(allContent, function (el) {
+  const allContent = this.content.children;
+  const elements = [];
+  [].forEach.call(allContent, (el) => {
     if (el.nodeName !== 'H3') { elements.push(el); }
   });
 
   return elements;
 };
 
-//Method to be called by JSON.stringify
-//This method is augmented in the relevant classes.
+// Method to be called by JSON.stringify
+// This method is augmented in the relevant classes.
 FormComponent.prototype.toJSON = function toJSON() {
-  var json = {};
+  const json = {};
 
   if (this.title && this.title.innerText) {
     json.title = this.title.innerText;
@@ -403,10 +402,10 @@ FormComponent.prototype.toJSON = function toJSON() {
   json.required = this.isRequired || false;
 
   json.content = [];
-  var contentEls = this.getElements();
+  let contentEls = this.getElements();
   contentEls = [].slice.call(contentEls);
-  contentEls.forEach(function (el) {
-    var elJson = {};
+  contentEls.forEach((el) => {
+    const elJson = {};
     elJson.nodeName = el.nodeName.toLowerCase();
     elJson.type = el.getAttribute('type') || undefined;
     elJson.name = el.getAttribute('name') || undefined;

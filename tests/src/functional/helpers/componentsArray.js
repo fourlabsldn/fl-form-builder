@@ -1,27 +1,27 @@
-var componentsArray = [//jshint ignore:line
+export default [
   {
     name: 'Checkbox',
     componentType: 'Checkboxes',
     buttonName: 'Check',
-    contentQuery: 'input[type=checkbox]', //query main element
-    optionQuery: 'label' //query option element
+    contentQuery: 'input[type=checkbox]', // query main element
+    optionQuery: 'label', // query option element
   }, {
     name: 'Radio button',
     componentType: 'RadioBtns',
     buttonName: 'Radio',
     contentQuery: 'input[type=radio]',
-    optionQuery: 'label' //query option element
+    optionQuery: 'label', // query option element
   }, {
     name: 'Dropdown',
     componentType: 'Dropdown',
     buttonName: 'Drop',
     contentQuery: 'select',
-    optionQuery: 'option' //query option element
+    optionQuery: 'option', // query option element
   }, {
     name: 'Text box',
     componentType: 'TextBox',
     buttonName: '"Text box"',
-    contentQuery: 'input[type=text]'
+    contentQuery: 'input[type=text]',
   }, {
     name: 'Text area',
     componentType: 'TextArea',

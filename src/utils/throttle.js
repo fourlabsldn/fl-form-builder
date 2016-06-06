@@ -6,33 +6,33 @@
  * @return {Function}                  the throttled function
  */
 export default function throttle(FuncDelay, callback) {
-  var lastCall = +new Date();
-  var delay = FuncDelay;
-  var params;
-  var context = {};
-  var calledDuringDelay = false;
+  let lastCall = +new Date();
+  const delay = FuncDelay;
+  let params;
+  const context = {};
+  let calledDuringDelay = false;
 
-  return function () {
-    var now = +new Date();
-    var diff = now - lastCall;
-    var timeToEndOfDelay;
+  return (...args) => {
+    const now = +new Date();
+    const diff = now - lastCall;
+    let timeToEndOfDelay;
 
-    params = arguments;
+    params = args;
 
     if (diff > delay) {
-      callback.apply(context, params); //Call function with latest parameters
+      callback.apply(context, params); // Call function with latest parameters
       calledDuringDelay = false;
       lastCall = now;
     } else if (!calledDuringDelay) {
       // If it wasn't called yet, call it when there is enough delay.
       timeToEndOfDelay = delay - diff;
 
-      setTimeout(function () {
-        callback.apply(context, params); //Call function with latest parameters
+      setTimeout(() => {
+        callback.apply(context, params); // Call function with latest parameters
       }, timeToEndOfDelay);
 
       calledDuringDelay = true;
       lastCall = now + timeToEndOfDelay;
     } // Otherwise do nothing.
   };
-};
+}

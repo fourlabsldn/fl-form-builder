@@ -1,10 +1,10 @@
 import blinkRed from './blinkRed';
-import listReorder from './listReorder';
+import trackReorderDrag from './trackReorderDrag';
 import throttle from './throttle';
 
 
 export default {
   blinkRed,
-  listReorder,
+  trackReorderDrag,
   throttle,
 };
