@@ -1,11 +1,16 @@
-/*globals RadioBtns, Checkboxes, TextBox, TextArea, Dropdown*/
+import RadioBtns from './components/RadioBtns';
+import Checkboxes from './components/Checkboxes';
+import TextBox from './components/TextBox';
+import TextArea from './components/TextArea';
+import Dropdown from './components/Dropdown';
+
 
 /**
  * Singleton to create form components
  * @class FormFabric
  * @param {HTMLElement} el Where the fabric will be put.
  */
-function FormFabric(formBody) {
+export default function FormFabric(formBody) {
   'use strict';
 
   if (!(this instanceof FormFabric)) {

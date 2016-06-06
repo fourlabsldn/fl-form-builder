@@ -1,4 +1,3 @@
-/*globals utils*/
 
 /**
  * Will take care of the dragging and reordering a list for one drag.
@@ -8,7 +7,7 @@
  * @param  {Array} param_elements Array of elements to be tracked.
  * @return {void}
  */
-utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elements) {
+export default function trackReorderDrag(param_e, param_el, param_elements) {
 
   function setTranslation(el, val) {
     el.style.transform = 'translate3d(0, ' + val + 'px, 0)';

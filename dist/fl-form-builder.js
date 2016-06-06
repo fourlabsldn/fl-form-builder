@@ -1,9 +1,12 @@
-(function () {//Yep. Just that.
-var utils = {};
+var babelHelpers = {};
+babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+};
+babelHelpers;
 
-/*globals utils*/
-
-utils.blinkRed = function blinkRed(el) {
+function blinkRed(el) {
   if (!el || !el.classList) {
     return;
   }
@@ -14,8 +17,6 @@ utils.blinkRed = function blinkRed(el) {
   }, 1500);
 };
 
-/*globals utils*/
-
 /**
  * Will take care of the dragging and reordering a list for one drag.
  * @function trackReorderDrag
@@ -24,7 +25,7 @@ utils.blinkRed = function blinkRed(el) {
  * @param  {Array} param_elements Array of elements to be tracked.
  * @return {void}
  */
-utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elements) {
+function trackReorderDrag(param_e, param_el, param_elements) {
 
   function setTranslation(el, val) {
     el.style.transform = 'translate3d(0, ' + val + 'px, 0)';
@@ -58,8 +59,7 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
       //let's estimate the general vertical distance between elements by
       //subtracting the size of the first element from the distance between
       //its top and the next element.
-      var firstElSpaceOccupied =
-          els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+      var firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
       var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
       var height = els[elIndex].clientHeight;
       spaceOccupied = height + verticalDistance;
@@ -82,14 +82,13 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
     var targetHeight = calculateElementHeight(els, targetIndex);
     return function doDragMove() {
       var targetTop = target.getBoundingClientRect().top;
-      var movedUp = (targetTop < targetInitialTop);
+      var movedUp = targetTop < targetInitialTop;
 
       var i;
       for (i = 0; i < tops.length; i++) {
         if (i === targetIndex) {
           continue;
-        } else
-        if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
+        } else if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
           setTranslation(els[i], -targetHeight);
         } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
           setTranslation(els[i], targetHeight);
@@ -106,11 +105,15 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
     var doDragMove = createDragMover(els, tops, targetIndex);
     var shouldStopListening;
     function dragListener(e) {
-      if (shouldStopListening) { return; }
+      if (shouldStopListening) {
+        return;
+      }
 
       doDragMove();
       var newY = e.pageY;
-      if (newY === 0) { return; } //correct weird behaviour when mouse goes up
+      if (newY === 0) {
+        return;
+      } //correct weird behaviour when mouse goes up
 
       var diff = newY - initialY;
       setTranslation(target, diff);
@@ -125,7 +128,9 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
 
   function getElementsCurrentTop(els) {
     var tops = [];
-    els.forEach(function (el) { tops.push(el.getBoundingClientRect().top); });
+    els.forEach(function (el) {
+      tops.push(el.getBoundingClientRect().top);
+    });
 
     return tops;
   }
@@ -133,7 +138,7 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
   function adjustElementsToTops(els, tops) {
     var currentTops = getElementsCurrentTop(els);
     els.forEach(function (el, i) {
-      var diff =  currentTops[i] - tops[i];
+      var diff = currentTops[i] - tops[i];
       setTranslation(el, diff);
     });
   }
@@ -145,12 +150,11 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
     var i = 0;
 
     //Pass by all elements that are above the target
-    while ((topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop) ||
-              (i === targetIndex)) {
+    while (topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop || i === targetIndex) {
       i++;
     }
 
-    var indexToInsertEl = (i > targetIndex) ? i - 1 : i;
+    var indexToInsertEl = i > targetIndex ? i - 1 : i;
 
     //Take away transitions from all elements and save them
     var initialTransitions = [];
@@ -164,7 +168,7 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
 
     //Add the element in the appropriate place. This will displace everyone else.
     var parent;
-    parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
+    parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
     if (!parent || !parent.appendChild) {
       throw new Error('trackReorderDrag(): No parent found in element list.');
     } else if (els[i]) {
@@ -200,7 +204,7 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
   }
 
   function init(e, el, elements) {
-    if (typeof el !== 'object') {
+    if ((typeof el === 'undefined' ? 'undefined' : babelHelpers.typeof(el)) !== 'object') {
       throw new Error('trackReorderDrag(): Invalid parameter');
     }
 
@@ -237,15 +241,13 @@ utils.trackReorderDrag = function trackReorderDrag(param_e, param_el, param_elem
   init(param_e, param_el, param_elements);
 };
 
-/*globals utils*/
-
 /**
  * @function throttle
  * @param  {integer}   FuncDelay
  * @param  {Function} callback
  * @return {Function}                  the throttled function
  */
-utils.throttle = function throttle(FuncDelay, callback) {
+function throttle(FuncDelay, callback) {
   var lastCall = +new Date();
   var delay = FuncDelay;
   var params;
@@ -277,7 +279,11 @@ utils.throttle = function throttle(FuncDelay, callback) {
   };
 };
 
-/*globals utils*/
+var utils$1 = {
+  blinkRed: blinkRed,
+  listReorder: trackReorderDrag,
+  throttle: throttle
+};
 
 function FormBody() {
   'use strict';
@@ -312,7 +318,7 @@ function FormBody() {
 
       //Take care of moving and reordering
       var elements = getAllComponents();
-      utils.trackReorderDrag(e, comp.element, elements);
+      utils$1.trackReorderDrag(e, comp.element, elements);
     });
 
     var throttleDelay = 50;
@@ -348,8 +354,7 @@ function FormBody() {
   this.removeComponent = function removeComponent(comp) {
     var compIndex = components.indexOf(comp);
     if (compIndex < 0) {
-      throw new Error('FormBody.removeComponent(): ' +
-          'Component being destroyed is not registered in FormBody.');
+      throw new Error('FormBody.removeComponent(): ' + 'Component being destroyed is not registered in FormBody.');
     }
 
     components.splice(compIndex, 1);
@@ -365,8 +370,7 @@ function FormBody() {
 
       //Reorder components array according to their vertical position
       components.sort(function (com1, com2) {
-        return com1.element.getBoundingClientRect().top >
-               com2.element.getBoundingClientRect().top;
+        return com1.element.getBoundingClientRect().top > com2.element.getBoundingClientRect().top;
       });
 
       // NOTE: Components are prepared to expose the appropriate values
@@ -375,11 +379,10 @@ function FormBody() {
       console.dir(JSON.parse(readyToExport));
 
       //For now let's emmit an event with the result.
-      var ev = new CustomEvent('formSubmitted',
-        { detail: {	json: readyToExport },
-          bubbles: true,
-          cancelable: true,
-        });
+      var ev = new CustomEvent('formSubmitted', { detail: { json: readyToExport },
+        bubbles: true,
+        cancelable: true
+      });
 
       this.dispatchEvent(ev);
     });
@@ -413,9 +416,6 @@ function FormBody() {
 
   this.init();
 }
-
-/*globals utils*/
-'use strict'; //jshint ignore:line
 
 /**
  * Parent class for form components
@@ -499,7 +499,7 @@ FormComponent.prototype.createControls = function createControls() {
     var ev = new CustomEvent('removeComponent', {
       detail: { comp: _this },
       bubbles: true,
-      cancelable: true,
+      cancelable: true
     });
 
     _this.element.dispatchEvent(ev);
@@ -592,13 +592,13 @@ FormComponent.prototype.hideConfig = function hideConfig() {
 
     //Show message to input placeholder text if there is no placeholder already
     //in place. Remove the message if placeholder wasn't set.
-    if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
+    if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT' && el.type === 'text') {
       var placeholderText = el.getAttribute('placeholder');
       var value = el.value;
 
       if (value) {
         el.setAttribute('placeholder', value);
-      }else if (placeholderText ===  placeholderMessage) {
+      } else if (placeholderText === placeholderMessage) {
         el.removeAttribute('placeholder');
       }
 
@@ -631,9 +631,9 @@ FormComponent.prototype.showConfig = function showConfing() {
 
     //Show message to input placeholder text if there is no placeholder already
     //in place. Remove the message if placeholder wasn't set.
-    if (el.nodeName === 'TEXTAREA' || (el.nodeName === 'INPUT' && el.type === 'text')) {
+    if (el.nodeName === 'TEXTAREA' || el.nodeName === 'INPUT' && el.type === 'text') {
       var placeholderText = el.getAttribute('placeholder');
-      var newContent = (placeholderText) ? placeholderText : placeholderMessage;
+      var newContent = placeholderText ? placeholderText : placeholderMessage;
       el.setAttribute('placeholder', newContent);
       el.value = '';
     }
@@ -645,7 +645,9 @@ FormComponent.prototype.showConfig = function showConfing() {
     //NOTE: There is a bug that for some reason it doesn't focus if you just
     //call focus() straight away. setTimeout solves it.
     //see http://goo.gl/UjKOk5
-    setTimeout(function () { focusElement.focus(); }, 15);
+    setTimeout(function () {
+      focusElement.focus();
+    }, 15);
   }
 
   //Set a listener to hide the configuration when the user clicks somewhere else.
@@ -697,8 +699,7 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * @param {Function} removeFunction    function to be called when removing an option
  * @return {HTMLElement} The cretated element
  */
-FormComponent.prototype.createAddOptionField =
-function createAddOptionField() {
+FormComponent.prototype.createAddOptionField = function createAddOptionField() {
 
   var _this = this;
   if (typeof this.removeOption === 'function') {
@@ -729,7 +730,7 @@ function createAddOptionField() {
 
     //Blink red and return if no value was provided
     if (!legend.value.trim()) {
-      utils.blinkRed(legend);
+      utils$1.blinkRed(legend);
 
       return;
     }
@@ -745,15 +746,13 @@ function createAddOptionField() {
       e.preventDefault();
       return false; // returning false will prevent the event from bubbling up.
     } else {
-      return true;
-    }
+        return true;
+      }
   });
 };
 
 //To be implemented by child clases
-FormComponent.prototype.saveConfig = function saveConfig() {
-
-};
+FormComponent.prototype.saveConfig = function saveConfig() {};
 
 FormComponent.prototype.destroy = function destroy() {
   this.element.remove();
@@ -766,7 +765,9 @@ FormComponent.prototype.destroy = function destroy() {
  * @return {Boolean}      Whether required was set or not.
  */
 FormComponent.prototype.required = function required(isRequired) {
-  if (this.isRequired === isRequired) { return true; }
+  if (this.isRequired === isRequired) {
+    return true;
+  }
 
   var inputs = this.content.querySelectorAll('input');
   var textAreas = this.content.querySelectorAll('textarea');
@@ -778,9 +779,13 @@ FormComponent.prototype.required = function required(isRequired) {
   var els = [].concat.call(inputs, textAreas, selects);
 
   if (isRequired) {
-    els.forEach(function (el) { el.setAttribute('required', true); });
+    els.forEach(function (el) {
+      el.setAttribute('required', true);
+    });
   } else {
-    els.forEach(function (el) { el.removeAttribute('required'); });
+    els.forEach(function (el) {
+      el.removeAttribute('required');
+    });
   }
 
   this.isRequired = isRequired;
@@ -801,7 +806,9 @@ FormComponent.prototype.getElements = function getElements() {
   var allContent = this.content.children;
   var elements = [];
   [].forEach.call(allContent, function (el) {
-    if (el.nodeName !== 'H3') { elements.push(el); }
+    if (el.nodeName !== 'H3') {
+      elements.push(el);
+    }
   });
 
   return elements;
@@ -835,334 +842,14 @@ FormComponent.prototype.toJSON = function toJSON() {
   return json;
 };
 
-/*globals RadioBtns, Checkboxes, TextBox, TextArea, Dropdown*/
-
-/**
- * Singleton to create form components
- * @class FormFabric
- * @param {HTMLElement} el Where the fabric will be put.
- */
-function FormFabric(formBody) {
-  'use strict';
-
-  if (!(this instanceof FormFabric)) {
-    return new FormFabric();
-  }
-
-  var formComponents = [
-    { desc: 'Radio buttons', constr: RadioBtns, class: 'glyphicon glyphicon-ok-circle' },
-    { desc: 'Checkboxes', constr: Checkboxes, class: 'glyphicon glyphicon-check' },
-    { desc: 'Dropdown', constr: Dropdown, class: 'glyphicon glyphicon-collapse-down' },
-    { desc: 'Text box', constr: TextBox, class: 'glyphicon glyphicon-text-width' },
-    { desc: 'Text area', constr: TextArea, class: 'glyphicon glyphicon-text-height' },
-  ];
-
-  function createElement(Constr, formBody) {
-    var name = 'Temp name' + (Math.floor(Math.random() * 1000));
-    var comp = new Constr(name);
-    var ev = new CustomEvent('addComponent',
-      {
-        detail: {	comp: comp },
-        bubbles: true,
-        cancelable: true,
-      });
-
-    formBody.dispatchEvent(ev);
-  }
-
-  /**
-   * @function createOptionsDropdown
-   * @return {HTMLElement} The dropdown menu
-   */
-  function createOptions() {
-    var frag = document.createDocumentFragment();
-    formComponents.forEach(function (component, idx) {
-      var op = document.createElement('button');
-      op.setAttribute('value', idx);
-      op.className = component.class;
-      op.name = component.desc;
-      op.title = component.desc;
-      op.classList.add('btn', 'btn-default');
-      op.addEventListener('click', function () {
-        var idx = op.value;
-        createElement(formComponents[idx].constr, formBody);
-      });
-
-      frag.appendChild(op);
-    });
-
-    return frag;
-  }
-
-  this.init = function init() {
-    this.element = document.createElement('div');
-    this.element.classList.add('fl-form-fabric');
-    var options = createOptions();
-    this.element.appendChild(options);
-  };
-
-  this.init(formBody);
-}
-
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore:line
-
-/**
- * @class Checkboxes
- * @extends FormComponent
- */
-function Checkboxes(name) {
-  if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
-
-  this.init(name);
-}
-
-Checkboxes.prototype = new FormComponent(); //Inheritance part
-Checkboxes.prototype.componentType = 'Checkboxes';
-/**
- * init() is automatically called in construction by FormComponent, the parent class
- * @override @method init
- * @param  {String} name
- * @return {void}
- */
-Checkboxes.prototype.init = function init(name) {
-  this.constructor.prototype.init.call(this, name); // parent class init.
-
-  this.name = name + '[]';
-  this.addPlaceHolder();
-};
-
-/**
- * Adds one checkbox to a group of checkboxes.
- * @method add
- * @param {String} value  value that will be sent on form submit
- * @param {String} legend [optional]
- */
-Checkboxes.prototype.addOption = function addOption(value, legend) {
-  if (!value) {
-    throw new Error('Checkboxes.addOption(): No value parameter provided.');
-  } else if (this.placeHolder) {
-    this.removePlaceHolder();
-  }
-
-  if (this.isRequired && this.getElements().length > 0) {
-    this.required(false);
-  }
-
-  var newBox = document.createElement('input');
-  newBox.setAttribute('type', 'checkbox');
-  newBox.setAttribute('name', this.name);
-  newBox.setAttribute('value', value);
-  newBox.classList.add('fl-check-box');
-
-  if (this.isRequired) { newBox.setAttribute('required', true); }
-
-  var legendNode = document.createElement('span');
-  legendNode.innerText = legend || value;
-  legendNode.classList.add('fl-editable');
-
-  //Let's already make it contenteditable as the config box is currently open.
-  legendNode.setAttribute('contenteditable', true);
-
-  var label = document.createElement('label');
-  label.appendChild(newBox);
-  label.appendChild(legendNode);
-  this.content.appendChild(label);
-  return label;
-};
-
-/**
- * @method removeOption
- * @return {void}
- */
-Checkboxes.prototype.removeOption = function removeOption() {
-  var boxes = this.getElements();
-  var atLeastOneBox = (boxes.length > 0);
-  if (!atLeastOneBox || this.placeHolder) {
-    utils.blinkRed(this.content);
-    return;
-  }
-
-  var lastEl = boxes.pop();
-  lastEl.remove();
-};
-/**
- * Sets checkboxes as required. Only does that if there is only one checkbox.
- * @override @method required
- * @param  {boolean} isRequired
- * @return {Boolean}      Whether required was set or not.
- */
-Checkboxes.prototype.required = function required(isRequired) {
-  if (this.isRequired === isRequired) {
-    return true;
-  } else if (!this.requiredSwitch) {
-    throw new Error('Checkboxes.required(): No required button in place.');
-  } else if (this.getElements().length > 1 && isRequired) {
-    console.error('Checkboxes: To be "required" there can only ' +
-                  'be one checkbox in the group.');
-    this.requiredSwitch.checked = false;
-    return false;
-  }
-
-  this.isRequired = isRequired;
-  var boxes = this.content.querySelectorAll('input');
-  if (isRequired) {
-    [].forEach.call(boxes, function (box) {
-      box.setAttribute('required', true);
-    });
-  } else {
-    [].forEach.call(boxes, function (box) {
-      box.removeAttribute('required');
-    });
-  }
-
-  this.requiredSwitch.checked = isRequired;
-  return true;
-};
-
-/**
- * @override addPlaceHolder
- */
-Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.addOption('placeholder', 'Check a box');
-};
-
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore:line
-
-/**
- * @class Dropdown
- * @extends FormComponent
- */
-function Dropdown(name) {
-  if (!(this instanceof Dropdown)) { return new Dropdown(); }
-
-  this.init(name);
-}
-
-Dropdown.prototype = new FormComponent(); //Inheritance part
-Dropdown.prototype.componentType = 'Dropdown';
-
-/**
- * init() is automatically called in construction by FormComponent, the parent class
- * @override @method init
- * @param  {String} name
- * @return {void}
- */
-Dropdown.prototype.init = function init(name) {
-  this.constructor.prototype.init.call(this, name); // parent class init.
-
-  var labelEl = document.createElement('div');
-  labelEl.classList.add('full-width');
-  this.selector = document.createElement('select');
-  this.selector.setAttribute('name', name);
-  this.selector.classList.add('fl-dropdown', 'form-control');
-  labelEl.appendChild(this.selector);
-
-  this.content.appendChild(labelEl);
-  this.addPlaceHolder();
-};
-
-/**
- * Adds a new option to the dropdown
- * @method add
- * @param {String} value
- * @param {String} legend [optional]
- * @return {HTMLElement} the option created
- */
-Dropdown.prototype.addOption = function addOption(value, legend) {
-  if (!value) {
-    throw new Error('Dropdown.addOption(): ' + value + ' is not a valid "value" value.');
-  } else if (this.placeHolder) {
-    this.removePlaceHolder();
-  }
-
-  var newOp = document.createElement('option');
-  newOp.innerText = legend || value;
-  this.selector.appendChild(newOp);
-  return newOp;
-};
-
-/**
- * @method removeOption
- * @return {void}
- */
-Dropdown.prototype.removeOption = function removeOption() {
-  var options = this.getElements();
-  var hasAtLeastOneOption = options.length > 0;
-  if (!hasAtLeastOneOption || this.placeHolder) {
-    utils.blinkRed(this.selector);
-    return;
-  }
-
-  var selectedIndex = this.selector.selectedIndex;
-  var index = (selectedIndex >= 0) ? selectedIndex : 0;
-  var optionToBeRemoved = this.selector.children[index];
-  optionToBeRemoved.remove();
-};
-
-/**
- * Adds a placeholder and saves it in this.placeHolder
- * @method @override addPlaceHolder
- */
-Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
-  this.placeHolder = this.addOption('placeholder', 'Select an option');
-  this.placeHolder.setAttribute('disabled', true);
-  this.placeHolder.setAttribute('selected', true);
-};
-
-/**
- * Hides the config panel and makes the selectable a dropdown again
- * @method @override hideConfig
- * @return {void}
- */
-Dropdown.prototype.hideConfig = function hideConfig() {
-  this.constructor.prototype.hideConfig.call(this);
-
-  if (!this.selector) {
-    console.error('Dropdown.hideConfig(): Selector not specified');
-    return;
-  }
-
-  //Make selector not multiple
-  this.selector.removeAttribute('multiple');
-};
-
-/**
- * Shows the config panes and allows the selection of multiple elements
- * @method @override showConfig
- * @return {void}
- */
-Dropdown.prototype.showConfig = function showConfig() {
-  this.constructor.prototype.showConfig.call(this);
-
-  if (!this.selector) {
-    console.error('Dropdown.showConfig(): Selector not specified');
-    return;
-  }
-
-  //Make selector multiple;
-  this.selector.setAttribute('multiple', true);
-};
-
-/**
- * @method @override getElements
- * @return {HTMLElement}
- */
-Dropdown.prototype.getElements = function getElements() {
-  var allOptions = this.content.querySelectorAll('option');
-  return [].slice.call(allOptions);
-};
-
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore: line
-
 /**
  * @class RadioBtns
  * @extends FormComponent
  */
 function RadioBtns(name) {
-  if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
+  if (!(this instanceof RadioBtns)) {
+    return new RadioBtns();
+  }
 
   this.init(name);
 }
@@ -1221,9 +908,9 @@ RadioBtns.prototype.addOption = function addOption(value, legend) {
  */
 RadioBtns.prototype.removeOption = function removeOption() {
   var radioBtns = this.getElements();
-  var atLeastOneBtn = (radioBtns.length > 0);
+  var atLeastOneBtn = radioBtns.length > 0;
   if (!atLeastOneBtn || this.placeHolder) {
-    utils.blinkRed(this.content);
+    utils$1.blinkRed(this.content);
     return;
   }
 
@@ -1231,58 +918,137 @@ RadioBtns.prototype.removeOption = function removeOption() {
   lastEl.remove();
 };
 
-/*globals FormComponent*/
-'use strict'; //jshint ignore: line
-
 /**
- * @class TextArea
+ * @class Checkboxes
  * @extends FormComponent
  */
-function TextArea(name) {
-  if (!(this instanceof TextArea)) { return new TextArea(); }
+function Checkboxes(name) {
+  if (!(this instanceof Checkboxes)) {
+    return new Checkboxes();
+  }
 
   this.init(name);
 }
 
-TextArea.prototype = new FormComponent(); //Inheritance part
-TextArea.prototype.componentType = 'TextArea';
-
+Checkboxes.prototype = new FormComponent(); //Inheritance part
+Checkboxes.prototype.componentType = 'Checkboxes';
 /**
  * init() is automatically called in construction by FormComponent, the parent class
  * @override @method init
  * @param  {String} name
  * @return {void}
  */
-TextArea.prototype.init = function init(name) {
+Checkboxes.prototype.init = function init(name) {
   this.constructor.prototype.init.call(this, name); // parent class init.
-  var labelEl = document.createElement('div');
-  labelEl.classList.add('full-width');
 
-  var area = document.createElement('textarea');
-  area.setAttribute('name', name);
-  area.setAttribute('rows', 5);
-  area.classList.add('fl-editable', 'fl-text-area', 'form-control');
-  labelEl.appendChild(area);
-
-  this.content.appendChild(labelEl);
-  this.focusElement = area;
+  this.name = name + '[]';
+  this.addPlaceHolder();
 };
 
-TextArea.prototype.setTitle = function setTitle(desc) {
-  if (!desc || !this.title) { return; }
+/**
+ * Adds one checkbox to a group of checkboxes.
+ * @method add
+ * @param {String} value  value that will be sent on form submit
+ * @param {String} legend [optional]
+ */
+Checkboxes.prototype.addOption = function addOption(value, legend) {
+  if (!value) {
+    throw new Error('Checkboxes.addOption(): No value parameter provided.');
+  } else if (this.placeHolder) {
+    this.removePlaceHolder();
+  }
 
-  this.title.innerText = desc;
+  if (this.isRequired && this.getElements().length > 0) {
+    this.required(false);
+  }
+
+  var newBox = document.createElement('input');
+  newBox.setAttribute('type', 'checkbox');
+  newBox.setAttribute('name', this.name);
+  newBox.setAttribute('value', value);
+  newBox.classList.add('fl-check-box');
+
+  if (this.isRequired) {
+    newBox.setAttribute('required', true);
+  }
+
+  var legendNode = document.createElement('span');
+  legendNode.innerText = legend || value;
+  legendNode.classList.add('fl-editable');
+
+  //Let's already make it contenteditable as the config box is currently open.
+  legendNode.setAttribute('contenteditable', true);
+
+  var label = document.createElement('label');
+  label.appendChild(newBox);
+  label.appendChild(legendNode);
+  this.content.appendChild(label);
+  return label;
 };
 
-/*globals FormComponent*/
-'use strict'; //jshint ignore: line
+/**
+ * @method removeOption
+ * @return {void}
+ */
+Checkboxes.prototype.removeOption = function removeOption() {
+  var boxes = this.getElements();
+  var atLeastOneBox = boxes.length > 0;
+  if (!atLeastOneBox || this.placeHolder) {
+    utils$1.blinkRed(this.content);
+    return;
+  }
+
+  var lastEl = boxes.pop();
+  lastEl.remove();
+};
+/**
+ * Sets checkboxes as required. Only does that if there is only one checkbox.
+ * @override @method required
+ * @param  {boolean} isRequired
+ * @return {Boolean}      Whether required was set or not.
+ */
+Checkboxes.prototype.required = function required(isRequired) {
+  if (this.isRequired === isRequired) {
+    return true;
+  } else if (!this.requiredSwitch) {
+    throw new Error('Checkboxes.required(): No required button in place.');
+  } else if (this.getElements().length > 1 && isRequired) {
+    console.error('Checkboxes: To be "required" there can only ' + 'be one checkbox in the group.');
+    this.requiredSwitch.checked = false;
+    return false;
+  }
+
+  this.isRequired = isRequired;
+  var boxes = this.content.querySelectorAll('input');
+  if (isRequired) {
+    [].forEach.call(boxes, function (box) {
+      box.setAttribute('required', true);
+    });
+  } else {
+    [].forEach.call(boxes, function (box) {
+      box.removeAttribute('required');
+    });
+  }
+
+  this.requiredSwitch.checked = isRequired;
+  return true;
+};
+
+/**
+ * @override addPlaceHolder
+ */
+Checkboxes.prototype.addPlaceHolder = function addPlaceHolder() {
+  this.placeHolder = this.addOption('placeholder', 'Check a box');
+};
 
 /**
  * @class TextBox
  * @extends FormComponent
  */
 function TextBox(name) {
-  if (!(this instanceof TextBox)) { return new TextBox(); }
+  if (!(this instanceof TextBox)) {
+    return new TextBox();
+  }
 
   this.init(name);
 }
@@ -1314,18 +1080,253 @@ TextBox.prototype.init = function init(name) {
 };
 
 TextBox.prototype.setLabel = function setLabel(desc) {
-  if (!desc || !this.title) { return; }
+  if (!desc || !this.title) {
+    return;
+  }
 
   this.title.innerText = desc;
 };
 
-xController(function flFormBuilder(xDivEl) {
+/**
+ * @class TextArea
+ * @extends FormComponent
+ */
+function TextArea(name) {
+  if (!(this instanceof TextArea)) {
+    return new TextArea();
+  }
+
+  this.init(name);
+}
+
+TextArea.prototype = new FormComponent(); //Inheritance part
+TextArea.prototype.componentType = 'TextArea';
+
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+TextArea.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+  var labelEl = document.createElement('div');
+  labelEl.classList.add('full-width');
+
+  var area = document.createElement('textarea');
+  area.setAttribute('name', name);
+  area.setAttribute('rows', 5);
+  area.classList.add('fl-editable', 'fl-text-area', 'form-control');
+  labelEl.appendChild(area);
+
+  this.content.appendChild(labelEl);
+  this.focusElement = area;
+};
+
+TextArea.prototype.setTitle = function setTitle(desc) {
+  if (!desc || !this.title) {
+    return;
+  }
+
+  this.title.innerText = desc;
+};
+
+/**
+ * @class Dropdown
+ * @extends FormComponent
+ */
+function Dropdown(name) {
+  if (!(this instanceof Dropdown)) {
+    return new Dropdown();
+  }
+
+  this.init(name);
+}
+
+Dropdown.prototype = new FormComponent(); //Inheritance part
+Dropdown.prototype.componentType = 'Dropdown';
+
+/**
+ * init() is automatically called in construction by FormComponent, the parent class
+ * @override @method init
+ * @param  {String} name
+ * @return {void}
+ */
+Dropdown.prototype.init = function init(name) {
+  this.constructor.prototype.init.call(this, name); // parent class init.
+
+  var labelEl = document.createElement('div');
+  labelEl.classList.add('full-width');
+  this.selector = document.createElement('select');
+  this.selector.setAttribute('name', name);
+  this.selector.classList.add('fl-dropdown', 'form-control');
+  labelEl.appendChild(this.selector);
+
+  this.content.appendChild(labelEl);
+  this.addPlaceHolder();
+};
+
+/**
+ * Adds a new option to the dropdown
+ * @method add
+ * @param {String} value
+ * @param {String} legend [optional]
+ * @return {HTMLElement} the option created
+ */
+Dropdown.prototype.addOption = function addOption(value, legend) {
+  if (!value) {
+    throw new Error('Dropdown.addOption(): ' + value + ' is not a valid "value" value.');
+  } else if (this.placeHolder) {
+    this.removePlaceHolder();
+  }
+
+  var newOp = document.createElement('option');
+  newOp.innerText = legend || value;
+  this.selector.appendChild(newOp);
+  return newOp;
+};
+
+/**
+ * @method removeOption
+ * @return {void}
+ */
+Dropdown.prototype.removeOption = function removeOption() {
+  var options = this.getElements();
+  var hasAtLeastOneOption = options.length > 0;
+  if (!hasAtLeastOneOption || this.placeHolder) {
+    utils$1.blinkRed(this.selector);
+    return;
+  }
+
+  var selectedIndex = this.selector.selectedIndex;
+  var index = selectedIndex >= 0 ? selectedIndex : 0;
+  var optionToBeRemoved = this.selector.children[index];
+  optionToBeRemoved.remove();
+};
+
+/**
+ * Adds a placeholder and saves it in this.placeHolder
+ * @method @override addPlaceHolder
+ */
+Dropdown.prototype.addPlaceHolder = function addPlaceHolder() {
+  this.placeHolder = this.addOption('placeholder', 'Select an option');
+  this.placeHolder.setAttribute('disabled', true);
+  this.placeHolder.setAttribute('selected', true);
+};
+
+/**
+ * Hides the config panel and makes the selectable a dropdown again
+ * @method @override hideConfig
+ * @return {void}
+ */
+Dropdown.prototype.hideConfig = function hideConfig() {
+  this.constructor.prototype.hideConfig.call(this);
+
+  if (!this.selector) {
+    console.error('Dropdown.hideConfig(): Selector not specified');
+    return;
+  }
+
+  //Make selector not multiple
+  this.selector.removeAttribute('multiple');
+};
+
+/**
+ * Shows the config panes and allows the selection of multiple elements
+ * @method @override showConfig
+ * @return {void}
+ */
+Dropdown.prototype.showConfig = function showConfig() {
+  this.constructor.prototype.showConfig.call(this);
+
+  if (!this.selector) {
+    console.error('Dropdown.showConfig(): Selector not specified');
+    return;
+  }
+
+  //Make selector multiple;
+  this.selector.setAttribute('multiple', true);
+};
+
+/**
+ * @method @override getElements
+ * @return {HTMLElement}
+ */
+Dropdown.prototype.getElements = function getElements() {
+  var allOptions = this.content.querySelectorAll('option');
+  return [].slice.call(allOptions);
+};
+
+/**
+ * Singleton to create form components
+ * @class FormFabric
+ * @param {HTMLElement} el Where the fabric will be put.
+ */
+function FormFabric(formBody) {
   'use strict';
+
+  if (!(this instanceof FormFabric)) {
+    return new FormFabric();
+  }
+
+  var formComponents = [{ desc: 'Radio buttons', constr: RadioBtns, class: 'glyphicon glyphicon-ok-circle' }, { desc: 'Checkboxes', constr: Checkboxes, class: 'glyphicon glyphicon-check' }, { desc: 'Dropdown', constr: Dropdown, class: 'glyphicon glyphicon-collapse-down' }, { desc: 'Text box', constr: TextBox, class: 'glyphicon glyphicon-text-width' }, { desc: 'Text area', constr: TextArea, class: 'glyphicon glyphicon-text-height' }];
+
+  function createElement(Constr, formBody) {
+    var name = 'Temp name' + Math.floor(Math.random() * 1000);
+    var comp = new Constr(name);
+    var ev = new CustomEvent('addComponent', {
+      detail: { comp: comp },
+      bubbles: true,
+      cancelable: true
+    });
+
+    formBody.dispatchEvent(ev);
+  }
+
+  /**
+   * @function createOptionsDropdown
+   * @return {HTMLElement} The dropdown menu
+   */
+  function createOptions() {
+    var frag = document.createDocumentFragment();
+    formComponents.forEach(function (component, idx) {
+      var op = document.createElement('button');
+      op.setAttribute('value', idx);
+      op.className = component.class;
+      op.name = component.desc;
+      op.title = component.desc;
+      op.classList.add('btn', 'btn-default');
+      op.addEventListener('click', function () {
+        var idx = op.value;
+        createElement(formComponents[idx].constr, formBody);
+      });
+
+      frag.appendChild(op);
+    });
+
+    return frag;
+  }
+
+  this.init = function init() {
+    this.element = document.createElement('div');
+    this.element.classList.add('fl-form-fabric');
+    var options = createOptions();
+    this.element.appendChild(options);
+  };
+
+  this.init(formBody);
+}
+
+function flFormBuilder(xDivEl) {
+  'use strict';
+
   var formBody = new FormBody();
   var fabric = new FormFabric(formBody.element);
 
   xDivEl.classList.add('fl-form-builder');
   xDivEl.appendChild(fabric.element);
   xDivEl.appendChild(formBody.element);
-});
-}());
+}
+
+xController(flFormBuilder);
+//# sourceMappingURL=fl-form-builder.js.map

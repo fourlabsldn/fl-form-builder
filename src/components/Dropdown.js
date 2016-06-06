@@ -1,11 +1,11 @@
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore:line
+import FormComponent from '../FormComponent';
+import utils from '../utils/utils';
 
 /**
  * @class Dropdown
  * @extends FormComponent
  */
-function Dropdown(name) {
+export default function Dropdown(name) {
   if (!(this instanceof Dropdown)) { return new Dropdown(); }
 
   this.init(name);

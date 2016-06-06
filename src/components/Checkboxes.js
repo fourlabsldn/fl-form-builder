@@ -1,11 +1,11 @@
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore:line
+import FormComponent from '../FormComponent';
+import utils from '../utils/utils';
 
 /**
  * @class Checkboxes
  * @extends FormComponent
  */
-function Checkboxes(name) {
+export default function Checkboxes(name) {
   if (!(this instanceof Checkboxes)) { return new Checkboxes(); }
 
   this.init(name);

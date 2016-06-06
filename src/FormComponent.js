@@ -1,12 +1,11 @@
-/*globals utils*/
-'use strict'; //jshint ignore:line
+import utils from './utils/utils.js';
 
 /**
  * Parent class for form components
  * @abstract
  * @class FormComponent
  */
-function FormComponent() {
+export default function FormComponent() {
   if (!(this instanceof FormComponent)) {
     return new FormComponent();
   }

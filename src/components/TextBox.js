@@ -1,11 +1,10 @@
-/*globals FormComponent*/
-'use strict'; //jshint ignore: line
+import FormComponent from '../FormComponent';
 
 /**
  * @class TextBox
  * @extends FormComponent
  */
-function TextBox(name) {
+export default function TextBox(name) {
   if (!(this instanceof TextBox)) { return new TextBox(); }
 
   this.init(name);

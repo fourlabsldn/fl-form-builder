@@ -1,6 +1,4 @@
-/*globals utils*/
-
-utils.blinkRed = function blinkRed(el) {
+export default function blinkRed(el) {
   if (!el || !el.classList) {
     return;
   }

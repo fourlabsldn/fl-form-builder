@@ -1,11 +1,11 @@
-/*globals FormComponent, utils*/
-'use strict'; //jshint ignore: line
+import FormComponent from '../FormComponent';
+import utils from '../utils/utils';
 
 /**
  * @class RadioBtns
  * @extends FormComponent
  */
-function RadioBtns(name) {
+export default function RadioBtns(name) {
   if (!(this instanceof RadioBtns)) { return new RadioBtns(); }
 
   this.init(name);

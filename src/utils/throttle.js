@@ -1,4 +1,3 @@
-/*globals utils*/
 
 /**
  * @function throttle
@@ -6,7 +5,7 @@
  * @param  {Function} callback
  * @return {Function}                  the throttled function
  */
-utils.throttle = function throttle(FuncDelay, callback) {
+export default function throttle(FuncDelay, callback) {
   var lastCall = +new Date();
   var delay = FuncDelay;
   var params;

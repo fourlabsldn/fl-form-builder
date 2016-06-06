@@ -1,6 +1,6 @@
-/*globals utils*/
+import utils from './utils/utils.js'
 
-function FormBody() {
+export default function FormBody() {
   'use strict';
 
   if (!(this instanceof FormBody)) {
