@@ -5,4 +5,7 @@ export default class Dropdown extends Component {
     super(modulePrefix);
     Object.preventExtensions(this);
   }
+  setRequired(required) {
+    this.html.content.querySelectorAll('')
+  }
 }

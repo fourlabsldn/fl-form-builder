@@ -1486,6 +1486,34 @@ var ViewController = function () {
   return ViewController;
 }();
 
+function createSwitch(labelText, modulePrefix) {
+  var cssPrefix = modulePrefix + '-ui-switch';
+
+  var wrapper = document.createElement('label');
+  wrapper.textContent = labelText;
+
+  var switchElement = document.createElement('div');
+  switchElement.classList.add(cssPrefix);
+
+  var switchInput = document.createElement('input');
+  switchInput.classList.add(cssPrefix + '-toggle');
+  switchInput.classList.add(cssPrefix + '-toggle-round');
+  switchInput.type = 'checkbox';
+  switchInput.id = cssPrefix + '-' + Date.now();
+  switchElement.appendChild(switchInput);
+
+  var switchLabel = document.createElement('label');
+  switchLabel.setAttribute('for', switchInput.id);
+  switchElement.appendChild(switchLabel);
+
+  wrapper.appendChild(switchElement);
+  return switchElement;
+}
+
+var utils = {
+  createSwitch: createSwitch
+};
+
 /**
  * @abstract @class FormComponent
  */
@@ -1498,13 +1526,126 @@ var FormComponent = function (_ViewController) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
 
+    _this.editables = [];
+    _this.deleteListeners = [];
+    _this.isRequired = false;
     _this.buildHtml();
     return _this;
   }
 
   _createClass(FormComponent, [{
     key: 'buildHtml',
-    value: function buildHtml() {}
+    value: function buildHtml() {
+      var _this2 = this;
+
+      var frag = document.createDocumentFragment();
+
+      // -- Content --
+      this.html.content = document.createElement('div');
+      this.html.content.classList.add(this.cssPrefix + '-content');
+      frag.appendChild(this.html.content);
+
+      this.html.title = document.createElement('h3');
+      this.html.title.innerText = 'Add a title';
+      this.editables.push(this.html.title);
+      this.html.content.appendChild(this.html.title);
+
+      // -- Configuration --
+      this.html.configuration = document.createElement('div');
+      var configurationCssClass = this.cssPrefix + '-configuration';
+      this.html.configuration.classList.add(configurationCssClass);
+      frag.appendChild(this.html.configuration);
+
+      this.html.componentSpecificConfiguration = document.createElement('div');
+      this.html.configuration.appendChild(this.html.componentSpecificConfiguration);
+
+      var configurationButtons = document.createElement('div');
+      this.html.configuration.appendChild(configurationButtons);
+
+      var deleteBtn = document.createElement('button');
+      deleteBtn.className = configurationCssClass + '-btn-delete';
+      deleteBtn.type = 'button';
+      deleteBtn.addEventListener('click', function () {
+        return _this2.delete();
+      });
+      configurationButtons.appendChild(deleteBtn);
+
+      var okBtn = document.createElement('button');
+      okBtn.className = configurationCssClass + '-btn-ok';
+      okBtn.type = 'button';
+      okBtn.addEventListener('click', function () {
+        return _this2.configToggle();
+      });
+      configurationButtons.appendChild(okBtn);
+
+      var requiredSwitch = utils.createSwitch('Requered', this.modulePrefix);
+      requiredSwitch.classList.add(configurationCssClass + '-switch-required');
+      requiredSwitch.addEventListener('change', function (e) {
+        var checked = e.target.checked;
+        _this2.setRequired(checked);
+      });
+      configurationButtons.appendChild(requiredSwitch);
+
+      // -- Sidebar --
+      this.html.sidebar = document.createElement('div');
+      this.html.sidebar.classList.add(this.cssPrefix + '-sidebar');
+      frag.appendChild(this.html.sidebar);
+
+      var showConfigBtn = document.createElement('button');
+      showConfigBtn.type = 'button';
+      showConfigBtn.classList.add('glyphicon', 'glyphicon-cog');
+      showConfigBtn.title = 'Configure form group';
+      this.html.sidebar.appendChild(showConfigBtn);
+
+      showConfigBtn.addEventListener('click', function () {
+        _this2.configToggle();
+      });
+
+      this.html.container.appendChild(frag);
+    }
+
+    /**
+     * @method enableEditing
+     * @param  {Boolean} enable - Whether to enable editing or not.
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      this.editables.forEach(function (element) {
+        element.setAttribute('contenteditable', enable);
+      });
+    }
+  }, {
+    key: 'configToggle',
+    value: function configToggle() {
+      this.html.configuration.classList.toggle(this.cssPrefix + '-configuration--visible');
+    }
+
+    /**
+     * @method onDelete
+     * @param  {function} fn
+     * @return {void}
+     */
+
+  }, {
+    key: 'onDelete',
+    value: function onDelete(fn) {
+      this.deleteListeners.push(fn);
+    }
+  }, {
+    key: 'delete',
+    value: function _delete() {
+      var _this3 = this;
+
+      this.deleteListeners.forEach(function (fn) {
+        return fn(_this3);
+      });
+      this.destroy();
+    }
   }]);
 
   return FormComponent;
@@ -1661,6 +1802,13 @@ var RadioBtns = function (_Component) {
     return _this;
   }
 
+  _createClass(RadioBtns, [{
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.html.content.querySelectorAll('');
+    }
+  }]);
+
   return RadioBtns;
 }(FormComponent);
 
@@ -1675,6 +1823,13 @@ var Checkboxes = function (_Component) {
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(Checkboxes, [{
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.html.content.querySelectorAll('');
+    }
+  }]);
 
   return Checkboxes;
 }(FormComponent);
@@ -1691,6 +1846,13 @@ var Dropdown = function (_Component) {
     return _this;
   }
 
+  _createClass(Dropdown, [{
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.html.content.querySelectorAll('');
+    }
+  }]);
+
   return Dropdown;
 }(FormComponent);
 
@@ -1706,6 +1868,13 @@ var TextBox = function (_Component) {
     return _this;
   }
 
+  _createClass(TextBox, [{
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.html.content.querySelectorAll('');
+    }
+  }]);
+
   return TextBox;
 }(FormComponent);
 
@@ -1720,6 +1889,13 @@ var TextArea = function (_Component) {
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(TextArea, [{
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.html.content.querySelectorAll('');
+    }
+  }]);
 
   return TextArea;
 }(FormComponent);

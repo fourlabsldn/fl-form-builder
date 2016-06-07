@@ -5,4 +5,7 @@ export default class RadioBtns extends Component {
     super(modulePrefix);
     Object.preventExtensions(this);
   }
+  setRequired(required) {
+    this.html.content.querySelectorAll('')
+  }
 }
