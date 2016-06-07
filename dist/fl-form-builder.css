@@ -16,7 +16,7 @@
 
 .fl-fb-FormComponent {
   position: relative;
-  padding-bottom: 5px;
+  padding: 0 15px 5px;
   margin: 5px 0;
   -webkit-border-radius: 5px;
           border-radius: 5px;
@@ -64,6 +64,10 @@
   background-color: #eee;
   width: 100%;
   padding: 15px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease, visibility 0s;
+  transition: all 0.2s ease, visibility 0s;
   position: absolute;
   right: 0;
   bottom: 5px;
@@ -72,9 +76,10 @@
       -ms-transform: translateY(100%);
           transform: translateY(100%);
   -webkit-border-radius: 0 0 5px 5px;
-          border-radius: 0 0 5px 5px;
-  -webkit-transition: all .2s ease, visibility 0s;
-  transition: all .2s ease, visibility 0s; }
+          border-radius: 0 0 5px 5px; }
+  .fl-fb-FormComponent-configuration--visible {
+    visibility: visible;
+    opacity: 1; }
 
 .fl-fb-FormComponent-configuration-buttons {
   display: -webkit-box;
