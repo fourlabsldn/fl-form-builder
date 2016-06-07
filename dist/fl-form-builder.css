@@ -76,6 +76,80 @@
   -webkit-transition: all .2s ease, visibility 0s;
   transition: all .2s ease, visibility 0s; }
 
+.fl-fb-FormComponent-configuration-buttons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch; }
+
+.fl-fb-FormComponent-configuration-btn-delete {
+  margin-left: 5px; }
+
+.fl-fb-FormComponent-configuration-btn-ok {
+  margin-left: auto; }
+
+.fl-fb-ui-switch {
+  display: inline-block;
+  margin: 0 5px; }
+  .fl-fb-ui-switch .fl-fb-ui-switch-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden; }
+  .fl-fb-ui-switch .fl-fb-ui-switch-toggle + label {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label {
+    padding: 2px;
+    width: -webkit-calc( 20px * 2);
+    width: calc( 20px * 2);
+    height: 20px;
+    background-color: #dddddd;
+    -webkit-border-radius: 20px;
+            border-radius: 20px; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:after,
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:before {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: ""; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 20px;
+            border-radius: 20px;
+    -webkit-transition: background 0.4s;
+    transition: background 0.4s; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:after {
+    width: -webkit-calc( 20px - 2px);
+    width: calc( 20px - 2px);
+    background-color: #fff;
+    -webkit-border-radius: 100%;
+            border-radius: 100%;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    -webkit-transition: margin 0.4s;
+    transition: margin 0.4s; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:before {
+    background-color: #63A8EB; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:after {
+    margin-left: 20px; }
+
 .fl-fb-ControlBar {
   display: -webkit-box;
   display: -webkit-flex;

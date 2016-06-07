@@ -37,30 +37,49 @@ export default class FormComponent extends ViewController {
     frag.appendChild(this.html.configuration);
 
     this.html.componentSpecificConfiguration = document.createElement('div');
+    this.html.componentSpecificConfiguration.classList.add(
+      `${this.cssPrefix}-componentConfiguration`
+    );
     this.html.configuration.appendChild(this.html.componentSpecificConfiguration);
 
     const configurationButtons = document.createElement('div');
+    configurationButtons.classList.add(`${this.cssPrefix}-configuration-buttons`);
     this.html.configuration.appendChild(configurationButtons);
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = `${configurationCssClass}-btn-delete`;
-    deleteBtn.type = 'button';
-    deleteBtn.addEventListener('click', () => this.delete());
-    configurationButtons.appendChild(deleteBtn);
-
-    const okBtn = document.createElement('button');
-    okBtn.className = `${configurationCssClass}-btn-ok`;
-    okBtn.type = 'button';
-    okBtn.addEventListener('click', () => this.configToggle());
-    configurationButtons.appendChild(okBtn);
-
-    const requiredSwitch = utils.createSwitch('Requered', this.modulePrefix);
+    const requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
     requiredSwitch.classList.add(`${configurationCssClass}-switch-required`);
     requiredSwitch.addEventListener('change', (e) => {
       const checked = e.target.checked;
       this.setRequired(checked);
     });
     configurationButtons.appendChild(requiredSwitch);
+
+    const okBtn = document.createElement('button');
+    okBtn.classList.add(
+      `${configurationCssClass}-btn-ok`,
+      'btn', // Bootstrap
+      'btn-sm',
+      'btn-default',
+      'glyphicon', // Font-awesome
+      'glyphicon-ok'
+    );
+    okBtn.type = 'button';
+    okBtn.addEventListener('click', () => this.configToggle());
+    configurationButtons.appendChild(okBtn);
+
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add(
+      `${configurationCssClass}-btn-delete`,
+      'btn', // Bootstrap
+      'btn-sm',
+      'btn-danger',
+      'glyphicon',
+      'glyphicon-trash'
+    );
+    deleteBtn.type = 'button';
+    deleteBtn.addEventListener('click', () => this.delete());
+    configurationButtons.appendChild(deleteBtn);
 
     // -- Sidebar --
     this.html.sidebar = document.createElement('div');
@@ -72,7 +91,7 @@ export default class FormComponent extends ViewController {
     showConfigBtn.type = 'button';
     showConfigBtn.classList.add(
       `${sidebarCssClass}-btn`,
-      'glyphicon',
+      'glyphicon', // Font-awesome
       'glyphicon-cog'
     );
     showConfigBtn.title = 'Configure form group';

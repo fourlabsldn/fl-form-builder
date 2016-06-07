@@ -20,5 +20,5 @@ export default function createSwitch(labelText, modulePrefix) {
   switchElement.appendChild(switchLabel);
 
   wrapper.appendChild(switchElement);
-  return switchElement;
+  return wrapper;
 }
