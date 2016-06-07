@@ -1529,9 +1529,10 @@ var FormComponent = function (_ViewController) {
     _this.cssPrefix = modulePrefix + '-FormComponent';
     _this.html.container.classList.add(modulePrefix + '-FormComponent');
 
-    _this.editables = [];
+    _this.editables = new Set();
     _this.deleteListeners = [];
     _this.isRequired = false;
+    _this.isConfigVisible = true;
 
     _this.buildHtml();
     return _this;
@@ -1551,7 +1552,7 @@ var FormComponent = function (_ViewController) {
 
       this.html.title = document.createElement('h3');
       this.html.title.innerText = 'Add a title';
-      this.editables.push(this.html.title);
+      this.addEditable(this.html.title);
       this.html.content.appendChild(this.html.title);
 
       // -- Configuration --
@@ -1616,6 +1617,18 @@ var FormComponent = function (_ViewController) {
     }
 
     /**
+     * @method addEditable
+     * @param  {HTMLElement} element
+     */
+
+  }, {
+    key: 'addEditable',
+    value: function addEditable(element) {
+      element.classList.add(this.cssPrefix + '-editable');
+      this.editables.add(element);
+    }
+
+    /**
      * @method enableEditing
      * @param  {Boolean} enable - Whether to enable editing or not.
      * @return {void}
@@ -1633,7 +1646,16 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'configToggle',
     value: function configToggle() {
-      this.html.configuration.classList.toggle(this.cssPrefix + '-configuration--visible');
+      if (this.isConfigVisible) {
+        // hide
+        this.html.configuration.classList.remove(this.cssPrefix + '-configuration--visible');
+        this.enableEditing(false);
+      } else {
+        // show
+        this.html.configuration.classList.add(this.cssPrefix + '-configuration--visible');
+        this.enableEditing(true);
+      }
+      this.isConfigVisible = !this.isConfigVisible;
     }
 
     /**

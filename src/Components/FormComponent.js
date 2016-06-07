@@ -10,9 +10,10 @@ export default class FormComponent extends ViewController {
     this.cssPrefix = `${modulePrefix}-FormComponent`;
     this.html.container.classList.add(`${modulePrefix}-FormComponent`);
 
-    this.editables = [];
+    this.editables = new Set();
     this.deleteListeners = [];
     this.isRequired = false;
+    this.isConfigVisible = true;
 
     this.buildHtml();
   }
@@ -27,7 +28,7 @@ export default class FormComponent extends ViewController {
 
     this.html.title = document.createElement('h3');
     this.html.title.innerText = 'Add a title';
-    this.editables.push(this.html.title);
+    this.addEditable(this.html.title);
     this.html.content.appendChild(this.html.title);
 
     // -- Configuration --
@@ -105,6 +106,15 @@ export default class FormComponent extends ViewController {
   }
 
   /**
+   * @method addEditable
+   * @param  {HTMLElement} element
+   */
+  addEditable(element) {
+    element.classList.add(`${this.cssPrefix}-editable`);
+    this.editables.add(element);
+  }
+
+  /**
    * @method enableEditing
    * @param  {Boolean} enable - Whether to enable editing or not.
    * @return {void}
@@ -116,7 +126,16 @@ export default class FormComponent extends ViewController {
   }
 
   configToggle() {
-    this.html.configuration.classList.toggle(`${this.cssPrefix}-configuration--visible`);
+    if (this.isConfigVisible) {
+      // hide
+      this.html.configuration.classList.remove(`${this.cssPrefix}-configuration--visible`);
+      this.enableEditing(false);
+    } else {
+      // show
+      this.html.configuration.classList.add(`${this.cssPrefix}-configuration--visible`);
+      this.enableEditing(true);
+    }
+    this.isConfigVisible = !this.isConfigVisible;
   }
 
   /**
