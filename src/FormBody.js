@@ -101,7 +101,7 @@ export default function FormBody() {
           cancelable: true,
         });
 
-      this.dispatchEvent(ev);
+      form.dispatchEvent(ev);
     });
 
 

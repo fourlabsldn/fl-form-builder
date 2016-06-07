@@ -21,7 +21,7 @@ const paths = {
     dep: './demo/dependencies/',
   },
   js: {
-    src: './src/',
+    src: './src/**/*',
     main: './src/main.js',
     dest: './dist/',
   },

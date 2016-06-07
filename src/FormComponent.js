@@ -239,15 +239,16 @@ FormComponent.prototype.showConfig = function showConfing() {
   // Set a listener to hide the configuration when the user clicks somewhere else.
   const listenerTarget = document.body;
   const useCapture = true;
+  const _this = this;
   listenerTarget.addEventListener('mousedown', function clickOutOfComponent(e) {
     const func = clickOutOfComponent;
     const clickX = e.clientX;
     const clickY = e.clientY;
 
     // If clicked outside of the component.
-    if (!this.isAtPoint(clickX, clickY)) {
+    if (!_this.isAtPoint(clickX, clickY)) {
       listenerTarget.removeEventListener('mousedown', func, useCapture);
-      this.hideConfig();
+      _this.hideConfig();
     }
   }, useCapture);
 };

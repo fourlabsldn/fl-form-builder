@@ -1631,7 +1631,7 @@ function FormBody() {
         cancelable: true
       });
 
-      _this.dispatchEvent(ev);
+      form.dispatchEvent(ev);
     });
 
     // Listen to new components being created
@@ -1705,7 +1705,7 @@ FormComponent.prototype.init = function init(name) {
  * @return {void}
  */
 FormComponent.prototype.createControls = function createControls() {
-  var _this = this;
+  var _this2 = this;
 
   // Create side control bar -----------------------------
   var controls = document.createElement('div');
@@ -1718,7 +1718,7 @@ FormComponent.prototype.createControls = function createControls() {
   controls.appendChild(moreConfigBtn);
 
   moreConfigBtn.addEventListener('click', function () {
-    _this.configToggle();
+    _this2.configToggle();
   });
 
   // Create configuration box -----------------------------
@@ -1742,12 +1742,12 @@ FormComponent.prototype.createControls = function createControls() {
   deleteBtn.classList.add('btn', 'btn-danger', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-trash');
   deleteBtn.addEventListener('click', function () {
     var ev = new CustomEvent('removeComponent', {
-      detail: { comp: _this },
+      detail: { comp: _this2 },
       bubbles: true,
       cancelable: true
     });
 
-    _this.element.dispatchEvent(ev);
+    _this2.element.dispatchEvent(ev);
   });
 
   buttonsContainer.appendChild(deleteBtn);
@@ -1757,8 +1757,8 @@ FormComponent.prototype.createControls = function createControls() {
   okBtn.setAttribute('name', 'ok');
   okBtn.classList.add('btn', 'btn-default', 'btn-sm', 'fl-bottom-btn', 'glyphicon', 'glyphicon-ok');
   okBtn.addEventListener('click', function () {
-    _this.saveConfig();
-    _this.configToggle();
+    _this2.saveConfig();
+    _this2.configToggle();
   });
 
   buttonsContainer.appendChild(okBtn);
@@ -1775,7 +1775,7 @@ FormComponent.prototype.createControls = function createControls() {
   switchInput.id = 'cmn-toggle-' + Date.now();
   switchInput.addEventListener('change', function (e) {
     var checked = e.target.checked;
-    _this.required(checked);
+    _this2.required(checked);
   });
 
   this.requiredSwitch = switchInput;
@@ -1898,15 +1898,16 @@ FormComponent.prototype.showConfig = function showConfing() {
   // Set a listener to hide the configuration when the user clicks somewhere else.
   var listenerTarget = document.body;
   var useCapture = true;
+  var _this = this;
   listenerTarget.addEventListener('mousedown', function clickOutOfComponent(e) {
     var func = clickOutOfComponent;
     var clickX = e.clientX;
     var clickY = e.clientY;
 
     // If clicked outside of the component.
-    if (!this.isAtPoint(clickX, clickY)) {
+    if (!_this.isAtPoint(clickX, clickY)) {
       listenerTarget.removeEventListener('mousedown', func, useCapture);
-      this.hideConfig();
+      _this.hideConfig();
     }
   }, useCapture);
 };
@@ -1943,7 +1944,7 @@ FormComponent.prototype.isAtPoint = function isAtPoint(x, y) {
  * @return {HTMLElement} The cretated element
  */
 FormComponent.prototype.createAddOptionField = function createAddOptionField() {
-  var _this2 = this;
+  var _this3 = this;
 
   if (typeof this.removeOption === 'function') {
     var removeBtn = document.createElement('i');
@@ -1951,7 +1952,7 @@ FormComponent.prototype.createAddOptionField = function createAddOptionField() {
     removeBtn.classList.add('glyphicon', 'glyphicon-minus-sign', 'fl-grey-btn');
     removeBtn.title = 'Remove last option';
     removeBtn.addEventListener('click', function () {
-      _this2.removeOption();
+      _this3.removeOption();
     });
 
     this.configContent.appendChild(removeBtn);
@@ -1977,7 +1978,7 @@ FormComponent.prototype.createAddOptionField = function createAddOptionField() {
       return;
     }
 
-    _this2.addOption(legend.value);
+    _this3.addOption(legend.value);
     legend.value = '';
   });
 
