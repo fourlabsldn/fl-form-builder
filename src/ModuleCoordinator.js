@@ -12,6 +12,7 @@ export default class Coordinator {
     this.componentFabric = new ComponentFabric(modulePrefix);
     this.componentsContainer = new ComponentsContainer(modulePrefix);
     this.controlBar = new ControlBar(modulePrefix, this);
+    Object.preventExtensions(this);
 
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());

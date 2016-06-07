@@ -1,5 +1,5 @@
 import ViewController from './ViewController';
-import Component from './Components/Component';
+import FormComponent from './Components/FormComponent';
 import assert from 'fl-assert';
 
 /**
@@ -9,6 +9,7 @@ export default class ComponentsContainer extends ViewController {
   constructor(modulePrefix) {
     super(modulePrefix);
     this.components = [];
+    Object.preventExtensions(this);
   }
 
   /**
@@ -16,7 +17,7 @@ export default class ComponentsContainer extends ViewController {
    * @param  {FormComponent} component
    */
   addComponent(component) {
-    assert(component instanceof Component,
+    assert(component instanceof FormComponent,
       'Invalid component being added. No an instance of Component.');
     this.components.push(component);
     this.html.container.appendChild(component.getHtmlContainer());

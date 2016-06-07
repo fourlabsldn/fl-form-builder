@@ -1487,19 +1487,27 @@ var ViewController = function () {
 }();
 
 /**
- * @abstract @class Component
+ * @abstract @class FormComponent
  */
 
-var Component = function (_ViewController) {
-  _inherits(Component, _ViewController);
+var FormComponent = function (_ViewController) {
+  _inherits(FormComponent, _ViewController);
 
-  function Component(modulePrefix) {
-    _classCallCheck(this, Component);
+  function FormComponent(modulePrefix) {
+    _classCallCheck(this, FormComponent);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this, modulePrefix));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
+
+    _this.buildHtml();
+    return _this;
   }
 
-  return Component;
+  _createClass(FormComponent, [{
+    key: 'buildHtml',
+    value: function buildHtml() {}
+  }]);
+
+  return FormComponent;
 }(ViewController);
 
 // Bug checking function that will throw an error whenever
@@ -1587,6 +1595,7 @@ var ComponentsContainer = function (_ViewController) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
     _this.components = [];
+    Object.preventExtensions(_this);
     return _this;
   }
 
@@ -1599,7 +1608,7 @@ var ComponentsContainer = function (_ViewController) {
   _createClass(ComponentsContainer, [{
     key: 'addComponent',
     value: function addComponent(component) {
-      assert(component instanceof Component, 'Invalid component being added. No an instance of Component.');
+      assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
       this.components.push(component);
       this.html.container.appendChild(component.getHtmlContainer());
     }
@@ -1643,62 +1652,77 @@ var ComponentsContainer = function (_ViewController) {
 var RadioBtns = function (_Component) {
   _inherits(RadioBtns, _Component);
 
-  function RadioBtns() {
+  function RadioBtns(modulePrefix) {
     _classCallCheck(this, RadioBtns);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    return _this;
   }
 
   return RadioBtns;
-}(Component);
+}(FormComponent);
 
 var Checkboxes = function (_Component) {
   _inherits(Checkboxes, _Component);
 
-  function Checkboxes() {
+  function Checkboxes(modulePrefix) {
     _classCallCheck(this, Checkboxes);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    return _this;
   }
 
   return Checkboxes;
-}(Component);
+}(FormComponent);
 
 var Dropdown = function (_Component) {
   _inherits(Dropdown, _Component);
 
-  function Dropdown() {
+  function Dropdown(modulePrefix) {
     _classCallCheck(this, Dropdown);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    return _this;
   }
 
   return Dropdown;
-}(Component);
+}(FormComponent);
 
 var TextBox = function (_Component) {
   _inherits(TextBox, _Component);
 
-  function TextBox() {
+  function TextBox(modulePrefix) {
     _classCallCheck(this, TextBox);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    return _this;
   }
 
   return TextBox;
-}(Component);
+}(FormComponent);
 
 var TextArea = function (_Component) {
   _inherits(TextArea, _Component);
 
-  function TextArea() {
+  function TextArea(modulePrefix) {
     _classCallCheck(this, TextArea);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    return _this;
   }
 
   return TextArea;
-}(Component);
+}(FormComponent);
 
 /**
  * @class ControlBar
@@ -1737,6 +1761,8 @@ var ComponentFabric = function () {
         iconClass: 'glyphicon glyphicon-text-height'
       }
     };
+
+    Object.preventExtensions(this);
   }
 
   /**
@@ -1814,6 +1840,7 @@ var ControlBar = function (_ViewController) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ControlBar).call(this, modulePrefix));
 
     _this.moduleCoordinator = moduleCoordinator;
+    Object.preventExtensions(_this);
     _this.buildHtml();
     return _this;
   }
@@ -1892,6 +1919,8 @@ var ControlBar = function (_ViewController) {
 
 var Storage = function Storage() {
   _classCallCheck(this, Storage);
+
+  Object.preventExtensions(this);
 };
 
 /**
@@ -1906,6 +1935,7 @@ var Coordinator = function () {
     this.componentFabric = new ComponentFabric(modulePrefix);
     this.componentsContainer = new ComponentsContainer(modulePrefix);
     this.controlBar = new ControlBar(modulePrefix, this);
+    Object.preventExtensions(this);
 
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());

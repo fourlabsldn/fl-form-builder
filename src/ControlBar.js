@@ -6,6 +6,7 @@ export default class ControlBar extends ViewController {
   constructor(modulePrefix, moduleCoordinator) {
     super(modulePrefix);
     this.moduleCoordinator = moduleCoordinator;
+    Object.preventExtensions(this);
     this.buildHtml();
   }
 

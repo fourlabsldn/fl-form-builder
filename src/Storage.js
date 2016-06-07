@@ -5,5 +5,7 @@
  * @class Storage
  */
 export default class Storage {
-
+  constructor() {
+    Object.preventExtensions(this);
+  }
 }

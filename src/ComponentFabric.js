@@ -39,6 +39,8 @@ export default class ComponentFabric {
         iconClass: 'glyphicon glyphicon-text-height',
       },
     };
+
+    Object.preventExtensions(this);
   }
 
   /**
