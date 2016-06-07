@@ -1526,9 +1526,13 @@ var FormComponent = function (_ViewController) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
 
+    _this.cssPrefix = modulePrefix + '-FormComponent';
+    _this.html.container.classList.add(modulePrefix + '-FormComponent');
+
     _this.editables = [];
     _this.deleteListeners = [];
     _this.isRequired = false;
+
     _this.buildHtml();
     return _this;
   }
@@ -1588,12 +1592,13 @@ var FormComponent = function (_ViewController) {
 
       // -- Sidebar --
       this.html.sidebar = document.createElement('div');
-      this.html.sidebar.classList.add(this.cssPrefix + '-sidebar');
+      var sidebarCssClass = this.cssPrefix + '-sidebar';
+      this.html.sidebar.classList.add(sidebarCssClass);
       frag.appendChild(this.html.sidebar);
 
       var showConfigBtn = document.createElement('button');
       showConfigBtn.type = 'button';
-      showConfigBtn.classList.add('glyphicon', 'glyphicon-cog');
+      showConfigBtn.classList.add(sidebarCssClass + '-btn', 'glyphicon', 'glyphicon-cog');
       showConfigBtn.title = 'Configure form group';
       this.html.sidebar.appendChild(showConfigBtn);
 
@@ -1645,6 +1650,17 @@ var FormComponent = function (_ViewController) {
         return fn(_this3);
       });
       this.destroy();
+    }
+
+    /**
+     * @method setRequired
+     * @param  {Boolean} required
+     */
+
+  }, {
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.isRequired = required;
     }
   }]);
 
@@ -1802,13 +1818,6 @@ var RadioBtns = function (_Component) {
     return _this;
   }
 
-  _createClass(RadioBtns, [{
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.html.content.querySelectorAll('');
-    }
-  }]);
-
   return RadioBtns;
 }(FormComponent);
 
@@ -1823,13 +1832,6 @@ var Checkboxes = function (_Component) {
     Object.preventExtensions(_this);
     return _this;
   }
-
-  _createClass(Checkboxes, [{
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.html.content.querySelectorAll('');
-    }
-  }]);
 
   return Checkboxes;
 }(FormComponent);
@@ -1846,13 +1848,6 @@ var Dropdown = function (_Component) {
     return _this;
   }
 
-  _createClass(Dropdown, [{
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.html.content.querySelectorAll('');
-    }
-  }]);
-
   return Dropdown;
 }(FormComponent);
 
@@ -1868,13 +1863,6 @@ var TextBox = function (_Component) {
     return _this;
   }
 
-  _createClass(TextBox, [{
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.html.content.querySelectorAll('');
-    }
-  }]);
-
   return TextBox;
 }(FormComponent);
 
@@ -1889,13 +1877,6 @@ var TextArea = function (_Component) {
     Object.preventExtensions(_this);
     return _this;
   }
-
-  _createClass(TextArea, [{
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.html.content.querySelectorAll('');
-    }
-  }]);
 
   return TextArea;
 }(FormComponent);
@@ -2039,7 +2020,7 @@ var ControlBar = function (_ViewController) {
           var component = _step.value;
 
           var compBtn = document.createElement('button');
-          compBtn.className = _this2.cssPrefix + '-component-button';
+          compBtn.className = _this2.cssPrefix + '-button-component';
           compBtn.className += ' ' + component.iconClass;
           compBtn.classList.add('btn', 'btn-default'); // Bootstrap
 
@@ -2074,7 +2055,7 @@ var ControlBar = function (_ViewController) {
       }
 
       var saveBtn = document.createElement('button');
-      saveBtn.className = this.cssPrefix + '-save-button';
+      saveBtn.className = this.cssPrefix + '-button-save';
       saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
       saveBtn.textContent = 'Save';
       frag.appendChild(saveBtn);

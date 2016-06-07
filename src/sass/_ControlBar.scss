@@ -1,0 +1,11 @@
+.fl-fb-ControlBar {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: stretch;
+
+  padding-bottom: 10px;
+}
+
+[class*='fl-fb-ControlBar-button'] {
+  margin: 3px;
+}

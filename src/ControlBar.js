@@ -17,7 +17,7 @@ export default class ControlBar extends ViewController {
     const componentTypes = this.moduleCoordinator.getComponentTypes();
     for (const component of componentTypes) {
       const compBtn = document.createElement('button');
-      compBtn.className = `${this.cssPrefix}-component-button`;
+      compBtn.className = `${this.cssPrefix}-button-component`;
       compBtn.className += ` ${component.iconClass}`;
       compBtn.classList.add('btn', 'btn-default'); // Bootstrap
 
@@ -33,7 +33,7 @@ export default class ControlBar extends ViewController {
 
     // Create Save button
     const saveBtn = document.createElement('button');
-    saveBtn.className = `${this.cssPrefix}-save-button`;
+    saveBtn.className = `${this.cssPrefix}-button-save`;
     saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
     saveBtn.textContent = 'Save';
     frag.appendChild(saveBtn);

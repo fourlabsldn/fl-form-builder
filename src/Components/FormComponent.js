@@ -7,10 +7,13 @@ import utils from '../utils/utils';
 export default class FormComponent extends ViewController {
   constructor(modulePrefix) {
     super(modulePrefix);
+    this.cssPrefix = `${modulePrefix}-FormComponent`;
+    this.html.container.classList.add(`${modulePrefix}-FormComponent`);
 
     this.editables = [];
     this.deleteListeners = [];
     this.isRequired = false;
+
     this.buildHtml();
   }
 
@@ -61,12 +64,17 @@ export default class FormComponent extends ViewController {
 
     // -- Sidebar --
     this.html.sidebar = document.createElement('div');
-    this.html.sidebar.classList.add(`${this.cssPrefix}-sidebar`);
+    const sidebarCssClass = `${this.cssPrefix}-sidebar`;
+    this.html.sidebar.classList.add(sidebarCssClass);
     frag.appendChild(this.html.sidebar);
 
     const showConfigBtn = document.createElement('button');
     showConfigBtn.type = 'button';
-    showConfigBtn.classList.add('glyphicon', 'glyphicon-cog');
+    showConfigBtn.classList.add(
+      `${sidebarCssClass}-btn`,
+      'glyphicon',
+      'glyphicon-cog'
+    );
     showConfigBtn.title = 'Configure form group';
     this.html.sidebar.appendChild(showConfigBtn);
 
@@ -104,5 +112,13 @@ export default class FormComponent extends ViewController {
   delete() {
     this.deleteListeners.forEach(fn => fn(this));
     this.destroy();
+  }
+
+  /**
+   * @method setRequired
+   * @param  {Boolean} required
+   */
+  setRequired(required) {
+    this.isRequired = required;
   }
 }
