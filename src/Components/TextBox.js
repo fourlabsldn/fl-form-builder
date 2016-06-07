@@ -18,6 +18,7 @@ export default class TextBox extends Component {
 
     this.html.container.appendChild(textBox);
     this.html.textBox = textBox;
+    this.focusElement = textBox;
     this.html.content.appendChild(textBox);
   }
 

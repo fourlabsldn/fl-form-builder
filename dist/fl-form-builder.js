@@ -1607,6 +1607,9 @@ var FormComponent = function (_ViewController) {
     _this.deleteListeners = [];
     _this.isRequired = false;
     _this.isConfigVisible = false;
+
+    // Focused on config show
+    _this.focusElement = null;
     _this.content = [];
 
     _this.buildHtml();
@@ -1741,11 +1744,23 @@ var FormComponent = function (_ViewController) {
         // show
         this.html.container.classList.add(this.cssPrefix + '--configuration-visible');
         this.enableEditing(true);
+
+        // hide on clickOut
         utils.onClickOut([this.html.container, this.html.configuration], function () {
           if (_this3.isConfigVisible) {
             _this3.configToggle();
           }
         });
+
+        // Focus on the appropriate element
+        if (this.focusElement) {
+          // NOTE: There is a bug that for some reason it doesn't focus if you just
+          // call focus() straight away. setTimeout solves it.
+          // see http:// goo.gl/UjKOk5
+          setTimeout(function () {
+            _this3.focusElement.focus();
+          }, 15);
+        }
       }
       this.isConfigVisible = !this.isConfigVisible;
     }
@@ -1994,6 +2009,7 @@ var TextBox = function (_Component) {
 
       this.html.container.appendChild(textBox);
       this.html.textBox = textBox;
+      this.focusElement = textBox;
       this.html.content.appendChild(textBox);
     }
   }, {

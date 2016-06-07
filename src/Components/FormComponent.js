@@ -14,6 +14,9 @@ export default class FormComponent extends ViewController {
     this.deleteListeners = [];
     this.isRequired = false;
     this.isConfigVisible = false;
+
+    // Focused on config show
+    this.focusElement = null;
     this.content = [];
 
     this.buildHtml();
@@ -141,12 +144,22 @@ export default class FormComponent extends ViewController {
       // show
       this.html.container.classList.add(`${this.cssPrefix}--configuration-visible`);
       this.enableEditing(true);
+
+      // hide on clickOut
       utils.onClickOut(
         [this.html.container, this.html.configuration],
         () => {
           if (this.isConfigVisible) { this.configToggle(); }
         }
       );
+
+      // Focus on the appropriate element
+      if (this.focusElement) {
+        // NOTE: There is a bug that for some reason it doesn't focus if you just
+        // call focus() straight away. setTimeout solves it.
+        // see http:// goo.gl/UjKOk5
+        setTimeout(() => { this.focusElement.focus(); }, 15);
+      }
     }
     this.isConfigVisible = !this.isConfigVisible;
   }
