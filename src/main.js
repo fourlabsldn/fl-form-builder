@@ -1,16 +1,10 @@
 /* globals xController */
 
-import FormBody from './FormBody';
-import FormFabric from './FormFabric';
+import ModuleCoordinator from './ModuleCoordinator';
+const MODULE_PREFIX = 'fl-fb';
 
-function flFormBuilder(xDivEl) {
-  'use strict';
-  const formBody = new FormBody();
-  const fabric = new FormFabric(formBody.element);
-
-  xDivEl.classList.add('fl-form-builder');
-  xDivEl.appendChild(fabric.element);
-  xDivEl.appendChild(formBody.element);
-}
-
-xController(flFormBuilder);
+xController((xdiv) => {
+  xdiv.classList.add(MODULE_PREFIX);
+  const coordinator = new ModuleCoordinator(MODULE_PREFIX, xdiv);
+  return coordinator;
+});
