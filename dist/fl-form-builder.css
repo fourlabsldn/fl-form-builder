@@ -54,7 +54,15 @@
   -webkit-transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
   transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
   transition: all .1s ease, visibility 0s, box-shadow .2s;
-  transition: all .1s ease, visibility 0s, box-shadow .2s, -webkit-box-shadow .2s; }
+  transition: all .1s ease, visibility 0s, box-shadow .2s, -webkit-box-shadow .2s;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .2s ease, visibility 0s;
+  transition: all .2s ease, visibility 0s; }
+  .fl-fb-FormComponent:hover .fl-fb-FormComponent-sidebar,
+  .fl-fb-FormComponent--configuration-visible .fl-fb-FormComponent-sidebar {
+    visibility: visible;
+    opacity: 1; }
 
 .fl-fb-FormComponent-sidebar-btn {
   background-color: transparent;
@@ -80,7 +88,7 @@
           transform: translateY(100%);
   -webkit-border-radius: 0 0 5px 5px;
           border-radius: 0 0 5px 5px; }
-  .fl-fb-FormComponent-configuration--visible {
+  .fl-fb-FormComponent--configuration-visible .fl-fb-FormComponent-configuration {
     visibility: visible;
     opacity: 1; }
 

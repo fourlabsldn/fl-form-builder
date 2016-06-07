@@ -134,11 +134,11 @@ export default class FormComponent extends ViewController {
   configToggle(forceState = false) {
     if (this.isConfigVisible && !forceState) {
       // hide
-      this.html.configuration.classList.remove(`${this.cssPrefix}-configuration--visible`);
+      this.html.container.classList.remove(`${this.cssPrefix}--configuration-visible`);
       this.enableEditing(false);
     } else {
       // show
-      this.html.configuration.classList.add(`${this.cssPrefix}-configuration--visible`);
+      this.html.container.classList.add(`${this.cssPrefix}--configuration-visible`);
       this.enableEditing(true);
       utils.onClickOut(
         [this.html.container, this.html.configuration],

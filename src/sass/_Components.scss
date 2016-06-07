@@ -56,6 +56,13 @@
   background-color: $c-background;
   transition: all .1s ease,
               visibility 0s, box-shadow .2s;
+
+  @include fade-hidden();
+
+  .fl-fb-FormComponent:hover &,
+  .fl-fb-FormComponent--configuration-visible & {
+    @include fade-visible();
+  }
 }
 
 .fl-fb-FormComponent-sidebar-btn {
@@ -89,7 +96,7 @@
 
   border-radius: 0 0 5px 5px;
 
-  &--visible {
+  .fl-fb-FormComponent--configuration-visible & {
     visibility: visible;
     opacity: 1;
   }

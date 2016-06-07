@@ -12,3 +12,15 @@ $c-danger-text: #fff;
 // FormComponent;
 $fc-side-padding: 15px;
 $fc-bottom-padding: 5px;
+
+
+@mixin fade-hidden() {
+  visibility: hidden;
+  opacity: 0;
+  transition: all .2s ease, visibility 0s;
+}
+
+@mixin fade-visible() {
+  visibility: visible;
+  opacity: 1;
+}
