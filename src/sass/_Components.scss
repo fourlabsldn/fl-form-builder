@@ -82,7 +82,7 @@
 .fl-fb-FormComponent-configuration {
   background-color: $c-background;
   width: 100%;
-  padding: 15px;
+  padding: 15px 15px 10px;
 
   visibility: hidden;
   opacity: 0;
@@ -102,10 +102,13 @@
   }
 }
 
-.fl-fb-FormComponent-configuration-buttons {
+.fl-fb-FormComponent-configuration-buttons,
+.fl-fb-FormComponent-configuration-options {
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
+
+  margin-bottom: 10px;
 }
 
 .fl-fb-FormComponent-configuration-btn-delete {
@@ -116,6 +119,16 @@
   margin-left: auto;
 }
 
+[class*=fl-fb-FormComponent-configuration-options-btn] {
+  background-color: transparent;
+  color: $c-font;
+  border: 0;
+}
+
+.fl-fb-FormComponent-configuration-options-input {
+  margin-left: 5px;
+  min-width: 50%;
+}
 
 // ============================================================
 //   SWITCH

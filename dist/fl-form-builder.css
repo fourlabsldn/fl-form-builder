@@ -74,7 +74,7 @@
 .fl-fb-FormComponent-configuration {
   background-color: #eee;
   width: 100%;
-  padding: 15px;
+  padding: 15px 15px 10px;
   visibility: hidden;
   opacity: 0;
   -webkit-transition: all 0.2s ease, visibility 0s;
@@ -92,7 +92,8 @@
     visibility: visible;
     opacity: 1; }
 
-.fl-fb-FormComponent-configuration-buttons {
+.fl-fb-FormComponent-configuration-buttons,
+.fl-fb-FormComponent-configuration-options {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -103,13 +104,23 @@
   -webkit-box-align: stretch;
   -webkit-align-items: stretch;
       -ms-flex-align: stretch;
-          align-items: stretch; }
+          align-items: stretch;
+  margin-bottom: 10px; }
 
 .fl-fb-FormComponent-configuration-btn-delete {
   margin-left: 5px; }
 
 .fl-fb-FormComponent-configuration-btn-ok {
   margin-left: auto; }
+
+[class*=fl-fb-FormComponent-configuration-options-btn] {
+  background-color: transparent;
+  color: #999;
+  border: 0; }
+
+.fl-fb-FormComponent-configuration-options-input {
+  margin-left: 5px;
+  min-width: 50%; }
 
 .fl-fb-ui-switch {
   display: inline-block;

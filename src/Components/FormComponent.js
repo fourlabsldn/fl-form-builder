@@ -111,6 +111,68 @@ export default class FormComponent extends ViewController {
     this.html.container.appendChild(frag);
   }
 
+  buildOptionsConfiguration() {
+    const optionsConfig = document.createElement('div');
+    const optionsConfigCssClass = `${this.cssPrefix}-configuration-options`;
+    optionsConfig.classList.add(optionsConfigCssClass);
+
+    if (this.html.configuration.children[0]) {
+      this.html.configuration.insertBefore(
+        optionsConfig,
+        this.html.configuration.children[0]
+      );
+    } else {
+      this.html.configuration.appendChild(optionsConfig);
+    }
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.title = 'Remove last option';
+    removeBtn.classList.add(
+      'glyphicon-minus-sign',
+      'glyphicon',
+      `${optionsConfigCssClass}-btn-remove`
+    );
+    removeBtn.addEventListener('click', () => this.removeOption());
+    optionsConfig.appendChild(removeBtn);
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.title = 'Add new option';
+    addBtn.classList.add(
+      'glyphicon-plus-sign',
+      'glyphicon',
+      `${optionsConfigCssClass}-btn-add`
+    );
+    addBtn.addEventListener('click', () => {
+      if (!legend.value.trim()) {
+        utils.blinkRed(legend);
+      } else {
+        this.addOption(legend.value);
+        legend.value = '';
+      }
+    });
+    optionsConfig.appendChild(addBtn);
+
+    const legend = document.createElement('input');
+    legend.setAttribute('placeholder', 'Type a new option');
+    legend.setAttribute('type', 'text');
+    legend.classList.add(
+      `${optionsConfigCssClass}-input`
+    );
+    this.focusElement = legend;
+    optionsConfig.appendChild(legend);
+    legend.addEventListener('keypress', (e) => {
+      if (e.which === 13) {
+        const click = new Event('click');
+        addBtn.dispatchEvent(click);
+        e.preventDefault();
+        return false; //  returning false will prevent the event from bubbling up.
+      }
+      return true;
+    });
+  }
+
   /**
    * @method addEditable
    * @param  {HTMLElement} element

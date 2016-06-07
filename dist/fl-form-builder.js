@@ -1695,6 +1695,60 @@ var FormComponent = function (_ViewController) {
 
       this.html.container.appendChild(frag);
     }
+  }, {
+    key: 'buildOptionsConfiguration',
+    value: function buildOptionsConfiguration() {
+      var _this3 = this;
+
+      var optionsConfig = document.createElement('div');
+      var optionsConfigCssClass = this.cssPrefix + '-configuration-options';
+      optionsConfig.classList.add(optionsConfigCssClass);
+
+      if (this.html.configuration.children[0]) {
+        this.html.configuration.insertBefore(optionsConfig, this.html.configuration.children[0]);
+      } else {
+        this.html.configuration.appendChild(optionsConfig);
+      }
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.title = 'Remove last option';
+      removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', optionsConfigCssClass + '-btn-remove');
+      removeBtn.addEventListener('click', function () {
+        return _this3.removeOption();
+      });
+      optionsConfig.appendChild(removeBtn);
+
+      var addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.title = 'Add new option';
+      addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
+      addBtn.addEventListener('click', function () {
+        if (!legend.value.trim()) {
+          utils.blinkRed(legend);
+        } else {
+          _this3.addOption(legend.value);
+          legend.value = '';
+        }
+      });
+      optionsConfig.appendChild(addBtn);
+
+      var legend = document.createElement('input');
+      legend.setAttribute('placeholder', 'Type a new option');
+      legend.setAttribute('type', 'text');
+      legend.classList.add(optionsConfigCssClass + '-input');
+      this.focusElement = legend;
+      optionsConfig.appendChild(legend);
+      legend.addEventListener('keypress', function (e) {
+        if (e.which === 13) {
+          var click = new Event('click');
+          addBtn.dispatchEvent(click);
+          e.preventDefault();
+          return false; //  returning false will prevent the event from bubbling up.
+        }
+        return true;
+      });
+    }
 
     /**
      * @method addEditable
@@ -1733,7 +1787,7 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'configToggle',
     value: function configToggle() {
-      var _this3 = this;
+      var _this4 = this;
 
       var forceState = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
@@ -1748,8 +1802,8 @@ var FormComponent = function (_ViewController) {
 
         // hide on clickOut
         utils.onClickOut([this.html.container, this.html.configuration], function () {
-          if (_this3.isConfigVisible && !_this3.isDetroyed) {
-            _this3.configToggle();
+          if (_this4.isConfigVisible && !_this4.isDetroyed) {
+            _this4.configToggle();
           }
         });
 
@@ -1759,7 +1813,7 @@ var FormComponent = function (_ViewController) {
           // call focus() straight away. setTimeout solves it.
           // see http:// goo.gl/UjKOk5
           setTimeout(function () {
-            _this3.focusElement.focus();
+            _this4.focusElement.focus();
           }, 15);
         }
       }
@@ -1780,10 +1834,10 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'delete',
     value: function _delete() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.deleteListeners.forEach(function (fn) {
-        return fn(_this4);
+        return fn(_this5);
       });
       this.destroy();
       this.isDetroyed = true;
@@ -1997,9 +2051,22 @@ var Checkboxes = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
 
+    _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(Checkboxes, [{
+    key: 'addOption',
+    value: function addOption() {
+      console.log('Adding an option');
+    }
+  }, {
+    key: 'removeOption',
+    value: function removeOption() {
+      console.log('Removing an option');
+    }
+  }]);
 
   return Checkboxes;
 }(FormComponent);
