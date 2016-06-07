@@ -1607,6 +1607,7 @@ var FormComponent = function (_ViewController) {
     _this.deleteListeners = [];
     _this.isRequired = false;
     _this.isConfigVisible = false;
+    _this.isDetroyed = false;
 
     // Focused on config show
     _this.focusElement = null;
@@ -1747,7 +1748,7 @@ var FormComponent = function (_ViewController) {
 
         // hide on clickOut
         utils.onClickOut([this.html.container, this.html.configuration], function () {
-          if (_this3.isConfigVisible) {
+          if (_this3.isConfigVisible && !_this3.isDetroyed) {
             _this3.configToggle();
           }
         });
@@ -1785,6 +1786,7 @@ var FormComponent = function (_ViewController) {
         return fn(_this4);
       });
       this.destroy();
+      this.isDetroyed = true;
     }
 
     /**
@@ -1936,6 +1938,37 @@ var ComponentsContainer = function (_ViewController) {
         return _this2.addComponent(comp);
       });
     }
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      var outcome = [];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var component = _step.value;
+
+          outcome.push(component.exportContent());
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return outcome;
+    }
   }]);
 
   return ComponentsContainer;
@@ -2020,7 +2053,7 @@ var TextBox = function (_FormComponent) {
       return {
         required: this.isRequired,
         title: this.html.title.textContent,
-        type: this.contructor.name
+        type: this.constructor.name
       };
     }
   }]);
@@ -2063,7 +2096,7 @@ var TextArea = function (_FormComponent) {
       return {
         required: this.isRequired,
         title: this.html.title.textContent,
-        type: this.contructor.name
+        type: this.constructor.name
       };
     }
   }]);
@@ -2248,6 +2281,9 @@ var ControlBar = function (_ViewController) {
       saveBtn.className = this.cssPrefix + '-button-save';
       saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
       saveBtn.textContent = 'Save';
+      saveBtn.addEventListener('click', function () {
+        return _this2.moduleCoordinator.save();
+      });
       frag.appendChild(saveBtn);
 
       this.html.container.appendChild(frag);
@@ -2264,11 +2300,23 @@ var ControlBar = function (_ViewController) {
  * @class Storage
  */
 
-var Storage = function Storage() {
-  _classCallCheck(this, Storage);
+var Storage = function () {
+  function Storage() {
+    _classCallCheck(this, Storage);
 
-  Object.preventExtensions(this);
-};
+    Object.preventExtensions(this);
+  }
+
+  _createClass(Storage, [{
+    key: 'saveContent',
+    value: function saveContent(content) {
+      console.warn('Not implemented.');
+      console.log(content);
+    }
+  }]);
+
+  return Storage;
+}();
 
 /**
  * @class Coordinator
@@ -2298,6 +2346,12 @@ var Coordinator = function () {
     value: function createComponent(compName) {
       var newComponent = this.componentFabric.createComponent(compName);
       this.componentsContainer.addComponent(newComponent);
+    }
+  }, {
+    key: 'save',
+    value: function save() {
+      var content = this.componentsContainer.exportContent();
+      this.storage.saveContent(content);
     }
   }]);
 

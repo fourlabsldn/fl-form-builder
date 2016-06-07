@@ -8,4 +8,9 @@ export default class Storage {
   constructor() {
     Object.preventExtensions(this);
   }
+
+  saveContent(content) {
+    console.warn('Not implemented.');
+    console.log(content);
+  }
 }

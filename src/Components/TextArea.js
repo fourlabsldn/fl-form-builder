@@ -28,7 +28,7 @@ export default class TextArea extends FormComponent {
     return {
       required: this.isRequired,
       title: this.html.title.textContent,
-      type: this.contructor.name,
+      type: this.constructor.name,
     };
   }
 }

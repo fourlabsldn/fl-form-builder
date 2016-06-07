@@ -26,4 +26,9 @@ export default class Coordinator {
     const newComponent = this.componentFabric.createComponent(compName);
     this.componentsContainer.addComponent(newComponent);
   }
+
+  save() {
+    const content = this.componentsContainer.exportContent();
+    this.storage.saveContent(content);
+  }
 }

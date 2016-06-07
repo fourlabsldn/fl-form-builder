@@ -14,6 +14,7 @@ export default class FormComponent extends ViewController {
     this.deleteListeners = [];
     this.isRequired = false;
     this.isConfigVisible = false;
+    this.isDetroyed = false;
 
     // Focused on config show
     this.focusElement = null;
@@ -149,7 +150,7 @@ export default class FormComponent extends ViewController {
       utils.onClickOut(
         [this.html.container, this.html.configuration],
         () => {
-          if (this.isConfigVisible) { this.configToggle(); }
+          if (this.isConfigVisible && !this.isDetroyed) { this.configToggle(); }
         }
       );
 
@@ -176,6 +177,7 @@ export default class FormComponent extends ViewController {
   delete() {
     this.deleteListeners.forEach(fn => fn(this));
     this.destroy();
+    this.isDetroyed = true;
   }
 
   /**

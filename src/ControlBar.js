@@ -36,6 +36,7 @@ export default class ControlBar extends ViewController {
     saveBtn.className = `${this.cssPrefix}-button-save`;
     saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
     saveBtn.textContent = 'Save';
+    saveBtn.addEventListener('click', () => this.moduleCoordinator.save());
     frag.appendChild(saveBtn);
 
     this.html.container.appendChild(frag);
