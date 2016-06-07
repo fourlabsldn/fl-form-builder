@@ -14,6 +14,7 @@ export default class FormComponent extends ViewController {
     this.deleteListeners = [];
     this.isRequired = false;
     this.isConfigVisible = false;
+    this.content = [];
 
     this.buildHtml();
     this.configToggle(true);

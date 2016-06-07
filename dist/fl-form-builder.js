@@ -1531,9 +1531,6 @@ function onClickOut(elements, callback) {
 // outside of the given element.
 function createClickOut(elements, callback) {
   return function clickOutOfComponent(e) {
-    console.log('listener triggered');
-
-    // If clicked outside of the element.
     if (clickIsWithinComponents(elements, e)) {
       return;
     }
@@ -1610,6 +1607,7 @@ var FormComponent = function (_ViewController) {
     _this.deleteListeners = [];
     _this.isRequired = false;
     _this.isConfigVisible = false;
+    _this.content = [];
 
     _this.buildHtml();
     _this.configToggle(true);
@@ -1981,9 +1979,32 @@ var TextBox = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).call(this, modulePrefix));
 
+    _this.buildComponent();
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(TextBox, [{
+    key: 'buildComponent',
+    value: function buildComponent() {
+      var textBox = document.createElement('input');
+      textBox.classList.add(this.cssPrefix + '-textBox', this.modulePrefix + '-editable', 'form-control' // Bootstrap
+      );
+      textBox.placeholder = 'Test';
+
+      this.html.container.appendChild(textBox);
+      this.html.textBox = textBox;
+      this.html.content.appendChild(textBox);
+    }
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      return {
+        required: this.isRequired,
+        title: this.html.title.textContent,
+        type: 'text' };
+    }
+  }]);
 
   return TextBox;
 }(FormComponent);

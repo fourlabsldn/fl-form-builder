@@ -20,9 +20,6 @@ export default function onClickOut(elements, callback) {
 // outside of the given element.
 function createClickOut(elements, callback) {
   return function clickOutOfComponent(e) {
-    console.log('listener triggered');
-
-    // If clicked outside of the element.
     if (clickIsWithinComponents(elements, e)) {
       return;
     }
