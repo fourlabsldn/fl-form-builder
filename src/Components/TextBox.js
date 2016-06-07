@@ -1,6 +1,6 @@
-import Component from './FormComponent';
+import FormComponent from './FormComponent';
 
-export default class TextBox extends Component {
+export default class TextBox extends FormComponent {
   constructor(modulePrefix) {
     super(modulePrefix);
     this.buildComponent();
@@ -9,13 +9,14 @@ export default class TextBox extends Component {
 
   buildComponent() {
     const textBox = document.createElement('input');
+    textBox.type = 'text';
     textBox.classList.add(
       `${this.cssPrefix}-textBox`,
-      `${this.modulePrefix}-editable`,
       'form-control' // Bootstrap
     );
     textBox.placeholder = 'Test';
 
+    this.addEditable(textBox);
     this.html.container.appendChild(textBox);
     this.html.textBox = textBox;
     this.focusElement = textBox;
@@ -26,7 +27,7 @@ export default class TextBox extends Component {
     return {
       required: this.isRequired,
       title: this.html.title.textContent,
-      type: 'text', // In the future we will support 'email', 'address', etc.
+      type: this.contructor.name,
     };
   }
 }

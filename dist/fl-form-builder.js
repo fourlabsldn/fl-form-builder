@@ -1986,8 +1986,8 @@ var Dropdown = function (_Component) {
   return Dropdown;
 }(FormComponent);
 
-var TextBox = function (_Component) {
-  _inherits(TextBox, _Component);
+var TextBox = function (_FormComponent) {
+  _inherits(TextBox, _FormComponent);
 
   function TextBox(modulePrefix) {
     _classCallCheck(this, TextBox);
@@ -2003,10 +2003,12 @@ var TextBox = function (_Component) {
     key: 'buildComponent',
     value: function buildComponent() {
       var textBox = document.createElement('input');
-      textBox.classList.add(this.cssPrefix + '-textBox', this.modulePrefix + '-editable', 'form-control' // Bootstrap
+      textBox.type = 'text';
+      textBox.classList.add(this.cssPrefix + '-textBox', 'form-control' // Bootstrap
       );
       textBox.placeholder = 'Test';
 
+      this.addEditable(textBox);
       this.html.container.appendChild(textBox);
       this.html.textBox = textBox;
       this.focusElement = textBox;
@@ -2018,24 +2020,53 @@ var TextBox = function (_Component) {
       return {
         required: this.isRequired,
         title: this.html.title.textContent,
-        type: 'text' };
+        type: this.contructor.name
+      };
     }
   }]);
 
   return TextBox;
 }(FormComponent);
 
-var TextArea = function (_Component) {
-  _inherits(TextArea, _Component);
+var TextArea = function (_FormComponent) {
+  _inherits(TextArea, _FormComponent);
 
   function TextArea(modulePrefix) {
     _classCallCheck(this, TextArea);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).call(this, modulePrefix));
 
+    _this.buildComponent();
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(TextArea, [{
+    key: 'buildComponent',
+    value: function buildComponent() {
+      var textArea = document.createElement('textarea');
+      textArea.setAttribute('rows', 5);
+
+      textArea.classList.add(this.cssPrefix + '-textArea', 'form-control' // Bootstrap
+      );
+      textArea.placeholder = 'Test';
+
+      this.addEditable(textArea);
+      this.html.container.appendChild(textArea);
+      this.html.textArea = textArea;
+      this.focusElement = textArea;
+      this.html.content.appendChild(textArea);
+    }
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      return {
+        required: this.isRequired,
+        title: this.html.title.textContent,
+        type: this.contructor.name
+      };
+    }
+  }]);
 
   return TextArea;
 }(FormComponent);
