@@ -1510,8 +1510,85 @@ function createSwitch(labelText, modulePrefix) {
   return wrapper;
 }
 
+/**
+ * executes a callback when there is a click outside of a list of
+ * elements
+ * @method onClickOut
+ * @param  {Array<HTMLElement>} elements
+ * @param  {Function} callback
+ * @return {Function} A function to cancel onClickOut
+ */
+function onClickOut(elements, callback) {
+  var clickOutOfComponent = createClickOut(elements, callback);
+  document.body.addEventListener('mousedown', clickOutOfComponent, true);
+
+  return function cancelOnclickOut() {
+    document.body.removeEventListener('mousedown', clickOutOfComponent, true);
+  };
+}
+
+// Returns a function that will execute a callback if there is a click
+// outside of the given element.
+function createClickOut(elements, callback) {
+  return function clickOutOfComponent(e) {
+    console.log('listener triggered');
+
+    // If clicked outside of the element.
+    if (clickIsWithinComponents(elements, e)) {
+      return;
+    }
+
+    document.body.removeEventListener('mousedown', clickOutOfComponent, true);
+    callback();
+  };
+}
+
+function clickIsWithinComponents(elements, e) {
+  var x = e.clientX;
+  var y = e.clientY;
+  var isInsideAnyElement = false;
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var element = _step.value;
+
+      var elementBox = element.getBoundingClientRect();
+      var top = elementBox.top;
+      var bottom = elementBox.bottom;
+      var right = elementBox.right;
+      var left = elementBox.left;
+
+      // If point is outside of the component
+      if (x > left && right > x && bottom > y && y > top) {
+        isInsideAnyElement = true;
+        break;
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return isInsideAnyElement;
+}
+
 var utils = {
-  createSwitch: createSwitch
+  createSwitch: createSwitch,
+  onClickOut: onClickOut
 };
 
 /**
@@ -1532,9 +1609,10 @@ var FormComponent = function (_ViewController) {
     _this.editables = new Set();
     _this.deleteListeners = [];
     _this.isRequired = false;
-    _this.isConfigVisible = true;
+    _this.isConfigVisible = false;
 
     _this.buildHtml();
+    _this.configToggle(true);
     return _this;
   }
 
@@ -1643,10 +1721,21 @@ var FormComponent = function (_ViewController) {
         element.setAttribute('contenteditable', enable);
       });
     }
+
+    /**
+     * @method configToggle
+     * @param  {Boolean} forceState Optional parameter to force a state.
+     * @return {void}
+     */
+
   }, {
     key: 'configToggle',
     value: function configToggle() {
-      if (this.isConfigVisible) {
+      var _this3 = this;
+
+      var forceState = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+      if (this.isConfigVisible && !forceState) {
         // hide
         this.html.configuration.classList.remove(this.cssPrefix + '-configuration--visible');
         this.enableEditing(false);
@@ -1654,6 +1743,11 @@ var FormComponent = function (_ViewController) {
         // show
         this.html.configuration.classList.add(this.cssPrefix + '-configuration--visible');
         this.enableEditing(true);
+        utils.onClickOut([this.html.container, this.html.configuration], function () {
+          if (_this3.isConfigVisible) {
+            _this3.configToggle();
+          }
+        });
       }
       this.isConfigVisible = !this.isConfigVisible;
     }
@@ -1672,10 +1766,10 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'delete',
     value: function _delete() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.deleteListeners.forEach(function (fn) {
-        return fn(_this3);
+        return fn(_this4);
       });
       this.destroy();
     }

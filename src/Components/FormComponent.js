@@ -13,9 +13,10 @@ export default class FormComponent extends ViewController {
     this.editables = new Set();
     this.deleteListeners = [];
     this.isRequired = false;
-    this.isConfigVisible = true;
+    this.isConfigVisible = false;
 
     this.buildHtml();
+    this.configToggle(true);
   }
 
   buildHtml() {
@@ -125,8 +126,13 @@ export default class FormComponent extends ViewController {
     });
   }
 
-  configToggle() {
-    if (this.isConfigVisible) {
+  /**
+   * @method configToggle
+   * @param  {Boolean} forceState Optional parameter to force a state.
+   * @return {void}
+   */
+  configToggle(forceState = false) {
+    if (this.isConfigVisible && !forceState) {
       // hide
       this.html.configuration.classList.remove(`${this.cssPrefix}-configuration--visible`);
       this.enableEditing(false);
@@ -134,6 +140,12 @@ export default class FormComponent extends ViewController {
       // show
       this.html.configuration.classList.add(`${this.cssPrefix}-configuration--visible`);
       this.enableEditing(true);
+      utils.onClickOut(
+        [this.html.container, this.html.configuration],
+        () => {
+          if (this.isConfigVisible) { this.configToggle(); }
+        }
+      );
     }
     this.isConfigVisible = !this.isConfigVisible;
   }
