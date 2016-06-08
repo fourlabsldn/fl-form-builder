@@ -341,13 +341,13 @@ var $exports = module.exports = function(name){
 $exports.store = store;
 });
 
-var require$$0$10 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
+var require$$0$9 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
 
 var _wksExt = __commonjs(function (module, exports) {
-exports.f = require$$0$10;
+exports.f = require$$0$9;
 });
 
-var require$$0$9 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
+var require$$0$8 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
 
 var _library = __commonjs(function (module) {
 module.exports = true;
@@ -359,7 +359,7 @@ var _wksDefine = __commonjs(function (module) {
 var global         = require$$3$2
   , core           = require$$0$2
   , LIBRARY        = require$$9
-  , wksExt         = require$$0$9
+  , wksExt         = require$$0$8
   , defineProperty = require$$1.f;
 module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -387,7 +387,7 @@ var _objectPie = __commonjs(function (module, exports) {
 exports.f = {}.propertyIsEnumerable;
 });
 
-var require$$0$11 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
+var require$$0$10 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
 
 var _enumBugKeys = __commonjs(function (module) {
 // IE 8- don't enum bug keys
@@ -406,7 +406,7 @@ module.exports = function(key){
 };
 });
 
-var require$$0$13 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
+var require$$0$12 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
 
 var _toInteger = __commonjs(function (module) {
 // 7.1.4 ToInteger
@@ -429,7 +429,7 @@ module.exports = function(index, length){
 };
 });
 
-var require$$0$14 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
+var require$$0$13 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
 
 var _toLength = __commonjs(function (module) {
 // 7.1.15 ToLength
@@ -450,7 +450,7 @@ module.exports = function(it){
 };
 });
 
-var require$$0$15 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
+var require$$0$14 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
 
 var _cof = __commonjs(function (module) {
 var toString = {}.toString;
@@ -460,11 +460,11 @@ module.exports = function(it){
 };
 });
 
-var require$$0$16 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
+var require$$0$15 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
 
 var _iobject = __commonjs(function (module) {
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = require$$0$16;
+var cof = require$$0$15;
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
@@ -475,7 +475,7 @@ var require$$1$11 = (_iobject && typeof _iobject === 'object' && 'default' in _i
 var _toIobject = __commonjs(function (module) {
 // to indexed object, toObject with fallback for non-array-like ES3 strings
 var IObject = require$$1$11
-  , defined = require$$0$15;
+  , defined = require$$0$14;
 module.exports = function(it){
   return IObject(defined(it));
 };
@@ -488,7 +488,7 @@ var _arrayIncludes = __commonjs(function (module) {
 // true  -> Array#includes
 var toIObject = require$$2$2
   , toLength  = require$$1$10
-  , toIndex   = require$$0$14;
+  , toIndex   = require$$0$13;
 module.exports = function(IS_INCLUDES){
   return function($this, el, fromIndex){
     var O      = toIObject($this)
@@ -522,7 +522,7 @@ var _objectKeysInternal = __commonjs(function (module) {
 var has          = require$$2$3
   , toIObject    = require$$2$2
   , arrayIndexOf = require$$1$8(false)
-  , IE_PROTO     = require$$0$13('IE_PROTO');
+  , IE_PROTO     = require$$0$12('IE_PROTO');
 
 module.exports = function(object, names){
   var O      = toIObject(object)
@@ -550,7 +550,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 };
 });
 
-var require$$0$12 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
+var require$$0$11 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
 
 var _objectKeys = __commonjs(function (module) {
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
@@ -565,7 +565,7 @@ module.exports = Object.keys || function keys(O){
 var require$$1$12 = (_objectKeys && typeof _objectKeys === 'object' && 'default' in _objectKeys ? _objectKeys['default'] : _objectKeys);
 
 var _objectGopd = __commonjs(function (module, exports) {
-var pIE            = require$$0$11
+var pIE            = require$$0$10
   , createDesc     = require$$3$3
   , toIObject      = require$$2$2
   , toPrimitive    = require$$3
@@ -588,7 +588,7 @@ var require$$1$13 = (_objectGopd && typeof _objectGopd === 'object' && 'default'
 var _objectGopnExt = __commonjs(function (module) {
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = require$$2$2
-  , gOPN      = require$$0$12.f
+  , gOPN      = require$$0$11.f
   , toString  = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -613,7 +613,7 @@ var _html = __commonjs(function (module) {
 module.exports = require$$3$2.document && document.documentElement;
 });
 
-var require$$0$18 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
+var require$$0$17 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
 
 var _objectDps = __commonjs(function (module) {
 var dP       = require$$1
@@ -638,7 +638,7 @@ var _objectCreate = __commonjs(function (module) {
 var anObject    = require$$2
   , dPs         = require$$4$1
   , enumBugKeys = require$$3$4
-  , IE_PROTO    = require$$0$13('IE_PROTO')
+  , IE_PROTO    = require$$0$12('IE_PROTO')
   , Empty       = function(){ /* empty */ }
   , PROTOTYPE   = 'prototype';
 
@@ -650,7 +650,7 @@ var createDict = function(){
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  require$$0$18.appendChild(iframe);
+  require$$0$17.appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -676,11 +676,11 @@ module.exports = Object.create || function create(O, Properties){
 };
 });
 
-var require$$0$17 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
+var require$$0$16 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
 
 var _isArray = __commonjs(function (module) {
 // 7.2.2 IsArray(argument)
-var cof = require$$0$16;
+var cof = require$$0$15;
 module.exports = Array.isArray || function isArray(arg){
   return cof(arg) == 'Array';
 };
@@ -692,7 +692,7 @@ var _enumKeys = __commonjs(function (module) {
 // all enumerable object keys, includes symbols
 var getKeys = require$$1$12
   , gOPS    = require$$1$6
-  , pIE     = require$$0$11;
+  , pIE     = require$$0$10;
 module.exports = function(it){
   var result     = getKeys(it)
     , getSymbols = gOPS.f;
@@ -726,7 +726,7 @@ var require$$16 = (_keyof && typeof _keyof === 'object' && 'default' in _keyof ?
 var _setToStringTag = __commonjs(function (module) {
 var def = require$$1.f
   , has = require$$2$3
-  , TAG = require$$0$10('toStringTag');
+  , TAG = require$$0$9('toStringTag');
 
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
@@ -812,8 +812,8 @@ var global         = require$$3$2
   , shared         = require$$1$5
   , setToStringTag = require$$2$4
   , uid            = require$$4
-  , wks            = require$$0$10
-  , wksExt         = require$$0$9
+  , wks            = require$$0$9
+  , wksExt         = require$$0$8
   , wksDefine      = require$$17
   , keyOf          = require$$16
   , enumKeys       = require$$15
@@ -822,7 +822,7 @@ var global         = require$$3$2
   , toIObject      = require$$2$2
   , toPrimitive    = require$$3
   , createDesc     = require$$3$3
-  , _create        = require$$0$17
+  , _create        = require$$0$16
   , gOPNExt        = require$$8
   , $GOPD          = require$$1$13
   , $DP            = require$$1
@@ -949,8 +949,8 @@ if(!USE_NATIVE){
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
-  require$$0$12.f = gOPNExt.f = $getOwnPropertyNames;
-  require$$0$11.f  = $propertyIsEnumerable;
+  require$$0$11.f = gOPNExt.f = $getOwnPropertyNames;
+  require$$0$10.f  = $propertyIsEnumerable;
   require$$1$6.f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !require$$9){
@@ -1041,13 +1041,13 @@ var index = __commonjs(function (module) {
 module.exports = require$$0$2.Symbol;
 });
 
-var require$$0$8 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+var require$$0$7 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
 
 var symbol = __commonjs(function (module) {
-module.exports = { "default": require$$0$8, __esModule: true };
+module.exports = { "default": require$$0$7, __esModule: true };
 });
 
-var require$$0$7 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
+var require$$0$6 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
 
 var _iterators = __commonjs(function (module) {
 module.exports = {};
@@ -1057,7 +1057,7 @@ var require$$4$2 = (_iterators && typeof _iterators === 'object' && 'default' in
 
 var _toObject = __commonjs(function (module) {
 // 7.1.13 ToObject(argument)
-var defined = require$$0$15;
+var defined = require$$0$14;
 module.exports = function(it){
   return Object(defined(it));
 };
@@ -1069,7 +1069,7 @@ var _objectGpo = __commonjs(function (module) {
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has         = require$$2$3
   , toObject    = require$$2$5
-  , IE_PROTO    = require$$0$13('IE_PROTO')
+  , IE_PROTO    = require$$0$12('IE_PROTO')
   , ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function(O){
@@ -1085,13 +1085,13 @@ var require$$1$15 = (_objectGpo && typeof _objectGpo === 'object' && 'default' i
 
 var _iterCreate = __commonjs(function (module) {
 'use strict';
-var create         = require$$0$17
+var create         = require$$0$16
   , descriptor     = require$$3$3
   , setToStringTag = require$$2$4
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require$$1$3(IteratorPrototype, require$$0$10('iterator'), function(){ return this; });
+require$$1$3(IteratorPrototype, require$$0$9('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -1112,7 +1112,7 @@ var LIBRARY        = require$$9
   , $iterCreate    = require$$3$5
   , setToStringTag = require$$2$4
   , getPrototypeOf = require$$1$15
-  , ITERATOR       = require$$0$10('iterator')
+  , ITERATOR       = require$$0$9('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
   , KEYS           = 'keys'
@@ -1174,7 +1174,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 });
 
-var require$$0$20 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
+var require$$0$19 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
 
 var _iterStep = __commonjs(function (module) {
 module.exports = function(done, value){
@@ -1201,7 +1201,7 @@ var addToUnscopables = require$$4$3
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require$$0$20(Array, 'Array', function(iterated, kind){
+module.exports = require$$0$19(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -1231,7 +1231,7 @@ var web_dom_iterable = __commonjs(function (module) {
 var global        = require$$3$2
   , hide          = require$$1$3
   , Iterators     = require$$4$2
-  , TO_STRING_TAG = require$$0$10('toStringTag');
+  , TO_STRING_TAG = require$$0$9('toStringTag');
 
 for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
   var NAME       = collections[i]
@@ -1244,7 +1244,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 var _stringAt = __commonjs(function (module) {
 var toInteger = require$$1$9
-  , defined   = require$$0$15;
+  , defined   = require$$0$14;
 // true  -> String#at
 // false -> String#codePointAt
 module.exports = function(TO_STRING){
@@ -1269,7 +1269,7 @@ var es6_string_iterator = __commonjs(function (module) {
 var $at  = require$$1$16(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-require$$0$20(String, 'String', function(iterated){
+require$$0$19(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -1285,13 +1285,13 @@ require$$0$20(String, 'String', function(iterated){
 });
 
 var iterator$1 = __commonjs(function (module) {
-module.exports = require$$0$9.f('iterator');
+module.exports = require$$0$8.f('iterator');
 });
 
-var require$$0$19 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
+var require$$0$18 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
 
 var iterator = __commonjs(function (module) {
-module.exports = { "default": require$$0$19, __esModule: true };
+module.exports = { "default": require$$0$18, __esModule: true };
 });
 
 var require$$1$14 = (iterator && typeof iterator === 'object' && 'default' in iterator ? iterator['default'] : iterator);
@@ -1305,7 +1305,7 @@ var _iterator = require$$1$14;
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = require$$0$7;
+var _symbol = require$$0$6;
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -1320,14 +1320,14 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 });
 
-var require$$0$6 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
+var _typeof$1 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
 
 var possibleConstructorReturn = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _typeof2 = require$$0$6;
+var _typeof2 = _typeof$1;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1347,7 +1347,7 @@ var _possibleConstructorReturn = (possibleConstructorReturn && typeof possibleCo
 var es6_object_create = __commonjs(function (module) {
 var $export = require$$2$1
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: require$$0$17});
+$export($export.S, 'Object', {create: require$$0$16});
 });
 
 var create$1 = __commonjs(function (module) {
@@ -1357,10 +1357,10 @@ module.exports = function create(P, D){
 };
 });
 
-var require$$0$21 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
+var require$$0$20 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
 
 var create = __commonjs(function (module) {
-module.exports = { "default": require$$0$21, __esModule: true };
+module.exports = { "default": require$$0$20, __esModule: true };
 });
 
 var require$$1$17 = (create && typeof create === 'object' && 'default' in create ? create['default'] : create);
@@ -1393,22 +1393,22 @@ module.exports = {
 };
 });
 
-var require$$0$23 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
+var require$$0$22 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
 
 var es6_object_setPrototypeOf = __commonjs(function (module) {
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = require$$2$1;
-$export($export.S, 'Object', {setPrototypeOf: require$$0$23.set});
+$export($export.S, 'Object', {setPrototypeOf: require$$0$22.set});
 });
 
 var setPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.setPrototypeOf;
 });
 
-var require$$0$22 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
+var require$$0$21 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
 
 var setPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$22, __esModule: true };
+module.exports = { "default": require$$0$21, __esModule: true };
 });
 
 var require$$2$6 = (setPrototypeOf && typeof setPrototypeOf === 'object' && 'default' in setPrototypeOf ? setPrototypeOf['default'] : setPrototypeOf);
@@ -1426,7 +1426,7 @@ var _create = require$$1$17;
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = require$$0$6;
+var _typeof2 = _typeof$1;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1499,14 +1499,14 @@ module.exports = function(KEY, exec){
 };
 });
 
-var require$$0$26 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
+var require$$0$25 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
 
 var es6_object_getOwnPropertyDescriptor = __commonjs(function (module) {
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
 var toIObject                 = require$$2$2
   , $getOwnPropertyDescriptor = require$$1$13.f;
 
-require$$0$26('getOwnPropertyDescriptor', function(){
+require$$0$25('getOwnPropertyDescriptor', function(){
   return function getOwnPropertyDescriptor(it, key){
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
@@ -1520,20 +1520,20 @@ module.exports = function getOwnPropertyDescriptor(it, key){
 };
 });
 
-var require$$0$25 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
+var require$$0$24 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
 
 var getOwnPropertyDescriptor = __commonjs(function (module) {
-module.exports = { "default": require$$0$25, __esModule: true };
+module.exports = { "default": require$$0$24, __esModule: true };
 });
 
-var require$$0$24 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
+var require$$0$23 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
 
 var es6_object_getPrototypeOf = __commonjs(function (module) {
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject        = require$$2$5
   , $getPrototypeOf = require$$1$15;
 
-require$$0$26('getPrototypeOf', function(){
+require$$0$25('getPrototypeOf', function(){
   return function getPrototypeOf(it){
     return $getPrototypeOf(toObject(it));
   };
@@ -1544,10 +1544,10 @@ var getPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.getPrototypeOf;
 });
 
-var require$$0$27 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
+var require$$0$26 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
 
 var getPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$27, __esModule: true };
+module.exports = { "default": require$$0$26, __esModule: true };
 });
 
 var require$$1$18 = (getPrototypeOf && typeof getPrototypeOf === 'object' && 'default' in getPrototypeOf ? getPrototypeOf['default'] : getPrototypeOf);
@@ -1561,7 +1561,7 @@ var _getPrototypeOf = require$$1$18;
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _getOwnPropertyDescriptor = require$$0$24;
+var _getOwnPropertyDescriptor = require$$0$23;
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -1704,7 +1704,267 @@ function blinkRed(el, modulePrefix) {
   }, 1500);
 }
 
+/**
+ * @function throttle
+ * @param  {integer}   FuncDelay
+ * @param  {Function} callback
+ * @return {Function}                  the throttled function
+ */
+function throttle(FuncDelay, callback) {
+  var lastCall = +new Date();
+  var delay = FuncDelay;
+  var params = void 0;
+  var context = {};
+  var calledDuringDelay = false;
+
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var now = +new Date();
+    var diff = now - lastCall;
+    var timeToEndOfDelay = void 0;
+
+    params = args;
+
+    if (diff > delay) {
+      callback.apply(context, params); // Call function with latest parameters
+      calledDuringDelay = false;
+      lastCall = now;
+    } else if (!calledDuringDelay) {
+      // If it wasn't called yet, call it when there is enough delay.
+      timeToEndOfDelay = delay - diff;
+
+      setTimeout(function () {
+        callback.apply(context, params); // Call function with latest parameters
+      }, timeToEndOfDelay);
+
+      calledDuringDelay = true;
+      lastCall = now + timeToEndOfDelay;
+    } // Otherwise do nothing.
+  };
+}
+
+/**
+ * Will take care of the dragging and reordering a list for one drag.
+ * @function trackReorderDrag
+ * @param  {event} paramE        The dragstart event, from which this should be called.
+ * @param  {HTMLElement} paramEl       The main Element being dragged
+ * @param  {Array<HTMLElement>} paramElements Array of elements to be tracked.
+ * @return {void}
+ */
+function trackReorderDrag(paramE, paramEl, paramElements) {
+  function setTranslation(el, val) {
+    el.style.transform = 'translate3d(0, ' + val + 'px, 0)'; //  eslint-disable-line no-param-reassign
+  }
+
+  /**
+   * @function resetElementsPositions
+   * @param {Array[HTMLElement]} els Elements being tracked
+   */
+  function resetElementsPositions(els) {
+    els.forEach(function (el) {
+      setTranslation(el, 0);
+    });
+  }
+
+  /**
+   * @function calculateElementHeight
+   * @param  {Array[HTMLElement]} els    Elements ordered by vertical position
+   * @param  {Integer} elIndex
+   * @return {void}
+   */
+  function calculateElementHeight(els, elIndex) {
+    var spaceOccupied = void 0;
+
+    // If not the last element
+    if (elIndex < els.length - 1) {
+      var elTop = els[elIndex].getBoundingClientRect().top;
+      var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
+      spaceOccupied = nextElTop - elTop;
+    } else {
+      // let's estimate the general vertical distance between elements by
+      // subtracting the size of the first element from the distance between
+      // its top and the next element.
+      var firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+      var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
+      var height = els[elIndex].clientHeight;
+      spaceOccupied = height + verticalDistance;
+    }
+
+    return spaceOccupied;
+  }
+
+  /**
+   * @function createDragMover
+   * @param  {Array[HTMLElements]} els         [description]
+   * @param  {Array[Integer]} tops        Initial tops
+   * @param  {Integer} targetIndex Index of element being dragged around
+   * @return {function}             The function to translate elements in the
+   *                                  list to make room for the dragged element
+   */
+  function createDragMover(els, tops, targetIndex) {
+    var target = els[targetIndex];
+    var targetInitialTop = tops[targetIndex];
+    var targetHeight = calculateElementHeight(els, targetIndex);
+    return function doDragMove() {
+      var targetTop = target.getBoundingClientRect().top;
+      var movedUp = targetTop < targetInitialTop;
+
+      var i = void 0;
+      for (i = 0; i < tops.length; i++) {
+        if (i === targetIndex) {
+          continue;
+        } else if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
+          setTranslation(els[i], -targetHeight);
+        } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
+          setTranslation(els[i], targetHeight);
+        } else {
+          setTranslation(els[i], 0);
+        }
+      }
+    };
+  }
+
+  function createDragListener(els, tops, targetIndex, initialY) {
+    var target = els[targetIndex];
+    var doDragMove = createDragMover(els, tops, targetIndex);
+    var shouldStopListening = void 0;
+    function dragListener(e) {
+      if (shouldStopListening) {
+        return;
+      }
+
+      doDragMove();
+      var newY = e.pageY;
+      if (newY === 0) {
+        return;
+      } // correct weird behaviour when mouse goes up
+
+      var diff = newY - initialY;
+      setTranslation(target, diff);
+    }
+
+    dragListener.stop = function () {
+      shouldStopListening = true;
+    };
+
+    return dragListener;
+  }
+
+  function getElementsCurrentTop(els) {
+    var tops = [];
+    els.forEach(function (el) {
+      tops.push(el.getBoundingClientRect().top);
+    });
+
+    return tops;
+  }
+
+  // function adjustElementsToTops(els, tops) {
+  //   const currentTops = getElementsCurrentTop(els);
+  //   els.forEach(function (el, i) {
+  //     const diff =  currentTops[i] - tops[i];
+  //     setTranslation(el, diff);
+  //   });
+  // }
+
+  function insertTargetInRightPlace(els, initialTops, targetIndex) {
+    var target = els[targetIndex];
+    var topsBeforeInsertion = getElementsCurrentTop(els);
+    var targetTop = topsBeforeInsertion[targetIndex];
+    var i = 0;
+
+    // Pass by all elements that are above the target
+    while (topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop || i === targetIndex) {
+      i++;
+    }
+
+    // Take away transitions from all elements and save them
+    var initialTransitions = [];
+    els.forEach(function (anEl) {
+      initialTransitions.push(anEl.style.transition);
+      anEl.style.transition = 'none'; // eslint-disable-line no-param-reassign
+    });
+
+    // Put everyone at translate3d(0,0,0) without transitions
+    resetElementsPositions(els);
+
+    // Add the element in the appropriate place. This will displace everyone else.
+    var parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
+    if (!parent || !parent.appendChild) {
+      throw new Error('trackReorderDrag(): No parent found in element list.');
+    } else if (els[i]) {
+      parent.insertBefore(target, els[i]);
+    } else {
+      var lastEl = els[els.length - 1];
+      parent.insertBefore(target, lastEl);
+      parent.insertBefore(lastEl, target);
+    }
+
+    // Now let's translate it to where it was just before it was repositioned
+    // All without transitions. It will seem like it never left that spot.
+    var futureTop = target.getBoundingClientRect().top;
+    var displacement = targetTop - futureTop;
+    setTranslation(target, displacement);
+
+    // Let's add a timeout to get the last place in the UI queue and let the
+    // CSS renderer to process the fact that all these elements do not have
+    // transitions and should appear wherever their coordinates say immediately.
+    setTimeout(function () {
+      // Restore all transitions
+      els.forEach(function (anEl, k) {
+        anEl.style.transition = initialTransitions[k]; // eslint-disable-line no-param-reassign
+      });
+
+      // Now transition the target can transition smoothly from where it
+      // was dropped to its final position at translate value 0.
+      setTranslation(target, 0);
+    }, 15);
+
+    //  adjustElementsToTops(els, topsBeforeInsertion);
+  }
+
+  function init(e, el, elements) {
+    if ((typeof el === 'undefined' ? 'undefined' : _typeof$1(el)) !== 'object') {
+      throw new Error('trackReorderDrag(): Invalid parameter');
+    }
+
+    // Reorder elements
+    elements.sort(function (el1, el2) {
+      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
+    });
+
+    // Set initial states
+    var initialTops = [];
+    elements.forEach(function (element) {
+      initialTops.push(element.getBoundingClientRect().top);
+    });
+
+    var elIndex = elements.indexOf(el);
+
+    // Create throttled drag listener
+    var initialY = e.pageY;
+    var dragListener = createDragListener(elements, initialTops, elIndex, initialY);
+    var throttledDragListener = throttle(50, dragListener);
+
+    // Listen to drags
+    var eventTarget = e.target;
+    eventTarget.addEventListener('drag', throttledDragListener);
+    eventTarget.addEventListener('dragend', function dragEndListener() {
+      dragListener.stop();
+      insertTargetInRightPlace(elements, initialTops, elIndex);
+      eventTarget.removeEventListener('drag', throttledDragListener);
+      eventTarget.removeEventListener('dragend', dragEndListener);
+    });
+  }
+
+  init(paramE, paramEl, paramElements);
+}
+
 var utils = {
+  trackReorderDrag: trackReorderDrag,
   createSwitch: createSwitch,
   onClickOut: onClickOut,
   blinkRed: blinkRed
@@ -1876,16 +2136,22 @@ var FormComponent = function (_ViewController) {
 
       var showConfigBtn = document.createElement('button');
       showConfigBtn.type = 'button';
-      showConfigBtn.classList.add(sidebarCssClass + '-btn', 'glyphicon', // Font-awesome
+      showConfigBtn.classList.add('glyphicon', // Font-awesome
       'glyphicon-cog');
       showConfigBtn.title = 'Configure form group';
-      this.html.sidebar.appendChild(showConfigBtn);
+      this.addSidebarButton(showConfigBtn);
 
       showConfigBtn.addEventListener('click', function () {
         _this2.configToggle();
       });
 
       this.html.container.appendChild(frag);
+    }
+  }, {
+    key: 'addSidebarButton',
+    value: function addSidebarButton(button) {
+      button.classList.add(this.cssPrefix + '-sidebar-btn');
+      this.html.sidebar.appendChild(button);
     }
 
     /**
@@ -2087,7 +2353,45 @@ var ComponentsContainer = function (_ViewController) {
       this.components.add(component);
       this.html.container.appendChild(component.getHtmlContainer());
       component.onDestroy(this.componentDestroyListener);
+
+      this.addDragButtonToComponent(component);
       component.configToggle(showConfig);
+    }
+  }, {
+    key: 'addDragButtonToComponent',
+    value: function addDragButtonToComponent(component) {
+      var _this2 = this;
+
+      var dragBtn = document.createElement('button');
+      dragBtn.type = 'button';
+      dragBtn.title = 'Drag to reorder';
+      dragBtn.setAttribute('draggable', true);
+      dragBtn.classList.add('glyphicon', // Font-awesome
+      'glyphicon-menu-hamburger');
+
+      var draggingClass = this.modulePrefix + '--dragging';
+      dragBtn.addEventListener('dragstart', function (e) {
+        var container = component.getHtmlContainer();
+        var componentsArray = Array.from(_this2.components);
+        var containersArray = componentsArray.map(function (c) {
+          return c.getHtmlContainer();
+        });
+
+        container.classList.add(draggingClass);
+        e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+
+        // Take care of moving and reordering
+        utils.trackReorderDrag(e, container, containersArray);
+      });
+
+      dragBtn.addEventListener('dragend', function () {
+        var container = component.getHtmlContainer();
+        setTimeout(function () {
+          return container.classList.remove(draggingClass);
+        }, 250);
+      });
+
+      component.addSidebarButton(dragBtn);
     }
   }, {
     key: 'getAllComponents',
@@ -2114,10 +2418,10 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteAllComponents',
     value: function deleteAllComponents() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.components.forEach(function (comp) {
-        return _this2.deleteComponent(comp);
+        return _this3.deleteComponent(comp);
       });
     }
 
@@ -2131,11 +2435,11 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'setComponents',
     value: function setComponents(components) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this3.addComponent(comp, false);
+        return _this4.addComponent(comp, false);
       });
     }
   }]);

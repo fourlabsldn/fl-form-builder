@@ -96,18 +96,22 @@ export default class FormComponent extends ViewController {
     const showConfigBtn = document.createElement('button');
     showConfigBtn.type = 'button';
     showConfigBtn.classList.add(
-      `${sidebarCssClass}-btn`,
       'glyphicon', // Font-awesome
       'glyphicon-cog'
     );
     showConfigBtn.title = 'Configure form group';
-    this.html.sidebar.appendChild(showConfigBtn);
+    this.addSidebarButton(showConfigBtn);
 
     showConfigBtn.addEventListener('click', () => {
       this.configToggle();
     });
 
     this.html.container.appendChild(frag);
+  }
+
+  addSidebarButton(button) {
+    button.classList.add(`${this.cssPrefix}-sidebar-btn`);
+    this.html.sidebar.appendChild(button);
   }
 
   /**

@@ -1,5 +1,6 @@
 import ViewController from './ViewController';
 import FormComponent from './Components/FormComponent';
+import utils from './utils/utils';
 import assert from 'fl-assert';
 
 /**
@@ -29,7 +30,40 @@ export default class ComponentsContainer extends ViewController {
     this.components.add(component);
     this.html.container.appendChild(component.getHtmlContainer());
     component.onDestroy(this.componentDestroyListener);
+
+    this.addDragButtonToComponent(component);
     component.configToggle(showConfig);
+  }
+
+  addDragButtonToComponent(component) {
+    const dragBtn = document.createElement('button');
+    dragBtn.type = 'button';
+    dragBtn.title = 'Drag to reorder';
+    dragBtn.setAttribute('draggable', true);
+    dragBtn.classList.add(
+      'glyphicon', // Font-awesome
+      'glyphicon-menu-hamburger'
+    );
+
+    const draggingClass = `${this.modulePrefix}--dragging`;
+    dragBtn.addEventListener('dragstart', (e) => {
+      const container = component.getHtmlContainer();
+      const componentsArray = Array.from(this.components);
+      const containersArray = componentsArray.map(c => c.getHtmlContainer());
+
+      container.classList.add(draggingClass);
+      e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+
+      // Take care of moving and reordering
+      utils.trackReorderDrag(e, container, containersArray);
+    });
+
+    dragBtn.addEventListener('dragend', () => {
+      const container = component.getHtmlContainer();
+      setTimeout(() => container.classList.remove(draggingClass), 250);
+    });
+
+    component.addSidebarButton(dragBtn);
   }
 
   getAllComponents() {
