@@ -1765,6 +1765,21 @@ var FormComponent = function (_ViewController) {
     }
 
     /**
+     * Removes an option element
+     * @method removeOption
+     * @return {void}
+     */
+
+  }, {
+    key: 'removeOption',
+    value: function removeOption() {
+      var optionToRemove = this.html.options.pop();
+      if (optionToRemove) {
+        optionToRemove.remove();
+      }
+    }
+
+    /**
      * @method addEditable
      * @param  {HTMLElement} element
      */
@@ -2072,9 +2087,31 @@ var RadioBtns = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).call(this, modulePrefix));
 
+    _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
     return _this;
   }
+
+  _createClass(RadioBtns, [{
+    key: 'addOption',
+    value: function addOption(text) {
+      var newOption = document.createElement('div');
+      newOption.classList.add(this.cssPrefix + '-option');
+
+      var optionRadio = document.createElement('input');
+      optionRadio.type = 'radio';
+      newOption.appendChild(optionRadio);
+
+      var optionText = document.createElement('span');
+      optionText.classList.add(this.cssPrefix + '-option-text');
+      optionText.textContent = text;
+      newOption.appendChild(optionText);
+
+      this.html.options.push(newOption);
+      this.html.content.appendChild(newOption);
+      this.addEditable(optionText);
+    }
+  }]);
 
   return RadioBtns;
 }(FormComponent);
@@ -2111,21 +2148,13 @@ var Checkboxes = function (_FormComponent) {
       this.html.content.appendChild(newOption);
       this.addEditable(optionText);
     }
-  }, {
-    key: 'removeOption',
-    value: function removeOption() {
-      var optionToRemove = this.html.options.pop();
-      if (optionToRemove) {
-        optionToRemove.remove();
-      }
-    }
   }]);
 
   return Checkboxes;
 }(FormComponent);
 
-var Dropdown = function (_Component) {
-  _inherits(Dropdown, _Component);
+var Dropdown = function (_FormComponent) {
+  _inherits(Dropdown, _FormComponent);
 
   function Dropdown(modulePrefix) {
     _classCallCheck(this, Dropdown);
@@ -2135,6 +2164,32 @@ var Dropdown = function (_Component) {
     Object.preventExtensions(_this);
     return _this;
   }
+  //
+  // addOption(text) {
+  //   const newOption = document.createElement('div');
+  //   newOption.classList.add(`${this.cssPrefix}-option`);
+  //
+  //   const optionCheckbox = document.createElement('input');
+  //   optionCheckbox.type = 'checkbox';
+  //   newOption.appendChild(optionCheckbox);
+  //
+  //   const optionText = document.createElement('span');
+  //   optionText.classList.add(`${this.cssPrefix}-option-text`);
+  //   optionText.textContent = text;
+  //   newOption.appendChild(optionText);
+  //
+  //   this.html.options.push(newOption);
+  //   this.html.content.appendChild(newOption);
+  //   this.addEditable(optionText);
+  // }
+  //
+  // removeOption() {
+  //   const optionToRemove = this.html.options.pop();
+  //   if (optionToRemove) {
+  //     optionToRemove.remove();
+  //   }
+  // }
+
 
   return Dropdown;
 }(FormComponent);

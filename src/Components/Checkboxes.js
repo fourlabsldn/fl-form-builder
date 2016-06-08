@@ -24,11 +24,4 @@ export default class Checkboxes extends FormComponent {
     this.html.content.appendChild(newOption);
     this.addEditable(optionText);
   }
-
-  removeOption() {
-    const optionToRemove = this.html.options.pop();
-    if (optionToRemove) {
-      optionToRemove.remove();
-    }
-  }
 }

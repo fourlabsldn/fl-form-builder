@@ -175,6 +175,18 @@ export default class FormComponent extends ViewController {
   }
 
   /**
+   * Removes an option element
+   * @method removeOption
+   * @return {void}
+   */
+  removeOption() {
+    const optionToRemove = this.html.options.pop();
+    if (optionToRemove) {
+      optionToRemove.remove();
+    }
+  }
+
+  /**
    * @method addEditable
    * @param  {HTMLElement} element
    */
