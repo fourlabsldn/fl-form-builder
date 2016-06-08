@@ -2612,126 +2612,130 @@ var Dropdown = function (_FormComponent) {
   return Dropdown;
 }(FormComponent);
 
-var TextBox = function (_FormComponent) {
-  _inherits(TextBox, _FormComponent);
+/**
+ * @abstract @class TextComponent
+ */
+
+var TextComponent = function (_FormComponent) {
+  _inherits(TextComponent, _FormComponent);
+
+  function TextComponent(modulePrefix, tagName) {
+    var fieldType = arguments.length <= 2 || arguments[2] === undefined ? 'text' : arguments[2];
+
+    _classCallCheck(this, TextComponent);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextComponent).call(this, modulePrefix));
+
+    _this.fieldType = fieldType;
+    _this.buildComponent(tagName, fieldType);
+
+    // We need to call enableEditing here again because the when it was
+    // called by the parent class this.html.textElement still didn't exist
+    _this.enableEditing(true);
+    _this.focus();
+    return _this;
+  }
+
+  _createClass(TextComponent, [{
+    key: 'buildComponent',
+    value: function buildComponent(tagName, fieldType) {
+      var textElement = document.createElement(tagName);
+      textElement.type = fieldType;
+
+      textElement.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
+      );
+      textElement.placeholder = 'Insert a placeholder text';
+
+      this.html.textElement = textElement;
+      this.focusElement = textElement;
+      this.html.content.appendChild(textElement);
+    }
+
+    /**
+     * @override @method enableEditing
+     * @param  {Boolean} enable
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      _get(Object.getPrototypeOf(TextComponent.prototype), 'enableEditing', this).call(this, enable);
+      if (!this.html.textElement) {
+        return;
+      }
+      if (enable) {
+        this.html.textElement.value = this.html.textElement.placeholder;
+        this.html.textElement.type = 'text';
+        this.html.textElement.placeholder = '';
+      } else {
+        this.html.textElement.placeholder = this.html.textElement.value;
+        this.html.textElement.type = this.fieldType;
+        this.html.textElement.value = '';
+      }
+    }
+
+    /**
+     * @override @method exportContent
+     * @return {Object}
+     */
+
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportContent', this).call(this);
+      output.placeholder = this.html.textElement.placeholder;
+      return output;
+    }
+  }]);
+
+  return TextComponent;
+}(FormComponent);
+
+var TextBox = function (_TextComponent) {
+  _inherits(TextBox, _TextComponent);
 
   function TextBox(modulePrefix) {
     _classCallCheck(this, TextBox);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).call(this, modulePrefix));
-
-    _this.buildComponent();
-    Object.preventExtensions(_this);
-
-    // We need to call enableEditing here again because the when it was
-    // called by the parent class this.html.textBox still didn't exist
-    _this.enableEditing(true);
-    _this.focus();
-    return _this;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).call(this, modulePrefix, 'input', 'text'));
   }
 
-  _createClass(TextBox, [{
-    key: 'buildComponent',
-    value: function buildComponent() {
-      var textBox = document.createElement('input');
-      textBox.type = 'text';
-      textBox.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
-      );
-      textBox.placeholder = 'Insert a placeholder text';
-
-      this.html.textBox = textBox;
-      this.focusElement = textBox;
-      this.html.content.appendChild(textBox);
-    }
-
-    /**
-     * @override @method enableEditing
-     * @param  {Boolean} enable
-     * @return {void}
-     */
-
-  }, {
-    key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      _get(Object.getPrototypeOf(TextBox.prototype), 'enableEditing', this).call(this, enable);
-      if (!this.html.textBox) {
-        return;
-      }
-      if (enable) {
-        this.html.textBox.value = this.html.textBox.placeholder;
-        this.html.textBox.placeholder = '';
-      } else {
-        this.html.textBox.placeholder = this.html.textBox.value;
-        this.html.textBox.value = '';
-      }
-    }
-  }]);
-
   return TextBox;
-}(FormComponent);
+}(TextComponent);
 
-var TextArea = function (_FormComponent) {
-  _inherits(TextArea, _FormComponent);
+var TextArea = function (_TextComponent) {
+  _inherits(TextArea, _TextComponent);
 
   function TextArea(modulePrefix) {
     _classCallCheck(this, TextArea);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).call(this, modulePrefix));
-
-    _this.buildComponent();
-    Object.preventExtensions(_this);
-
-    // We need to call enableEditing here again because the when it was
-    // called by the parent class this.html.textArea still didn't exist
-    _this.enableEditing(true);
-    _this.focus();
-    return _this;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).call(this, modulePrefix, 'textarea'));
   }
+
+  /**
+   * @override @method buildComponent
+   */
+
 
   _createClass(TextArea, [{
     key: 'buildComponent',
     value: function buildComponent() {
-      var textArea = document.createElement('textarea');
-      textArea.setAttribute('rows', 5);
+      var _get2;
 
-      textArea.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
-      );
-      textArea.placeholder = 'Insert a placeholder text';
-
-      this.html.textArea = textArea;
-      this.focusElement = textArea;
-      this.html.content.appendChild(textArea);
-    }
-
-    /**
-     * @override @method enableEditing
-     * @param  {Boolean} enable
-     * @return {void}
-     */
-
-  }, {
-    key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      _get(Object.getPrototypeOf(TextArea.prototype), 'enableEditing', this).call(this, enable);
-      if (!this.html.textArea) {
-        return;
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
-      if (enable) {
-        this.html.textArea.value = this.html.textArea.placeholder;
-        this.html.textArea.placeholder = '';
-      } else {
-        this.html.textArea.placeholder = this.html.textArea.value;
-        this.html.textArea.value = '';
-      }
+
+      (_get2 = _get(Object.getPrototypeOf(TextArea.prototype), 'buildComponent', this)).call.apply(_get2, [this].concat(args));
+      this.html.textElement.setAttribute('rows', 5);
     }
   }]);
 
   return TextArea;
-}(FormComponent);
+}(TextComponent);
 
 /**
  * @class ControlBar
