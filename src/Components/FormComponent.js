@@ -12,7 +12,7 @@ export default class FormComponent extends ViewController {
     this.html.container.classList.add(`${modulePrefix}-FormComponent`);
 
     this.editables = new Set();
-    this.deleteListeners = [];
+    this.destroyListeners = new Set();
     this.isRequired = false;
     this.isConfigVisible = false;
     this.isDetroyed = false;
@@ -20,7 +20,6 @@ export default class FormComponent extends ViewController {
     // Focused on config show
     this.focusElement = null;
     this.buildHtml();
-    this.configToggle(true);
     this.setRequired(false);
   }
 
@@ -59,7 +58,7 @@ export default class FormComponent extends ViewController {
       const checked = this.html.requiredSwitch;
       this.setRequired(checked);
     });
-    configurationButtons.appendChild(requiredSwitch);
+    configurationButtons.appendChild(this.html.requiredSwitch);
 
     const okBtn = document.createElement('button');
     okBtn.classList.add(
@@ -139,8 +138,9 @@ export default class FormComponent extends ViewController {
    * @param  {Boolean} forceState Optional parameter to force a state.
    * @return {void}
    */
-  configToggle(forceState = false) {
-    if (this.isConfigVisible && !forceState) {
+  configToggle(newState = !this.isConfigVisible) {
+    this.isConfigVisible = newState;
+    if (!newState) {
       // hide
       this.html.container.classList.remove(`${this.cssPrefix}--configuration-visible`);
       this.enableEditing(false);
@@ -158,7 +158,6 @@ export default class FormComponent extends ViewController {
       );
       this.focus();
     }
-    this.isConfigVisible = !this.isConfigVisible;
   }
 
   // Focus on the appropriate element
@@ -177,13 +176,17 @@ export default class FormComponent extends ViewController {
    * @return {void}
    */
   onDestroy(fn) {
-    this.deleteListeners.push(fn);
+    this.destroyListeners.add(fn);
+  }
+
+  removeDestroyListener(fn) {
+    this.destroyListeners.delete(fn);
   }
 
   destroy() {
     if (this.isDetroyed) { return; }
     this.isDetroyed = true;
-    this.deleteListeners.forEach(fn => fn(this));
+    this.destroyListeners.forEach(fn => fn(this));
     super.destroy();
   }
 
@@ -217,8 +220,9 @@ export default class FormComponent extends ViewController {
    * @return {void}
    */
   importState(state) {
-    assert(state.title === this.constructor.name);
-    this.html.title = state.title;
+    assert(state.type === this.constructor.name,
+      `Importing incompatible state. Expected ${this.constructor.name}, got ${state.type}`);
+    this.html.title.textContent = state.title;
     this.setRequired(state.required);
   }
 }

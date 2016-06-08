@@ -9,9 +9,6 @@ export default class TextComponent extends FormComponent {
     this.fieldType = fieldType;
     this.buildComponent(tagName, fieldType);
 
-    // We need to call enableEditing here again because the when it was
-    // called by the parent class this.html.textElement still didn't exist
-    this.enableEditing(true);
     this.focus();
   }
 
@@ -23,11 +20,11 @@ export default class TextComponent extends FormComponent {
       `${this.cssPrefix}-${this.constructor.name}`,
       'form-control' // Bootstrap
     );
-    textElement.placeholder = 'Insert a placeholder text';
-
     this.html.textElement = textElement;
     this.focusElement = textElement;
     this.html.content.appendChild(textElement);
+
+    this.setPlaceholder('Insert a placeholder text');
   }
 
   /**
@@ -39,14 +36,26 @@ export default class TextComponent extends FormComponent {
     super.enableEditing(enable);
     if (!this.html.textElement) { return; }
     if (enable) {
-      this.html.textElement.value = this.html.textElement.placeholder;
+      this.html.textElement.value = this.getPlaceholder();
       this.html.textElement.type = 'text';
-      this.html.textElement.placeholder = '';
-    } else {
-      this.html.textElement.placeholder = this.html.textElement.value;
-      this.html.textElement.type = this.fieldType;
-      this.html.textElement.value = '';
+      return;
     }
+    if (this.html.textElement.value) {
+      this.setPlaceholder(this.html.textElement.value);
+    }
+    this.html.textElement.type = this.fieldType;
+    this.html.textElement.value = '';
+  }
+
+  setPlaceholder(text) {
+    if (this.isConfigVisible) {
+      this.html.textElement.value = text;
+    }
+    this.html.textElement.setAttribute('placeholder', text);
+  }
+
+  getPlaceholder() {
+    return this.html.textElement.getAttribute('placeholder');
   }
 
   /**
@@ -55,7 +64,7 @@ export default class TextComponent extends FormComponent {
    */
   exportState() {
     const output = super.exportState();
-    output.placeholder = this.html.textElement.placeholder;
+    output.placeholder = this.getPlaceholder();
     return output;
   }
 
@@ -66,6 +75,6 @@ export default class TextComponent extends FormComponent {
    */
   importState(state) {
     super.importState(state);
-    this.html.textElement.setAttribute('placeholder', state.placeholder);
+    this.setPlaceholder(state.placeholder);
   }
 }

@@ -1798,7 +1798,7 @@ var FormComponent = function (_ViewController) {
     _this.html.container.classList.add(modulePrefix + '-FormComponent');
 
     _this.editables = new Set();
-    _this.deleteListeners = [];
+    _this.destroyListeners = new Set();
     _this.isRequired = false;
     _this.isConfigVisible = false;
     _this.isDetroyed = false;
@@ -1806,7 +1806,6 @@ var FormComponent = function (_ViewController) {
     // Focused on config show
     _this.focusElement = null;
     _this.buildHtml();
-    _this.configToggle(true);
     _this.setRequired(false);
     return _this;
   }
@@ -1848,7 +1847,7 @@ var FormComponent = function (_ViewController) {
         var checked = _this2.html.requiredSwitch;
         _this2.setRequired(checked);
       });
-      configurationButtons.appendChild(requiredSwitch);
+      configurationButtons.appendChild(this.html.requiredSwitch);
 
       var okBtn = document.createElement('button');
       okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
@@ -1931,9 +1930,10 @@ var FormComponent = function (_ViewController) {
     value: function configToggle() {
       var _this3 = this;
 
-      var forceState = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+      var newState = arguments.length <= 0 || arguments[0] === undefined ? !this.isConfigVisible : arguments[0];
 
-      if (this.isConfigVisible && !forceState) {
+      this.isConfigVisible = newState;
+      if (!newState) {
         // hide
         this.html.container.classList.remove(this.cssPrefix + '--configuration-visible');
         this.enableEditing(false);
@@ -1950,7 +1950,6 @@ var FormComponent = function (_ViewController) {
         });
         this.focus();
       }
-      this.isConfigVisible = !this.isConfigVisible;
     }
 
     // Focus on the appropriate element
@@ -1979,7 +1978,12 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'onDestroy',
     value: function onDestroy(fn) {
-      this.deleteListeners.push(fn);
+      this.destroyListeners.add(fn);
+    }
+  }, {
+    key: 'removeDestroyListener',
+    value: function removeDestroyListener(fn) {
+      this.destroyListeners.delete(fn);
     }
   }, {
     key: 'destroy',
@@ -1990,7 +1994,7 @@ var FormComponent = function (_ViewController) {
         return;
       }
       this.isDetroyed = true;
-      this.deleteListeners.forEach(function (fn) {
+      this.destroyListeners.forEach(function (fn) {
         return fn(_this5);
       });
       _get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
@@ -2035,8 +2039,8 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'importState',
     value: function importState(state) {
-      assert(state.title === this.constructor.name);
-      this.html.title = state.title;
+      assert(state.type === this.constructor.name, 'Importing incompatible state. Expected ' + this.constructor.name + ', got ' + state.type);
+      this.html.title.textContent = state.title;
       this.setRequired(state.required);
     }
   }]);
@@ -2057,6 +2061,12 @@ var ComponentsContainer = function (_ViewController) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
     _this.components = new Set();
+
+    // Used with component.ondestroy;
+    _this.componentDestroyListener = function (component) {
+      _this.deleteComponent(component);
+    };
+
     Object.preventExtensions(_this);
     return _this;
   }
@@ -2064,32 +2074,36 @@ var ComponentsContainer = function (_ViewController) {
   /**
    * @method addComponent
    * @param  {FormComponent} component
+   * @param  {Boolean} showConfig
    */
 
 
   _createClass(ComponentsContainer, [{
     key: 'addComponent',
     value: function addComponent(component) {
-      var _this2 = this;
+      var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
       this.components.add(component);
       this.html.container.appendChild(component.getHtmlContainer());
-      component.onDestroy(function () {
-        return _this2.deleteComponent(component);
-      });
+      component.onDestroy(this.componentDestroyListener);
+      component.configToggle(showConfig);
+    }
+  }, {
+    key: 'getAllComponents',
+    value: function getAllComponents() {
+      return Array.from(this.components);
     }
   }, {
     key: 'deleteComponent',
     value: function deleteComponent(component) {
       if (!this.components.has(component)) {
-        assert.warn(false, 'Component being deleted is not part of component list.');
+        console.warn('Removing component not in container');
         return;
       }
       this.components.delete(component);
-      if (!component.isDestroyed) {
-        component.destroy();
-      }
+      component.removeDestroyListener(this.componentDestroyListener);
+      component.destroy();
     }
     /**
      * Deletes all components
@@ -2100,10 +2114,10 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteAllComponents',
     value: function deleteAllComponents() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.components.forEach(function (comp) {
-        return _this3.deleteComponent(comp);
+        return _this2.deleteComponent(comp);
       });
     }
 
@@ -2117,43 +2131,12 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'setComponents',
     value: function setComponents(components) {
-      var _this4 = this;
+      var _this3 = this;
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this4.addComponent(comp);
+        return _this3.addComponent(comp, false);
       });
-    }
-  }, {
-    key: 'exportState',
-    value: function exportState() {
-      var outcome = [];
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var component = _step.value;
-
-          outcome.push(component.exportState());
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return outcome;
     }
   }]);
 
@@ -2497,6 +2480,41 @@ var Dropdown = function (_OptionsComponent) {
       });
       return output;
     }
+
+    /**
+     * @override @method importState
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState(state) {
+      _get(Object.getPrototypeOf(Dropdown.prototype), 'importState', this).call(this, state);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = state.disabledIndexes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var disabledIndex = _step.value;
+
+          this.html.options[disabledIndex].setAttribute('disabled', true);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
   }]);
 
   return Dropdown;
@@ -2519,9 +2537,6 @@ var TextComponent = function (_FormComponent) {
     _this.fieldType = fieldType;
     _this.buildComponent(tagName, fieldType);
 
-    // We need to call enableEditing here again because the when it was
-    // called by the parent class this.html.textElement still didn't exist
-    _this.enableEditing(true);
     _this.focus();
     return _this;
   }
@@ -2534,11 +2549,11 @@ var TextComponent = function (_FormComponent) {
 
       textElement.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
-      textElement.placeholder = 'Insert a placeholder text';
-
       this.html.textElement = textElement;
       this.focusElement = textElement;
       this.html.content.appendChild(textElement);
+
+      this.setPlaceholder('Insert a placeholder text');
     }
 
     /**
@@ -2557,14 +2572,28 @@ var TextComponent = function (_FormComponent) {
         return;
       }
       if (enable) {
-        this.html.textElement.value = this.html.textElement.placeholder;
+        this.html.textElement.value = this.getPlaceholder();
         this.html.textElement.type = 'text';
-        this.html.textElement.placeholder = '';
-      } else {
-        this.html.textElement.placeholder = this.html.textElement.value;
-        this.html.textElement.type = this.fieldType;
-        this.html.textElement.value = '';
+        return;
       }
+      if (this.html.textElement.value) {
+        this.setPlaceholder(this.html.textElement.value);
+      }
+      this.html.textElement.type = this.fieldType;
+      this.html.textElement.value = '';
+    }
+  }, {
+    key: 'setPlaceholder',
+    value: function setPlaceholder(text) {
+      if (this.isConfigVisible) {
+        this.html.textElement.value = text;
+      }
+      this.html.textElement.setAttribute('placeholder', text);
+    }
+  }, {
+    key: 'getPlaceholder',
+    value: function getPlaceholder() {
+      return this.html.textElement.getAttribute('placeholder');
     }
 
     /**
@@ -2576,7 +2605,7 @@ var TextComponent = function (_FormComponent) {
     key: 'exportState',
     value: function exportState() {
       var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
-      output.placeholder = this.html.textElement.placeholder;
+      output.placeholder = this.getPlaceholder();
       return output;
     }
 
@@ -2590,7 +2619,7 @@ var TextComponent = function (_FormComponent) {
     key: 'importState',
     value: function importState(state) {
       _get(Object.getPrototypeOf(TextComponent.prototype), 'importState', this).call(this, state);
-      this.html.textElement.setAttribute('placeholder', state.placeholder);
+      this.setPlaceholder(state.placeholder);
     }
   }]);
 
@@ -2651,27 +2680,27 @@ var ComponentFabric = function () {
     this.modulePrefix = modulePrefix;
 
     this.componentTypes = {
-      radioBtns: {
+      RadioBtns: {
         description: 'Radio buttons',
         Contructor: RadioBtns,
         iconClass: 'glyphicon glyphicon-ok-circle'
       },
-      checkboxes: {
+      Checkboxes: {
         description: 'Checkboxes',
         Contructor: Checkboxes,
         iconClass: 'glyphicon glyphicon-check'
       },
-      dropdown: {
+      Dropdown: {
         description: 'Dropdown',
         Contructor: Dropdown,
         iconClass: 'glyphicon glyphicon-collapse-down'
       },
-      textBox: {
+      TextBox: {
         description: 'Text box',
         Contructor: TextBox,
         iconClass: 'glyphicon glyphicon-text-width'
       },
-      textArea: {
+      TextArea: {
         description: 'Text area',
         Contructor: TextArea,
         iconClass: 'glyphicon glyphicon-text-height'
@@ -2822,6 +2851,16 @@ var ControlBar = function (_ViewController) {
       });
       frag.appendChild(saveBtn);
 
+      // Create Import button
+      var importBtn = document.createElement('button');
+      importBtn.className = this.cssPrefix + '-button-save';
+      importBtn.classList.add('btn', 'btn-default'); // Bootstrap
+      importBtn.textContent = 'Import';
+      importBtn.addEventListener('click', function () {
+        return _this2.moduleCoordinator.importState();
+      });
+      frag.appendChild(importBtn);
+
       this.html.container.appendChild(frag);
     }
   }]);
@@ -2886,8 +2925,66 @@ var Coordinator = function () {
   }, {
     key: 'save',
     value: function save() {
-      var content = this.componentsContainer.exportState();
+      var content = this.exportState();
       this.storage.saveContent(content);
+    }
+
+    /**
+     * @method exportState
+     * @return {Array<Object>} - each component is a state object for a FormComponent
+     */
+
+  }, {
+    key: 'exportState',
+    value: function exportState() {
+      var components = this.componentsContainer.getAllComponents();
+      var outcome = [];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var component = _step.value;
+
+          outcome.push(component.exportState());
+        }
+        // return outcome;
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      var imported = '[{"required":false,"title":"aaaaaa","type":"RadioBtns","options":["Insert an option"]},{"required":false,"title":"bbbbbb","type":"Checkboxes","options":[]},{"required":false,"title":"CCCCC","type":"Dropdown","options":["Select an option","option 2","option 3 [disabled]"],"disabledIndexes":[0,2]},{"required":false,"title":"DDDDD","type":"TextBox","placeholder":"pppppppppp"},{"required":false,"title":"eEeEeE","type":"TextArea","placeholder":"p2p2p2"}]';
+      return JSON.parse(imported);
+    }
+  }, {
+    key: 'importState',
+    value: function importState() {
+      var _this = this;
+
+      var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
+
+      this.componentsContainer.deleteAllComponents();
+
+      var components = [];
+      state.forEach(function (componentState) {
+        var component = _this.componentFabric.createComponent(componentState.type);
+        component.importState(componentState);
+        components.push(component);
+      });
+
+      this.componentsContainer.setComponents(components);
     }
   }]);
 

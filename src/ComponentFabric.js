@@ -13,27 +13,27 @@ export default class ComponentFabric {
     this.modulePrefix = modulePrefix;
 
     this.componentTypes = {
-      radioBtns: {
+      RadioBtns: {
         description: 'Radio buttons',
         Contructor: RadioBtns,
         iconClass: 'glyphicon glyphicon-ok-circle',
       },
-      checkboxes: {
+      Checkboxes: {
         description: 'Checkboxes',
         Contructor: Checkboxes,
         iconClass: 'glyphicon glyphicon-check',
       },
-      dropdown: {
+      Dropdown: {
         description: 'Dropdown',
         Contructor: Dropdown,
         iconClass: 'glyphicon glyphicon-collapse-down',
       },
-      textBox: {
+      TextBox: {
         description: 'Text box',
         Contructor: TextBox,
         iconClass: 'glyphicon glyphicon-text-width',
       },
-      textArea: {
+      TextArea: {
         description: 'Text area',
         Contructor: TextArea,
         iconClass: 'glyphicon glyphicon-text-height',

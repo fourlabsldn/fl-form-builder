@@ -39,6 +39,14 @@ export default class ControlBar extends ViewController {
     saveBtn.addEventListener('click', () => this.moduleCoordinator.save());
     frag.appendChild(saveBtn);
 
+    // Create Import button
+    const importBtn = document.createElement('button');
+    importBtn.className = `${this.cssPrefix}-button-save`;
+    importBtn.classList.add('btn', 'btn-default'); // Bootstrap
+    importBtn.textContent = 'Import';
+    importBtn.addEventListener('click', () => this.moduleCoordinator.importState());
+    frag.appendChild(importBtn);
+
     this.html.container.appendChild(frag);
   }
 }

@@ -9,28 +9,41 @@ export default class ComponentsContainer extends ViewController {
   constructor(modulePrefix) {
     super(modulePrefix);
     this.components = new Set();
+
+    // Used with component.ondestroy;
+    this.componentDestroyListener = (component) => {
+      this.deleteComponent(component);
+    };
+
     Object.preventExtensions(this);
   }
 
   /**
    * @method addComponent
    * @param  {FormComponent} component
+   * @param  {Boolean} showConfig
    */
-  addComponent(component) {
+  addComponent(component, showConfig = true) {
     assert(component instanceof FormComponent,
       'Invalid component being added. No an instance of Component.');
     this.components.add(component);
     this.html.container.appendChild(component.getHtmlContainer());
-    component.onDestroy(() => this.deleteComponent(component));
+    component.onDestroy(this.componentDestroyListener);
+    component.configToggle(showConfig);
+  }
+
+  getAllComponents() {
+    return Array.from(this.components);
   }
 
   deleteComponent(component) {
     if (!this.components.has(component)) {
-      assert.warn(false, 'Component being deleted is not part of component list.');
+      console.warn('Removing component not in container');
       return;
     }
     this.components.delete(component);
-    if (!component.isDestroyed) { component.destroy(); }
+    component.removeDestroyListener(this.componentDestroyListener);
+    component.destroy();
   }
   /**
    * Deletes all components
@@ -49,14 +62,6 @@ export default class ComponentsContainer extends ViewController {
    */
   setComponents(components) {
     this.deleteAllComponents();
-    components.forEach(comp => this.addComponent(comp));
-  }
-
-  exportState() {
-    const outcome = [];
-    for (const component of this.components) {
-      outcome.push(component.exportState());
-    }
-    return outcome;
+    components.forEach(comp => this.addComponent(comp, false));
   }
 }

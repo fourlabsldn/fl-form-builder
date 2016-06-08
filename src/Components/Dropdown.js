@@ -93,4 +93,16 @@ export default class Dropdown extends OptionsComponent {
     });
     return output;
   }
+
+
+  /**
+   * @override @method importState
+   * @return {void}
+   */
+  importState(state) {
+    super.importState(state);
+    for (const disabledIndex of state.disabledIndexes) {
+      this.html.options[disabledIndex].setAttribute('disabled', true);
+    }
+  }
 }
