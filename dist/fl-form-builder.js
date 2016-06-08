@@ -1871,6 +1871,8 @@ var FormComponent = function (_ViewController) {
         }
         return true;
       });
+
+      this.focus();
     }
 
     /**
@@ -1947,18 +1949,26 @@ var FormComponent = function (_ViewController) {
             _this4.configToggle();
           }
         });
-
-        // Focus on the appropriate element
-        if (this.focusElement) {
-          // NOTE: There is a bug that for some reason it doesn't focus if you just
-          // call focus() straight away. setTimeout solves it.
-          // see http:// goo.gl/UjKOk5
-          setTimeout(function () {
-            _this4.focusElement.focus();
-          }, 15);
-        }
+        this.focus();
       }
       this.isConfigVisible = !this.isConfigVisible;
+    }
+
+    // Focus on the appropriate element
+
+  }, {
+    key: 'focus',
+    value: function focus() {
+      var _this5 = this;
+
+      if (this.focusElement) {
+        // NOTE: There is a bug that for some reason it doesn't focus if you just
+        // call focus() straight away. setTimeout solves it.
+        // see http:// goo.gl/UjKOk5
+        setTimeout(function () {
+          _this5.focusElement.focus();
+        }, 15);
+      }
     }
 
     /**
@@ -1975,14 +1985,14 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.isDetroyed) {
         return;
       }
       this.isDetroyed = true;
       this.deleteListeners.forEach(function (fn) {
-        return fn(_this5);
+        return fn(_this6);
       });
       _get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
     }
@@ -2219,6 +2229,8 @@ var RadioBtns = function (_Component) {
 
     _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
+
+    _this.addOption('Insert an option');
     return _this;
   }
 
@@ -2256,6 +2268,8 @@ var Checkboxes = function (_FormComponent) {
 
     _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
+
+    _this.addOption('Insert an option');
     return _this;
   }
 

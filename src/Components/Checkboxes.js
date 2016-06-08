@@ -5,6 +5,8 @@ export default class Checkboxes extends FormComponent {
     super(modulePrefix);
     this.buildOptionsConfiguration();
     Object.preventExtensions(this);
+
+    this.addOption('Insert an option');
   }
 
   addOption(text) {

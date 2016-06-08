@@ -172,6 +172,8 @@ export default class FormComponent extends ViewController {
       }
       return true;
     });
+
+    this.focus();
   }
 
   /**
@@ -231,16 +233,19 @@ export default class FormComponent extends ViewController {
           if (this.isConfigVisible && !this.isDetroyed) { this.configToggle(); }
         }
       );
-
-      // Focus on the appropriate element
-      if (this.focusElement) {
-        // NOTE: There is a bug that for some reason it doesn't focus if you just
-        // call focus() straight away. setTimeout solves it.
-        // see http:// goo.gl/UjKOk5
-        setTimeout(() => { this.focusElement.focus(); }, 15);
-      }
+      this.focus();
     }
     this.isConfigVisible = !this.isConfigVisible;
+  }
+
+  // Focus on the appropriate element
+  focus() {
+    if (this.focusElement) {
+      // NOTE: There is a bug that for some reason it doesn't focus if you just
+      // call focus() straight away. setTimeout solves it.
+      // see http:// goo.gl/UjKOk5
+      setTimeout(() => { this.focusElement.focus(); }, 15);
+    }
   }
 
   /**
