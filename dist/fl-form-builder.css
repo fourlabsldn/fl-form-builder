@@ -60,7 +60,11 @@
   display: block; }
 
 .fl-fb-FormComponent-option-text {
-  margin-left: 5px; }
+  margin-left: 10px;
+  font-weight: bold; }
+
+.fl-fb-FormComponent-TextArea {
+  resize: none; }
 
 .fl-fb-FormComponent-sidebar {
   position: absolute;
@@ -94,7 +98,8 @@
   .fl-fb-FormComponent:hover .fl-fb-FormComponent-sidebar,
   .fl-fb-FormComponent--configuration-visible .fl-fb-FormComponent-sidebar {
     visibility: visible;
-    opacity: 1; }
+    opacity: 1;
+    opacity: .8; }
 
 .fl-fb-FormComponent-sidebar-btn {
   background-color: transparent;

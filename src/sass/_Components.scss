@@ -39,7 +39,12 @@
 }
 
 .fl-fb-FormComponent-option-text {
-  margin-left: 5px;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.fl-fb-FormComponent-TextArea {
+  resize: none;
 }
 // =========================================================
 //                     Sidebar
@@ -68,6 +73,7 @@
   .fl-fb-FormComponent:hover &,
   .fl-fb-FormComponent--configuration-visible & {
     @include fade-visible();
+    opacity: .8;
   }
 }
 
