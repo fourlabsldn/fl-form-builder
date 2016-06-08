@@ -2291,35 +2291,56 @@ var Dropdown = function (_FormComponent) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this, modulePrefix));
 
+    _this.buildComponent();
+    _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
     return _this;
   }
-  //
-  // addOption(text) {
-  //   const newOption = document.createElement('div');
-  //   newOption.classList.add(`${this.cssPrefix}-option`);
-  //
-  //   const optionCheckbox = document.createElement('input');
-  //   optionCheckbox.type = 'checkbox';
-  //   newOption.appendChild(optionCheckbox);
-  //
-  //   const optionText = document.createElement('span');
-  //   optionText.classList.add(`${this.cssPrefix}-option-text`);
-  //   optionText.textContent = text;
-  //   newOption.appendChild(optionText);
-  //
-  //   this.html.options.push(newOption);
-  //   this.html.content.appendChild(newOption);
-  //   this.addEditable(optionText);
-  // }
-  //
-  // removeOption() {
-  //   const optionToRemove = this.html.options.pop();
-  //   if (optionToRemove) {
-  //     optionToRemove.remove();
-  //   }
-  // }
 
+  _createClass(Dropdown, [{
+    key: 'buildComponent',
+    value: function buildComponent() {
+      var dropdown = document.createElement('select');
+      dropdown.setAttribute('multiple', true);
+      dropdown.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
+      );
+
+      this.html.dropdown = dropdown;
+      this.focusElement = dropdown;
+      this.html.content.appendChild(dropdown);
+    }
+  }, {
+    key: 'addOption',
+    value: function addOption(text) {
+      var newOption = document.createElement('option');
+      newOption.textContent = text;
+
+      this.html.options.push(newOption);
+      this.html.dropdown.appendChild(newOption);
+    }
+
+    /**
+     * @override @method enableEditing
+     * @param  {Boolean} enable
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      _get(Object.getPrototypeOf(Dropdown.prototype), 'enableEditing', this).call(this, enable);
+      if (!this.html.dropdown) {
+        return;
+      }
+      if (enable) {
+        this.html.dropdown.setAttribute('multiple', true);
+      } else {
+        this.html.dropdown.removeAttribute('multiple');
+      }
+    }
+  }]);
 
   return Dropdown;
 }(FormComponent);
@@ -2342,12 +2363,11 @@ var TextBox = function (_FormComponent) {
     value: function buildComponent() {
       var textBox = document.createElement('input');
       textBox.type = 'text';
-      textBox.classList.add(this.cssPrefix + '-textBox', 'form-control' // Bootstrap
+      textBox.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
       textBox.placeholder = 'Test';
 
       this.addEditable(textBox);
-      this.html.container.appendChild(textBox);
       this.html.textBox = textBox;
       this.focusElement = textBox;
       this.html.content.appendChild(textBox);
@@ -2376,12 +2396,11 @@ var TextArea = function (_FormComponent) {
       var textArea = document.createElement('textarea');
       textArea.setAttribute('rows', 5);
 
-      textArea.classList.add(this.cssPrefix + '-textArea', 'form-control' // Bootstrap
+      textArea.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
       textArea.placeholder = 'Test';
 
       this.addEditable(textArea);
-      this.html.container.appendChild(textArea);
       this.html.textArea = textArea;
       this.focusElement = textArea;
       this.html.content.appendChild(textArea);
