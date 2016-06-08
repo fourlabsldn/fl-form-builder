@@ -3,15 +3,30 @@ import Component from './FormComponent';
 export default class Checkboxes extends Component {
   constructor(modulePrefix) {
     super(modulePrefix);
+    this.html.options = [];
     this.buildOptionsConfiguration();
     Object.preventExtensions(this);
   }
 
-  addOption() {
-    console.log('Adding an option');
+  addOption(text) {
+    const newOption = document.createElement('div');
+    newOption.classList.add(`${this.cssPrefix}-option`);
+
+    const optionCheckbox = document.createElement('input');
+    optionCheckbox.type = 'checkbox';
+    newOption.appendChild(optionCheckbox);
+
+    const optionText = document.createElement('span');
+    optionText.textContent = text;
+    newOption.appendChild(optionText);
+
+    this.html.options.push(newOption);
+    this.html.content.appendChild(newOption);
+    this.addEditable(optionText);
   }
 
   removeOption() {
-    console.log('Removing an option');
+    const optionToRemove = this.html.options.pop();
+    optionToRemove.remove();
   }
 }

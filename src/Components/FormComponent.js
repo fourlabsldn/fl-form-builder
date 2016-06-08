@@ -179,6 +179,9 @@ export default class FormComponent extends ViewController {
   addEditable(element) {
     element.classList.add(`${this.cssPrefix}-editable`);
     this.editables.add(element);
+    if (this.isConfigVisible) {
+      this.enableEditing(true);
+    }
   }
 
   /**

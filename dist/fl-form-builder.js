@@ -1624,7 +1624,6 @@ var FormComponent = function (_ViewController) {
 
     // Focused on config show
     _this.focusElement = null;
-    _this.content = [];
 
     _this.buildHtml();
     _this.configToggle(true);
@@ -1773,6 +1772,9 @@ var FormComponent = function (_ViewController) {
     value: function addEditable(element) {
       element.classList.add(this.cssPrefix + '-editable');
       this.editables.add(element);
+      if (this.isConfigVisible) {
+        this.enableEditing(true);
+      }
     }
 
     /**
@@ -2064,6 +2066,7 @@ var Checkboxes = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
 
+    _this.html.options = [];
     _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
     return _this;
@@ -2071,13 +2074,27 @@ var Checkboxes = function (_Component) {
 
   _createClass(Checkboxes, [{
     key: 'addOption',
-    value: function addOption() {
-      console.log('Adding an option');
+    value: function addOption(text) {
+      var newOption = document.createElement('div');
+      newOption.classList.add(this.cssPrefix + '-option');
+
+      var optionCheckbox = document.createElement('input');
+      optionCheckbox.type = 'checkbox';
+      newOption.appendChild(optionCheckbox);
+
+      var optionText = document.createElement('span');
+      optionText.textContent = text;
+      newOption.appendChild(optionText);
+
+      this.html.options.push(newOption);
+      this.html.content.appendChild(newOption);
+      this.addEditable(optionText);
     }
   }, {
     key: 'removeOption',
     value: function removeOption() {
-      console.log('Removing an option');
+      var optionToRemove = this.html.options.pop();
+      optionToRemove.remove();
     }
   }]);
 
