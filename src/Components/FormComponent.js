@@ -86,7 +86,7 @@ export default class FormComponent extends ViewController {
       'glyphicon-trash'
     );
     deleteBtn.type = 'button';
-    deleteBtn.addEventListener('click', () => this.delete());
+    deleteBtn.addEventListener('click', () => this.destroy());
     configurationButtons.appendChild(deleteBtn);
 
     // -- Sidebar --
@@ -244,18 +244,19 @@ export default class FormComponent extends ViewController {
   }
 
   /**
-   * @method onDelete
+   * @method onDestroy
    * @param  {function} fn
    * @return {void}
    */
-  onDelete(fn) {
+  onDestroy(fn) {
     this.deleteListeners.push(fn);
   }
 
-  delete() {
-    this.deleteListeners.forEach(fn => fn(this));
-    this.destroy();
+  destroy() {
+    if (this.isDetroyed) { return; }
     this.isDetroyed = true;
+    this.deleteListeners.forEach(fn => fn(this));
+    super.destroy();
   }
 
   /**

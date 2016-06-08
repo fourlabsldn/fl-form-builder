@@ -8,7 +8,7 @@ import assert from 'fl-assert';
 export default class ComponentsContainer extends ViewController {
   constructor(modulePrefix) {
     super(modulePrefix);
-    this.components = [];
+    this.components = new Set();
     Object.preventExtensions(this);
   }
 
@@ -19,17 +19,26 @@ export default class ComponentsContainer extends ViewController {
   addComponent(component) {
     assert(component instanceof FormComponent,
       'Invalid component being added. No an instance of Component.');
-    this.components.push(component);
+    this.components.add(component);
     this.html.container.appendChild(component.getHtmlContainer());
+    component.onDestroy(() => this.deleteComponent(component));
   }
 
+  deleteComponent(component) {
+    if (!this.components.has(component)) {
+      assert.warn(false, 'Component being deleted is not part of component list.');
+      return;
+    }
+    this.components.delete(component);
+    if (!component.isDestroyed) { component.destroy(); }
+  }
   /**
    * Deletes all components
-   * @method deleteComponents
+   * @method deleteAllComponents
    * @return {void}
    */
-  deleteComponents() {
-    this.components.forEach(comp => comp.destroy);
+  deleteAllComponents() {
+    this.components.forEach(comp => this.deleteComponent(comp));
   }
 
   /**
@@ -39,7 +48,7 @@ export default class ComponentsContainer extends ViewController {
    * @return {void}
    */
   setComponents(components) {
-    this.deleteComponents();
+    this.deleteAllComponents();
     components.forEach(comp => this.addComponent(comp));
   }
 
