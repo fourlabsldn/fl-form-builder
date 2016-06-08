@@ -21,6 +21,7 @@ export default class FormComponent extends ViewController {
     this.focusElement = null;
     this.buildHtml();
     this.configToggle(true);
+    this.setRequired(false);
   }
 
   buildHtml() {
@@ -52,10 +53,10 @@ export default class FormComponent extends ViewController {
     configurationButtons.classList.add(`${this.cssPrefix}-configuration-buttons`);
     this.html.configuration.appendChild(configurationButtons);
 
-    const requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
-    requiredSwitch.classList.add(`${configurationCssClass}-switch-required`);
-    requiredSwitch.addEventListener('change', (e) => {
-      const checked = e.target.checked;
+    this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
+    this.html.requiredSwitch.classList.add(`${configurationCssClass}-switch-required`);
+    this.html.requiredSwitch.addEventListener('change', (e) => {
+      const checked = this.html.requiredSwitch;
       this.setRequired(checked);
     });
     configurationButtons.appendChild(requiredSwitch);
@@ -192,6 +193,7 @@ export default class FormComponent extends ViewController {
    */
   setRequired(required) {
     this.isRequired = required;
+    this.html.requiredSwitch = required;
   }
 
   /**
@@ -217,6 +219,6 @@ export default class FormComponent extends ViewController {
   importState(state) {
     assert(state.title === this.constructor.name);
     this.html.title = state.title;
-    this.isRequired = state.required;
+    this.setRequired(state.required);
   }
 }

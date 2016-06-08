@@ -58,4 +58,14 @@ export default class TextComponent extends FormComponent {
     output.placeholder = this.html.textElement.placeholder;
     return output;
   }
+
+  /**
+   * @override @method importState
+   * @param  {Object} state
+   * @return {void}
+   */
+  importState(state) {
+    super.importState(state);
+    this.html.textElement.setAttribute('placeholder', state.placeholder);
+  }
 }

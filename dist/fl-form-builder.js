@@ -1807,6 +1807,7 @@ var FormComponent = function (_ViewController) {
     _this.focusElement = null;
     _this.buildHtml();
     _this.configToggle(true);
+    _this.setRequired(false);
     return _this;
   }
 
@@ -1841,10 +1842,10 @@ var FormComponent = function (_ViewController) {
       configurationButtons.classList.add(this.cssPrefix + '-configuration-buttons');
       this.html.configuration.appendChild(configurationButtons);
 
-      var requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
-      requiredSwitch.classList.add(configurationCssClass + '-switch-required');
-      requiredSwitch.addEventListener('change', function (e) {
-        var checked = e.target.checked;
+      this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
+      this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
+      this.html.requiredSwitch.addEventListener('change', function (e) {
+        var checked = _this2.html.requiredSwitch;
         _this2.setRequired(checked);
       });
       configurationButtons.appendChild(requiredSwitch);
@@ -2004,6 +2005,7 @@ var FormComponent = function (_ViewController) {
     key: 'setRequired',
     value: function setRequired(required) {
       this.isRequired = required;
+      this.html.requiredSwitch = required;
     }
 
     /**
@@ -2035,7 +2037,7 @@ var FormComponent = function (_ViewController) {
     value: function importState(state) {
       assert(state.title === this.constructor.name);
       this.html.title = state.title;
-      this.isRequired = state.required;
+      this.setRequired(state.required);
     }
   }]);
 
@@ -2576,6 +2578,19 @@ var TextComponent = function (_FormComponent) {
       var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
       output.placeholder = this.html.textElement.placeholder;
       return output;
+    }
+
+    /**
+     * @override @method importState
+     * @param  {Object} state
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState(state) {
+      _get(Object.getPrototypeOf(TextComponent.prototype), 'importState', this).call(this, state);
+      this.html.textElement.setAttribute('placeholder', state.placeholder);
     }
   }]);
 
