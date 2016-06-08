@@ -1,5 +1,6 @@
 import ViewController from '../ViewController';
 import utils from '../utils/utils';
+import assert from 'fl-assert';
 
 /**
  * @abstract @class FormComponent
@@ -18,9 +19,6 @@ export default class FormComponent extends ViewController {
 
     // Focused on config show
     this.focusElement = null;
-
-    // Elements that have options will store them in here.
-    this.html.options = [];
     this.buildHtml();
     this.configToggle(true);
   }
@@ -112,86 +110,6 @@ export default class FormComponent extends ViewController {
     this.html.container.appendChild(frag);
   }
 
-  buildOptionsConfiguration() {
-    const optionsConfig = document.createElement('div');
-    const optionsConfigCssClass = `${this.cssPrefix}-configuration-options`;
-    optionsConfig.classList.add(optionsConfigCssClass);
-
-    if (this.html.configuration.children[0]) {
-      this.html.configuration.insertBefore(
-        optionsConfig,
-        this.html.configuration.children[0]
-      );
-    } else {
-      this.html.configuration.appendChild(optionsConfig);
-    }
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.title = 'Remove last option';
-    removeBtn.classList.add(
-      'glyphicon-minus-sign',
-      'glyphicon',
-      `${optionsConfigCssClass}-btn-remove`
-    );
-    removeBtn.addEventListener('click', () => this.removeOption());
-    optionsConfig.appendChild(removeBtn);
-
-    const addBtn = document.createElement('button');
-    addBtn.type = 'button';
-    addBtn.title = 'Add new option';
-    addBtn.classList.add(
-      'glyphicon-plus-sign',
-      'glyphicon',
-      `${optionsConfigCssClass}-btn-add`
-    );
-    addBtn.addEventListener('click', () => {
-      if (!legend.value.trim()) {
-        utils.blinkRed(legend, this.modulePrefix);
-        return;
-      }
-      const params = [legend.value];
-      if (this.getComponentSpecificOptions) {
-        params.push(...this.getComponentSpecificOptions());
-      }
-      this.addOption.apply(this, params);
-      legend.value = '';
-    });
-    optionsConfig.appendChild(addBtn);
-
-    const legend = document.createElement('input');
-    legend.setAttribute('placeholder', 'Type a new option');
-    legend.setAttribute('type', 'text');
-    legend.classList.add(
-      `${optionsConfigCssClass}-input`
-    );
-    this.focusElement = legend;
-    optionsConfig.appendChild(legend);
-    legend.addEventListener('keypress', (e) => {
-      if (e.which === 13) {
-        const click = new Event('click');
-        addBtn.dispatchEvent(click);
-        e.preventDefault();
-        return false; //  returning false will prevent the event from bubbling up.
-      }
-      return true;
-    });
-
-    this.focus();
-  }
-
-  /**
-   * Removes an option element
-   * @method removeOption
-   * @return {void}
-   */
-  removeOption() {
-    const optionToRemove = this.html.options.pop();
-    if (optionToRemove) {
-      optionToRemove.remove();
-    }
-  }
-
   /**
    * @method addEditable
    * @param  {HTMLElement} element
@@ -278,15 +196,27 @@ export default class FormComponent extends ViewController {
 
   /**
    * Exports the information of a component in one object
-   * @method exportContent
+   * @method exportState
    * @return {[type]} [description]
    */
-  exportContent() {
+  exportState() {
     return {
       required: this.isRequired,
       title: this.html.title.textContent,
       type: this.constructor.name,
-      options: this.html.options.map(o => o.textContent),
     };
+  }
+
+  /**
+   * Sets the component state the the options specified in the
+   * state object
+   * @method importState
+   * @param  {Object} state
+   * @return {void}
+   */
+  importState(state) {
+    assert(state.title === this.constructor.name);
+    this.html.title = state.title;
+    this.isRequired = state.required;
   }
 }

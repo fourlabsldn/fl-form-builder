@@ -52,10 +52,10 @@ export default class ComponentsContainer extends ViewController {
     components.forEach(comp => this.addComponent(comp));
   }
 
-  exportContent() {
+  exportState() {
     const outcome = [];
     for (const component of this.components) {
-      outcome.push(component.exportContent());
+      outcome.push(component.exportState());
     }
     return outcome;
   }

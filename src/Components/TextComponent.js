@@ -50,11 +50,11 @@ export default class TextComponent extends FormComponent {
   }
 
   /**
-   * @override @method exportContent
+   * @override @method exportState
    * @return {Object}
    */
-  exportContent() {
-    const output = super.exportContent();
+  exportState() {
+    const output = super.exportState();
     output.placeholder = this.html.textElement.placeholder;
     return output;
   }

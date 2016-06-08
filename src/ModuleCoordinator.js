@@ -28,7 +28,7 @@ export default class Coordinator {
   }
 
   save() {
-    const content = this.componentsContainer.exportContent();
+    const content = this.componentsContainer.exportState();
     this.storage.saveContent(content);
   }
 }

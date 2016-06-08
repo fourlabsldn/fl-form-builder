@@ -104,10 +104,10 @@ module.exports = function(it){
 };
 });
 
-var require$$0$5 = (_anObject && typeof _anObject === 'object' && 'default' in _anObject ? _anObject['default'] : _anObject);
+var require$$2 = (_anObject && typeof _anObject === 'object' && 'default' in _anObject ? _anObject['default'] : _anObject);
 
 var _objectDp = __commonjs(function (module, exports) {
-var anObject       = require$$0$5
+var anObject       = require$$2
   , IE8_DOM_DEFINE = require$$1$1
   , toPrimitive    = require$$3
   , dP             = Object.defineProperty;
@@ -138,11 +138,11 @@ module.exports = function(bitmap, value){
 };
 });
 
-var require$$0$6 = (_propertyDesc && typeof _propertyDesc === 'object' && 'default' in _propertyDesc ? _propertyDesc['default'] : _propertyDesc);
+var require$$3$3 = (_propertyDesc && typeof _propertyDesc === 'object' && 'default' in _propertyDesc ? _propertyDesc['default'] : _propertyDesc);
 
 var _hide = __commonjs(function (module) {
 var dP         = require$$1
-  , createDesc = require$$0$6;
+  , createDesc = require$$3$3;
 module.exports = require$$0$3 ? function(object, key, value){
   return dP.f(object, key, createDesc(1, value));
 } : function(object, key, value){
@@ -160,11 +160,11 @@ module.exports = function(it){
 };
 });
 
-var require$$0$7 = (_aFunction && typeof _aFunction === 'object' && 'default' in _aFunction ? _aFunction['default'] : _aFunction);
+var require$$0$5 = (_aFunction && typeof _aFunction === 'object' && 'default' in _aFunction ? _aFunction['default'] : _aFunction);
 
 var _ctx = __commonjs(function (module) {
 // optional / simple context binding
-var aFunction = require$$0$7;
+var aFunction = require$$0$5;
 module.exports = function(fn, that, length){
   aFunction(fn);
   if(that === undefined)return fn;
@@ -185,12 +185,12 @@ module.exports = function(fn, that, length){
 };
 });
 
-var require$$8 = (_ctx && typeof _ctx === 'object' && 'default' in _ctx ? _ctx['default'] : _ctx);
+var require$$1$4 = (_ctx && typeof _ctx === 'object' && 'default' in _ctx ? _ctx['default'] : _ctx);
 
 var _export = __commonjs(function (module, exports) {
 var global    = require$$3$2
   , core      = require$$0$2
-  , ctx       = require$$8
+  , ctx       = require$$1$4
   , hide      = require$$1$3
   , PROTOTYPE = 'prototype';
 
@@ -251,10 +251,10 @@ $export.R = 128; // real proto method for `library`
 module.exports = $export;
 });
 
-var require$$2 = (_export && typeof _export === 'object' && 'default' in _export ? _export['default'] : _export);
+var require$$2$1 = (_export && typeof _export === 'object' && 'default' in _export ? _export['default'] : _export);
 
 var es6_object_defineProperty = __commonjs(function (module) {
-var $export = require$$2;
+var $export = require$$2$1;
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !require$$0$3, 'Object', {defineProperty: require$$1.f});
 });
@@ -325,10 +325,10 @@ module.exports = function(key){
 };
 });
 
-var require$$1$4 = (_shared && typeof _shared === 'object' && 'default' in _shared ? _shared['default'] : _shared);
+var require$$1$5 = (_shared && typeof _shared === 'object' && 'default' in _shared ? _shared['default'] : _shared);
 
 var _wks = __commonjs(function (module) {
-var store      = require$$1$4('wks')
+var store      = require$$1$5('wks')
   , uid        = require$$4
   , Symbol     = require$$3$2.Symbol
   , USE_SYMBOL = typeof Symbol == 'function';
@@ -341,13 +341,13 @@ var $exports = module.exports = function(name){
 $exports.store = store;
 });
 
-var require$$0$12 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
+var require$$0$10 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
 
 var _wksExt = __commonjs(function (module, exports) {
-exports.f = require$$0$12;
+exports.f = require$$0$10;
 });
 
-var require$$0$11 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
+var require$$0$9 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
 
 var _library = __commonjs(function (module) {
 module.exports = true;
@@ -359,7 +359,7 @@ var _wksDefine = __commonjs(function (module) {
 var global         = require$$3$2
   , core           = require$$0$2
   , LIBRARY        = require$$9
-  , wksExt         = require$$0$11
+  , wksExt         = require$$0$9
   , defineProperty = require$$1.f;
 module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -381,13 +381,13 @@ var _objectGops = __commonjs(function (module, exports) {
 exports.f = Object.getOwnPropertySymbols;
 });
 
-var require$$1$5 = (_objectGops && typeof _objectGops === 'object' && 'default' in _objectGops ? _objectGops['default'] : _objectGops);
+var require$$1$6 = (_objectGops && typeof _objectGops === 'object' && 'default' in _objectGops ? _objectGops['default'] : _objectGops);
 
 var _objectPie = __commonjs(function (module, exports) {
 exports.f = {}.propertyIsEnumerable;
 });
 
-var require$$0$13 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
+var require$$0$11 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
 
 var _enumBugKeys = __commonjs(function (module) {
 // IE 8- don't enum bug keys
@@ -396,17 +396,17 @@ module.exports = (
 ).split(',');
 });
 
-var require$$3$3 = (_enumBugKeys && typeof _enumBugKeys === 'object' && 'default' in _enumBugKeys ? _enumBugKeys['default'] : _enumBugKeys);
+var require$$3$4 = (_enumBugKeys && typeof _enumBugKeys === 'object' && 'default' in _enumBugKeys ? _enumBugKeys['default'] : _enumBugKeys);
 
 var _sharedKey = __commonjs(function (module) {
-var shared = require$$1$4('keys')
+var shared = require$$1$5('keys')
   , uid    = require$$4;
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
 });
 
-var require$$0$15 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
+var require$$0$13 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
 
 var _toInteger = __commonjs(function (module) {
 // 7.1.4 ToInteger
@@ -417,10 +417,10 @@ module.exports = function(it){
 };
 });
 
-var require$$1$8 = (_toInteger && typeof _toInteger === 'object' && 'default' in _toInteger ? _toInteger['default'] : _toInteger);
+var require$$1$9 = (_toInteger && typeof _toInteger === 'object' && 'default' in _toInteger ? _toInteger['default'] : _toInteger);
 
 var _toIndex = __commonjs(function (module) {
-var toInteger = require$$1$8
+var toInteger = require$$1$9
   , max       = Math.max
   , min       = Math.min;
 module.exports = function(index, length){
@@ -429,18 +429,18 @@ module.exports = function(index, length){
 };
 });
 
-var require$$0$16 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
+var require$$0$14 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
 
 var _toLength = __commonjs(function (module) {
 // 7.1.15 ToLength
-var toInteger = require$$1$8
+var toInteger = require$$1$9
   , min       = Math.min;
 module.exports = function(it){
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 };
 });
 
-var require$$3$4 = (_toLength && typeof _toLength === 'object' && 'default' in _toLength ? _toLength['default'] : _toLength);
+var require$$1$10 = (_toLength && typeof _toLength === 'object' && 'default' in _toLength ? _toLength['default'] : _toLength);
 
 var _defined = __commonjs(function (module) {
 // 7.2.1 RequireObjectCoercible(argument)
@@ -450,7 +450,7 @@ module.exports = function(it){
 };
 });
 
-var require$$0$17 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
+var require$$0$15 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
 
 var _cof = __commonjs(function (module) {
 var toString = {}.toString;
@@ -460,35 +460,35 @@ module.exports = function(it){
 };
 });
 
-var require$$1$10 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
+var require$$0$16 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
 
 var _iobject = __commonjs(function (module) {
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = require$$1$10;
+var cof = require$$0$16;
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
 });
 
-var require$$1$9 = (_iobject && typeof _iobject === 'object' && 'default' in _iobject ? _iobject['default'] : _iobject);
+var require$$1$11 = (_iobject && typeof _iobject === 'object' && 'default' in _iobject ? _iobject['default'] : _iobject);
 
 var _toIobject = __commonjs(function (module) {
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = require$$1$9
-  , defined = require$$0$17;
+var IObject = require$$1$11
+  , defined = require$$0$15;
 module.exports = function(it){
   return IObject(defined(it));
 };
 });
 
-var require$$2$1 = (_toIobject && typeof _toIobject === 'object' && 'default' in _toIobject ? _toIobject['default'] : _toIobject);
+var require$$2$2 = (_toIobject && typeof _toIobject === 'object' && 'default' in _toIobject ? _toIobject['default'] : _toIobject);
 
 var _arrayIncludes = __commonjs(function (module) {
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = require$$2$1
-  , toLength  = require$$3$4
-  , toIndex   = require$$0$16;
+var toIObject = require$$2$2
+  , toLength  = require$$1$10
+  , toIndex   = require$$0$14;
 module.exports = function(IS_INCLUDES){
   return function($this, el, fromIndex){
     var O      = toIObject($this)
@@ -507,7 +507,7 @@ module.exports = function(IS_INCLUDES){
 };
 });
 
-var require$$1$7 = (_arrayIncludes && typeof _arrayIncludes === 'object' && 'default' in _arrayIncludes ? _arrayIncludes['default'] : _arrayIncludes);
+var require$$1$8 = (_arrayIncludes && typeof _arrayIncludes === 'object' && 'default' in _arrayIncludes ? _arrayIncludes['default'] : _arrayIncludes);
 
 var _has = __commonjs(function (module) {
 var hasOwnProperty = {}.hasOwnProperty;
@@ -516,13 +516,13 @@ module.exports = function(it, key){
 };
 });
 
-var require$$2$2 = (_has && typeof _has === 'object' && 'default' in _has ? _has['default'] : _has);
+var require$$2$3 = (_has && typeof _has === 'object' && 'default' in _has ? _has['default'] : _has);
 
 var _objectKeysInternal = __commonjs(function (module) {
-var has          = require$$2$2
-  , toIObject    = require$$2$1
-  , arrayIndexOf = require$$1$7(false)
-  , IE_PROTO     = require$$0$15('IE_PROTO');
+var has          = require$$2$3
+  , toIObject    = require$$2$2
+  , arrayIndexOf = require$$1$8(false)
+  , IE_PROTO     = require$$0$13('IE_PROTO');
 
 module.exports = function(object, names){
   var O      = toIObject(object)
@@ -538,38 +538,38 @@ module.exports = function(object, names){
 };
 });
 
-var require$$1$6 = (_objectKeysInternal && typeof _objectKeysInternal === 'object' && 'default' in _objectKeysInternal ? _objectKeysInternal['default'] : _objectKeysInternal);
+var require$$1$7 = (_objectKeysInternal && typeof _objectKeysInternal === 'object' && 'default' in _objectKeysInternal ? _objectKeysInternal['default'] : _objectKeysInternal);
 
 var _objectGopn = __commonjs(function (module, exports) {
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = require$$1$6
-  , hiddenKeys = require$$3$3.concat('length', 'prototype');
+var $keys      = require$$1$7
+  , hiddenKeys = require$$3$4.concat('length', 'prototype');
 
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
   return $keys(O, hiddenKeys);
 };
 });
 
-var require$$0$14 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
+var require$$0$12 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
 
 var _objectKeys = __commonjs(function (module) {
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = require$$1$6
-  , enumBugKeys = require$$3$3;
+var $keys       = require$$1$7
+  , enumBugKeys = require$$3$4;
 
 module.exports = Object.keys || function keys(O){
   return $keys(O, enumBugKeys);
 };
 });
 
-var require$$1$11 = (_objectKeys && typeof _objectKeys === 'object' && 'default' in _objectKeys ? _objectKeys['default'] : _objectKeys);
+var require$$1$12 = (_objectKeys && typeof _objectKeys === 'object' && 'default' in _objectKeys ? _objectKeys['default'] : _objectKeys);
 
 var _objectGopd = __commonjs(function (module, exports) {
-var pIE            = require$$0$13
-  , createDesc     = require$$0$6
-  , toIObject      = require$$2$1
+var pIE            = require$$0$11
+  , createDesc     = require$$3$3
+  , toIObject      = require$$2$2
   , toPrimitive    = require$$3
-  , has            = require$$2$2
+  , has            = require$$2$3
   , IE8_DOM_DEFINE = require$$1$1
   , gOPD           = Object.getOwnPropertyDescriptor;
 
@@ -583,12 +583,12 @@ exports.f = require$$0$3 ? gOPD : function getOwnPropertyDescriptor(O, P){
 };
 });
 
-var require$$1$12 = (_objectGopd && typeof _objectGopd === 'object' && 'default' in _objectGopd ? _objectGopd['default'] : _objectGopd);
+var require$$1$13 = (_objectGopd && typeof _objectGopd === 'object' && 'default' in _objectGopd ? _objectGopd['default'] : _objectGopd);
 
 var _objectGopnExt = __commonjs(function (module) {
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = require$$2$1
-  , gOPN      = require$$0$14.f
+var toIObject = require$$2$2
+  , gOPN      = require$$0$12.f
   , toString  = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -607,18 +607,18 @@ module.exports.f = function getOwnPropertyNames(it){
 };
 });
 
-var require$$8$1 = (_objectGopnExt && typeof _objectGopnExt === 'object' && 'default' in _objectGopnExt ? _objectGopnExt['default'] : _objectGopnExt);
+var require$$8 = (_objectGopnExt && typeof _objectGopnExt === 'object' && 'default' in _objectGopnExt ? _objectGopnExt['default'] : _objectGopnExt);
 
 var _html = __commonjs(function (module) {
 module.exports = require$$3$2.document && document.documentElement;
 });
 
-var require$$0$19 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
+var require$$0$18 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
 
 var _objectDps = __commonjs(function (module) {
 var dP       = require$$1
-  , anObject = require$$0$5
-  , getKeys  = require$$1$11;
+  , anObject = require$$2
+  , getKeys  = require$$1$12;
 
 module.exports = require$$0$3 ? Object.defineProperties : function defineProperties(O, Properties){
   anObject(O);
@@ -635,10 +635,10 @@ var require$$4$1 = (_objectDps && typeof _objectDps === 'object' && 'default' in
 
 var _objectCreate = __commonjs(function (module) {
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject    = require$$0$5
+var anObject    = require$$2
   , dPs         = require$$4$1
-  , enumBugKeys = require$$3$3
-  , IE_PROTO    = require$$0$15('IE_PROTO')
+  , enumBugKeys = require$$3$4
+  , IE_PROTO    = require$$0$13('IE_PROTO')
   , Empty       = function(){ /* empty */ }
   , PROTOTYPE   = 'prototype';
 
@@ -650,7 +650,7 @@ var createDict = function(){
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  require$$0$19.appendChild(iframe);
+  require$$0$18.appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -676,11 +676,11 @@ module.exports = Object.create || function create(O, Properties){
 };
 });
 
-var require$$0$18 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
+var require$$0$17 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
 
 var _isArray = __commonjs(function (module) {
 // 7.2.2 IsArray(argument)
-var cof = require$$1$10;
+var cof = require$$0$16;
 module.exports = Array.isArray || function isArray(arg){
   return cof(arg) == 'Array';
 };
@@ -690,9 +690,9 @@ var require$$14 = (_isArray && typeof _isArray === 'object' && 'default' in _isA
 
 var _enumKeys = __commonjs(function (module) {
 // all enumerable object keys, includes symbols
-var getKeys = require$$1$11
-  , gOPS    = require$$1$5
-  , pIE     = require$$0$13;
+var getKeys = require$$1$12
+  , gOPS    = require$$1$6
+  , pIE     = require$$0$11;
 module.exports = function(it){
   var result     = getKeys(it)
     , getSymbols = gOPS.f;
@@ -709,8 +709,8 @@ module.exports = function(it){
 var require$$15 = (_enumKeys && typeof _enumKeys === 'object' && 'default' in _enumKeys ? _enumKeys['default'] : _enumKeys);
 
 var _keyof = __commonjs(function (module) {
-var getKeys   = require$$1$11
-  , toIObject = require$$2$1;
+var getKeys   = require$$1$12
+  , toIObject = require$$2$2;
 module.exports = function(object, el){
   var O      = toIObject(object)
     , keys   = getKeys(O)
@@ -725,20 +725,20 @@ var require$$16 = (_keyof && typeof _keyof === 'object' && 'default' in _keyof ?
 
 var _setToStringTag = __commonjs(function (module) {
 var def = require$$1.f
-  , has = require$$2$2
-  , TAG = require$$0$12('toStringTag');
+  , has = require$$2$3
+  , TAG = require$$0$10('toStringTag');
 
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 };
 });
 
-var require$$2$3 = (_setToStringTag && typeof _setToStringTag === 'object' && 'default' in _setToStringTag ? _setToStringTag['default'] : _setToStringTag);
+var require$$2$4 = (_setToStringTag && typeof _setToStringTag === 'object' && 'default' in _setToStringTag ? _setToStringTag['default'] : _setToStringTag);
 
 var _meta = __commonjs(function (module) {
 var META     = require$$4('meta')
   , isObject = require$$3$1
-  , has      = require$$2$2
+  , has      = require$$2$3
   , setDesc  = require$$1.f
   , id       = 0;
 var isExtensible = Object.isExtensible || function(){
@@ -803,30 +803,30 @@ var es6_symbol = __commonjs(function (module) {
 'use strict';
 // ECMAScript 6 symbols shim
 var global         = require$$3$2
-  , has            = require$$2$2
+  , has            = require$$2$3
   , DESCRIPTORS    = require$$0$3
-  , $export        = require$$2
+  , $export        = require$$2$1
   , redefine       = require$$7
   , META           = require$$24.KEY
   , $fails         = require$$0$4
-  , shared         = require$$1$4
-  , setToStringTag = require$$2$3
+  , shared         = require$$1$5
+  , setToStringTag = require$$2$4
   , uid            = require$$4
-  , wks            = require$$0$12
-  , wksExt         = require$$0$11
+  , wks            = require$$0$10
+  , wksExt         = require$$0$9
   , wksDefine      = require$$17
   , keyOf          = require$$16
   , enumKeys       = require$$15
   , isArray        = require$$14
-  , anObject       = require$$0$5
-  , toIObject      = require$$2$1
+  , anObject       = require$$2
+  , toIObject      = require$$2$2
   , toPrimitive    = require$$3
-  , createDesc     = require$$0$6
-  , _create        = require$$0$18
-  , gOPNExt        = require$$8$1
-  , $GOPD          = require$$1$12
+  , createDesc     = require$$3$3
+  , _create        = require$$0$17
+  , gOPNExt        = require$$8
+  , $GOPD          = require$$1$13
   , $DP            = require$$1
-  , $keys          = require$$1$11
+  , $keys          = require$$1$12
   , gOPD           = $GOPD.f
   , dP             = $DP.f
   , gOPN           = gOPNExt.f
@@ -949,9 +949,9 @@ if(!USE_NATIVE){
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
-  require$$0$14.f = gOPNExt.f = $getOwnPropertyNames;
-  require$$0$13.f  = $propertyIsEnumerable;
-  require$$1$5.f = $getOwnPropertySymbols;
+  require$$0$12.f = gOPNExt.f = $getOwnPropertyNames;
+  require$$0$11.f  = $propertyIsEnumerable;
+  require$$1$6.f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !require$$9){
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -1041,35 +1041,35 @@ var index = __commonjs(function (module) {
 module.exports = require$$0$2.Symbol;
 });
 
-var require$$0$10 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+var require$$0$8 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
 
 var symbol = __commonjs(function (module) {
-module.exports = { "default": require$$0$10, __esModule: true };
+module.exports = { "default": require$$0$8, __esModule: true };
 });
 
-var require$$0$9 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
+var require$$0$7 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
 
 var _iterators = __commonjs(function (module) {
 module.exports = {};
 });
 
-var require$$1$14 = (_iterators && typeof _iterators === 'object' && 'default' in _iterators ? _iterators['default'] : _iterators);
+var require$$4$2 = (_iterators && typeof _iterators === 'object' && 'default' in _iterators ? _iterators['default'] : _iterators);
 
 var _toObject = __commonjs(function (module) {
 // 7.1.13 ToObject(argument)
-var defined = require$$0$17;
+var defined = require$$0$15;
 module.exports = function(it){
   return Object(defined(it));
 };
 });
 
-var require$$2$4 = (_toObject && typeof _toObject === 'object' && 'default' in _toObject ? _toObject['default'] : _toObject);
+var require$$2$5 = (_toObject && typeof _toObject === 'object' && 'default' in _toObject ? _toObject['default'] : _toObject);
 
 var _objectGpo = __commonjs(function (module) {
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has         = require$$2$2
-  , toObject    = require$$2$4
-  , IE_PROTO    = require$$0$15('IE_PROTO')
+var has         = require$$2$3
+  , toObject    = require$$2$5
+  , IE_PROTO    = require$$0$13('IE_PROTO')
   , ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function(O){
@@ -1085,13 +1085,13 @@ var require$$1$15 = (_objectGpo && typeof _objectGpo === 'object' && 'default' i
 
 var _iterCreate = __commonjs(function (module) {
 'use strict';
-var create         = require$$0$18
-  , descriptor     = require$$0$6
-  , setToStringTag = require$$2$3
+var create         = require$$0$17
+  , descriptor     = require$$3$3
+  , setToStringTag = require$$2$4
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require$$1$3(IteratorPrototype, require$$0$12('iterator'), function(){ return this; });
+require$$1$3(IteratorPrototype, require$$0$10('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -1104,15 +1104,15 @@ var require$$3$5 = (_iterCreate && typeof _iterCreate === 'object' && 'default' 
 var _iterDefine = __commonjs(function (module) {
 'use strict';
 var LIBRARY        = require$$9
-  , $export        = require$$2
+  , $export        = require$$2$1
   , redefine       = require$$7
   , hide           = require$$1$3
-  , has            = require$$2$2
-  , Iterators      = require$$1$14
+  , has            = require$$2$3
+  , Iterators      = require$$4$2
   , $iterCreate    = require$$3$5
-  , setToStringTag = require$$2$3
+  , setToStringTag = require$$2$4
   , getPrototypeOf = require$$1$15
-  , ITERATOR       = require$$0$12('iterator')
+  , ITERATOR       = require$$0$10('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
   , KEYS           = 'keys'
@@ -1174,7 +1174,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 });
 
-var require$$0$21 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
+var require$$0$20 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
 
 var _iterStep = __commonjs(function (module) {
 module.exports = function(done, value){
@@ -1188,20 +1188,20 @@ var _addToUnscopables = __commonjs(function (module) {
 module.exports = function(){ /* empty */ };
 });
 
-var require$$4$2 = (_addToUnscopables && typeof _addToUnscopables === 'object' && 'default' in _addToUnscopables ? _addToUnscopables['default'] : _addToUnscopables);
+var require$$4$3 = (_addToUnscopables && typeof _addToUnscopables === 'object' && 'default' in _addToUnscopables ? _addToUnscopables['default'] : _addToUnscopables);
 
 var es6_array_iterator = __commonjs(function (module) {
 'use strict';
-var addToUnscopables = require$$4$2
+var addToUnscopables = require$$4$3
   , step             = require$$3$6
-  , Iterators        = require$$1$14
-  , toIObject        = require$$2$1;
+  , Iterators        = require$$4$2
+  , toIObject        = require$$2$2;
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require$$0$21(Array, 'Array', function(iterated, kind){
+module.exports = require$$0$20(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -1230,8 +1230,8 @@ addToUnscopables('entries');
 var web_dom_iterable = __commonjs(function (module) {
 var global        = require$$3$2
   , hide          = require$$1$3
-  , Iterators     = require$$1$14
-  , TO_STRING_TAG = require$$0$12('toStringTag');
+  , Iterators     = require$$4$2
+  , TO_STRING_TAG = require$$0$10('toStringTag');
 
 for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
   var NAME       = collections[i]
@@ -1243,8 +1243,8 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 });
 
 var _stringAt = __commonjs(function (module) {
-var toInteger = require$$1$8
-  , defined   = require$$0$17;
+var toInteger = require$$1$9
+  , defined   = require$$0$15;
 // true  -> String#at
 // false -> String#codePointAt
 module.exports = function(TO_STRING){
@@ -1269,7 +1269,7 @@ var es6_string_iterator = __commonjs(function (module) {
 var $at  = require$$1$16(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-require$$0$21(String, 'String', function(iterated){
+require$$0$20(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -1285,27 +1285,27 @@ require$$0$21(String, 'String', function(iterated){
 });
 
 var iterator$1 = __commonjs(function (module) {
-module.exports = require$$0$11.f('iterator');
+module.exports = require$$0$9.f('iterator');
 });
 
-var require$$0$20 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
+var require$$0$19 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
 
 var iterator = __commonjs(function (module) {
-module.exports = { "default": require$$0$20, __esModule: true };
+module.exports = { "default": require$$0$19, __esModule: true };
 });
 
-var require$$1$13 = (iterator && typeof iterator === 'object' && 'default' in iterator ? iterator['default'] : iterator);
+var require$$1$14 = (iterator && typeof iterator === 'object' && 'default' in iterator ? iterator['default'] : iterator);
 
 var _typeof = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _iterator = require$$1$13;
+var _iterator = require$$1$14;
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = require$$0$9;
+var _symbol = require$$0$7;
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -1320,14 +1320,14 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 });
 
-var require$$0$8 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
+var require$$0$6 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
 
 var possibleConstructorReturn = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _typeof2 = require$$0$8;
+var _typeof2 = require$$0$6;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1345,9 +1345,9 @@ exports.default = function (self, call) {
 var _possibleConstructorReturn = (possibleConstructorReturn && typeof possibleConstructorReturn === 'object' && 'default' in possibleConstructorReturn ? possibleConstructorReturn['default'] : possibleConstructorReturn);
 
 var es6_object_create = __commonjs(function (module) {
-var $export = require$$2
+var $export = require$$2$1
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: require$$0$18});
+$export($export.S, 'Object', {create: require$$0$17});
 });
 
 var create$1 = __commonjs(function (module) {
@@ -1357,10 +1357,10 @@ module.exports = function create(P, D){
 };
 });
 
-var require$$0$22 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
+var require$$0$21 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
 
 var create = __commonjs(function (module) {
-module.exports = { "default": require$$0$22, __esModule: true };
+module.exports = { "default": require$$0$21, __esModule: true };
 });
 
 var require$$1$17 = (create && typeof create === 'object' && 'default' in create ? create['default'] : create);
@@ -1369,7 +1369,7 @@ var _setProto = __commonjs(function (module) {
 // Works with __proto__ only. Old v8 can't work with null proto objects.
 /* eslint-disable no-proto */
 var isObject = require$$3$1
-  , anObject = require$$0$5;
+  , anObject = require$$2;
 var check = function(O, proto){
   anObject(O);
   if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
@@ -1378,7 +1378,7 @@ module.exports = {
   set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
     function(test, buggy, set){
       try {
-        set = require$$8(Function.call, require$$1$12.f(Object.prototype, '__proto__').set, 2);
+        set = require$$1$4(Function.call, require$$1$13.f(Object.prototype, '__proto__').set, 2);
         set(test, []);
         buggy = !(test instanceof Array);
       } catch(e){ buggy = true; }
@@ -1393,32 +1393,32 @@ module.exports = {
 };
 });
 
-var require$$0$24 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
+var require$$0$23 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
 
 var es6_object_setPrototypeOf = __commonjs(function (module) {
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = require$$2;
-$export($export.S, 'Object', {setPrototypeOf: require$$0$24.set});
+var $export = require$$2$1;
+$export($export.S, 'Object', {setPrototypeOf: require$$0$23.set});
 });
 
 var setPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.setPrototypeOf;
 });
 
-var require$$0$23 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
+var require$$0$22 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
 
 var setPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$23, __esModule: true };
+module.exports = { "default": require$$0$22, __esModule: true };
 });
 
-var require$$2$5 = (setPrototypeOf && typeof setPrototypeOf === 'object' && 'default' in setPrototypeOf ? setPrototypeOf['default'] : setPrototypeOf);
+var require$$2$6 = (setPrototypeOf && typeof setPrototypeOf === 'object' && 'default' in setPrototypeOf ? setPrototypeOf['default'] : setPrototypeOf);
 
 var inherits = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _setPrototypeOf = require$$2$5;
+var _setPrototypeOf = require$$2$6;
 
 var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
@@ -1426,7 +1426,7 @@ var _create = require$$1$17;
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = require$$0$8;
+var _typeof2 = require$$0$6;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1486,197 +1486,9 @@ var ViewController = function () {
   return ViewController;
 }();
 
-var _iterDetect = __commonjs(function (module) {
-var ITERATOR     = require$$0$12('iterator')
-  , SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function(){ SAFE_CLOSING = true; };
-  Array.from(riter, function(){ throw 2; });
-} catch(e){ /* empty */ }
-
-module.exports = function(exec, skipClosing){
-  if(!skipClosing && !SAFE_CLOSING)return false;
-  var safe = false;
-  try {
-    var arr  = [7]
-      , iter = arr[ITERATOR]();
-    iter.next = function(){ return {done: safe = true}; };
-    arr[ITERATOR] = function(){ return iter; };
-    exec(arr);
-  } catch(e){ /* empty */ }
-  return safe;
-};
-});
-
-var require$$0$27 = (_iterDetect && typeof _iterDetect === 'object' && 'default' in _iterDetect ? _iterDetect['default'] : _iterDetect);
-
-var _classof = __commonjs(function (module) {
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require$$1$10
-  , TAG = require$$0$12('toStringTag')
-  // ES3 wrong here
-  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function(it, key){
-  try {
-    return it[key];
-  } catch(e){ /* empty */ }
-};
-
-module.exports = function(it){
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-});
-
-var require$$3$7 = (_classof && typeof _classof === 'object' && 'default' in _classof ? _classof['default'] : _classof);
-
-var core_getIteratorMethod = __commonjs(function (module) {
-var classof   = require$$3$7
-  , ITERATOR  = require$$0$12('iterator')
-  , Iterators = require$$1$14;
-module.exports = require$$0$2.getIteratorMethod = function(it){
-  if(it != undefined)return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-});
-
-var require$$1$18 = (core_getIteratorMethod && typeof core_getIteratorMethod === 'object' && 'default' in core_getIteratorMethod ? core_getIteratorMethod['default'] : core_getIteratorMethod);
-
-var _createProperty = __commonjs(function (module) {
-'use strict';
-var $defineProperty = require$$1
-  , createDesc      = require$$0$6;
-
-module.exports = function(object, index, value){
-  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
-  else object[index] = value;
-};
-});
-
-var require$$2$6 = (_createProperty && typeof _createProperty === 'object' && 'default' in _createProperty ? _createProperty['default'] : _createProperty);
-
-var _isArrayIter = __commonjs(function (module) {
-// check on default Array iterator
-var Iterators  = require$$1$14
-  , ITERATOR   = require$$0$12('iterator')
-  , ArrayProto = Array.prototype;
-
-module.exports = function(it){
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-});
-
-var require$$4$3 = (_isArrayIter && typeof _isArrayIter === 'object' && 'default' in _isArrayIter ? _isArrayIter['default'] : _isArrayIter);
-
-var _iterCall = __commonjs(function (module) {
-// call something on iterator step with safe closing on error
-var anObject = require$$0$5;
-module.exports = function(iterator, fn, value, entries){
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch(e){
-    var ret = iterator['return'];
-    if(ret !== undefined)anObject(ret.call(iterator));
-    throw e;
-  }
-};
-});
-
-var require$$5 = (_iterCall && typeof _iterCall === 'object' && 'default' in _iterCall ? _iterCall['default'] : _iterCall);
-
-var es6_array_from = __commonjs(function (module) {
-'use strict';
-var ctx            = require$$8
-  , $export        = require$$2
-  , toObject       = require$$2$4
-  , call           = require$$5
-  , isArrayIter    = require$$4$3
-  , toLength       = require$$3$4
-  , createProperty = require$$2$6
-  , getIterFn      = require$$1$18;
-
-$export($export.S + $export.F * !require$$0$27(function(iter){ Array.from(iter); }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
-    var O       = toObject(arrayLike)
-      , C       = typeof this == 'function' ? this : Array
-      , aLen    = arguments.length
-      , mapfn   = aLen > 1 ? arguments[1] : undefined
-      , mapping = mapfn !== undefined
-      , index   = 0
-      , iterFn  = getIterFn(O)
-      , length, result, step, iterator;
-    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
-      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
-        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
-      }
-    } else {
-      length = toLength(O.length);
-      for(result = new C(length); length > index; index++){
-        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-      }
-    }
-    result.length = index;
-    return result;
-  }
-});
-});
-
-var from$1 = __commonjs(function (module) {
-module.exports = require$$0$2.Array.from;
-});
-
-var require$$0$26 = (from$1 && typeof from$1 === 'object' && 'default' in from$1 ? from$1['default'] : from$1);
-
-var from = __commonjs(function (module) {
-module.exports = { "default": require$$0$26, __esModule: true };
-});
-
-var require$$0$25 = (from && typeof from === 'object' && 'default' in from ? from['default'] : from);
-
-var toConsumableArray = __commonjs(function (module, exports) {
-"use strict";
-
-exports.__esModule = true;
-
-var _from = require$$0$25;
-
-var _from2 = _interopRequireDefault(_from);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-});
-
-var _toConsumableArray = (toConsumableArray && typeof toConsumableArray === 'object' && 'default' in toConsumableArray ? toConsumableArray['default'] : toConsumableArray);
-
 var _objectSap = __commonjs(function (module) {
 // most Object methods by ES6 should accept primitives
-var $export = require$$2
+var $export = require$$2$1
   , core    = require$$0$2
   , fails   = require$$0$4;
 module.exports = function(KEY, exec){
@@ -1687,14 +1499,14 @@ module.exports = function(KEY, exec){
 };
 });
 
-var require$$0$30 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
+var require$$0$26 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
 
 var es6_object_getOwnPropertyDescriptor = __commonjs(function (module) {
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject                 = require$$2$1
-  , $getOwnPropertyDescriptor = require$$1$12.f;
+var toIObject                 = require$$2$2
+  , $getOwnPropertyDescriptor = require$$1$13.f;
 
-require$$0$30('getOwnPropertyDescriptor', function(){
+require$$0$26('getOwnPropertyDescriptor', function(){
   return function getOwnPropertyDescriptor(it, key){
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
@@ -1708,20 +1520,20 @@ module.exports = function getOwnPropertyDescriptor(it, key){
 };
 });
 
-var require$$0$29 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
+var require$$0$25 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
 
 var getOwnPropertyDescriptor = __commonjs(function (module) {
-module.exports = { "default": require$$0$29, __esModule: true };
+module.exports = { "default": require$$0$25, __esModule: true };
 });
 
-var require$$0$28 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
+var require$$0$24 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
 
 var es6_object_getPrototypeOf = __commonjs(function (module) {
 // 19.1.2.9 Object.getPrototypeOf(O)
-var toObject        = require$$2$4
+var toObject        = require$$2$5
   , $getPrototypeOf = require$$1$15;
 
-require$$0$30('getPrototypeOf', function(){
+require$$0$26('getPrototypeOf', function(){
   return function getPrototypeOf(it){
     return $getPrototypeOf(toObject(it));
   };
@@ -1732,24 +1544,24 @@ var getPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.getPrototypeOf;
 });
 
-var require$$0$31 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
+var require$$0$27 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
 
 var getPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$31, __esModule: true };
+module.exports = { "default": require$$0$27, __esModule: true };
 });
 
-var require$$1$19 = (getPrototypeOf && typeof getPrototypeOf === 'object' && 'default' in getPrototypeOf ? getPrototypeOf['default'] : getPrototypeOf);
+var require$$1$18 = (getPrototypeOf && typeof getPrototypeOf === 'object' && 'default' in getPrototypeOf ? getPrototypeOf['default'] : getPrototypeOf);
 
 var get = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _getPrototypeOf = require$$1$19;
+var _getPrototypeOf = require$$1$18;
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _getOwnPropertyDescriptor = require$$0$28;
+var _getOwnPropertyDescriptor = require$$0$24;
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -1898,6 +1710,78 @@ var utils = {
   blinkRed: blinkRed
 };
 
+// Bug checking function that will throw an error whenever
+// the condition sent to it is evaluated to false
+/**
+ * Processes the message and outputs the correct message if the condition
+ * is false. Otherwise it outputs null.
+ * @api private
+ * @method processCondition
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return {String | null}  - Error message if there is an error, nul otherwise.
+ */
+function processCondition(condition, errorMessage) {
+  if (!condition) {
+    var completeErrorMessage = '';
+    var re = /at ([^\s]+)\s\(/g;
+    var stackTrace = new Error().stack;
+    var stackFunctions = [];
+
+    var funcName = re.exec(stackTrace);
+    while (funcName && funcName[1]) {
+      stackFunctions.push(funcName[1]);
+      funcName = re.exec(stackTrace);
+    }
+
+    // Number 0 is processCondition itself,
+    // Number 1 is assert,
+    // Number 2 is the caller function.
+    if (stackFunctions[2]) {
+      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
+    }
+
+    completeErrorMessage += errorMessage;
+    return completeErrorMessage;
+  }
+
+  return null;
+}
+
+/**
+ * Throws an error if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert(myDate !== undefined, "Date cannot be undefined.");
+ * @api public
+ * @method assert
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+function assert(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    throw new Error(error);
+  }
+}
+
+/**
+ * Logs a warning if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert.warn(myDate !== undefined, "No date provided.");
+ * @api public
+ * @method warn
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+assert.warn = function warn(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    console.warn(error);
+  }
+};
+
 /**
  * @abstract @class FormComponent
  */
@@ -1921,9 +1805,6 @@ var FormComponent = function (_ViewController) {
 
     // Focused on config show
     _this.focusElement = null;
-
-    // Elements that have options will store them in here.
-    _this.html.options = [];
     _this.buildHtml();
     _this.configToggle(true);
     return _this;
@@ -2006,81 +1887,6 @@ var FormComponent = function (_ViewController) {
 
       this.html.container.appendChild(frag);
     }
-  }, {
-    key: 'buildOptionsConfiguration',
-    value: function buildOptionsConfiguration() {
-      var _this3 = this;
-
-      var optionsConfig = document.createElement('div');
-      var optionsConfigCssClass = this.cssPrefix + '-configuration-options';
-      optionsConfig.classList.add(optionsConfigCssClass);
-
-      if (this.html.configuration.children[0]) {
-        this.html.configuration.insertBefore(optionsConfig, this.html.configuration.children[0]);
-      } else {
-        this.html.configuration.appendChild(optionsConfig);
-      }
-
-      var removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.title = 'Remove last option';
-      removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', optionsConfigCssClass + '-btn-remove');
-      removeBtn.addEventListener('click', function () {
-        return _this3.removeOption();
-      });
-      optionsConfig.appendChild(removeBtn);
-
-      var addBtn = document.createElement('button');
-      addBtn.type = 'button';
-      addBtn.title = 'Add new option';
-      addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
-      addBtn.addEventListener('click', function () {
-        if (!legend.value.trim()) {
-          utils.blinkRed(legend, _this3.modulePrefix);
-          return;
-        }
-        var params = [legend.value];
-        if (_this3.getComponentSpecificOptions) {
-          params.push.apply(params, _toConsumableArray(_this3.getComponentSpecificOptions()));
-        }
-        _this3.addOption.apply(_this3, params);
-        legend.value = '';
-      });
-      optionsConfig.appendChild(addBtn);
-
-      var legend = document.createElement('input');
-      legend.setAttribute('placeholder', 'Type a new option');
-      legend.setAttribute('type', 'text');
-      legend.classList.add(optionsConfigCssClass + '-input');
-      this.focusElement = legend;
-      optionsConfig.appendChild(legend);
-      legend.addEventListener('keypress', function (e) {
-        if (e.which === 13) {
-          var click = new Event('click');
-          addBtn.dispatchEvent(click);
-          e.preventDefault();
-          return false; //  returning false will prevent the event from bubbling up.
-        }
-        return true;
-      });
-
-      this.focus();
-    }
-
-    /**
-     * Removes an option element
-     * @method removeOption
-     * @return {void}
-     */
-
-  }, {
-    key: 'removeOption',
-    value: function removeOption() {
-      var optionToRemove = this.html.options.pop();
-      if (optionToRemove) {
-        optionToRemove.remove();
-      }
-    }
 
     /**
      * @method addEditable
@@ -2122,7 +1928,7 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'configToggle',
     value: function configToggle() {
-      var _this4 = this;
+      var _this3 = this;
 
       var forceState = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
 
@@ -2137,8 +1943,8 @@ var FormComponent = function (_ViewController) {
 
         // hide on clickOut
         utils.onClickOut([this.html.container, this.html.configuration], function () {
-          if (_this4.isConfigVisible && !_this4.isDetroyed) {
-            _this4.configToggle();
+          if (_this3.isConfigVisible && !_this3.isDetroyed) {
+            _this3.configToggle();
           }
         });
         this.focus();
@@ -2151,14 +1957,14 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'focus',
     value: function focus() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (this.focusElement) {
         // NOTE: There is a bug that for some reason it doesn't focus if you just
         // call focus() straight away. setTimeout solves it.
         // see http:// goo.gl/UjKOk5
         setTimeout(function () {
-          _this5.focusElement.focus();
+          _this4.focusElement.focus();
         }, 15);
       }
     }
@@ -2177,14 +1983,14 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this6 = this;
+      var _this5 = this;
 
       if (this.isDetroyed) {
         return;
       }
       this.isDetroyed = true;
       this.deleteListeners.forEach(function (fn) {
-        return fn(_this6);
+        return fn(_this5);
       });
       _get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
     }
@@ -2202,98 +2008,39 @@ var FormComponent = function (_ViewController) {
 
     /**
      * Exports the information of a component in one object
-     * @method exportContent
+     * @method exportState
      * @return {[type]} [description]
      */
 
   }, {
-    key: 'exportContent',
-    value: function exportContent() {
+    key: 'exportState',
+    value: function exportState() {
       return {
         required: this.isRequired,
         title: this.html.title.textContent,
-        type: this.constructor.name,
-        options: this.html.options.map(function (o) {
-          return o.textContent;
-        })
+        type: this.constructor.name
       };
+    }
+
+    /**
+     * Sets the component state the the options specified in the
+     * state object
+     * @method importState
+     * @param  {Object} state
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState(state) {
+      assert(state.title === this.constructor.name);
+      this.html.title = state.title;
+      this.isRequired = state.required;
     }
   }]);
 
   return FormComponent;
 }(ViewController);
-
-// Bug checking function that will throw an error whenever
-// the condition sent to it is evaluated to false
-/**
- * Processes the message and outputs the correct message if the condition
- * is false. Otherwise it outputs null.
- * @api private
- * @method processCondition
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return {String | null}  - Error message if there is an error, nul otherwise.
- */
-function processCondition(condition, errorMessage) {
-  if (!condition) {
-    var completeErrorMessage = '';
-    var re = /at ([^\s]+)\s\(/g;
-    var stackTrace = new Error().stack;
-    var stackFunctions = [];
-
-    var funcName = re.exec(stackTrace);
-    while (funcName && funcName[1]) {
-      stackFunctions.push(funcName[1]);
-      funcName = re.exec(stackTrace);
-    }
-
-    // Number 0 is processCondition itself,
-    // Number 1 is assert,
-    // Number 2 is the caller function.
-    if (stackFunctions[2]) {
-      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
-    }
-
-    completeErrorMessage += errorMessage;
-    return completeErrorMessage;
-  }
-
-  return null;
-}
-
-/**
- * Throws an error if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert(myDate !== undefined, "Date cannot be undefined.");
- * @api public
- * @method assert
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-function assert(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    throw new Error(error);
-  }
-}
-
-/**
- * Logs a warning if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert.warn(myDate !== undefined, "No date provided.");
- * @api public
- * @method warn
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-assert.warn = function warn(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    console.warn(error);
-  }
-};
 
 /**
  * @class ControlBar
@@ -2376,8 +2123,8 @@ var ComponentsContainer = function (_ViewController) {
       });
     }
   }, {
-    key: 'exportContent',
-    value: function exportContent() {
+    key: 'exportState',
+    value: function exportState() {
       var outcome = [];
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
@@ -2387,7 +2134,7 @@ var ComponentsContainer = function (_ViewController) {
         for (var _iterator = this.components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var component = _step.value;
 
-          outcome.push(component.exportContent());
+          outcome.push(component.exportState());
         }
       } catch (err) {
         _didIteratorError = true;
@@ -2411,68 +2158,106 @@ var ComponentsContainer = function (_ViewController) {
   return ComponentsContainer;
 }(ViewController);
 
-var RadioBtns = function (_Component) {
-  _inherits(RadioBtns, _Component);
+var OptionsComponent = function (_FormComponent) {
+  _inherits(OptionsComponent, _FormComponent);
 
-  function RadioBtns(modulePrefix) {
-    _classCallCheck(this, RadioBtns);
+  function OptionsComponent(modulePrefix) {
+    _classCallCheck(this, OptionsComponent);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).call(this, modulePrefix));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(OptionsComponent).call(this, modulePrefix));
 
-    _this.buildOptionsConfiguration();
-    Object.preventExtensions(_this);
-
-    _this.addOption('Insert an option');
+    _this.html.options = [];
     return _this;
   }
 
-  _createClass(RadioBtns, [{
-    key: 'addOption',
-    value: function addOption(text) {
-      var newOption = document.createElement('div');
-      newOption.classList.add(this.cssPrefix + '-option');
+  /**
+   * In addition to building the standard html structure, it adds
+   * a field to add an option.
+   * @method buildHtml
+   * @return {[type]} [description]
+   */
 
-      var optionRadio = document.createElement('input');
-      optionRadio.type = 'radio';
-      newOption.appendChild(optionRadio);
 
-      var optionText = document.createElement('span');
-      optionText.classList.add(this.cssPrefix + '-option-text');
-      optionText.textContent = text;
-      newOption.appendChild(optionText);
+  _createClass(OptionsComponent, [{
+    key: 'buildHtml',
+    value: function buildHtml() {
+      var _this2 = this;
 
-      this.html.options.push(newOption);
-      this.html.content.appendChild(newOption);
-      this.addEditable(optionText);
+      _get(Object.getPrototypeOf(OptionsComponent.prototype), 'buildHtml', this).call(this);
+
+      var optionsConfig = document.createElement('div');
+      var optionsConfigCssClass = this.cssPrefix + '-configuration-options';
+      optionsConfig.classList.add(optionsConfigCssClass);
+
+      if (this.html.configuration.children[0]) {
+        this.html.configuration.insertBefore(optionsConfig, this.html.configuration.children[0]);
+      } else {
+        this.html.configuration.appendChild(optionsConfig);
+      }
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.title = 'Remove last option';
+      removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', optionsConfigCssClass + '-btn-remove');
+      removeBtn.addEventListener('click', function () {
+        return _this2.removeOption();
+      });
+      optionsConfig.appendChild(removeBtn);
+
+      var addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.title = 'Add new option';
+      addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
+      addBtn.addEventListener('click', function () {
+        return _this2.submitOptionFromConfigBar();
+      });
+      optionsConfig.appendChild(addBtn);
+
+      this.html.newOptionText = document.createElement('input');
+      this.html.newOptionText.setAttribute('placeholder', 'Type a new option');
+      this.html.newOptionText.setAttribute('type', 'text');
+      this.html.newOptionText.classList.add(optionsConfigCssClass + '-input');
+      this.focusElement = this.html.newOptionText;
+      optionsConfig.appendChild(this.html.newOptionText);
+      this.html.newOptionText.addEventListener('keypress', function (e) {
+        if (e.which === 13) {
+          var click = new Event('click');
+          addBtn.dispatchEvent(click);
+          e.preventDefault();
+          return false; //  returning false will prevent the event from bubbling up.
+        }
+        return true;
+      });
+
+      this.focus();
     }
-  }]);
+  }, {
+    key: 'submitOptionFromConfigBar',
+    value: function submitOptionFromConfigBar() {
+      if (!this.html.newOptionText.value.trim()) {
+        utils.blinkRed(this.html.newOptionText, this.modulePrefix);
+        return;
+      }
+      this.addOption(this.html.newOptionText.value);
+      this.html.newOptionText.value = '';
+    }
 
-  return RadioBtns;
-}(FormComponent);
+    /**
+     * This method is supposed to be extended by subclasses and they will
+     * define the optionType or change this method completely.
+     * @method addOption
+     * @param  {String} text
+     * @param  {Stirng} optionType
+     */
 
-var Checkboxes = function (_FormComponent) {
-  _inherits(Checkboxes, _FormComponent);
-
-  function Checkboxes(modulePrefix) {
-    _classCallCheck(this, Checkboxes);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
-
-    _this.buildOptionsConfiguration();
-    Object.preventExtensions(_this);
-
-    _this.addOption('Insert an option');
-    return _this;
-  }
-
-  _createClass(Checkboxes, [{
+  }, {
     key: 'addOption',
-    value: function addOption(text) {
+    value: function addOption(text, optionType) {
       var newOption = document.createElement('div');
       newOption.classList.add(this.cssPrefix + '-option');
 
       var optionCheckbox = document.createElement('input');
-      optionCheckbox.type = 'checkbox';
+      optionCheckbox.type = optionType;
       newOption.appendChild(optionCheckbox);
 
       var optionText = document.createElement('span');
@@ -2484,22 +2269,126 @@ var Checkboxes = function (_FormComponent) {
       this.html.content.appendChild(newOption);
       this.addEditable(optionText);
     }
+
+    /**
+     * Removes an option element
+     * @method removeOption
+     * @return {void}
+     */
+
+  }, {
+    key: 'removeOption',
+    value: function removeOption() {
+      var optionToRemove = this.html.options.pop();
+      if (optionToRemove) {
+        optionToRemove.remove();
+      }
+    }
+
+    /**
+     * @override @method exportState
+     * @return {Object}
+     */
+
+  }, {
+    key: 'exportState',
+    value: function exportState() {
+      var output = _get(Object.getPrototypeOf(OptionsComponent.prototype), 'exportState', this).call(this);
+      output.options = this.html.options.map(function (o) {
+        return o.textContent;
+      });
+      return output;
+    }
+
+    /**
+     * @override @method importState
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState(state) {
+      var _this3 = this;
+
+      _get(Object.getPrototypeOf(OptionsComponent.prototype), 'importState', this).call(this, state);
+      var optionCount = this.html.options.length;
+      for (var i = 0; i < optionCount; i++) {
+        this.removeOption();
+      }
+      state.options.forEach(function (o) {
+        return _this3.addOption(o);
+      });
+    }
+  }]);
+
+  return OptionsComponent;
+}(FormComponent);
+
+var RadioBtns = function (_OptionsComponent) {
+  _inherits(RadioBtns, _OptionsComponent);
+
+  function RadioBtns(modulePrefix) {
+    _classCallCheck(this, RadioBtns);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    _this.addOption('Insert an option');
+    return _this;
+  }
+
+  /**
+   * @override @method addOption
+   * @param  {String} text
+   */
+
+
+  _createClass(RadioBtns, [{
+    key: 'addOption',
+    value: function addOption(text) {
+      _get(Object.getPrototypeOf(RadioBtns.prototype), 'addOption', this).call(this, text, 'radio');
+    }
+  }]);
+
+  return RadioBtns;
+}(OptionsComponent);
+
+var Checkboxes = function (_OptionsComponent) {
+  _inherits(Checkboxes, _OptionsComponent);
+
+  function Checkboxes(modulePrefix) {
+    _classCallCheck(this, Checkboxes);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
+
+    Object.preventExtensions(_this);
+    _this.addOption('Insert an option');
+    return _this;
+  }
+
+  /**
+   * @override @method addOption
+   * @param  {String} text
+   */
+
+
+  _createClass(Checkboxes, [{
+    key: 'addOption',
+    value: function addOption(text) {
+      _get(Object.getPrototypeOf(Checkboxes.prototype), 'addOption', this).call(this, text, 'checkbox');
+    }
   }]);
 
   return Checkboxes;
-}(FormComponent);
+}(OptionsComponent);
 
-var Dropdown = function (_FormComponent) {
-  _inherits(Dropdown, _FormComponent);
+var Dropdown = function (_OptionsComponent) {
+  _inherits(Dropdown, _OptionsComponent);
 
   function Dropdown(modulePrefix) {
     _classCallCheck(this, Dropdown);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this, modulePrefix));
-
-    _this.buildComponent();
-    _this.buildOptionsConfiguration();
-    _this.buildComponentSpecificConfiguration();
 
     Object.preventExtensions(_this);
 
@@ -2511,6 +2400,13 @@ var Dropdown = function (_FormComponent) {
   }
 
   _createClass(Dropdown, [{
+    key: 'buildHtml',
+    value: function buildHtml() {
+      _get(Object.getPrototypeOf(Dropdown.prototype), 'buildHtml', this).call(this);
+      this.buildComponent();
+      this.buildComponentSpecificConfiguration();
+    }
+  }, {
     key: 'buildComponent',
     value: function buildComponent() {
       var dropdown = document.createElement('select');
@@ -2525,33 +2421,25 @@ var Dropdown = function (_FormComponent) {
   }, {
     key: 'buildComponentSpecificConfiguration',
     value: function buildComponentSpecificConfiguration() {
-      this.html.configOptions = {};
+      var newOptionDisabledWrapper = document.createElement('label');
+      var newOptionDisabled = document.createElement('input');
+      newOptionDisabled.type = 'checkbox';
+      newOptionDisabledWrapper.appendChild(newOptionDisabled);
+      newOptionDisabledWrapper.appendChild(document.createTextNode('Divider'));
 
-      var disabledOptionWrapper = document.createElement('label');
-      var disabledOption = document.createElement('input');
-      disabledOption.type = 'checkbox';
-      disabledOptionWrapper.appendChild(disabledOption);
-      disabledOptionWrapper.appendChild(document.createTextNode('Divider'));
-
-      this.html.configOptions.disabledOption = disabledOption;
-      this.html.componentSpecificConfiguration.appendChild(disabledOptionWrapper);
+      this.html.newOptionDisabled = newOptionDisabled;
+      this.html.componentSpecificConfiguration.appendChild(newOptionDisabledWrapper);
     }
-
-    /**
-     * Fetches component specific options and clears component-specific fields
-     * @method getComponentSpecificOptions
-     * @return {Array}
-     */
-
   }, {
-    key: 'getComponentSpecificOptions',
-    value: function getComponentSpecificOptions() {
-      // Fetch data
-      var disabledOption = this.html.configOptions.disabledOption.checked;
-
-      // Reset fields
-      this.html.configOptions.disabledOption.checked = false;
-      return [disabledOption];
+    key: 'submitOptionFromConfigBar',
+    value: function submitOptionFromConfigBar() {
+      if (!this.html.newOptionText.value.trim()) {
+        utils.blinkRed(this.html.newOptionText, this.modulePrefix);
+        return;
+      }
+      this.addOption(this.html.newOptionText.value, this.html.newOptionDisabled.checked);
+      this.html.newOptionDisabled.checked = false;
+      this.html.newOptionText.value = '';
     }
   }, {
     key: 'addOption',
@@ -2591,18 +2479,18 @@ var Dropdown = function (_FormComponent) {
     }
 
     /**
-     * @override @method exportContent
+     * @override @method exportState
      * @return {Object}
      */
 
   }, {
-    key: 'exportContent',
-    value: function exportContent() {
-      var output = _get(Object.getPrototypeOf(Dropdown.prototype), 'exportContent', this).call(this);
-      output.disabledOptionsIndexes = [];
+    key: 'exportState',
+    value: function exportState() {
+      var output = _get(Object.getPrototypeOf(Dropdown.prototype), 'exportState', this).call(this);
+      output.disabledIndexes = [];
       this.html.options.forEach(function (o, index) {
         if (o.hasAttribute('disabled')) {
-          output.disabledOptionsIndexes.push(index);
+          output.disabledIndexes.push(index);
         }
       });
       return output;
@@ -2610,7 +2498,7 @@ var Dropdown = function (_FormComponent) {
   }]);
 
   return Dropdown;
-}(FormComponent);
+}(OptionsComponent);
 
 /**
  * @abstract @class TextComponent
@@ -2678,14 +2566,14 @@ var TextComponent = function (_FormComponent) {
     }
 
     /**
-     * @override @method exportContent
+     * @override @method exportState
      * @return {Object}
      */
 
   }, {
-    key: 'exportContent',
-    value: function exportContent() {
-      var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportContent', this).call(this);
+    key: 'exportState',
+    value: function exportState() {
+      var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
       output.placeholder = this.html.textElement.placeholder;
       return output;
     }
@@ -2983,7 +2871,7 @@ var Coordinator = function () {
   }, {
     key: 'save',
     value: function save() {
-      var content = this.componentsContainer.exportContent();
+      var content = this.componentsContainer.exportState();
       this.storage.saveContent(content);
     }
   }]);
