@@ -1,6 +1,6 @@
-import Component from './FormComponent';
+import FormComponent from './FormComponent';
 
-export default class Checkboxes extends Component {
+export default class Checkboxes extends FormComponent {
   constructor(modulePrefix) {
     super(modulePrefix);
     this.html.options = [];
@@ -17,6 +17,7 @@ export default class Checkboxes extends Component {
     newOption.appendChild(optionCheckbox);
 
     const optionText = document.createElement('span');
+    optionText.classList.add(`${this.cssPrefix}-option-text`);
     optionText.textContent = text;
     newOption.appendChild(optionText);
 
@@ -27,6 +28,8 @@ export default class Checkboxes extends Component {
 
   removeOption() {
     const optionToRemove = this.html.options.pop();
-    optionToRemove.remove();
+    if (optionToRemove) {
+      optionToRemove.remove();
+    }
   }
 }

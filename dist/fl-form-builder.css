@@ -56,6 +56,12 @@
 .fl-fb-FormComponent-editable[contenteditable="true"] {
   border-bottom: 1px solid #444; }
 
+.fl-fb-FormComponent-option {
+  display: block; }
+
+.fl-fb-FormComponent-option-text {
+  margin-left: 5px; }
+
 .fl-fb-FormComponent-sidebar {
   position: absolute;
   right: 0;

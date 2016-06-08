@@ -2058,8 +2058,8 @@ var RadioBtns = function (_Component) {
   return RadioBtns;
 }(FormComponent);
 
-var Checkboxes = function (_Component) {
-  _inherits(Checkboxes, _Component);
+var Checkboxes = function (_FormComponent) {
+  _inherits(Checkboxes, _FormComponent);
 
   function Checkboxes(modulePrefix) {
     _classCallCheck(this, Checkboxes);
@@ -2083,6 +2083,7 @@ var Checkboxes = function (_Component) {
       newOption.appendChild(optionCheckbox);
 
       var optionText = document.createElement('span');
+      optionText.classList.add(this.cssPrefix + '-option-text');
       optionText.textContent = text;
       newOption.appendChild(optionText);
 
@@ -2094,7 +2095,9 @@ var Checkboxes = function (_Component) {
     key: 'removeOption',
     value: function removeOption() {
       var optionToRemove = this.html.options.pop();
-      optionToRemove.remove();
+      if (optionToRemove) {
+        optionToRemove.remove();
+      }
     }
   }]);
 
