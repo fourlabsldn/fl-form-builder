@@ -22,12 +22,4 @@ export default class TextBox extends FormComponent {
     this.focusElement = textBox;
     this.html.content.appendChild(textBox);
   }
-
-  exportContent() {
-    return {
-      required: this.isRequired,
-      title: this.html.title.textContent,
-      type: this.constructor.name,
-    };
-  }
 }

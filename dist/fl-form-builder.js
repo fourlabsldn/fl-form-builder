@@ -1625,6 +1625,8 @@ var FormComponent = function (_ViewController) {
     // Focused on config show
     _this.focusElement = null;
 
+    // Elements that have options will store them in here.
+    _this.html.options = [];
     _this.buildHtml();
     _this.configToggle(true);
     return _this;
@@ -1868,6 +1870,25 @@ var FormComponent = function (_ViewController) {
     value: function setRequired(required) {
       this.isRequired = required;
     }
+
+    /**
+     * Exports the information of a component in one object
+     * @method exportContent
+     * @return {[type]} [description]
+     */
+
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      return {
+        required: this.isRequired,
+        title: this.html.title.textContent,
+        type: this.constructor.name,
+        options: this.html.options.map(function (o) {
+          return o.textContent;
+        })
+      };
+    }
   }]);
 
   return FormComponent;
@@ -2066,7 +2087,6 @@ var Checkboxes = function (_FormComponent) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
 
-    _this.html.options = [];
     _this.buildOptionsConfiguration();
     Object.preventExtensions(_this);
     return _this;
@@ -2147,15 +2167,6 @@ var TextBox = function (_FormComponent) {
       this.focusElement = textBox;
       this.html.content.appendChild(textBox);
     }
-  }, {
-    key: 'exportContent',
-    value: function exportContent() {
-      return {
-        required: this.isRequired,
-        title: this.html.title.textContent,
-        type: this.constructor.name
-      };
-    }
   }]);
 
   return TextBox;
@@ -2189,15 +2200,6 @@ var TextArea = function (_FormComponent) {
       this.html.textArea = textArea;
       this.focusElement = textArea;
       this.html.content.appendChild(textArea);
-    }
-  }, {
-    key: 'exportContent',
-    value: function exportContent() {
-      return {
-        required: this.isRequired,
-        title: this.html.title.textContent,
-        type: this.constructor.name
-      };
     }
   }]);
 

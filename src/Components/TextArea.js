@@ -23,12 +23,4 @@ export default class TextArea extends FormComponent {
     this.focusElement = textArea;
     this.html.content.appendChild(textArea);
   }
-
-  exportContent() {
-    return {
-      required: this.isRequired,
-      title: this.html.title.textContent,
-      type: this.constructor.name,
-    };
-  }
 }

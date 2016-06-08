@@ -3,7 +3,6 @@ import FormComponent from './FormComponent';
 export default class Checkboxes extends FormComponent {
   constructor(modulePrefix) {
     super(modulePrefix);
-    this.html.options = [];
     this.buildOptionsConfiguration();
     Object.preventExtensions(this);
   }

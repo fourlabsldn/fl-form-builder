@@ -19,6 +19,8 @@ export default class FormComponent extends ViewController {
     // Focused on config show
     this.focusElement = null;
 
+    // Elements that have options will store them in here.
+    this.html.options = [];
     this.buildHtml();
     this.configToggle(true);
   }
@@ -250,5 +252,19 @@ export default class FormComponent extends ViewController {
    */
   setRequired(required) {
     this.isRequired = required;
+  }
+
+  /**
+   * Exports the information of a component in one object
+   * @method exportContent
+   * @return {[type]} [description]
+   */
+  exportContent() {
+    return {
+      required: this.isRequired,
+      title: this.html.title.textContent,
+      type: this.constructor.name,
+      options: this.html.options.map(o => o.textContent),
+    };
   }
 }
