@@ -2622,6 +2622,11 @@ var TextBox = function (_FormComponent) {
 
     _this.buildComponent();
     Object.preventExtensions(_this);
+
+    // We need to call enableEditing here again because the when it was
+    // called by the parent class this.html.textBox still didn't exist
+    _this.enableEditing(true);
+    _this.focus();
     return _this;
   }
 
@@ -2632,12 +2637,35 @@ var TextBox = function (_FormComponent) {
       textBox.type = 'text';
       textBox.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
-      textBox.placeholder = 'Test';
+      textBox.placeholder = 'Insert a placeholder text';
 
-      this.addEditable(textBox);
       this.html.textBox = textBox;
       this.focusElement = textBox;
       this.html.content.appendChild(textBox);
+    }
+
+    /**
+     * @override @method enableEditing
+     * @param  {Boolean} enable
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      _get(Object.getPrototypeOf(TextBox.prototype), 'enableEditing', this).call(this, enable);
+      if (!this.html.textBox) {
+        return;
+      }
+      if (enable) {
+        this.html.textBox.value = this.html.textBox.placeholder;
+        this.html.textBox.placeholder = '';
+      } else {
+        this.html.textBox.placeholder = this.html.textBox.value;
+        this.html.textBox.value = '';
+      }
     }
   }]);
 
@@ -2654,6 +2682,11 @@ var TextArea = function (_FormComponent) {
 
     _this.buildComponent();
     Object.preventExtensions(_this);
+
+    // We need to call enableEditing here again because the when it was
+    // called by the parent class this.html.textArea still didn't exist
+    _this.enableEditing(true);
+    _this.focus();
     return _this;
   }
 
@@ -2665,12 +2698,35 @@ var TextArea = function (_FormComponent) {
 
       textArea.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
-      textArea.placeholder = 'Test';
+      textArea.placeholder = 'Insert a placeholder text';
 
-      this.addEditable(textArea);
       this.html.textArea = textArea;
       this.focusElement = textArea;
       this.html.content.appendChild(textArea);
+    }
+
+    /**
+     * @override @method enableEditing
+     * @param  {Boolean} enable
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      _get(Object.getPrototypeOf(TextArea.prototype), 'enableEditing', this).call(this, enable);
+      if (!this.html.textArea) {
+        return;
+      }
+      if (enable) {
+        this.html.textArea.value = this.html.textArea.placeholder;
+        this.html.textArea.placeholder = '';
+      } else {
+        this.html.textArea.placeholder = this.html.textArea.value;
+        this.html.textArea.value = '';
+      }
     }
   }]);
 
