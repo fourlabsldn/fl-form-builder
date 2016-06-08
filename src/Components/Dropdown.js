@@ -79,4 +79,19 @@ export default class Dropdown extends FormComponent {
       this.html.dropdown.removeAttribute('multiple');
     }
   }
+
+  /**
+   * @override @method exportContent
+   * @return {Object}
+   */
+  exportContent() {
+    const output = super.exportContent();
+    output.disabledOptionsIndexes = [];
+    this.html.options.forEach((o, index) => {
+      if (o.hasAttribute('disabled')) {
+        output.disabledOptionsIndexes.push(index);
+      }
+    });
+    return output;
+  }
 }

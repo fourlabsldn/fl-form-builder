@@ -2589,6 +2589,24 @@ var Dropdown = function (_FormComponent) {
         this.html.dropdown.removeAttribute('multiple');
       }
     }
+
+    /**
+     * @override @method exportContent
+     * @return {Object}
+     */
+
+  }, {
+    key: 'exportContent',
+    value: function exportContent() {
+      var output = _get(Object.getPrototypeOf(Dropdown.prototype), 'exportContent', this).call(this);
+      output.disabledOptionsIndexes = [];
+      this.html.options.forEach(function (o, index) {
+        if (o.hasAttribute('disabled')) {
+          output.disabledOptionsIndexes.push(index);
+        }
+      });
+      return output;
+    }
   }]);
 
   return Dropdown;
