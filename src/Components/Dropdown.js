@@ -5,7 +5,15 @@ export default class Dropdown extends FormComponent {
     super(modulePrefix);
     this.buildComponent();
     this.buildOptionsConfiguration();
+    this.buildComponentSpecificConfiguration();
+
     Object.preventExtensions(this);
+
+
+    // Create placeholder
+    this.addOption('Select an option');
+    this.html.options[0].disabled = true;
+    this.html.options[0].selected = true;
   }
 
   buildComponent() {
@@ -21,8 +29,36 @@ export default class Dropdown extends FormComponent {
     this.html.content.appendChild(dropdown);
   }
 
-  addOption(text) {
+  buildComponentSpecificConfiguration() {
+    this.html.configOptions = {};
+
+    const disabledOptionWrapper = document.createElement('label');
+    const disabledOption = document.createElement('input');
+    disabledOption.type = 'checkbox';
+    disabledOptionWrapper.appendChild(disabledOption);
+    disabledOptionWrapper.appendChild(document.createTextNode('Disabled'));
+
+    this.html.configOptions.disabledOption = disabledOption;
+    this.html.componentSpecificConfiguration.appendChild(disabledOptionWrapper);
+  }
+
+  /**
+   * Fetches component specific options and clears component-specific fields
+   * @method getComponentSpecificOptions
+   * @return {Array}
+   */
+  getComponentSpecificOptions() {
+    // Fetch data
+    const disabledOption = this.html.configOptions.disabledOption.checked;
+
+    // Reset fields
+    this.html.configOptions.disabledOption.checked = false;
+    return [disabledOption];
+  }
+
+  addOption(text, disabled = false) {
     const newOption = document.createElement('option');
+    if (disabled) { newOption.setAttribute('disabled', true); }
     newOption.textContent = text;
 
     this.html.options.push(newOption);

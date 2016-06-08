@@ -148,10 +148,14 @@ export default class FormComponent extends ViewController {
     addBtn.addEventListener('click', () => {
       if (!legend.value.trim()) {
         utils.blinkRed(legend, this.modulePrefix);
-      } else {
-        this.addOption(legend.value);
-        legend.value = '';
+        return;
       }
+      const params = [legend.value];
+      if (this.getComponentSpecificOptions) {
+        params.push(...this.getComponentSpecificOptions());
+      }
+      this.addOption.apply(this, params);
+      legend.value = '';
     });
     optionsConfig.appendChild(addBtn);
 
