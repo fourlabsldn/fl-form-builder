@@ -1583,9 +1583,22 @@ function clickIsWithinComponents(elements, e) {
   return isInsideAnyElement;
 }
 
+function blinkRed(el, modulePrefix) {
+  if (!el || !el.classList) {
+    return;
+  }
+
+  var blickClass = modulePrefix + "-blink-red";
+  el.classList.add(blickClass);
+  setTimeout(function () {
+    el.classList.remove(blickClass);
+  }, 1500);
+}
+
 var utils = {
   createSwitch: createSwitch,
-  onClickOut: onClickOut
+  onClickOut: onClickOut,
+  blinkRed: blinkRed
 };
 
 /**
@@ -1725,7 +1738,7 @@ var FormComponent = function (_ViewController) {
       addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
       addBtn.addEventListener('click', function () {
         if (!legend.value.trim()) {
-          utils.blinkRed(legend);
+          utils.blinkRed(legend, _this3.modulePrefix);
         } else {
           _this3.addOption(legend.value);
           legend.value = '';

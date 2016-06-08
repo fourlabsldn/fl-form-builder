@@ -1,0 +1,20 @@
+.fl-fb-blink-red {
+
+  // transition: all 0.2s ease;
+  animation-name: blinkOutline;
+  animation-duration: 0.3s;
+  animation-iteration-count: 2;
+  animation-direction: reverse;
+}
+
+@keyframes blinkOutline {
+  0% {
+    outline: 1px solid transparent;
+  }
+  50% {
+    outline: 1px solid rgba(250,0,0,0.8);
+  }
+  100% {
+    outline: 1px solid transparent;
+  }
+}
