@@ -2531,7 +2531,7 @@ var Dropdown = function (_FormComponent) {
       var disabledOption = document.createElement('input');
       disabledOption.type = 'checkbox';
       disabledOptionWrapper.appendChild(disabledOption);
-      disabledOptionWrapper.appendChild(document.createTextNode('Disabled'));
+      disabledOptionWrapper.appendChild(document.createTextNode('Divider'));
 
       this.html.configOptions.disabledOption = disabledOption;
       this.html.componentSpecificConfiguration.appendChild(disabledOptionWrapper);

@@ -114,6 +114,7 @@
   }
 }
 
+.fl-fb-FormComponent-componentConfiguration,
 .fl-fb-FormComponent-configuration-buttons,
 .fl-fb-FormComponent-configuration-options {
   display: flex;
@@ -121,6 +122,16 @@
   align-items: stretch;
 
   margin-bottom: 10px;
+}
+.fl-fb-FormComponent-componentConfiguration {
+  display: inline-flex;
+  padding: 0 5px;
+  [type="checkbox"] {
+    margin-right: 5px;
+  }
+}
+.fl-fb-FormComponent-configuration-options {
+  display: inline-flex;
 }
 
 .fl-fb-FormComponent-configuration-btn-delete {
@@ -140,6 +151,7 @@
 .fl-fb-FormComponent-configuration-options-input {
   margin-left: 5px;
   min-width: 50%;
+  text-indent: 5px;
 }
 
 // ============================================================

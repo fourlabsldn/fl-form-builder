@@ -129,6 +129,7 @@
     visibility: visible;
     opacity: 1; }
 
+.fl-fb-FormComponent-componentConfiguration,
 .fl-fb-FormComponent-configuration-buttons,
 .fl-fb-FormComponent-configuration-options {
   display: -webkit-box;
@@ -144,6 +145,21 @@
           align-items: stretch;
   margin-bottom: 10px; }
 
+.fl-fb-FormComponent-componentConfiguration {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  padding: 0 5px; }
+  .fl-fb-FormComponent-componentConfiguration [type="checkbox"] {
+    margin-right: 5px; }
+
+.fl-fb-FormComponent-configuration-options {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex; }
+
 .fl-fb-FormComponent-configuration-btn-delete {
   margin-left: 5px; }
 
@@ -157,7 +173,8 @@
 
 .fl-fb-FormComponent-configuration-options-input {
   margin-left: 5px;
-  min-width: 50%; }
+  min-width: 50%;
+  text-indent: 5px; }
 
 .fl-fb-ui-switch {
   display: inline-block;
