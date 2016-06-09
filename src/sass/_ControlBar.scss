@@ -2,10 +2,12 @@
   display: flex;
   flex-flow: row wrap;
   align-items: stretch;
+  justify-content: space-between;
 
   padding-bottom: 10px;
 }
 
 [class*='fl-fb-ControlBar-button'] {
-  margin: 3px;
+  // margin: 3px;
+  cursor: pointer;
 }

@@ -1,7 +1,7 @@
 import assert from 'fl-assert';
 
 
-const MAX_HISTORY_STATES = 5;
+const MAX_HISTORY_STATES = 15;
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states

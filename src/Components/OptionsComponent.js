@@ -2,6 +2,12 @@ import FormComponent from './FormComponent';
 import utils from '../utils/utils';
 
 export default class OptionsComponent extends FormComponent {
+  static getInfo() {
+    const info = super.getInfo();
+    info.group = 'Options Components';
+    return info;
+  }
+
   constructor(modulePrefix) {
     super(modulePrefix);
     this.html.options = [];

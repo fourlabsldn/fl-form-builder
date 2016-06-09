@@ -2593,6 +2593,15 @@ var ComponentsContainer = function (_ViewController) {
 var OptionsComponent = function (_FormComponent) {
   _inherits(OptionsComponent, _FormComponent);
 
+  _createClass(OptionsComponent, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(OptionsComponent), 'getInfo', this).call(this);
+      info.group = 'Options Components';
+      return info;
+    }
+  }]);
+
   function OptionsComponent(modulePrefix) {
     _classCallCheck(this, OptionsComponent);
 
@@ -3009,6 +3018,15 @@ var Dropdown = function (_OptionsComponent) {
 var TextComponent = function (_FormComponent) {
   _inherits(TextComponent, _FormComponent);
 
+  _createClass(TextComponent, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(TextComponent), 'getInfo', this).call(this);
+      info.group = 'Text Components';
+      return info;
+    }
+  }]);
+
   function TextComponent(modulePrefix, tagName) {
     var fieldType = arguments.length <= 2 || arguments[2] === undefined ? 'text' : arguments[2];
 
@@ -3309,38 +3327,21 @@ var ControlBar = function (_ViewController) {
     value: function buildHtml() {
       var _this2 = this;
 
-      var frag = document.createDocumentFragment();
+      var componentGroups = {};
+      var componentTypes = this.moduleCoordinator.getComponentTypes();
 
       // Create component buttons
-      var componentTypes = this.moduleCoordinator.getComponentTypes();
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        var _loop = function _loop() {
+        for (var _iterator = componentTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var component = _step.value;
 
-          var compBtn = document.createElement('button');
-          compBtn.className = _this2.cssPrefix + '-button-component';
-          compBtn.className += ' ' + component.iconClass;
-          compBtn.classList.add('btn', 'btn-default'); // Bootstrap
-
-          compBtn.value = component.name;
-          compBtn.name = component.description;
-          compBtn.title = component.description;
-          compBtn.addEventListener('click', function () {
-            _this2.moduleCoordinator.createComponent(component.name);
-          });
-
-          frag.appendChild(compBtn);
-        };
-
-        for (var _iterator = componentTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          _loop();
+          componentGroups[component.group] = componentGroups[component.group] || [];
+          componentGroups[component.group].push(component);
         }
-
-        // Create Save button
       } catch (err) {
         _didIteratorError = true;
         _iteratorError = err;
@@ -3356,14 +3357,53 @@ var ControlBar = function (_ViewController) {
         }
       }
 
+      var componentsBtnGroups = createButtonGroup();
+      var buttonsClass = this.cssPrefix + '-button-component';
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = Object.keys(componentGroups)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var group = _step2.value;
+
+          var expansibleBtn = createExapansibleButton(group, componentGroups[group], buttonsClass);
+          componentsBtnGroups.appendChild(expansibleBtn);
+        }
+
+        // Add listeners to all component creation buttons
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      componentsBtnGroups.querySelectorAll('.' + buttonsClass).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          _this2.moduleCoordinator.createComponent(btn.name);
+        });
+      });
+
+      var actionsBtnGroup = createButtonGroup();
+      // Create Save button
       var saveBtn = document.createElement('button');
       saveBtn.className = this.cssPrefix + '-button-save';
-      saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
+      saveBtn.classList.add('btn', // Bootstrap
+      'btn-primary');
       saveBtn.textContent = 'Save';
       saveBtn.addEventListener('click', function () {
         return _this2.moduleCoordinator.save();
       });
-      frag.appendChild(saveBtn);
+      actionsBtnGroup.appendChild(saveBtn);
 
       // Create Import button
       var undoBtn = document.createElement('button');
@@ -3376,16 +3416,79 @@ var ControlBar = function (_ViewController) {
           utils.blinkRed(undoBtn, _this2.modulePrefix);
         }
       });
-      frag.appendChild(undoBtn);
+      actionsBtnGroup.appendChild(undoBtn);
 
-      this.html.container.appendChild(frag);
+      this.html.container.appendChild(componentsBtnGroups);
+      this.html.container.appendChild(actionsBtnGroup);
     }
   }]);
 
   return ControlBar;
 }(ViewController);
 
-var MAX_HISTORY_STATES = 5;
+function createButtonGroup() {
+  var group = document.createElement('div');
+  group.classList.add('btn-group');
+  group.setAttribute('role', 'group');
+  return group;
+}
+
+function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
+  var btnGroup = createButtonGroup();
+  var btn = document.createElement('button');
+  btn.classList.add('btn', 'btn-default', 'dropdown-toggle');
+  btn.setAttribute('type', 'button');
+  btn.setAttribute('data-toggle', 'dropdown');
+  btn.setAttribute('aria-haspopup', 'true');
+  btn.setAttribute('aria-expanded', 'false');
+
+  var arrowDown = document.createElement('span');
+  arrowDown.classList.add('caret');
+
+  btn.textContent = buttonName;
+  btn.appendChild(arrowDown);
+  btnGroup.appendChild(btn);
+
+  var list = document.createElement('ul');
+  list.classList.add('dropdown-menu');
+
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = subButtons[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var buttonInfo = _step3.value;
+
+      var listItem = document.createElement('li');
+      var clickable = document.createElement('a');
+      clickable.name = buttonInfo.name;
+      clickable.textContent = buttonInfo.description;
+      clickable.classList.add(subButtonsClass);
+
+      listItem.appendChild(clickable);
+      list.appendChild(listItem);
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+        _iterator3.return();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
+
+  btnGroup.appendChild(list);
+  return btnGroup;
+}
+
+var MAX_HISTORY_STATES = 15;
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states

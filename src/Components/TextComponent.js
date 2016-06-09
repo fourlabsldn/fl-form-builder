@@ -4,6 +4,12 @@ import FormComponent from './FormComponent';
  * @abstract @class TextComponent
  */
 export default class TextComponent extends FormComponent {
+  static getInfo() {
+    const info = super.getInfo();
+    info.group = 'Text Components';
+    return info;
+  }
+
   constructor(modulePrefix, tagName, fieldType = 'text') {
     super(modulePrefix);
     this.fieldType = fieldType;

@@ -24,10 +24,12 @@
 
 .fl-fb-FormComponent--configuration-visible {
   z-index: 2;
+  background-color: $c-highlight;
 }
 
 .fl-fb-FormComponent-editable[contenteditable="true"] {
-  border-bottom: 1px solid $c-font-dark;
+  // border-bottom: 1px solid $c-font-dark;
+  background-color: $c-text-highlight;
 }
 
 .fl-fb--dragging {
@@ -117,7 +119,7 @@
 .fl-fb-FormComponent-configuration {
   background-color: $c-background;
   width: 100%;
-  padding: 15px 15px 10px;
+  padding: 15px $fc-side-padding 2px;
 
   visibility: hidden;
   opacity: 0;

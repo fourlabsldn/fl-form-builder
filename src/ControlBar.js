@@ -13,33 +13,44 @@ export default class ControlBar extends ViewController {
   }
 
   buildHtml() {
-    const frag = document.createDocumentFragment();
+    const componentGroups = {};
+    const componentTypes = this.moduleCoordinator.getComponentTypes();
 
     // Create component buttons
-    const componentTypes = this.moduleCoordinator.getComponentTypes();
     for (const component of componentTypes) {
-      const compBtn = document.createElement('button');
-      compBtn.className = `${this.cssPrefix}-button-component`;
-      compBtn.className += ` ${component.iconClass}`;
-      compBtn.classList.add('btn', 'btn-default'); // Bootstrap
-
-      compBtn.value = component.name;
-      compBtn.name = component.description;
-      compBtn.title = component.description;
-      compBtn.addEventListener('click', () => {
-        this.moduleCoordinator.createComponent(component.name);
-      });
-
-      frag.appendChild(compBtn);
+      componentGroups[component.group] = componentGroups[component.group] || [];
+      componentGroups[component.group].push(component);
     }
 
+    const componentsBtnGroups = createButtonGroup();
+    const buttonsClass = `${this.cssPrefix}-button-component`;
+    for (const group of Object.keys(componentGroups)) {
+      const expansibleBtn = createExapansibleButton(
+        group,
+        componentGroups[group],
+        buttonsClass
+      );
+      componentsBtnGroups.appendChild(expansibleBtn);
+    }
+
+    // Add listeners to all component creation buttons
+    componentsBtnGroups.querySelectorAll(`.${buttonsClass}`).forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.moduleCoordinator.createComponent(btn.name);
+      });
+    });
+
+    const actionsBtnGroup = createButtonGroup();
     // Create Save button
     const saveBtn = document.createElement('button');
     saveBtn.className = `${this.cssPrefix}-button-save`;
-    saveBtn.classList.add('btn', 'btn-primary'); // Bootstrap
+    saveBtn.classList.add(
+      'btn', // Bootstrap
+      'btn-primary'
+    );
     saveBtn.textContent = 'Save';
     saveBtn.addEventListener('click', () => this.moduleCoordinator.save());
-    frag.appendChild(saveBtn);
+    actionsBtnGroup.appendChild(saveBtn);
 
     // Create Import button
     const undoBtn = document.createElement('button');
@@ -52,8 +63,55 @@ export default class ControlBar extends ViewController {
         utils.blinkRed(undoBtn, this.modulePrefix);
       }
     });
-    frag.appendChild(undoBtn);
+    actionsBtnGroup.appendChild(undoBtn);
 
-    this.html.container.appendChild(frag);
+    this.html.container.appendChild(componentsBtnGroups);
+    this.html.container.appendChild(actionsBtnGroup);
   }
+}
+
+
+function createButtonGroup() {
+  const group = document.createElement('div');
+  group.classList.add('btn-group');
+  group.setAttribute('role', 'group');
+  return group;
+}
+
+function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
+  const btnGroup = createButtonGroup();
+  const btn = document.createElement('button');
+  btn.classList.add(
+    'btn',
+    'btn-default',
+    'dropdown-toggle'
+  );
+  btn.setAttribute('type', 'button');
+  btn.setAttribute('data-toggle', 'dropdown');
+  btn.setAttribute('aria-haspopup', 'true');
+  btn.setAttribute('aria-expanded', 'false');
+
+  const arrowDown = document.createElement('span');
+  arrowDown.classList.add('caret');
+
+  btn.textContent = buttonName;
+  btn.appendChild(arrowDown);
+  btnGroup.appendChild(btn);
+
+  const list = document.createElement('ul');
+  list.classList.add('dropdown-menu');
+
+  for (const buttonInfo of subButtons) {
+    const listItem = document.createElement('li');
+    const clickable = document.createElement('a');
+    clickable.name = buttonInfo.name;
+    clickable.textContent = buttonInfo.description;
+    clickable.classList.add(subButtonsClass);
+
+    listItem.appendChild(clickable);
+    list.appendChild(listItem);
+  }
+
+  btnGroup.appendChild(list);
+  return btnGroup;
 }
