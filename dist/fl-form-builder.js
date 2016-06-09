@@ -2527,11 +2527,34 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteAllComponents',
     value: function deleteAllComponents() {
-      var _this4 = this;
+      // NOTE: we create a new array because deleteComponent modifies
+      // 'this.components', so we would have problems as we are
+      // iterating trough an array being modified.
+      var components = Array.from(this.components);
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-      this.components.forEach(function (comp) {
-        return _this4.deleteComponent(comp, false);
-      });
+      try {
+        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var comp = _step.value;
+
+          this.deleteComponent(comp);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
     }
 
     /**
@@ -2544,11 +2567,11 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'setComponents',
     value: function setComponents(components) {
-      var _this5 = this;
+      var _this4 = this;
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this5.addComponent(comp, false, false);
+        return _this4.addComponent(comp, false, false);
       });
     }
   }]);
@@ -3274,7 +3297,10 @@ var ControlBar = function (_ViewController) {
       undoBtn.classList.add('btn', 'btn-default'); // Bootstrap
       undoBtn.textContent = 'Undo';
       undoBtn.addEventListener('click', function () {
-        return _this2.moduleCoordinator.popHistoryState();
+        var undoSuccess = _this2.moduleCoordinator.popHistoryState();
+        if (!undoSuccess) {
+          utils.blinkRed(undoBtn, _this2.modulePrefix);
+        }
       });
       frag.appendChild(undoBtn);
 
@@ -3285,6 +3311,7 @@ var ControlBar = function (_ViewController) {
   return ControlBar;
 }(ViewController);
 
+var MAX_HISTORY_STATES = 5;
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states
@@ -3311,8 +3338,10 @@ var Storage = function () {
     key: 'pushHistoryState',
     value: function pushHistoryState(state) {
       assert(state, 'Invalid state being saved: ' + state);
+      if (this.history.length > MAX_HISTORY_STATES) {
+        this.history = this.history.slice(1);
+      }
       if (this.currentState) {
-        console.log('Pushing history state of index ' + this.history.length);
         this.history.push(this.currentState);
       }
       this.currentState = state;
@@ -3439,15 +3468,27 @@ var Coordinator = function () {
     value: function pushHistoryState() {
       var currentState = this.exportState();
       this.storage.pushHistoryState(currentState);
+      console.log('Pushing state:');
+      console.dir(currentState);
     }
+
+    /**
+     * Undo function
+     * @method popHistoryState
+     * @return {Boolean} success
+     */
+
   }, {
     key: 'popHistoryState',
     value: function popHistoryState() {
       var lastState = this.storage.popHistoryState();
+      console.log('Popping state:');
       console.dir(lastState);
       if (lastState) {
         this.importState(lastState);
+        return true;
       }
+      return false;
     }
   }]);
 

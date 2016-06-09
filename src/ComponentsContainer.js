@@ -107,7 +107,13 @@ export default class ComponentsContainer extends ViewController {
    * @return {void}
    */
   deleteAllComponents() {
-    this.components.forEach(comp => this.deleteComponent(comp, false));
+    // NOTE: we create a new array because deleteComponent modifies
+    // 'this.components', so we would have problems as we are
+    // iterating trough an array being modified.
+    const components = Array.from(this.components);
+    for (const comp of components) {
+      this.deleteComponent(comp);
+    }
   }
 
   /**

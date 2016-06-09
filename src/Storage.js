@@ -1,5 +1,7 @@
 import assert from 'fl-assert';
 
+
+const MAX_HISTORY_STATES = 5;
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states
@@ -20,8 +22,10 @@ export default class Storage {
 
   pushHistoryState(state) {
     assert(state, `Invalid state being saved: ${state}`);
+    if (this.history.length > MAX_HISTORY_STATES) {
+      this.history = this.history.slice(1);
+    }
     if (this.currentState) {
-      console.log(`Pushing history state of index ${this.history.length}`);
       this.history.push(this.currentState);
     }
     this.currentState = state;

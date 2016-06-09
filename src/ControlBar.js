@@ -1,4 +1,6 @@
 import ViewController from './ViewController';
+import utils from './utils/utils';
+
 /**
  * @class ControlBar
  */
@@ -44,7 +46,12 @@ export default class ControlBar extends ViewController {
     undoBtn.className = `${this.cssPrefix}-button-save`;
     undoBtn.classList.add('btn', 'btn-default'); // Bootstrap
     undoBtn.textContent = 'Undo';
-    undoBtn.addEventListener('click', () => this.moduleCoordinator.popHistoryState());
+    undoBtn.addEventListener('click', () => {
+      const undoSuccess = this.moduleCoordinator.popHistoryState();
+      if (!undoSuccess) {
+        utils.blinkRed(undoBtn, this.modulePrefix);
+      }
+    });
     frag.appendChild(undoBtn);
 
     this.html.container.appendChild(frag);
