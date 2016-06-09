@@ -67,8 +67,6 @@ export default class Coordinator {
   pushHistoryState() {
     const currentState = this.exportState();
     this.storage.pushHistoryState(currentState);
-    console.log('Pushing state:');
-    console.dir(currentState);
   }
 
   /**
@@ -78,8 +76,6 @@ export default class Coordinator {
    */
   popHistoryState() {
     const lastState = this.storage.popHistoryState();
-    console.log('Popping state:');
-    console.dir(lastState);
     if (lastState) {
       this.importState(lastState);
       return true;

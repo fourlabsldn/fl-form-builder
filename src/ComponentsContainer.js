@@ -54,11 +54,13 @@ export default class ComponentsContainer extends ViewController {
 
     const draggingClass = `${this.modulePrefix}--dragging`;
     dragBtn.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+      if (this.components.length < 2) { return; }
+
       const container = component.getHtmlContainer();
       const containersArray = this.components.map(c => c.getHtmlContainer());
 
       container.classList.add(draggingClass);
-      e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
 
       // Take care of moving and reordering
       utils.trackReorderDrag(e, container, containersArray);

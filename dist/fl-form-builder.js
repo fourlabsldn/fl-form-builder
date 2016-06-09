@@ -2478,13 +2478,17 @@ var ComponentsContainer = function (_ViewController) {
 
       var draggingClass = this.modulePrefix + '--dragging';
       dragBtn.addEventListener('dragstart', function (e) {
+        e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+        if (_this3.components.length < 2) {
+          return;
+        }
+
         var container = component.getHtmlContainer();
         var containersArray = _this3.components.map(function (c) {
           return c.getHtmlContainer();
         });
 
         container.classList.add(draggingClass);
-        e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
 
         // Take care of moving and reordering
         utils.trackReorderDrag(e, container, containersArray);
@@ -3509,7 +3513,6 @@ var Storage = function () {
     key: 'saveContent',
     value: function saveContent(content) {
       console.warn('Not implemented.');
-      console.log(content);
     }
   }, {
     key: 'pushHistoryState',
@@ -3645,8 +3648,6 @@ var Coordinator = function () {
     value: function pushHistoryState() {
       var currentState = this.exportState();
       this.storage.pushHistoryState(currentState);
-      console.log('Pushing state:');
-      console.dir(currentState);
     }
 
     /**
@@ -3659,8 +3660,6 @@ var Coordinator = function () {
     key: 'popHistoryState',
     value: function popHistoryState() {
       var lastState = this.storage.popHistoryState();
-      console.log('Popping state:');
-      console.dir(lastState);
       if (lastState) {
         this.importState(lastState);
         return true;
