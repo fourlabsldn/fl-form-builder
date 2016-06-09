@@ -1,5 +1,5 @@
-import OptionsComponent from './OptionsComponent';
-import utils from '../utils/utils';
+import OptionsComponent from '../OptionsComponent';
+import utils from '../../utils/utils';
 
 export default class Dropdown extends OptionsComponent {
   static getInfo() {

@@ -1,4 +1,4 @@
-import TextComponent from './TextComponent';
+import TextComponent from '../TextComponent';
 
 export default class TextArea extends TextComponent {
   static getInfo() {

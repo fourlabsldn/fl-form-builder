@@ -1,4 +1,4 @@
-import OptionsComponent from './OptionsComponent';
+import OptionsComponent from '../OptionsComponent';
 
 export default class Checkboxes extends OptionsComponent {
   static getInfo() {

@@ -1,8 +1,11 @@
-import RadioBtns from './Components/RadioBtns';
-import Checkboxes from './Components/Checkboxes';
-import Dropdown from './Components/Dropdown';
-import TextBox from './Components/TextBox';
-import TextArea from './Components/TextArea';
+import RadioBtns from './Components/OptionsComponents/RadioBtns';
+import Checkboxes from './Components/OptionsComponents/Checkboxes';
+import Dropdown from './Components/OptionsComponents/Dropdown';
+import TextBox from './Components/TextComponents/TextBox';
+import TextArea from './Components/TextComponents/TextArea';
+import EmailBox from './Components/TextComponents/EmailBox';
+import TelephoneBox from './Components/TextComponents/TelephoneBox';
+import NumberBox from './Components/TextComponents/NumberBox';
 import assert from 'fl-assert';
 
 /**
@@ -16,6 +19,9 @@ export default class ComponentFabric {
       Checkboxes,
       Dropdown,
       TextBox,
+      EmailBox,
+      TelephoneBox,
+      NumberBox,
       TextArea,
     ];
 

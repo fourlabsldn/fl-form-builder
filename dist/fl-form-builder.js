@@ -3171,6 +3171,72 @@ var TextArea = function (_TextComponent) {
   return TextArea;
 }(TextComponent);
 
+var EmailBox = function (_TextComponent) {
+  _inherits(EmailBox, _TextComponent);
+
+  _createClass(EmailBox, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(EmailBox), 'getInfo', this).call(this);
+      info.description = 'Email Box';
+      info.iconClass = 'glyphicon glyphicon-envelope';
+      return info;
+    }
+  }]);
+
+  function EmailBox(modulePrefix) {
+    _classCallCheck(this, EmailBox);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(EmailBox).call(this, modulePrefix, 'input', 'email'));
+  }
+
+  return EmailBox;
+}(TextComponent);
+
+var TelephoneBox = function (_TextComponent) {
+  _inherits(TelephoneBox, _TextComponent);
+
+  _createClass(TelephoneBox, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(TelephoneBox), 'getInfo', this).call(this);
+      info.description = 'Telephone Box';
+      info.iconClass = 'glyphicon glyphicon-earphone';
+      return info;
+    }
+  }]);
+
+  function TelephoneBox(modulePrefix) {
+    _classCallCheck(this, TelephoneBox);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TelephoneBox).call(this, modulePrefix, 'input', 'tel'));
+  }
+
+  return TelephoneBox;
+}(TextComponent);
+
+var NumberBox = function (_TextComponent) {
+  _inherits(NumberBox, _TextComponent);
+
+  _createClass(NumberBox, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(NumberBox), 'getInfo', this).call(this);
+      info.description = 'Number Box';
+      info.iconClass = 'glyphicon glyphicon-subscript';
+      return info;
+    }
+  }]);
+
+  function NumberBox(modulePrefix) {
+    _classCallCheck(this, NumberBox);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberBox).call(this, modulePrefix, 'input', 'number'));
+  }
+
+  return NumberBox;
+}(TextComponent);
+
 /**
  * @class ControlBar
  */
@@ -3180,7 +3246,7 @@ var ComponentFabric = function () {
     _classCallCheck(this, ComponentFabric);
 
     this.modulePrefix = modulePrefix;
-    this.componentConstructors = [RadioBtns, Checkboxes, Dropdown, TextBox, TextArea];
+    this.componentConstructors = [RadioBtns, Checkboxes, Dropdown, TextBox, EmailBox, TelephoneBox, NumberBox, TextArea];
 
     Object.preventExtensions(this);
   }
