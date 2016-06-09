@@ -18,6 +18,8 @@ export default class FormComponent extends ViewController {
 
     this.acceptEvents('destroy', 'change');
 
+    this.lastState = null;
+
     // Focused on config show
     this.focusElement = null;
     this.buildHtml();
@@ -49,8 +51,8 @@ export default class FormComponent extends ViewController {
 
     this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
     this.html.requiredSwitch.classList.add(`${configurationCssClass}-switch-required`);
-    this.html.requiredSwitch.addEventListener('change', () => {
-      const checked = this.html.requiredSwitch;
+    this.html.requiredSwitch.addEventListener('change', (e) => {
+      const checked = e.target.checked;
       this.setRequired(checked);
     });
     configurationButtons.appendChild(this.html.requiredSwitch);
@@ -66,8 +68,6 @@ export default class FormComponent extends ViewController {
     );
     okBtn.type = 'button';
     okBtn.addEventListener('click', () => {
-      // TODO: compare changes before triggering change.
-      this.trigger('change');
       this.configToggle();
     });
     configurationButtons.appendChild(okBtn);
@@ -145,6 +145,7 @@ export default class FormComponent extends ViewController {
       // hide
       this.html.container.classList.remove(`${this.cssPrefix}--configuration-visible`);
       this.enableEditing(false);
+      this.triggerChangeIfNeeded();
     } else {
       // show
       this.html.container.classList.add(`${this.cssPrefix}--configuration-visible`);
@@ -183,8 +184,8 @@ export default class FormComponent extends ViewController {
    * @param  {Boolean} required
    */
   setRequired(required) {
-    this.isRequired = required;
-    this.html.requiredSwitch = required;
+    this.isRequired = !!required;
+    this.html.requiredSwitch = !!required;
   }
 
   /**
@@ -212,5 +213,22 @@ export default class FormComponent extends ViewController {
       `Importing incompatible state. Expected ${this.constructor.name}, got ${state.type}`);
     this.html.title.textContent = state.title;
     this.setRequired(state.required);
+  }
+
+  /**
+   * Triggers the change event if any change happened.
+   * @method triggerChangeIfNeeded
+   * @return {void}
+   */
+  triggerChangeIfNeeded() {
+    const currentState = this.exportState();
+    const currStateJson = JSON.stringify(currentState);
+
+    const lastStateJson = JSON.stringify(this.lastState);
+    const changeHappened = lastStateJson !== currStateJson;
+    if (changeHappened && this.lastState !== null) {
+      this.trigger('change');
+    }
+    this.lastState = currentState;
   }
 }

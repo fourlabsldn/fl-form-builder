@@ -95,7 +95,7 @@ export default class ComponentsContainer extends ViewController {
    * @return {void}
    */
   deleteAllComponents() {
-    this.components.forEach(comp => this.deleteComponent(comp));
+    this.components.forEach(comp => this.deleteComponent(comp, false));
   }
 
   /**
@@ -106,6 +106,6 @@ export default class ComponentsContainer extends ViewController {
    */
   setComponents(components) {
     this.deleteAllComponents();
-    components.forEach(comp => this.addComponent(comp, false));
+    components.forEach(comp => this.addComponent(comp, false, false));
   }
 }

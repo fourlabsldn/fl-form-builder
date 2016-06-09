@@ -2151,6 +2151,8 @@ var FormComponent = function (_ViewController) {
 
     _this.acceptEvents('destroy', 'change');
 
+    _this.lastState = null;
+
     // Focused on config show
     _this.focusElement = null;
     _this.buildHtml();
@@ -2187,8 +2189,8 @@ var FormComponent = function (_ViewController) {
 
       this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
       this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
-      this.html.requiredSwitch.addEventListener('change', function () {
-        var checked = _this2.html.requiredSwitch;
+      this.html.requiredSwitch.addEventListener('change', function (e) {
+        var checked = e.target.checked;
         _this2.setRequired(checked);
       });
       configurationButtons.appendChild(this.html.requiredSwitch);
@@ -2199,8 +2201,6 @@ var FormComponent = function (_ViewController) {
       'glyphicon-ok');
       okBtn.type = 'button';
       okBtn.addEventListener('click', function () {
-        // TODO: compare changes before triggering change.
-        _this2.trigger('change');
         _this2.configToggle();
       });
       configurationButtons.appendChild(okBtn);
@@ -2289,6 +2289,7 @@ var FormComponent = function (_ViewController) {
         // hide
         this.html.container.classList.remove(this.cssPrefix + '--configuration-visible');
         this.enableEditing(false);
+        this.triggerChangeIfNeeded();
       } else {
         // show
         this.html.container.classList.add(this.cssPrefix + '--configuration-visible');
@@ -2339,8 +2340,8 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'setRequired',
     value: function setRequired(required) {
-      this.isRequired = required;
-      this.html.requiredSwitch = required;
+      this.isRequired = !!required;
+      this.html.requiredSwitch = !!required;
     }
 
     /**
@@ -2373,6 +2374,26 @@ var FormComponent = function (_ViewController) {
       assert(state.type === this.constructor.name, 'Importing incompatible state. Expected ' + this.constructor.name + ', got ' + state.type);
       this.html.title.textContent = state.title;
       this.setRequired(state.required);
+    }
+
+    /**
+     * Triggers the change event if any change happened.
+     * @method triggerChangeIfNeeded
+     * @return {void}
+     */
+
+  }, {
+    key: 'triggerChangeIfNeeded',
+    value: function triggerChangeIfNeeded() {
+      var currentState = this.exportState();
+      var currStateJson = JSON.stringify(currentState);
+
+      var lastStateJson = JSON.stringify(this.lastState);
+      var changeHappened = lastStateJson !== currStateJson;
+      if (changeHappened && this.lastState !== null) {
+        this.trigger('change');
+      }
+      this.lastState = currentState;
     }
   }]);
 
@@ -2502,7 +2523,7 @@ var ComponentsContainer = function (_ViewController) {
       var _this4 = this;
 
       this.components.forEach(function (comp) {
-        return _this4.deleteComponent(comp);
+        return _this4.deleteComponent(comp, false);
       });
     }
 
@@ -2520,7 +2541,7 @@ var ComponentsContainer = function (_ViewController) {
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this5.addComponent(comp, false);
+        return _this5.addComponent(comp, false, false);
       });
     }
   }]);
@@ -3267,6 +3288,7 @@ var Storage = function () {
   function Storage() {
     _classCallCheck(this, Storage);
 
+    this.currentState = null;
     this.history = [];
     Object.preventExtensions(this);
   }
@@ -3280,8 +3302,11 @@ var Storage = function () {
   }, {
     key: 'pushHistoryState',
     value: function pushHistoryState(state) {
-      console.log('Pushing history state: ' + this.history.length);
-      this.history.push(state);
+      console.log('Pushing history state of index: ' + this.history.length);
+      if (this.currentState) {
+        this.history.push(this.currentState);
+      }
+      this.currentState = state;
     }
 
     /**
@@ -3292,8 +3317,9 @@ var Storage = function () {
   }, {
     key: 'popHistoryState',
     value: function popHistoryState() {
-      console.log('Popping history state: ' + this.history.length);
-      return this.history.pop();
+      this.currentState = this.history.pop();
+      console.log('Popping history state of index: ' + (this.history.length || undefined));
+      return this.currentState;
     }
   }]);
 
@@ -3319,6 +3345,8 @@ var Coordinator = function () {
     Object.preventExtensions(this);
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());
+
+    this.pushHistoryState();
   }
 
   _createClass(Coordinator, [{
@@ -3331,6 +3359,7 @@ var Coordinator = function () {
     value: function createComponent(compName) {
       var newComponent = this.componentFabric.createComponent(compName);
       this.componentsContainer.addComponent(newComponent);
+      this.pushHistoryState();
     }
   }, {
     key: 'save',
@@ -3404,6 +3433,7 @@ var Coordinator = function () {
     key: 'popHistoryState',
     value: function popHistoryState() {
       var lastState = this.storage.popHistoryState();
+      console.dir(lastState);
       if (lastState) {
         this.importState(lastState);
       }

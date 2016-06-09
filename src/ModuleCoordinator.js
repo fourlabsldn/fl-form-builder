@@ -19,6 +19,8 @@ export default class Coordinator {
     Object.preventExtensions(this);
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());
+
+    this.pushHistoryState();
   }
 
   getComponentTypes() {
@@ -28,6 +30,7 @@ export default class Coordinator {
   createComponent(compName) {
     const newComponent = this.componentFabric.createComponent(compName);
     this.componentsContainer.addComponent(newComponent);
+    this.pushHistoryState();
   }
 
   save() {
@@ -68,6 +71,7 @@ export default class Coordinator {
 
   popHistoryState() {
     const lastState = this.storage.popHistoryState();
+    console.dir(lastState);
     if (lastState) {
       this.importState(lastState);
     }

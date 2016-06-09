@@ -6,6 +6,7 @@
  */
 export default class Storage {
   constructor() {
+    this.currentState = null;
     this.history = [];
     Object.preventExtensions(this);
   }
@@ -16,8 +17,11 @@ export default class Storage {
   }
 
   pushHistoryState(state) {
-    console.log(`Pushing history state: ${this.history.length}`);
-    this.history.push(state);
+    console.log(`Pushing history state of index: ${this.history.length}`);
+    if (this.currentState) {
+      this.history.push(this.currentState);
+    }
+    this.currentState = state;
   }
 
   /**
@@ -25,8 +29,9 @@ export default class Storage {
    * @return {Object} - A State object
    */
   popHistoryState() {
-    console.log(`Popping history state: ${this.history.length}`);
-    return this.history.pop();
+    this.currentState = this.history.pop();
+    console.log(`Popping history state of index: ${this.history.length || undefined}`);
+    return this.currentState;
   }
 
 }
