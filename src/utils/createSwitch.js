@@ -13,7 +13,9 @@ export default function createSwitch(labelText, modulePrefix) {
   switchInput.classList.add(`${cssPrefix}-toggle-round`);
   switchInput.type = 'checkbox';
   switchInput.id = `${cssPrefix}-${Date.now()}`;
+  wrapper.input = switchInput;
   switchElement.appendChild(switchInput);
+
 
   const switchLabel = document.createElement('label');
   switchLabel.setAttribute('for', switchInput.id);

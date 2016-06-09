@@ -1768,6 +1768,7 @@ function createSwitch(labelText, modulePrefix) {
   switchInput.classList.add(cssPrefix + '-toggle-round');
   switchInput.type = 'checkbox';
   switchInput.id = cssPrefix + '-' + Date.now();
+  wrapper.input = switchInput;
   switchElement.appendChild(switchInput);
 
   var switchLabel = document.createElement('label');
@@ -2351,7 +2352,7 @@ var FormComponent = function (_ViewController) {
     key: 'setRequired',
     value: function setRequired(required) {
       this.isRequired = !!required;
-      this.html.requiredSwitch = !!required;
+      this.html.requiredSwitch.input.checked = !!required;
     }
 
     /**

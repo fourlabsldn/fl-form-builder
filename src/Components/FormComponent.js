@@ -193,7 +193,7 @@ export default class FormComponent extends ViewController {
    */
   setRequired(required) {
     this.isRequired = !!required;
-    this.html.requiredSwitch = !!required;
+    this.html.requiredSwitch.input.checked = !!required;
   }
 
   /**
