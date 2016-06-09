@@ -51,7 +51,7 @@ export default class Coordinator {
     return outcome;
   }
 
-  importState(state = this.exportState()) {
+  importState(state = this.exportState(), registerInHistory = true) {
     this.componentsContainer.deleteAllComponents();
 
     const components = [];
@@ -62,6 +62,9 @@ export default class Coordinator {
     });
 
     this.componentsContainer.setComponents(components);
+    if (registerInHistory) {
+      this.pushHistoryState();
+    }
   }
 
   pushHistoryState() {
@@ -77,7 +80,7 @@ export default class Coordinator {
   popHistoryState() {
     const lastState = this.storage.popHistoryState();
     if (lastState) {
-      this.importState(lastState);
+      this.importState(lastState, false);
       return true;
     }
     return false;

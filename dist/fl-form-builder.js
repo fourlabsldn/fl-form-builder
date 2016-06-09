@@ -3632,6 +3632,7 @@ var Coordinator = function () {
       var _this = this;
 
       var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
+      var registerInHistory = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       this.componentsContainer.deleteAllComponents();
 
@@ -3643,6 +3644,9 @@ var Coordinator = function () {
       });
 
       this.componentsContainer.setComponents(components);
+      if (registerInHistory) {
+        this.pushHistoryState();
+      }
     }
   }, {
     key: 'pushHistoryState',
@@ -3662,7 +3666,7 @@ var Coordinator = function () {
     value: function popHistoryState() {
       var lastState = this.storage.popHistoryState();
       if (lastState) {
-        this.importState(lastState);
+        this.importState(lastState, false);
         return true;
       }
       return false;
