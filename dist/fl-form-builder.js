@@ -2324,9 +2324,11 @@ var ComponentsContainer = function (_ViewController) {
   function ComponentsContainer(modulePrefix) {
     _classCallCheck(this, ComponentsContainer);
 
+    // This is kept in the order they appear on screen.
+
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
-    _this.components = new Set();
+    _this.components = [];
 
     // Used with component.ondestroy;
     _this.componentDestroyListener = function (component) {
@@ -2350,7 +2352,7 @@ var ComponentsContainer = function (_ViewController) {
       var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
-      this.components.add(component);
+      this.components.push(component);
       this.html.container.appendChild(component.getHtmlContainer());
       component.onDestroy(this.componentDestroyListener);
 
@@ -2372,8 +2374,7 @@ var ComponentsContainer = function (_ViewController) {
       var draggingClass = this.modulePrefix + '--dragging';
       dragBtn.addEventListener('dragstart', function (e) {
         var container = component.getHtmlContainer();
-        var componentsArray = Array.from(_this2.components);
-        var containersArray = componentsArray.map(function (c) {
+        var containersArray = _this2.components.map(function (c) {
           return c.getHtmlContainer();
         });
 
@@ -2389,6 +2390,11 @@ var ComponentsContainer = function (_ViewController) {
         setTimeout(function () {
           return container.classList.remove(draggingClass);
         }, 250);
+
+        // Reorder components according to their position.
+        _this2.components.sort(function (el1, el2) {
+          return el1.getHtmlContainer().getBoundingClientRect().top > el2.getHtmlContainer().getBoundingClientRect().top;
+        });
       });
 
       component.addSidebarButton(dragBtn);
@@ -2401,11 +2407,13 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteComponent',
     value: function deleteComponent(component) {
-      if (!this.components.has(component)) {
+      var componentIndex = this.components.indexOf(component);
+      if (componentIndex === -1) {
         console.warn('Removing component not in container');
         return;
       }
-      this.components.delete(component);
+      // Delete element from components array
+      this.components.splice(componentIndex, 1);
       component.removeDestroyListener(this.componentDestroyListener);
       component.destroy();
     }
@@ -3253,7 +3261,6 @@ var Coordinator = function () {
 
           outcome.push(component.exportState());
         }
-        // return outcome;
       } catch (err) {
         _didIteratorError = true;
         _iteratorError = err;
@@ -3269,8 +3276,7 @@ var Coordinator = function () {
         }
       }
 
-      var imported = '[{"required":false,"title":"aaaaaa","type":"RadioBtns","options":["Insert an option"]},{"required":false,"title":"bbbbbb","type":"Checkboxes","options":[]},{"required":false,"title":"CCCCC","type":"Dropdown","options":["Select an option","option 2","option 3 [disabled]"],"disabledIndexes":[0,2]},{"required":false,"title":"DDDDD","type":"TextBox","placeholder":"pppppppppp"},{"required":false,"title":"eEeEeE","type":"TextArea","placeholder":"p2p2p2"}]';
-      return JSON.parse(imported);
+      return outcome;
     }
   }, {
     key: 'importState',

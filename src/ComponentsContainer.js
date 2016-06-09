@@ -9,7 +9,9 @@ import assert from 'fl-assert';
 export default class ComponentsContainer extends ViewController {
   constructor(modulePrefix) {
     super(modulePrefix);
-    this.components = new Set();
+
+    // This is kept in the order they appear on screen.
+    this.components = [];
 
     // Used with component.ondestroy;
     this.componentDestroyListener = (component) => {
@@ -27,7 +29,7 @@ export default class ComponentsContainer extends ViewController {
   addComponent(component, showConfig = true) {
     assert(component instanceof FormComponent,
       'Invalid component being added. No an instance of Component.');
-    this.components.add(component);
+    this.components.push(component);
     this.html.container.appendChild(component.getHtmlContainer());
     component.onDestroy(this.componentDestroyListener);
 
@@ -48,8 +50,7 @@ export default class ComponentsContainer extends ViewController {
     const draggingClass = `${this.modulePrefix}--dragging`;
     dragBtn.addEventListener('dragstart', (e) => {
       const container = component.getHtmlContainer();
-      const componentsArray = Array.from(this.components);
-      const containersArray = componentsArray.map(c => c.getHtmlContainer());
+      const containersArray = this.components.map(c => c.getHtmlContainer());
 
       container.classList.add(draggingClass);
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
@@ -61,6 +62,12 @@ export default class ComponentsContainer extends ViewController {
     dragBtn.addEventListener('dragend', () => {
       const container = component.getHtmlContainer();
       setTimeout(() => container.classList.remove(draggingClass), 250);
+
+      // Reorder components according to their position.
+      this.components.sort((el1, el2) => {
+        return el1.getHtmlContainer().getBoundingClientRect().top >
+               el2.getHtmlContainer().getBoundingClientRect().top;
+      });
     });
 
     component.addSidebarButton(dragBtn);
@@ -71,11 +78,13 @@ export default class ComponentsContainer extends ViewController {
   }
 
   deleteComponent(component) {
-    if (!this.components.has(component)) {
+    const componentIndex = this.components.indexOf(component);
+    if (componentIndex === -1) {
       console.warn('Removing component not in container');
       return;
     }
-    this.components.delete(component);
+    // Delete element from components array
+    this.components.splice(componentIndex, 1);
     component.removeDestroyListener(this.componentDestroyListener);
     component.destroy();
   }

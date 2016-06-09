@@ -62,7 +62,8 @@
 .fl-fb--dragging {
   -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
           box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
-  z-index: 5; }
+  z-index: 2;
+  background-color: #ebf4fc; }
 
 .fl-fb-FormComponent-option {
   display: block; }
