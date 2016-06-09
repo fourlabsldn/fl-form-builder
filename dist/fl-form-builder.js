@@ -2058,10 +2058,13 @@ var FormComponent = function (_ViewController) {
     _this.html.container.classList.add(modulePrefix + '-FormComponent');
 
     _this.editables = new Set();
-    _this.destroyListeners = new Set();
     _this.isRequired = false;
     _this.isConfigVisible = false;
     _this.isDetroyed = false;
+    _this.listeners = {
+      destroy: new Set(),
+      change: new Set()
+    };
 
     // Focused on config show
     _this.focusElement = null;
@@ -2232,33 +2235,55 @@ var FormComponent = function (_ViewController) {
     }
 
     /**
-     * @method onDestroy
+     * @method on
      * @param  {function} fn
+     * @param {String} event
      * @return {void}
      */
 
   }, {
-    key: 'onDestroy',
-    value: function onDestroy(fn) {
-      this.destroyListeners.add(fn);
+    key: 'on',
+    value: function on(event, fn) {
+      assert(this.listeners[event], 'Trying to listen to invalid event: ' + event);
+      this.listeners[event].add(fn);
     }
+
+    /**
+     * @method removeListener
+     * @param  {String} event
+     * @param  {Function} fn
+     * @return {void}
+     */
+
   }, {
-    key: 'removeDestroyListener',
-    value: function removeDestroyListener(fn) {
-      this.destroyListeners.delete(fn);
+    key: 'removeListener',
+    value: function removeListener(event, fn) {
+      assert(this.listeners[event], 'Trying to remove listener from invalid event: ' + event);
+      this.listeners[event].delete(fn);
+    }
+
+    /**
+     * @method trigger
+     * @param  {String} event
+     */
+
+  }, {
+    key: 'trigger',
+    value: function trigger(event) {
+      var _this5 = this;
+
+      this.listeners[event].forEach(function (fn) {
+        return fn(_this5);
+      });
     }
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this5 = this;
-
       if (this.isDetroyed) {
         return;
       }
       this.isDetroyed = true;
-      this.destroyListeners.forEach(function (fn) {
-        return fn(_this5);
-      });
+      this.trigger('destroy');
       _get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
     }
 
@@ -2350,7 +2375,7 @@ var ComponentsContainer = function (_ViewController) {
       assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
       this.components.push(component);
       this.html.container.appendChild(component.getHtmlContainer());
-      component.onDestroy(this.componentDestroyListener);
+      component.on('destroy', this.componentDestroyListener);
 
       this.addDragButtonToComponent(component);
       component.configToggle(showConfig);
@@ -2410,7 +2435,7 @@ var ComponentsContainer = function (_ViewController) {
       }
       // Delete element from components array
       this.components.splice(componentIndex, 1);
-      component.removeDestroyListener(this.componentDestroyListener);
+      component.removeListener('destroy', this.componentDestroyListener);
       component.destroy();
     }
     /**

@@ -31,7 +31,7 @@ export default class ComponentsContainer extends ViewController {
       'Invalid component being added. No an instance of Component.');
     this.components.push(component);
     this.html.container.appendChild(component.getHtmlContainer());
-    component.onDestroy(this.componentDestroyListener);
+    component.on('destroy', this.componentDestroyListener);
 
     this.addDragButtonToComponent(component);
     component.configToggle(showConfig);
@@ -85,7 +85,7 @@ export default class ComponentsContainer extends ViewController {
     }
     // Delete element from components array
     this.components.splice(componentIndex, 1);
-    component.removeDestroyListener(this.componentDestroyListener);
+    component.removeListener('destroy', this.componentDestroyListener);
     component.destroy();
   }
   /**

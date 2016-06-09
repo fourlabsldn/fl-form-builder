@@ -12,10 +12,13 @@ export default class FormComponent extends ViewController {
     this.html.container.classList.add(`${modulePrefix}-FormComponent`);
 
     this.editables = new Set();
-    this.destroyListeners = new Set();
     this.isRequired = false;
     this.isConfigVisible = false;
     this.isDetroyed = false;
+    this.listeners = {
+      destroy: new Set(),
+      change: new Set(),
+    };
 
     // Focused on config show
     this.focusElement = null;
@@ -167,22 +170,39 @@ export default class FormComponent extends ViewController {
   }
 
   /**
-   * @method onDestroy
+   * @method on
    * @param  {function} fn
+   * @param {String} event
    * @return {void}
    */
-  onDestroy(fn) {
-    this.destroyListeners.add(fn);
+  on(event, fn) {
+    assert(this.listeners[event], `Trying to listen to invalid event: ${event}`);
+    this.listeners[event].add(fn);
   }
 
-  removeDestroyListener(fn) {
-    this.destroyListeners.delete(fn);
+  /**
+   * @method removeListener
+   * @param  {String} event
+   * @param  {Function} fn
+   * @return {void}
+   */
+  removeListener(event, fn) {
+    assert(this.listeners[event], `Trying to remove listener from invalid event: ${event}`);
+    this.listeners[event].delete(fn);
+  }
+
+  /**
+   * @method trigger
+   * @param  {String} event
+   */
+  trigger(event) {
+    this.listeners[event].forEach(fn => fn(this));
   }
 
   destroy() {
     if (this.isDetroyed) { return; }
     this.isDetroyed = true;
-    this.destroyListeners.forEach(fn => fn(this));
+    this.trigger('destroy');
     super.destroy();
   }
 
