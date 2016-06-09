@@ -33,10 +33,31 @@
     <div class="row">
       <div class="col-sm-3 sidebar greyed-out">
       </div>
-      <div class="col-sm-9">
-        <x-div data-controller="../dist/fl-form-builder"></x-div>
+      <div class="col-sm-9 xdiv-container">
       </div>
+
+      <div class="col-sm-9">
+        <x-div
+          data-controller="../dist/fl-form-builder"
+          data-restore-state='[{"required":true,"title":"Element 1 Title [required]","type":"TextBox","placeholder":"element 1 placeholder"},{"required":false,"title":"Element 2 Title [3 options, not required]","type":"Checkboxes","options":["option 1","opiton 2","option 3"]},{"required":true,"title":"Element 3 Title [3 options, required]","type":"Dropdown","options":["Option 1","Option 2 [disabled]","Option 3"],"disabledIndexes":[1]}]'
+          ></x-div>
+      </div>
+
     </div>
   </div>
+
+  <script>
+    var json = '[{"required":true,"title":"Element 1 Title [required]","type":"TextBox","placeholder":"element 1 placeholder"},{"required":false,"title":"Element 2 Title [3 options, not required]","type":"Checkboxes","options":["option 1","opiton 2","option 3"]},{"required":true,"title":"Element 3 Title [3 options, required]","type":"Dropdown","options":["Option 1","Option 2 [disabled]","Option 3"],"disabledIndexes":[1]}]'
+    var pastState = JSON.parse(json);
+    var xdiv = document.createElement('x-div');
+    xdiv.setAttribute('data-controller', '../dist/fl-form-builder');
+
+    xdiv.addEventListener('formBuilderLoaded', function (e) {
+      e.detail.instance.importState(pastState);
+    })
+
+    var container = document.querySelector('.xdiv-container');
+    container.appendChild(xdiv);
+  </script>
 </body>
 </html>

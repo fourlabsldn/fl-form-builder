@@ -17,6 +17,7 @@ export default class Storage {
 
   saveContent(content) {
     console.warn('Not implemented.');
+    console.log(JSON.stringify(content));
   }
 
   pushHistoryState(state) {
