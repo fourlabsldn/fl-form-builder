@@ -2,6 +2,13 @@ import OptionsComponent from './OptionsComponent';
 import utils from '../utils/utils';
 
 export default class Dropdown extends OptionsComponent {
+  static getInfo() {
+    const info = super.getInfo();
+    info.description = 'Dropdown';
+    info.iconClass = 'glyphicon glyphicon-collapse-down';
+    return info;
+  }
+
   constructor(modulePrefix) {
     super(modulePrefix);
     Object.preventExtensions(this);

@@ -11,34 +11,13 @@ import assert from 'fl-assert';
 export default class ComponentFabric {
   constructor(modulePrefix) {
     this.modulePrefix = modulePrefix;
-
-    this.componentTypes = {
-      RadioBtns: {
-        description: 'Radio buttons',
-        Contructor: RadioBtns,
-        iconClass: 'glyphicon glyphicon-ok-circle',
-      },
-      Checkboxes: {
-        description: 'Checkboxes',
-        Contructor: Checkboxes,
-        iconClass: 'glyphicon glyphicon-check',
-      },
-      Dropdown: {
-        description: 'Dropdown',
-        Contructor: Dropdown,
-        iconClass: 'glyphicon glyphicon-collapse-down',
-      },
-      TextBox: {
-        description: 'Text box',
-        Contructor: TextBox,
-        iconClass: 'glyphicon glyphicon-text-width',
-      },
-      TextArea: {
-        description: 'Text area',
-        Contructor: TextArea,
-        iconClass: 'glyphicon glyphicon-text-height',
-      },
-    };
+    this.componentConstructors = [
+      RadioBtns,
+      Checkboxes,
+      Dropdown,
+      TextBox,
+      TextArea,
+    ];
 
     Object.preventExtensions(this);
   }
@@ -49,8 +28,9 @@ export default class ComponentFabric {
    * @return {Component}
    */
   createComponent(componentName) {
-    assert(this.componentTypes[componentName], `Invalid component: ${componentName}`);
-    return new this.componentTypes[componentName].Contructor(this.modulePrefix);
+    const Comp = this.componentConstructors.find(c => c.getInfo().name === componentName);
+    assert(Comp, `Invalid component: ${componentName}`);
+    return new Comp(this.modulePrefix);
   }
 
   /**
@@ -58,17 +38,7 @@ export default class ComponentFabric {
    * @return {Array<Object>}
    */
   getComponentTypes() {
-    const types = [];
-    const names = Object.keys(this.componentTypes);
-    for (const componentName of names) {
-      const comp = this.componentTypes[componentName];
-
-      types.push({
-        iconClass: comp.iconClass,
-        description: comp.decription,
-        name: componentName,
-      });
-    }
+    const types = this.componentConstructors.map(component => component.getInfo());
     return types;
   }
 }

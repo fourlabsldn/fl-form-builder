@@ -2136,6 +2136,17 @@ var utils = {
 var FormComponent = function (_ViewController) {
   _inherits(FormComponent, _ViewController);
 
+  _createClass(FormComponent, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      return {
+        description: 'General Component',
+        iconClass: undefined,
+        name: this.name
+      };
+    }
+  }]);
+
   function FormComponent(modulePrefix) {
     _classCallCheck(this, FormComponent);
 
@@ -2749,6 +2760,16 @@ var OptionsComponent = function (_FormComponent) {
 var RadioBtns = function (_OptionsComponent) {
   _inherits(RadioBtns, _OptionsComponent);
 
+  _createClass(RadioBtns, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(RadioBtns), 'getInfo', this).call(this);
+      info.description = 'Radio Buttons';
+      info.iconClass = 'glyphicon glyphicon-ok-circle';
+      return info;
+    }
+  }]);
+
   function RadioBtns(modulePrefix) {
     _classCallCheck(this, RadioBtns);
 
@@ -2778,6 +2799,16 @@ var RadioBtns = function (_OptionsComponent) {
 var Checkboxes = function (_OptionsComponent) {
   _inherits(Checkboxes, _OptionsComponent);
 
+  _createClass(Checkboxes, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(Checkboxes), 'getInfo', this).call(this);
+      info.description = 'Checkboxes';
+      info.iconClass = 'glyphicon glyphicon-check';
+      return info;
+    }
+  }]);
+
   function Checkboxes(modulePrefix) {
     _classCallCheck(this, Checkboxes);
 
@@ -2806,6 +2837,16 @@ var Checkboxes = function (_OptionsComponent) {
 
 var Dropdown = function (_OptionsComponent) {
   _inherits(Dropdown, _OptionsComponent);
+
+  _createClass(Dropdown, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(Dropdown), 'getInfo', this).call(this);
+      info.description = 'Dropdown';
+      info.iconClass = 'glyphicon glyphicon-collapse-down';
+      return info;
+    }
+  }]);
 
   function Dropdown(modulePrefix) {
     _classCallCheck(this, Dropdown);
@@ -3070,6 +3111,16 @@ var TextComponent = function (_FormComponent) {
 var TextBox = function (_TextComponent) {
   _inherits(TextBox, _TextComponent);
 
+  _createClass(TextBox, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(TextBox), 'getInfo', this).call(this);
+      info.description = 'Text Box';
+      info.iconClass = 'glyphicon glyphicon-text-width';
+      return info;
+    }
+  }]);
+
   function TextBox(modulePrefix) {
     _classCallCheck(this, TextBox);
 
@@ -3081,6 +3132,16 @@ var TextBox = function (_TextComponent) {
 
 var TextArea = function (_TextComponent) {
   _inherits(TextArea, _TextComponent);
+
+  _createClass(TextArea, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      var info = _get(Object.getPrototypeOf(TextArea), 'getInfo', this).call(this);
+      info.description = 'Text Area';
+      info.iconClass = 'glyphicon glyphicon-text-height';
+      return info;
+    }
+  }]);
 
   function TextArea(modulePrefix) {
     _classCallCheck(this, TextArea);
@@ -3119,34 +3180,7 @@ var ComponentFabric = function () {
     _classCallCheck(this, ComponentFabric);
 
     this.modulePrefix = modulePrefix;
-
-    this.componentTypes = {
-      RadioBtns: {
-        description: 'Radio buttons',
-        Contructor: RadioBtns,
-        iconClass: 'glyphicon glyphicon-ok-circle'
-      },
-      Checkboxes: {
-        description: 'Checkboxes',
-        Contructor: Checkboxes,
-        iconClass: 'glyphicon glyphicon-check'
-      },
-      Dropdown: {
-        description: 'Dropdown',
-        Contructor: Dropdown,
-        iconClass: 'glyphicon glyphicon-collapse-down'
-      },
-      TextBox: {
-        description: 'Text box',
-        Contructor: TextBox,
-        iconClass: 'glyphicon glyphicon-text-width'
-      },
-      TextArea: {
-        description: 'Text area',
-        Contructor: TextArea,
-        iconClass: 'glyphicon glyphicon-text-height'
-      }
-    };
+    this.componentConstructors = [RadioBtns, Checkboxes, Dropdown, TextBox, TextArea];
 
     Object.preventExtensions(this);
   }
@@ -3161,8 +3195,11 @@ var ComponentFabric = function () {
   _createClass(ComponentFabric, [{
     key: 'createComponent',
     value: function createComponent(componentName) {
-      assert(this.componentTypes[componentName], 'Invalid component: ' + componentName);
-      return new this.componentTypes[componentName].Contructor(this.modulePrefix);
+      var Comp = this.componentConstructors.find(function (c) {
+        return c.getInfo().name === componentName;
+      });
+      assert(Comp, 'Invalid component: ' + componentName);
+      return new Comp(this.modulePrefix);
     }
 
     /**
@@ -3173,39 +3210,9 @@ var ComponentFabric = function () {
   }, {
     key: 'getComponentTypes',
     value: function getComponentTypes() {
-      var types = [];
-      var names = Object.keys(this.componentTypes);
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var componentName = _step.value;
-
-          var comp = this.componentTypes[componentName];
-
-          types.push({
-            iconClass: comp.iconClass,
-            description: comp.decription,
-            name: componentName
-          });
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
+      var types = this.componentConstructors.map(function (component) {
+        return component.getInfo();
+      });
       return types;
     }
   }]);

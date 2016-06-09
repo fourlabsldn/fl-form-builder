@@ -6,6 +6,14 @@ import assert from 'fl-assert';
  * @abstract @class FormComponent
  */
 export default class FormComponent extends ViewController {
+  static getInfo() {
+    return {
+      description: 'General Component',
+      iconClass: undefined,
+      name: this.name,
+    };
+  }
+
   constructor(modulePrefix) {
     super(modulePrefix);
     this.cssPrefix = `${modulePrefix}-FormComponent`;
