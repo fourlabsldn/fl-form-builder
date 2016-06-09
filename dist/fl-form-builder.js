@@ -2571,7 +2571,7 @@ var ComponentsContainer = function (_ViewController) {
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this4.addComponent(comp, false, false);
+        return _this4.addComponent(comp, false);
       });
     }
   }]);
@@ -2865,6 +2865,7 @@ var Dropdown = function (_OptionsComponent) {
       this.addOption(this.html.newOptionText.value, this.html.newOptionDisabled.checked);
       this.html.newOptionDisabled.checked = false;
       this.html.newOptionText.value = '';
+      this.triggerChangeIfNeeded();
     }
   }, {
     key: 'addOption',

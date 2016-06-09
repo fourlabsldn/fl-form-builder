@@ -58,6 +58,7 @@ export default class Dropdown extends OptionsComponent {
     );
     this.html.newOptionDisabled.checked = false;
     this.html.newOptionText.value = '';
+    this.triggerChangeIfNeeded();
   }
 
   addOption(text, disabled = false) {
