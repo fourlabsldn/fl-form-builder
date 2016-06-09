@@ -1,3 +1,5 @@
+import assert from 'fl-assert';
+
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states
@@ -17,8 +19,9 @@ export default class Storage {
   }
 
   pushHistoryState(state) {
-    console.log(`Pushing history state of index: ${this.history.length}`);
+    assert(state, `Invalid state being saved: ${state}`);
     if (this.currentState) {
+      console.log(`Pushing history state of index ${this.history.length}`);
       this.history.push(this.currentState);
     }
     this.currentState = state;
@@ -29,9 +32,10 @@ export default class Storage {
    * @return {Object} - A State object
    */
   popHistoryState() {
-    this.currentState = this.history.pop();
-    console.log(`Popping history state of index: ${this.history.length || undefined}`);
-    return this.currentState;
+    if (this.history.length > 0) {
+      this.currentState = this.history.pop();
+      return this.currentState;
+    }
+    return undefined;
   }
-
 }

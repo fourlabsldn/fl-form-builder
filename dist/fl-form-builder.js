@@ -2148,10 +2148,9 @@ var FormComponent = function (_ViewController) {
     _this.isRequired = false;
     _this.isConfigVisible = false;
     _this.isDetroyed = false;
+    _this.lastState = null;
 
     _this.acceptEvents('destroy', 'change');
-
-    _this.lastState = null;
 
     // Focused on config show
     _this.focusElement = null;
@@ -2415,6 +2414,15 @@ var ComponentsContainer = function (_ViewController) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
     _this.components = [];
+
+    // Used with component.ondestroy;
+    // This must be here and not together with other class methods because
+    // of the binding of 'this'
+    _this.componentDestroyListener = function (component) {
+      _this.deleteComponent(component);
+      _this.trigger('change');
+    };
+
     _this.acceptEvents('change');
     Object.preventExtensions(_this);
     return _this;
@@ -2444,14 +2452,6 @@ var ComponentsContainer = function (_ViewController) {
       component.on('change', function () {
         return _this2.trigger('change');
       });
-    }
-
-    // Used with component.ondestroy;
-
-  }, {
-    key: 'componentDestroyListener',
-    value: function componentDestroyListener(component) {
-      this.deleteComponent(component);
     }
   }, {
     key: 'addDragButtonToComponent',
@@ -2486,9 +2486,16 @@ var ComponentsContainer = function (_ViewController) {
         }, 250);
 
         // Reorder components according to their position.
+        var beforeReordering = JSON.stringify(_this3.components);
         _this3.components.sort(function (el1, el2) {
           return el1.getHtmlContainer().getBoundingClientRect().top > el2.getHtmlContainer().getBoundingClientRect().top;
         });
+
+        // Trigger change if elements were reordered
+        var afterReordering = JSON.stringify(_this3.components);
+        if (beforeReordering !== afterReordering) {
+          _this3.trigger('change');
+        }
       });
 
       component.addSidebarButton(dragBtn);
@@ -2631,6 +2638,7 @@ var OptionsComponent = function (_FormComponent) {
       }
       this.addOption(this.html.newOptionText.value);
       this.html.newOptionText.value = '';
+      this.triggerChangeIfNeeded();
     }
 
     /**
@@ -3302,8 +3310,9 @@ var Storage = function () {
   }, {
     key: 'pushHistoryState',
     value: function pushHistoryState(state) {
-      console.log('Pushing history state of index: ' + this.history.length);
+      assert(state, 'Invalid state being saved: ' + state);
       if (this.currentState) {
+        console.log('Pushing history state of index ' + this.history.length);
         this.history.push(this.currentState);
       }
       this.currentState = state;
@@ -3317,9 +3326,11 @@ var Storage = function () {
   }, {
     key: 'popHistoryState',
     value: function popHistoryState() {
-      this.currentState = this.history.pop();
-      console.log('Popping history state of index: ' + (this.history.length || undefined));
-      return this.currentState;
+      if (this.history.length > 0) {
+        this.currentState = this.history.pop();
+        return this.currentState;
+      }
+      return undefined;
     }
   }]);
 

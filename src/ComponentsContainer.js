@@ -12,6 +12,15 @@ export default class ComponentsContainer extends ViewController {
 
     // This is kept in the order they appear on screen.
     this.components = [];
+
+    // Used with component.ondestroy;
+    // This must be here and not together with other class methods because
+    // of the binding of 'this'
+    this.componentDestroyListener = (component) => {
+      this.deleteComponent(component);
+      this.trigger('change');
+    };
+
     this.acceptEvents('change');
     Object.preventExtensions(this);
   }
@@ -31,11 +40,6 @@ export default class ComponentsContainer extends ViewController {
     this.addDragButtonToComponent(component);
     component.configToggle(showConfig);
     component.on('change', () => this.trigger('change'));
-  }
-
-  // Used with component.ondestroy;
-  componentDestroyListener(component) {
-    this.deleteComponent(component);
   }
 
   addDragButtonToComponent(component) {
@@ -64,11 +68,19 @@ export default class ComponentsContainer extends ViewController {
       const container = component.getHtmlContainer();
       setTimeout(() => container.classList.remove(draggingClass), 250);
 
+
       // Reorder components according to their position.
+      const beforeReordering = JSON.stringify(this.components);
       this.components.sort((el1, el2) => {
         return el1.getHtmlContainer().getBoundingClientRect().top >
                el2.getHtmlContainer().getBoundingClientRect().top;
       });
+
+      // Trigger change if elements were reordered
+      const afterReordering = JSON.stringify(this.components);
+      if (beforeReordering !== afterReordering) {
+        this.trigger('change');
+      }
     });
 
     component.addSidebarButton(dragBtn);

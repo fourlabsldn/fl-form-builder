@@ -79,6 +79,7 @@ export default class OptionsComponent extends FormComponent {
     }
     this.addOption(this.html.newOptionText.value);
     this.html.newOptionText.value = '';
+    this.triggerChangeIfNeeded();
   }
 
   /**

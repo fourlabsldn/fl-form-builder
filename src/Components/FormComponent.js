@@ -15,10 +15,10 @@ export default class FormComponent extends ViewController {
     this.isRequired = false;
     this.isConfigVisible = false;
     this.isDetroyed = false;
+    this.lastState = null;
 
     this.acceptEvents('destroy', 'change');
 
-    this.lastState = null;
 
     // Focused on config show
     this.focusElement = null;
