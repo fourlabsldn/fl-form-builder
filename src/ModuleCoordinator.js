@@ -10,10 +10,13 @@ export default class Coordinator {
   constructor(modulePrefix, xdiv) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
-    this.componentsContainer = new ComponentsContainer(modulePrefix);
-    this.controlBar = new ControlBar(modulePrefix, this);
-    Object.preventExtensions(this);
 
+    this.componentsContainer = new ComponentsContainer(modulePrefix);
+    this.componentsContainer.on('change', this.pushHistoryState.bind(this));
+
+    this.controlBar = new ControlBar(modulePrefix, this);
+
+    Object.preventExtensions(this);
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());
   }
@@ -56,5 +59,17 @@ export default class Coordinator {
     });
 
     this.componentsContainer.setComponents(components);
+  }
+
+  pushHistoryState() {
+    const currentState = this.exportState();
+    this.storage.pushHistoryState(currentState);
+  }
+
+  popHistoryState() {
+    const lastState = this.storage.popHistoryState();
+    if (lastState) {
+      this.importState(lastState);
+    }
   }
 }

@@ -15,10 +15,8 @@ export default class FormComponent extends ViewController {
     this.isRequired = false;
     this.isConfigVisible = false;
     this.isDetroyed = false;
-    this.listeners = {
-      destroy: new Set(),
-      change: new Set(),
-    };
+
+    this.acceptEvents('destroy', 'change');
 
     // Focused on config show
     this.focusElement = null;
@@ -67,7 +65,11 @@ export default class FormComponent extends ViewController {
       'glyphicon-ok'
     );
     okBtn.type = 'button';
-    okBtn.addEventListener('click', () => this.configToggle());
+    okBtn.addEventListener('click', () => {
+      // TODO: compare changes before triggering change.
+      this.trigger('change');
+      this.configToggle();
+    });
     configurationButtons.appendChild(okBtn);
 
     // -- Sidebar --
@@ -167,36 +169,6 @@ export default class FormComponent extends ViewController {
       // see http:// goo.gl/UjKOk5
       setTimeout(() => { this.focusElement.focus(); }, 15);
     }
-  }
-
-  /**
-   * @method on
-   * @param  {function} fn
-   * @param {String} event
-   * @return {void}
-   */
-  on(event, fn) {
-    assert(this.listeners[event], `Trying to listen to invalid event: ${event}`);
-    this.listeners[event].add(fn);
-  }
-
-  /**
-   * @method removeListener
-   * @param  {String} event
-   * @param  {Function} fn
-   * @return {void}
-   */
-  removeListener(event, fn) {
-    assert(this.listeners[event], `Trying to remove listener from invalid event: ${event}`);
-    this.listeners[event].delete(fn);
-  }
-
-  /**
-   * @method trigger
-   * @param  {String} event
-   */
-  trigger(event) {
-    this.listeners[event].forEach(fn => fn(this));
   }
 
   destroy() {

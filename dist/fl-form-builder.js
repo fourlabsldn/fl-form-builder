@@ -1451,6 +1451,78 @@ exports.default = function (subClass, superClass) {
 
 var _inherits = (inherits && typeof inherits === 'object' && 'default' in inherits ? inherits['default'] : inherits);
 
+// Bug checking function that will throw an error whenever
+// the condition sent to it is evaluated to false
+/**
+ * Processes the message and outputs the correct message if the condition
+ * is false. Otherwise it outputs null.
+ * @api private
+ * @method processCondition
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return {String | null}  - Error message if there is an error, nul otherwise.
+ */
+function processCondition(condition, errorMessage) {
+  if (!condition) {
+    var completeErrorMessage = '';
+    var re = /at ([^\s]+)\s\(/g;
+    var stackTrace = new Error().stack;
+    var stackFunctions = [];
+
+    var funcName = re.exec(stackTrace);
+    while (funcName && funcName[1]) {
+      stackFunctions.push(funcName[1]);
+      funcName = re.exec(stackTrace);
+    }
+
+    // Number 0 is processCondition itself,
+    // Number 1 is assert,
+    // Number 2 is the caller function.
+    if (stackFunctions[2]) {
+      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
+    }
+
+    completeErrorMessage += errorMessage;
+    return completeErrorMessage;
+  }
+
+  return null;
+}
+
+/**
+ * Throws an error if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert(myDate !== undefined, "Date cannot be undefined.");
+ * @api public
+ * @method assert
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+function assert(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    throw new Error(error);
+  }
+}
+
+/**
+ * Logs a warning if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert.warn(myDate !== undefined, "No date provided.");
+ * @api public
+ * @method warn
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+assert.warn = function warn(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    console.warn(error);
+  }
+};
+
 /**
  * This class creates elements with an html counterpart.
  * HTML components are stored in this.html, and the main container
@@ -1465,15 +1537,102 @@ var ViewController = function () {
     this.html = {};
     this.html.container = document.createElement('div');
 
+    this.listeners = {};
+    this.acceptEvents('destroy');
+
     this.modulePrefix = modulePrefix;
     this.cssPrefix = this.modulePrefix + '-' + this.constructor.name;
     this.html.container.classList.add(this.cssPrefix);
   }
 
+  /**
+   * Sets which events will be accepted.
+   * @method acceptEvents
+   * @param  {Array<String>} eventList
+   * @return {void}
+   */
+
+
   _createClass(ViewController, [{
+    key: 'acceptEvents',
+    value: function acceptEvents() {
+      for (var _len = arguments.length, eventList = Array(_len), _key = 0; _key < _len; _key++) {
+        eventList[_key] = arguments[_key];
+      }
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = eventList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var eventName = _step.value;
+
+          this.listeners[eventName] = new Set();
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+
+    /**
+     * @method on
+     * @param  {function} fn
+     * @param {String} event
+     * @return {void}
+     */
+
+  }, {
+    key: 'on',
+    value: function on(event, fn) {
+      assert(this.listeners[event], 'Trying to listen to invalid event: ' + event);
+      this.listeners[event].add(fn);
+    }
+
+    /**
+     * @method removeListener
+     * @param  {String} event
+     * @param  {Function} fn
+     * @return {void}
+     */
+
+  }, {
+    key: 'removeListener',
+    value: function removeListener(event, fn) {
+      assert(this.listeners[event], 'Trying to remove listener from invalid event: ' + event);
+      this.listeners[event].delete(fn);
+    }
+
+    /**
+     * @method trigger
+     * @param  {String} event
+     */
+
+  }, {
+    key: 'trigger',
+    value: function trigger(event) {
+      var _this = this;
+
+      this.listeners[event].forEach(function (fn) {
+        return fn(_this);
+      });
+    }
+  }, {
     key: 'destroy',
     value: function destroy() {
       this.html.container.remove();
+      this.listeners = null;
       this.html = {};
     }
   }, {
@@ -1970,78 +2129,6 @@ var utils = {
   blinkRed: blinkRed
 };
 
-// Bug checking function that will throw an error whenever
-// the condition sent to it is evaluated to false
-/**
- * Processes the message and outputs the correct message if the condition
- * is false. Otherwise it outputs null.
- * @api private
- * @method processCondition
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return {String | null}  - Error message if there is an error, nul otherwise.
- */
-function processCondition(condition, errorMessage) {
-  if (!condition) {
-    var completeErrorMessage = '';
-    var re = /at ([^\s]+)\s\(/g;
-    var stackTrace = new Error().stack;
-    var stackFunctions = [];
-
-    var funcName = re.exec(stackTrace);
-    while (funcName && funcName[1]) {
-      stackFunctions.push(funcName[1]);
-      funcName = re.exec(stackTrace);
-    }
-
-    // Number 0 is processCondition itself,
-    // Number 1 is assert,
-    // Number 2 is the caller function.
-    if (stackFunctions[2]) {
-      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
-    }
-
-    completeErrorMessage += errorMessage;
-    return completeErrorMessage;
-  }
-
-  return null;
-}
-
-/**
- * Throws an error if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert(myDate !== undefined, "Date cannot be undefined.");
- * @api public
- * @method assert
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-function assert(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    throw new Error(error);
-  }
-}
-
-/**
- * Logs a warning if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert.warn(myDate !== undefined, "No date provided.");
- * @api public
- * @method warn
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-assert.warn = function warn(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    console.warn(error);
-  }
-};
-
 /**
  * @abstract @class FormComponent
  */
@@ -2061,10 +2148,8 @@ var FormComponent = function (_ViewController) {
     _this.isRequired = false;
     _this.isConfigVisible = false;
     _this.isDetroyed = false;
-    _this.listeners = {
-      destroy: new Set(),
-      change: new Set()
-    };
+
+    _this.acceptEvents('destroy', 'change');
 
     // Focused on config show
     _this.focusElement = null;
@@ -2114,7 +2199,9 @@ var FormComponent = function (_ViewController) {
       'glyphicon-ok');
       okBtn.type = 'button';
       okBtn.addEventListener('click', function () {
-        return _this2.configToggle();
+        // TODO: compare changes before triggering change.
+        _this2.trigger('change');
+        _this2.configToggle();
       });
       configurationButtons.appendChild(okBtn);
 
@@ -2233,49 +2320,6 @@ var FormComponent = function (_ViewController) {
         }, 15);
       }
     }
-
-    /**
-     * @method on
-     * @param  {function} fn
-     * @param {String} event
-     * @return {void}
-     */
-
-  }, {
-    key: 'on',
-    value: function on(event, fn) {
-      assert(this.listeners[event], 'Trying to listen to invalid event: ' + event);
-      this.listeners[event].add(fn);
-    }
-
-    /**
-     * @method removeListener
-     * @param  {String} event
-     * @param  {Function} fn
-     * @return {void}
-     */
-
-  }, {
-    key: 'removeListener',
-    value: function removeListener(event, fn) {
-      assert(this.listeners[event], 'Trying to remove listener from invalid event: ' + event);
-      this.listeners[event].delete(fn);
-    }
-
-    /**
-     * @method trigger
-     * @param  {String} event
-     */
-
-  }, {
-    key: 'trigger',
-    value: function trigger(event) {
-      var _this5 = this;
-
-      this.listeners[event].forEach(function (fn) {
-        return fn(_this5);
-      });
-    }
   }, {
     key: 'destroy',
     value: function destroy() {
@@ -2350,12 +2394,7 @@ var ComponentsContainer = function (_ViewController) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
     _this.components = [];
-
-    // Used with component.ondestroy;
-    _this.componentDestroyListener = function (component) {
-      _this.deleteComponent(component);
-    };
-
+    _this.acceptEvents('change');
     Object.preventExtensions(_this);
     return _this;
   }
@@ -2370,6 +2409,8 @@ var ComponentsContainer = function (_ViewController) {
   _createClass(ComponentsContainer, [{
     key: 'addComponent',
     value: function addComponent(component) {
+      var _this2 = this;
+
       var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
       assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
@@ -2379,11 +2420,22 @@ var ComponentsContainer = function (_ViewController) {
 
       this.addDragButtonToComponent(component);
       component.configToggle(showConfig);
+      component.on('change', function () {
+        return _this2.trigger('change');
+      });
+    }
+
+    // Used with component.ondestroy;
+
+  }, {
+    key: 'componentDestroyListener',
+    value: function componentDestroyListener(component) {
+      this.deleteComponent(component);
     }
   }, {
     key: 'addDragButtonToComponent',
     value: function addDragButtonToComponent(component) {
-      var _this2 = this;
+      var _this3 = this;
 
       var dragBtn = document.createElement('button');
       dragBtn.type = 'button';
@@ -2395,7 +2447,7 @@ var ComponentsContainer = function (_ViewController) {
       var draggingClass = this.modulePrefix + '--dragging';
       dragBtn.addEventListener('dragstart', function (e) {
         var container = component.getHtmlContainer();
-        var containersArray = _this2.components.map(function (c) {
+        var containersArray = _this3.components.map(function (c) {
           return c.getHtmlContainer();
         });
 
@@ -2413,7 +2465,7 @@ var ComponentsContainer = function (_ViewController) {
         }, 250);
 
         // Reorder components according to their position.
-        _this2.components.sort(function (el1, el2) {
+        _this3.components.sort(function (el1, el2) {
           return el1.getHtmlContainer().getBoundingClientRect().top > el2.getHtmlContainer().getBoundingClientRect().top;
         });
       });
@@ -2447,10 +2499,10 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteAllComponents',
     value: function deleteAllComponents() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.components.forEach(function (comp) {
-        return _this3.deleteComponent(comp);
+        return _this4.deleteComponent(comp);
       });
     }
 
@@ -2464,11 +2516,11 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'setComponents',
     value: function setComponents(components) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this4.addComponent(comp, false);
+        return _this5.addComponent(comp, false);
       });
     }
   }]);
@@ -3188,14 +3240,14 @@ var ControlBar = function (_ViewController) {
       frag.appendChild(saveBtn);
 
       // Create Import button
-      var importBtn = document.createElement('button');
-      importBtn.className = this.cssPrefix + '-button-save';
-      importBtn.classList.add('btn', 'btn-default'); // Bootstrap
-      importBtn.textContent = 'Import';
-      importBtn.addEventListener('click', function () {
-        return _this2.moduleCoordinator.importState();
+      var undoBtn = document.createElement('button');
+      undoBtn.className = this.cssPrefix + '-button-save';
+      undoBtn.classList.add('btn', 'btn-default'); // Bootstrap
+      undoBtn.textContent = 'Undo';
+      undoBtn.addEventListener('click', function () {
+        return _this2.moduleCoordinator.popHistoryState();
       });
-      frag.appendChild(importBtn);
+      frag.appendChild(undoBtn);
 
       this.html.container.appendChild(frag);
     }
@@ -3215,6 +3267,7 @@ var Storage = function () {
   function Storage() {
     _classCallCheck(this, Storage);
 
+    this.history = [];
     Object.preventExtensions(this);
   }
 
@@ -3223,6 +3276,24 @@ var Storage = function () {
     value: function saveContent(content) {
       console.warn('Not implemented.');
       console.log(content);
+    }
+  }, {
+    key: 'pushHistoryState',
+    value: function pushHistoryState(state) {
+      console.log('Pushing history state: ' + this.history.length);
+      this.history.push(state);
+    }
+
+    /**
+     * @method popHistoryState
+     * @return {Object} - A State object
+     */
+
+  }, {
+    key: 'popHistoryState',
+    value: function popHistoryState() {
+      console.log('Popping history state: ' + this.history.length);
+      return this.history.pop();
     }
   }]);
 
@@ -3239,10 +3310,13 @@ var Coordinator = function () {
 
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
-    this.componentsContainer = new ComponentsContainer(modulePrefix);
-    this.controlBar = new ControlBar(modulePrefix, this);
-    Object.preventExtensions(this);
 
+    this.componentsContainer = new ComponentsContainer(modulePrefix);
+    this.componentsContainer.on('change', this.pushHistoryState.bind(this));
+
+    this.controlBar = new ControlBar(modulePrefix, this);
+
+    Object.preventExtensions(this);
     xdiv.appendChild(this.controlBar.getHtmlContainer());
     xdiv.appendChild(this.componentsContainer.getHtmlContainer());
   }
@@ -3319,6 +3393,20 @@ var Coordinator = function () {
       });
 
       this.componentsContainer.setComponents(components);
+    }
+  }, {
+    key: 'pushHistoryState',
+    value: function pushHistoryState() {
+      var currentState = this.exportState();
+      this.storage.pushHistoryState(currentState);
+    }
+  }, {
+    key: 'popHistoryState',
+    value: function popHistoryState() {
+      var lastState = this.storage.popHistoryState();
+      if (lastState) {
+        this.importState(lastState);
+      }
     }
   }]);
 

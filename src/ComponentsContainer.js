@@ -12,12 +12,7 @@ export default class ComponentsContainer extends ViewController {
 
     // This is kept in the order they appear on screen.
     this.components = [];
-
-    // Used with component.ondestroy;
-    this.componentDestroyListener = (component) => {
-      this.deleteComponent(component);
-    };
-
+    this.acceptEvents('change');
     Object.preventExtensions(this);
   }
 
@@ -35,6 +30,12 @@ export default class ComponentsContainer extends ViewController {
 
     this.addDragButtonToComponent(component);
     component.configToggle(showConfig);
+    component.on('change', () => this.trigger('change'));
+  }
+
+  // Used with component.ondestroy;
+  componentDestroyListener(component) {
+    this.deleteComponent(component);
   }
 
   addDragButtonToComponent(component) {
