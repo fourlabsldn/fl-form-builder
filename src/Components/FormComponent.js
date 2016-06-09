@@ -42,19 +42,13 @@ export default class FormComponent extends ViewController {
     this.html.configuration.classList.add(configurationCssClass);
     frag.appendChild(this.html.configuration);
 
-    this.html.componentSpecificConfiguration = document.createElement('div');
-    this.html.componentSpecificConfiguration.classList.add(
-      `${this.cssPrefix}-componentConfiguration`
-    );
-    this.html.configuration.appendChild(this.html.componentSpecificConfiguration);
-
     const configurationButtons = document.createElement('div');
     configurationButtons.classList.add(`${this.cssPrefix}-configuration-buttons`);
     this.html.configuration.appendChild(configurationButtons);
 
     this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
     this.html.requiredSwitch.classList.add(`${configurationCssClass}-switch-required`);
-    this.html.requiredSwitch.addEventListener('change', (e) => {
+    this.html.requiredSwitch.addEventListener('change', () => {
       const checked = this.html.requiredSwitch;
       this.setRequired(checked);
     });
@@ -73,25 +67,20 @@ export default class FormComponent extends ViewController {
     okBtn.addEventListener('click', () => this.configToggle());
     configurationButtons.appendChild(okBtn);
 
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add(
-      `${configurationCssClass}-btn-delete`,
-      'btn', // Bootstrap
-      'btn-sm',
-      'btn-danger',
-      'glyphicon',
-      'glyphicon-trash'
-    );
-    deleteBtn.type = 'button';
-    deleteBtn.addEventListener('click', () => this.destroy());
-    configurationButtons.appendChild(deleteBtn);
-
     // -- Sidebar --
     this.html.sidebar = document.createElement('div');
     const sidebarCssClass = `${this.cssPrefix}-sidebar`;
     this.html.sidebar.classList.add(sidebarCssClass);
     frag.appendChild(this.html.sidebar);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add(
+      'glyphicon',
+      'glyphicon-trash'
+    );
+    deleteBtn.type = 'button';
+    deleteBtn.addEventListener('click', () => this.destroy());
+    this.addSidebarButton(deleteBtn, 'delete');
 
     const showConfigBtn = document.createElement('button');
     showConfigBtn.type = 'button';
@@ -100,7 +89,7 @@ export default class FormComponent extends ViewController {
       'glyphicon-cog'
     );
     showConfigBtn.title = 'Configure form group';
-    this.addSidebarButton(showConfigBtn);
+    this.addSidebarButton(showConfigBtn, 'config');
 
     showConfigBtn.addEventListener('click', () => {
       this.configToggle();
@@ -109,9 +98,12 @@ export default class FormComponent extends ViewController {
     this.html.container.appendChild(frag);
   }
 
-  addSidebarButton(button) {
-    button.classList.add(`${this.cssPrefix}-sidebar-btn`);
-    this.html.sidebar.appendChild(button);
+  addSidebarButton(button, elementName) {
+    const className = elementName
+      ? `${this.cssPrefix}-sidebar-btn-${elementName}`
+      : `${this.cssPrefix}-sidebar-btn`;
+    button.classList.add(className);
+    this.html.sidebar.insertBefore(button, this.html.sidebar.children[0]);
   }
 
   /**

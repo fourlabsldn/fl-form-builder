@@ -33,13 +33,18 @@ export default class Dropdown extends OptionsComponent {
 
   buildComponentSpecificConfiguration() {
     const newOptionDisabledWrapper = document.createElement('label');
+
     const newOptionDisabled = document.createElement('input');
+    newOptionDisabled.classList.add(
+      `${this.cssPrefix}-configuration-options-optionDisabled`
+    );
     newOptionDisabled.type = 'checkbox';
     newOptionDisabledWrapper.appendChild(newOptionDisabled);
     newOptionDisabledWrapper.appendChild(document.createTextNode('Divider'));
 
+    const optionConfig = this.html.configuration.children[0];
     this.html.newOptionDisabled = newOptionDisabled;
-    this.html.componentSpecificConfiguration.appendChild(newOptionDisabledWrapper);
+    optionConfig.appendChild(newOptionDisabledWrapper);
   }
 
   submitOptionFromConfigBar() {

@@ -108,14 +108,27 @@
   .fl-fb-FormComponent--configuration-visible .fl-fb-FormComponent-sidebar {
     visibility: visible;
     opacity: 1;
-    opacity: .8; }
+    opacity: .9; }
 
-.fl-fb-FormComponent-sidebar-btn {
+[class*=fl-fb-FormComponent-sidebar-btn] {
   background-color: transparent;
   border: 0;
-  opacity: .6; }
-  .fl-fb-FormComponent-sidebar-btn:hover {
+  visibility: visible;
+  opacity: 1;
+  opacity: .8;
+  margin: 2px 0; }
+  [class*=fl-fb-FormComponent-sidebar-btn]:hover {
     opacity: 1; }
+
+.fl-fb-FormComponent-sidebar-btn-delete {
+  margin-top: auto;
+  color: #d9534f; }
+
+.fl-fb-FormComponent--configuration-visible .fl-fb-FormComponent-sidebar-btn-config {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .2s ease, visibility 0s;
+  transition: all .2s ease, visibility 0s; }
 
 .fl-fb-FormComponent-configuration {
   background-color: #eee;
@@ -138,7 +151,6 @@
     visibility: visible;
     opacity: 1; }
 
-.fl-fb-FormComponent-componentConfiguration,
 .fl-fb-FormComponent-configuration-buttons,
 .fl-fb-FormComponent-configuration-options {
   display: -webkit-box;
@@ -154,23 +166,9 @@
           align-items: stretch;
   margin-bottom: 10px; }
 
-.fl-fb-FormComponent-componentConfiguration {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  padding: 0 5px; }
-  .fl-fb-FormComponent-componentConfiguration [type="checkbox"] {
-    margin-right: 5px; }
-
-.fl-fb-FormComponent-configuration-options {
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex; }
-
-.fl-fb-FormComponent-configuration-btn-delete {
-  margin-left: 5px; }
+.fl-fb-FormComponent-configuration-options-optionDisabled.fl-fb-FormComponent-configuration-options-optionDisabled {
+  margin-left: 5px;
+  margin-right: 5px; }
 
 .fl-fb-FormComponent-configuration-btn-ok {
   margin-left: auto; }
@@ -181,7 +179,6 @@
   border: 0; }
 
 .fl-fb-FormComponent-configuration-options-input {
-  margin-left: 5px;
   min-width: 50%;
   text-indent: 5px; }
 

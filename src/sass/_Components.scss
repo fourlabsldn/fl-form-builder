@@ -83,20 +83,33 @@
   .fl-fb-FormComponent:hover &,
   .fl-fb-FormComponent--configuration-visible & {
     @include fade-visible();
-    opacity: .8;
+    opacity: .9;
   }
 }
 
-.fl-fb-FormComponent-sidebar-btn {
+[class*=fl-fb-FormComponent-sidebar-btn] {
   background-color: transparent;
   border: 0;
-  opacity: .6;
+
+  @include fade-visible();
+  opacity: .8;
+  margin: 2px 0;
 
   &:hover {
     opacity: 1;
   }
 }
 
+.fl-fb-FormComponent-sidebar-btn-delete {
+  margin-top: auto;
+  color: $c-danger;
+}
+
+.fl-fb-FormComponent-sidebar-btn-config {
+  .fl-fb-FormComponent--configuration-visible & {
+    @include fade-hidden();
+  }
+}
 // =========================================================
 //                     Configuration
 // =========================================================
@@ -124,7 +137,6 @@
   }
 }
 
-.fl-fb-FormComponent-componentConfiguration,
 .fl-fb-FormComponent-configuration-buttons,
 .fl-fb-FormComponent-configuration-options {
   display: flex;
@@ -133,19 +145,11 @@
 
   margin-bottom: 10px;
 }
-.fl-fb-FormComponent-componentConfiguration {
-  display: inline-flex;
-  padding: 0 5px;
-  [type="checkbox"] {
-    margin-right: 5px;
-  }
-}
-.fl-fb-FormComponent-configuration-options {
-  display: inline-flex;
-}
 
-.fl-fb-FormComponent-configuration-btn-delete {
+// The class appears twice to solve a specificity issue with normalise.css
+.fl-fb-FormComponent-configuration-options-optionDisabled.fl-fb-FormComponent-configuration-options-optionDisabled {
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .fl-fb-FormComponent-configuration-btn-ok {
@@ -159,7 +163,6 @@
 }
 
 .fl-fb-FormComponent-configuration-options-input {
-  margin-left: 5px;
   min-width: 50%;
   text-indent: 5px;
 }

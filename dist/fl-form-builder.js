@@ -2093,17 +2093,13 @@ var FormComponent = function (_ViewController) {
       this.html.configuration.classList.add(configurationCssClass);
       frag.appendChild(this.html.configuration);
 
-      this.html.componentSpecificConfiguration = document.createElement('div');
-      this.html.componentSpecificConfiguration.classList.add(this.cssPrefix + '-componentConfiguration');
-      this.html.configuration.appendChild(this.html.componentSpecificConfiguration);
-
       var configurationButtons = document.createElement('div');
       configurationButtons.classList.add(this.cssPrefix + '-configuration-buttons');
       this.html.configuration.appendChild(configurationButtons);
 
       this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
       this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
-      this.html.requiredSwitch.addEventListener('change', function (e) {
+      this.html.requiredSwitch.addEventListener('change', function () {
         var checked = _this2.html.requiredSwitch;
         _this2.setRequired(checked);
       });
@@ -2119,27 +2115,26 @@ var FormComponent = function (_ViewController) {
       });
       configurationButtons.appendChild(okBtn);
 
-      var deleteBtn = document.createElement('button');
-      deleteBtn.classList.add(configurationCssClass + '-btn-delete', 'btn', // Bootstrap
-      'btn-sm', 'btn-danger', 'glyphicon', 'glyphicon-trash');
-      deleteBtn.type = 'button';
-      deleteBtn.addEventListener('click', function () {
-        return _this2.destroy();
-      });
-      configurationButtons.appendChild(deleteBtn);
-
       // -- Sidebar --
       this.html.sidebar = document.createElement('div');
       var sidebarCssClass = this.cssPrefix + '-sidebar';
       this.html.sidebar.classList.add(sidebarCssClass);
       frag.appendChild(this.html.sidebar);
 
+      var deleteBtn = document.createElement('button');
+      deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
+      deleteBtn.type = 'button';
+      deleteBtn.addEventListener('click', function () {
+        return _this2.destroy();
+      });
+      this.addSidebarButton(deleteBtn, 'delete');
+
       var showConfigBtn = document.createElement('button');
       showConfigBtn.type = 'button';
       showConfigBtn.classList.add('glyphicon', // Font-awesome
       'glyphicon-cog');
       showConfigBtn.title = 'Configure form group';
-      this.addSidebarButton(showConfigBtn);
+      this.addSidebarButton(showConfigBtn, 'config');
 
       showConfigBtn.addEventListener('click', function () {
         _this2.configToggle();
@@ -2149,9 +2144,10 @@ var FormComponent = function (_ViewController) {
     }
   }, {
     key: 'addSidebarButton',
-    value: function addSidebarButton(button) {
-      button.classList.add(this.cssPrefix + '-sidebar-btn');
-      this.html.sidebar.appendChild(button);
+    value: function addSidebarButton(button, elementName) {
+      var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
+      button.classList.add(className);
+      this.html.sidebar.insertBefore(button, this.html.sidebar.children[0]);
     }
 
     /**
@@ -2719,13 +2715,16 @@ var Dropdown = function (_OptionsComponent) {
     key: 'buildComponentSpecificConfiguration',
     value: function buildComponentSpecificConfiguration() {
       var newOptionDisabledWrapper = document.createElement('label');
+
       var newOptionDisabled = document.createElement('input');
+      newOptionDisabled.classList.add(this.cssPrefix + '-configuration-options-optionDisabled');
       newOptionDisabled.type = 'checkbox';
       newOptionDisabledWrapper.appendChild(newOptionDisabled);
       newOptionDisabledWrapper.appendChild(document.createTextNode('Divider'));
 
+      var optionConfig = this.html.configuration.children[0];
       this.html.newOptionDisabled = newOptionDisabled;
-      this.html.componentSpecificConfiguration.appendChild(newOptionDisabledWrapper);
+      optionConfig.appendChild(newOptionDisabledWrapper);
     }
   }, {
     key: 'submitOptionFromConfigBar',
