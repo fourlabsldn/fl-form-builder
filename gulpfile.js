@@ -155,7 +155,7 @@ gulp.task('build:docs', () => {
   gulp.src(['./src/ModuleCoordinator.js', 'README.md'], { base: '.' })
     .pipe(doxx({
       title: moduleName,
-      urlPrefix: `/${moduleName}/docs'`,
+      urlPrefix: `/${moduleName}/docs`,
     }))
     .pipe(replace(/http:/g, 'https:'))
     .pipe(gulp.dest(paths.docs.dest));
