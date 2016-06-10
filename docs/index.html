@@ -87,7 +87,7 @@
 </ul>
 <h2>Getting started</h2>
 <h3>Creating a form-builder</h3>
-<p>To create a form builder just insert the <a href="https://github.com/fourlabsldn/x-div"><code>x-div</code></a> element to the page as such:</p><pre><code class="lang-javascript">&lt;x-div data-controller=&quot;../dist/fl-form-builder&quot;&gt; &lt;/x-div&gt;
+<p>To create a form builder just insert the <a href="https://github.com/fourlabsldn/x-div"><code>x-div</code></a> element to the page as such:</p><pre><code class="lang-html">&lt;x-div data-controller=&quot;../dist/fl-form-builder&quot;&gt; &lt;/x-div&gt;
 </code></pre>
 <h3>Catching the form-builder element</h3>
 <p>The form-builder element will emmit an event called <code>formBuilderLoaded</code>, which will contain an instance of the <code>ModuleCoordinator</code> element used to control the form. You can retrieve this instance like this:</p><pre><code class="lang-javascript">document.addEventListener(&#39;formBuilderLoaded&#39;, (e) =&gt; {

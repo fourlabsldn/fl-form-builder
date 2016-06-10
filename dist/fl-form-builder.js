@@ -1,3 +1,4 @@
+(function () {
 function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
 
 // Bug checking function that will throw an error whenever
@@ -413,13 +414,13 @@ var $exports = module.exports = function(name){
 $exports.store = store;
 });
 
-var require$$0$9 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
+var require$$0$10 = (_wks && typeof _wks === 'object' && 'default' in _wks ? _wks['default'] : _wks);
 
 var _wksExt = __commonjs(function (module, exports) {
-exports.f = require$$0$9;
+exports.f = require$$0$10;
 });
 
-var require$$0$8 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
+var require$$0$9 = (_wksExt && typeof _wksExt === 'object' && 'default' in _wksExt ? _wksExt['default'] : _wksExt);
 
 var _library = __commonjs(function (module) {
 module.exports = true;
@@ -431,7 +432,7 @@ var _wksDefine = __commonjs(function (module) {
 var global         = require$$3$2
   , core           = require$$0$2
   , LIBRARY        = require$$9
-  , wksExt         = require$$0$8
+  , wksExt         = require$$0$9
   , defineProperty = require$$1.f;
 module.exports = function(name){
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
@@ -459,7 +460,7 @@ var _objectPie = __commonjs(function (module, exports) {
 exports.f = {}.propertyIsEnumerable;
 });
 
-var require$$0$10 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
+var require$$0$11 = (_objectPie && typeof _objectPie === 'object' && 'default' in _objectPie ? _objectPie['default'] : _objectPie);
 
 var _enumBugKeys = __commonjs(function (module) {
 // IE 8- don't enum bug keys
@@ -478,7 +479,7 @@ module.exports = function(key){
 };
 });
 
-var require$$0$12 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
+var require$$0$13 = (_sharedKey && typeof _sharedKey === 'object' && 'default' in _sharedKey ? _sharedKey['default'] : _sharedKey);
 
 var _toInteger = __commonjs(function (module) {
 // 7.1.4 ToInteger
@@ -501,7 +502,7 @@ module.exports = function(index, length){
 };
 });
 
-var require$$0$13 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
+var require$$0$14 = (_toIndex && typeof _toIndex === 'object' && 'default' in _toIndex ? _toIndex['default'] : _toIndex);
 
 var _toLength = __commonjs(function (module) {
 // 7.1.15 ToLength
@@ -522,7 +523,7 @@ module.exports = function(it){
 };
 });
 
-var require$$0$14 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
+var require$$0$15 = (_defined && typeof _defined === 'object' && 'default' in _defined ? _defined['default'] : _defined);
 
 var _cof = __commonjs(function (module) {
 var toString = {}.toString;
@@ -532,11 +533,11 @@ module.exports = function(it){
 };
 });
 
-var require$$0$15 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
+var require$$0$16 = (_cof && typeof _cof === 'object' && 'default' in _cof ? _cof['default'] : _cof);
 
 var _iobject = __commonjs(function (module) {
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = require$$0$15;
+var cof = require$$0$16;
 module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
@@ -547,7 +548,7 @@ var require$$1$11 = (_iobject && typeof _iobject === 'object' && 'default' in _i
 var _toIobject = __commonjs(function (module) {
 // to indexed object, toObject with fallback for non-array-like ES3 strings
 var IObject = require$$1$11
-  , defined = require$$0$14;
+  , defined = require$$0$15;
 module.exports = function(it){
   return IObject(defined(it));
 };
@@ -560,7 +561,7 @@ var _arrayIncludes = __commonjs(function (module) {
 // true  -> Array#includes
 var toIObject = require$$2$2
   , toLength  = require$$1$10
-  , toIndex   = require$$0$13;
+  , toIndex   = require$$0$14;
 module.exports = function(IS_INCLUDES){
   return function($this, el, fromIndex){
     var O      = toIObject($this)
@@ -594,7 +595,7 @@ var _objectKeysInternal = __commonjs(function (module) {
 var has          = require$$2$3
   , toIObject    = require$$2$2
   , arrayIndexOf = require$$1$8(false)
-  , IE_PROTO     = require$$0$12('IE_PROTO');
+  , IE_PROTO     = require$$0$13('IE_PROTO');
 
 module.exports = function(object, names){
   var O      = toIObject(object)
@@ -622,7 +623,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 };
 });
 
-var require$$0$11 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
+var require$$0$12 = (_objectGopn && typeof _objectGopn === 'object' && 'default' in _objectGopn ? _objectGopn['default'] : _objectGopn);
 
 var _objectKeys = __commonjs(function (module) {
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
@@ -637,7 +638,7 @@ module.exports = Object.keys || function keys(O){
 var require$$1$12 = (_objectKeys && typeof _objectKeys === 'object' && 'default' in _objectKeys ? _objectKeys['default'] : _objectKeys);
 
 var _objectGopd = __commonjs(function (module, exports) {
-var pIE            = require$$0$10
+var pIE            = require$$0$11
   , createDesc     = require$$3$3
   , toIObject      = require$$2$2
   , toPrimitive    = require$$3
@@ -660,7 +661,7 @@ var require$$1$13 = (_objectGopd && typeof _objectGopd === 'object' && 'default'
 var _objectGopnExt = __commonjs(function (module) {
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = require$$2$2
-  , gOPN      = require$$0$11.f
+  , gOPN      = require$$0$12.f
   , toString  = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -685,7 +686,7 @@ var _html = __commonjs(function (module) {
 module.exports = require$$3$2.document && document.documentElement;
 });
 
-var require$$0$17 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
+var require$$0$18 = (_html && typeof _html === 'object' && 'default' in _html ? _html['default'] : _html);
 
 var _objectDps = __commonjs(function (module) {
 var dP       = require$$1
@@ -710,7 +711,7 @@ var _objectCreate = __commonjs(function (module) {
 var anObject    = require$$2
   , dPs         = require$$4$1
   , enumBugKeys = require$$3$4
-  , IE_PROTO    = require$$0$12('IE_PROTO')
+  , IE_PROTO    = require$$0$13('IE_PROTO')
   , Empty       = function(){ /* empty */ }
   , PROTOTYPE   = 'prototype';
 
@@ -722,7 +723,7 @@ var createDict = function(){
     , gt     = '>'
     , iframeDocument;
   iframe.style.display = 'none';
-  require$$0$17.appendChild(iframe);
+  require$$0$18.appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
   // createDict = iframe.contentWindow.Object;
   // html.removeChild(iframe);
@@ -748,11 +749,11 @@ module.exports = Object.create || function create(O, Properties){
 };
 });
 
-var require$$0$16 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
+var require$$0$17 = (_objectCreate && typeof _objectCreate === 'object' && 'default' in _objectCreate ? _objectCreate['default'] : _objectCreate);
 
 var _isArray = __commonjs(function (module) {
 // 7.2.2 IsArray(argument)
-var cof = require$$0$15;
+var cof = require$$0$16;
 module.exports = Array.isArray || function isArray(arg){
   return cof(arg) == 'Array';
 };
@@ -764,7 +765,7 @@ var _enumKeys = __commonjs(function (module) {
 // all enumerable object keys, includes symbols
 var getKeys = require$$1$12
   , gOPS    = require$$1$6
-  , pIE     = require$$0$10;
+  , pIE     = require$$0$11;
 module.exports = function(it){
   var result     = getKeys(it)
     , getSymbols = gOPS.f;
@@ -798,7 +799,7 @@ var require$$16 = (_keyof && typeof _keyof === 'object' && 'default' in _keyof ?
 var _setToStringTag = __commonjs(function (module) {
 var def = require$$1.f
   , has = require$$2$3
-  , TAG = require$$0$9('toStringTag');
+  , TAG = require$$0$10('toStringTag');
 
 module.exports = function(it, tag, stat){
   if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
@@ -884,8 +885,8 @@ var global         = require$$3$2
   , shared         = require$$1$5
   , setToStringTag = require$$2$4
   , uid            = require$$4
-  , wks            = require$$0$9
-  , wksExt         = require$$0$8
+  , wks            = require$$0$10
+  , wksExt         = require$$0$9
   , wksDefine      = require$$17
   , keyOf          = require$$16
   , enumKeys       = require$$15
@@ -894,7 +895,7 @@ var global         = require$$3$2
   , toIObject      = require$$2$2
   , toPrimitive    = require$$3
   , createDesc     = require$$3$3
-  , _create        = require$$0$16
+  , _create        = require$$0$17
   , gOPNExt        = require$$8
   , $GOPD          = require$$1$13
   , $DP            = require$$1
@@ -1021,8 +1022,8 @@ if(!USE_NATIVE){
 
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
-  require$$0$11.f = gOPNExt.f = $getOwnPropertyNames;
-  require$$0$10.f  = $propertyIsEnumerable;
+  require$$0$12.f = gOPNExt.f = $getOwnPropertyNames;
+  require$$0$11.f  = $propertyIsEnumerable;
   require$$1$6.f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !require$$9){
@@ -1113,13 +1114,13 @@ var index = __commonjs(function (module) {
 module.exports = require$$0$2.Symbol;
 });
 
-var require$$0$7 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+var require$$0$8 = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
 
 var symbol = __commonjs(function (module) {
-module.exports = { "default": require$$0$7, __esModule: true };
+module.exports = { "default": require$$0$8, __esModule: true };
 });
 
-var require$$0$6 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
+var require$$0$7 = (symbol && typeof symbol === 'object' && 'default' in symbol ? symbol['default'] : symbol);
 
 var _iterators = __commonjs(function (module) {
 module.exports = {};
@@ -1129,7 +1130,7 @@ var require$$4$2 = (_iterators && typeof _iterators === 'object' && 'default' in
 
 var _toObject = __commonjs(function (module) {
 // 7.1.13 ToObject(argument)
-var defined = require$$0$14;
+var defined = require$$0$15;
 module.exports = function(it){
   return Object(defined(it));
 };
@@ -1141,7 +1142,7 @@ var _objectGpo = __commonjs(function (module) {
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
 var has         = require$$2$3
   , toObject    = require$$2$5
-  , IE_PROTO    = require$$0$12('IE_PROTO')
+  , IE_PROTO    = require$$0$13('IE_PROTO')
   , ObjectProto = Object.prototype;
 
 module.exports = Object.getPrototypeOf || function(O){
@@ -1157,13 +1158,13 @@ var require$$1$15 = (_objectGpo && typeof _objectGpo === 'object' && 'default' i
 
 var _iterCreate = __commonjs(function (module) {
 'use strict';
-var create         = require$$0$16
+var create         = require$$0$17
   , descriptor     = require$$3$3
   , setToStringTag = require$$2$4
   , IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-require$$1$3(IteratorPrototype, require$$0$9('iterator'), function(){ return this; });
+require$$1$3(IteratorPrototype, require$$0$10('iterator'), function(){ return this; });
 
 module.exports = function(Constructor, NAME, next){
   Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -1184,7 +1185,7 @@ var LIBRARY        = require$$9
   , $iterCreate    = require$$3$5
   , setToStringTag = require$$2$4
   , getPrototypeOf = require$$1$15
-  , ITERATOR       = require$$0$9('iterator')
+  , ITERATOR       = require$$0$10('iterator')
   , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
   , FF_ITERATOR    = '@@iterator'
   , KEYS           = 'keys'
@@ -1246,7 +1247,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 };
 });
 
-var require$$0$19 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
+var require$$0$20 = (_iterDefine && typeof _iterDefine === 'object' && 'default' in _iterDefine ? _iterDefine['default'] : _iterDefine);
 
 var _iterStep = __commonjs(function (module) {
 module.exports = function(done, value){
@@ -1273,7 +1274,7 @@ var addToUnscopables = require$$4$3
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = require$$0$19(Array, 'Array', function(iterated, kind){
+module.exports = require$$0$20(Array, 'Array', function(iterated, kind){
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
@@ -1303,7 +1304,7 @@ var web_dom_iterable = __commonjs(function (module) {
 var global        = require$$3$2
   , hide          = require$$1$3
   , Iterators     = require$$4$2
-  , TO_STRING_TAG = require$$0$9('toStringTag');
+  , TO_STRING_TAG = require$$0$10('toStringTag');
 
 for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
   var NAME       = collections[i]
@@ -1316,7 +1317,7 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 var _stringAt = __commonjs(function (module) {
 var toInteger = require$$1$9
-  , defined   = require$$0$14;
+  , defined   = require$$0$15;
 // true  -> String#at
 // false -> String#codePointAt
 module.exports = function(TO_STRING){
@@ -1341,7 +1342,7 @@ var es6_string_iterator = __commonjs(function (module) {
 var $at  = require$$1$16(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-require$$0$19(String, 'String', function(iterated){
+require$$0$20(String, 'String', function(iterated){
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -1357,13 +1358,13 @@ require$$0$19(String, 'String', function(iterated){
 });
 
 var iterator$1 = __commonjs(function (module) {
-module.exports = require$$0$8.f('iterator');
+module.exports = require$$0$9.f('iterator');
 });
 
-var require$$0$18 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
+var require$$0$19 = (iterator$1 && typeof iterator$1 === 'object' && 'default' in iterator$1 ? iterator$1['default'] : iterator$1);
 
 var iterator = __commonjs(function (module) {
-module.exports = { "default": require$$0$18, __esModule: true };
+module.exports = { "default": require$$0$19, __esModule: true };
 });
 
 var require$$1$14 = (iterator && typeof iterator === 'object' && 'default' in iterator ? iterator['default'] : iterator);
@@ -1377,7 +1378,7 @@ var _iterator = require$$1$14;
 
 var _iterator2 = _interopRequireDefault(_iterator);
 
-var _symbol = require$$0$6;
+var _symbol = require$$0$7;
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -1392,14 +1393,14 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 });
 
-var _typeof$1 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
+var require$$0$6 = (_typeof && typeof _typeof === 'object' && 'default' in _typeof ? _typeof['default'] : _typeof);
 
 var possibleConstructorReturn = __commonjs(function (module, exports) {
 "use strict";
 
 exports.__esModule = true;
 
-var _typeof2 = _typeof$1;
+var _typeof2 = require$$0$6;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1419,7 +1420,7 @@ var _possibleConstructorReturn = (possibleConstructorReturn && typeof possibleCo
 var es6_object_create = __commonjs(function (module) {
 var $export = require$$2$1
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', {create: require$$0$16});
+$export($export.S, 'Object', {create: require$$0$17});
 });
 
 var create$1 = __commonjs(function (module) {
@@ -1429,10 +1430,10 @@ module.exports = function create(P, D){
 };
 });
 
-var require$$0$20 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
+var require$$0$21 = (create$1 && typeof create$1 === 'object' && 'default' in create$1 ? create$1['default'] : create$1);
 
 var create = __commonjs(function (module) {
-module.exports = { "default": require$$0$20, __esModule: true };
+module.exports = { "default": require$$0$21, __esModule: true };
 });
 
 var require$$1$17 = (create && typeof create === 'object' && 'default' in create ? create['default'] : create);
@@ -1465,22 +1466,22 @@ module.exports = {
 };
 });
 
-var require$$0$22 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
+var require$$0$23 = (_setProto && typeof _setProto === 'object' && 'default' in _setProto ? _setProto['default'] : _setProto);
 
 var es6_object_setPrototypeOf = __commonjs(function (module) {
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = require$$2$1;
-$export($export.S, 'Object', {setPrototypeOf: require$$0$22.set});
+$export($export.S, 'Object', {setPrototypeOf: require$$0$23.set});
 });
 
 var setPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.setPrototypeOf;
 });
 
-var require$$0$21 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
+var require$$0$22 = (setPrototypeOf$1 && typeof setPrototypeOf$1 === 'object' && 'default' in setPrototypeOf$1 ? setPrototypeOf$1['default'] : setPrototypeOf$1);
 
 var setPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$21, __esModule: true };
+module.exports = { "default": require$$0$22, __esModule: true };
 });
 
 var require$$2$6 = (setPrototypeOf && typeof setPrototypeOf === 'object' && 'default' in setPrototypeOf ? setPrototypeOf['default'] : setPrototypeOf);
@@ -1498,7 +1499,7 @@ var _create = require$$1$17;
 
 var _create2 = _interopRequireDefault(_create);
 
-var _typeof2 = _typeof$1;
+var _typeof2 = require$$0$6;
 
 var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1530,7 +1531,7 @@ var _inherits = (inherits && typeof inherits === 'object' && 'default' in inheri
  * @abstract @class
  */
 
-var ViewController = function () {
+let ViewController = function () {
   function ViewController(modulePrefix) {
     _classCallCheck(this, ViewController);
 
@@ -1541,7 +1542,7 @@ var ViewController = function () {
     this.acceptEvents('destroy');
 
     this.modulePrefix = modulePrefix;
-    this.cssPrefix = this.modulePrefix + '-' + this.constructor.name;
+    this.cssPrefix = `${ this.modulePrefix }-${ this.constructor.name }`;
     this.html.container.classList.add(this.cssPrefix);
   }
 
@@ -1555,34 +1556,9 @@ var ViewController = function () {
 
   _createClass(ViewController, [{
     key: 'acceptEvents',
-    value: function acceptEvents() {
-      for (var _len = arguments.length, eventList = Array(_len), _key = 0; _key < _len; _key++) {
-        eventList[_key] = arguments[_key];
-      }
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = eventList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var eventName = _step.value;
-
-          this.listeners[eventName] = new Set();
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+    value: function acceptEvents(...eventList) {
+      for (const eventName of eventList) {
+        this.listeners[eventName] = new Set();
       }
     }
 
@@ -1596,7 +1572,7 @@ var ViewController = function () {
   }, {
     key: 'on',
     value: function on(event, fn) {
-      assert(this.listeners[event], 'Trying to listen to invalid event: ' + event);
+      assert(this.listeners[event], `Trying to listen to invalid event: ${ event }`);
       this.listeners[event].add(fn);
     }
 
@@ -1610,7 +1586,7 @@ var ViewController = function () {
   }, {
     key: 'removeListener',
     value: function removeListener(event, fn) {
-      assert(this.listeners[event], 'Trying to remove listener from invalid event: ' + event);
+      assert(this.listeners[event], `Trying to remove listener from invalid event: ${ event }`);
       this.listeners[event].delete(fn);
     }
 
@@ -1622,11 +1598,7 @@ var ViewController = function () {
   }, {
     key: 'trigger',
     value: function trigger(event) {
-      var _this = this;
-
-      this.listeners[event].forEach(function (fn) {
-        return fn(_this);
-      });
+      this.listeners[event].forEach(fn => fn(this));
     }
   }, {
     key: 'destroy',
@@ -1658,14 +1630,14 @@ module.exports = function(KEY, exec){
 };
 });
 
-var require$$0$25 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
+var require$$0$26 = (_objectSap && typeof _objectSap === 'object' && 'default' in _objectSap ? _objectSap['default'] : _objectSap);
 
 var es6_object_getOwnPropertyDescriptor = __commonjs(function (module) {
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
 var toIObject                 = require$$2$2
   , $getOwnPropertyDescriptor = require$$1$13.f;
 
-require$$0$25('getOwnPropertyDescriptor', function(){
+require$$0$26('getOwnPropertyDescriptor', function(){
   return function getOwnPropertyDescriptor(it, key){
     return $getOwnPropertyDescriptor(toIObject(it), key);
   };
@@ -1679,20 +1651,20 @@ module.exports = function getOwnPropertyDescriptor(it, key){
 };
 });
 
-var require$$0$24 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
+var require$$0$25 = (getOwnPropertyDescriptor$1 && typeof getOwnPropertyDescriptor$1 === 'object' && 'default' in getOwnPropertyDescriptor$1 ? getOwnPropertyDescriptor$1['default'] : getOwnPropertyDescriptor$1);
 
 var getOwnPropertyDescriptor = __commonjs(function (module) {
-module.exports = { "default": require$$0$24, __esModule: true };
+module.exports = { "default": require$$0$25, __esModule: true };
 });
 
-var require$$0$23 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
+var require$$0$24 = (getOwnPropertyDescriptor && typeof getOwnPropertyDescriptor === 'object' && 'default' in getOwnPropertyDescriptor ? getOwnPropertyDescriptor['default'] : getOwnPropertyDescriptor);
 
 var es6_object_getPrototypeOf = __commonjs(function (module) {
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject        = require$$2$5
   , $getPrototypeOf = require$$1$15;
 
-require$$0$25('getPrototypeOf', function(){
+require$$0$26('getPrototypeOf', function(){
   return function getPrototypeOf(it){
     return $getPrototypeOf(toObject(it));
   };
@@ -1703,10 +1675,10 @@ var getPrototypeOf$1 = __commonjs(function (module) {
 module.exports = require$$0$2.Object.getPrototypeOf;
 });
 
-var require$$0$26 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
+var require$$0$27 = (getPrototypeOf$1 && typeof getPrototypeOf$1 === 'object' && 'default' in getPrototypeOf$1 ? getPrototypeOf$1['default'] : getPrototypeOf$1);
 
 var getPrototypeOf = __commonjs(function (module) {
-module.exports = { "default": require$$0$26, __esModule: true };
+module.exports = { "default": require$$0$27, __esModule: true };
 });
 
 var require$$1$18 = (getPrototypeOf && typeof getPrototypeOf === 'object' && 'default' in getPrototypeOf ? getPrototypeOf['default'] : getPrototypeOf);
@@ -1720,7 +1692,7 @@ var _getPrototypeOf = require$$1$18;
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _getOwnPropertyDescriptor = require$$0$23;
+var _getOwnPropertyDescriptor = require$$0$24;
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -1755,23 +1727,23 @@ exports.default = function get(object, property, receiver) {
 var _get = (get && typeof get === 'object' && 'default' in get ? get['default'] : get);
 
 function createSwitch(labelText, modulePrefix) {
-  var cssPrefix = modulePrefix + '-ui-switch';
+  const cssPrefix = `${ modulePrefix }-ui-switch`;
 
-  var wrapper = document.createElement('label');
+  const wrapper = document.createElement('label');
   wrapper.textContent = labelText;
 
-  var switchElement = document.createElement('div');
+  const switchElement = document.createElement('div');
   switchElement.classList.add(cssPrefix);
 
-  var switchInput = document.createElement('input');
-  switchInput.classList.add(cssPrefix + '-toggle');
-  switchInput.classList.add(cssPrefix + '-toggle-round');
+  const switchInput = document.createElement('input');
+  switchInput.classList.add(`${ cssPrefix }-toggle`);
+  switchInput.classList.add(`${ cssPrefix }-toggle-round`);
   switchInput.type = 'checkbox';
-  switchInput.id = cssPrefix + '-' + Date.now();
+  switchInput.id = `${ cssPrefix }-${ Date.now() }`;
   wrapper.input = switchInput;
   switchElement.appendChild(switchInput);
 
-  var switchLabel = document.createElement('label');
+  const switchLabel = document.createElement('label');
   switchLabel.setAttribute('for', switchInput.id);
   switchElement.appendChild(switchLabel);
 
@@ -1788,7 +1760,7 @@ function createSwitch(labelText, modulePrefix) {
  * @return {Function} A function to cancel onClickOut
  */
 function onClickOut(elements, callback) {
-  var clickOutOfComponent = createClickOut(elements, callback);
+  const clickOutOfComponent = createClickOut(elements, callback);
   document.body.addEventListener('mousedown', clickOutOfComponent, true);
 
   return function cancelOnclickOut() {
@@ -1810,42 +1782,21 @@ function createClickOut(elements, callback) {
 }
 
 function clickIsWithinComponents(elements, e) {
-  var x = e.clientX;
-  var y = e.clientY;
-  var isInsideAnyElement = false;
+  const x = e.clientX;
+  const y = e.clientY;
+  let isInsideAnyElement = false;
 
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
+  for (const element of elements) {
+    const elementBox = element.getBoundingClientRect();
+    const top = elementBox.top;
+    const bottom = elementBox.bottom;
+    const right = elementBox.right;
+    const left = elementBox.left;
 
-  try {
-    for (var _iterator = elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var element = _step.value;
-
-      var elementBox = element.getBoundingClientRect();
-      var top = elementBox.top;
-      var bottom = elementBox.bottom;
-      var right = elementBox.right;
-      var left = elementBox.left;
-
-      // If point is outside of the component
-      if (x > left && right > x && bottom > y && y > top) {
-        isInsideAnyElement = true;
-        break;
-      }
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
+    // If point is outside of the component
+    if (x > left && right > x && bottom > y && y > top) {
+      isInsideAnyElement = true;
+      break;
     }
   }
 
@@ -1857,9 +1808,9 @@ function blinkRed(el, modulePrefix) {
     return;
   }
 
-  var blickClass = modulePrefix + "-blink-red";
+  const blickClass = `${ modulePrefix }-blink-red`;
   el.classList.add(blickClass);
-  setTimeout(function () {
+  setTimeout(() => {
     el.classList.remove(blickClass);
   }, 1500);
 }
@@ -1871,20 +1822,16 @@ function blinkRed(el, modulePrefix) {
  * @return {Function}                  the throttled function
  */
 function throttle(FuncDelay, callback) {
-  var lastCall = +new Date();
-  var delay = FuncDelay;
-  var params = void 0;
-  var context = {};
-  var calledDuringDelay = false;
+  let lastCall = +new Date();
+  const delay = FuncDelay;
+  let params;
+  const context = {};
+  let calledDuringDelay = false;
 
-  return function () {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    var now = +new Date();
-    var diff = now - lastCall;
-    var timeToEndOfDelay = void 0;
+  return (...args) => {
+    const now = +new Date();
+    const diff = now - lastCall;
+    let timeToEndOfDelay;
 
     params = args;
 
@@ -1896,7 +1843,7 @@ function throttle(FuncDelay, callback) {
       // If it wasn't called yet, call it when there is enough delay.
       timeToEndOfDelay = delay - diff;
 
-      setTimeout(function () {
+      setTimeout(() => {
         callback.apply(context, params); // Call function with latest parameters
       }, timeToEndOfDelay);
 
@@ -1916,7 +1863,7 @@ function throttle(FuncDelay, callback) {
  */
 function trackReorderDrag(paramE, paramEl, paramElements) {
   function setTranslation(el, val) {
-    el.style.transform = 'translate3d(0, ' + val + 'px, 0)'; //  eslint-disable-line no-param-reassign
+    el.style.transform = `translate3d(0, ${ val }px, 0)`; //  eslint-disable-line no-param-reassign
   }
 
   /**
@@ -1924,7 +1871,7 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
    * @param {Array<HTMLElement>} els Elements being tracked
    */
   function resetElementsPositions(els) {
-    els.forEach(function (el) {
+    els.forEach(el => {
       setTranslation(el, 0);
     });
   }
@@ -1936,20 +1883,20 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
    * @return {void}
    */
   function calculateElementHeight(els, elIndex) {
-    var spaceOccupied = void 0;
+    let spaceOccupied;
 
     // If not the last element
     if (elIndex < els.length - 1) {
-      var elTop = els[elIndex].getBoundingClientRect().top;
-      var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
+      const elTop = els[elIndex].getBoundingClientRect().top;
+      const nextElTop = els[elIndex + 1].getBoundingClientRect().top;
       spaceOccupied = nextElTop - elTop;
     } else {
       // let's estimate the general vertical distance between elements by
       // subtracting the size of the first element from the distance between
       // its top and the next element.
-      var firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
-      var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
-      var height = els[elIndex].clientHeight;
+      const firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+      const verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
+      const height = els[elIndex].clientHeight;
       spaceOccupied = height + verticalDistance;
     }
 
@@ -1965,14 +1912,14 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
    *                                  list to make room for the dragged element
    */
   function createDragMover(els, tops, targetIndex) {
-    var target = els[targetIndex];
-    var targetInitialTop = tops[targetIndex];
-    var targetHeight = calculateElementHeight(els, targetIndex);
+    const target = els[targetIndex];
+    const targetInitialTop = tops[targetIndex];
+    const targetHeight = calculateElementHeight(els, targetIndex);
     return function doDragMove() {
-      var targetTop = target.getBoundingClientRect().top;
-      var movedUp = targetTop < targetInitialTop;
+      const targetTop = target.getBoundingClientRect().top;
+      const movedUp = targetTop < targetInitialTop;
 
-      var i = void 0;
+      let i;
       for (i = 0; i < tops.length; i++) {
         if (i === targetIndex) {
           continue;
@@ -1988,25 +1935,25 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
   }
 
   function createDragListener(els, tops, targetIndex, initialY) {
-    var target = els[targetIndex];
-    var doDragMove = createDragMover(els, tops, targetIndex);
-    var shouldStopListening = void 0;
+    const target = els[targetIndex];
+    const doDragMove = createDragMover(els, tops, targetIndex);
+    let shouldStopListening;
     function dragListener(e) {
       if (shouldStopListening) {
         return;
       }
 
       doDragMove();
-      var newY = e.pageY;
+      const newY = e.pageY;
       if (newY === 0) {
         return;
       } // correct weird behaviour when mouse goes up
 
-      var diff = newY - initialY;
+      const diff = newY - initialY;
       setTranslation(target, diff);
     }
 
-    dragListener.stop = function () {
+    dragListener.stop = () => {
       shouldStopListening = true;
     };
 
@@ -2014,8 +1961,8 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
   }
 
   function getElementsCurrentTop(els) {
-    var tops = [];
-    els.forEach(function (el) {
+    const tops = [];
+    els.forEach(el => {
       tops.push(el.getBoundingClientRect().top);
     });
 
@@ -2031,10 +1978,10 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
   // }
 
   function insertTargetInRightPlace(els, initialTops, targetIndex) {
-    var target = els[targetIndex];
-    var topsBeforeInsertion = getElementsCurrentTop(els);
-    var targetTop = topsBeforeInsertion[targetIndex];
-    var i = 0;
+    const target = els[targetIndex];
+    const topsBeforeInsertion = getElementsCurrentTop(els);
+    const targetTop = topsBeforeInsertion[targetIndex];
+    let i = 0;
 
     // Pass by all elements that are above the target
     while (topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop || i === targetIndex) {
@@ -2042,8 +1989,8 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
     }
 
     // Take away transitions from all elements and save them
-    var initialTransitions = [];
-    els.forEach(function (anEl) {
+    const initialTransitions = [];
+    els.forEach(anEl => {
       initialTransitions.push(anEl.style.transition);
       anEl.style.transition = 'none'; // eslint-disable-line no-param-reassign
     });
@@ -2052,29 +1999,29 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
     resetElementsPositions(els);
 
     // Add the element in the appropriate place. This will displace everyone else.
-    var parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
+    const parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
     if (!parent || !parent.appendChild) {
       throw new Error('trackReorderDrag(): No parent found in element list.');
     } else if (els[i]) {
       parent.insertBefore(target, els[i]);
     } else {
-      var lastEl = els[els.length - 1];
+      const lastEl = els[els.length - 1];
       parent.insertBefore(target, lastEl);
       parent.insertBefore(lastEl, target);
     }
 
     // Now let's translate it to where it was just before it was repositioned
     // All without transitions. It will seem like it never left that spot.
-    var futureTop = target.getBoundingClientRect().top;
-    var displacement = targetTop - futureTop;
+    const futureTop = target.getBoundingClientRect().top;
+    const displacement = targetTop - futureTop;
     setTranslation(target, displacement);
 
     // Let's add a timeout to get the last place in the UI queue and let the
     // CSS renderer to process the fact that all these elements do not have
     // transitions and should appear wherever their coordinates say immediately.
-    setTimeout(function () {
+    setTimeout(() => {
       // Restore all transitions
-      els.forEach(function (anEl, k) {
+      els.forEach((anEl, k) => {
         anEl.style.transition = initialTransitions[k]; // eslint-disable-line no-param-reassign
       });
 
@@ -2087,30 +2034,30 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
   }
 
   function init(e, el, elements) {
-    if ((typeof el === 'undefined' ? 'undefined' : _typeof$1(el)) !== 'object') {
+    if (typeof el !== 'object') {
       throw new Error('trackReorderDrag(): Invalid parameter');
     }
 
     // Reorder elements
-    elements.sort(function (el1, el2) {
+    elements.sort((el1, el2) => {
       return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
     });
 
     // Set initial states
-    var initialTops = [];
-    elements.forEach(function (element) {
+    const initialTops = [];
+    elements.forEach(element => {
       initialTops.push(element.getBoundingClientRect().top);
     });
 
-    var elIndex = elements.indexOf(el);
+    const elIndex = elements.indexOf(el);
 
     // Create throttled drag listener
-    var initialY = e.pageY;
-    var dragListener = createDragListener(elements, initialTops, elIndex, initialY);
-    var throttledDragListener = throttle(50, dragListener);
+    const initialY = e.pageY;
+    const dragListener = createDragListener(elements, initialTops, elIndex, initialY);
+    const throttledDragListener = throttle(50, dragListener);
 
     // Listen to drags
-    var eventTarget = e.target;
+    const eventTarget = e.target;
     eventTarget.addEventListener('drag', throttledDragListener);
     eventTarget.addEventListener('dragend', function dragEndListener() {
       dragListener.stop();
@@ -2124,27 +2071,27 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
 }
 
 function fireEvent(targetElement, eventName, detailObj) {
-  assert(typeof eventName === 'string', 'Invalid event name: ' + eventName);
-  var targetIsHtmlNode = targetElement && targetElement.appendChild;
-  assert(targetIsHtmlNode, 'Target element is not an HTML element: ' + eventName);
+  assert(typeof eventName === 'string', `Invalid event name: ${ eventName }`);
+  const targetIsHtmlNode = targetElement && targetElement.appendChild;
+  assert(targetIsHtmlNode, `Target element is not an HTML element: ${ eventName }`);
 
-  var event = new CustomEvent(eventName, { detail: detailObj });
+  const event = new CustomEvent(eventName, { detail: detailObj });
   targetElement.dispatchEvent(event);
 }
 
 var utils = {
-  trackReorderDrag: trackReorderDrag,
-  createSwitch: createSwitch,
-  onClickOut: onClickOut,
-  fireEvent: fireEvent,
-  blinkRed: blinkRed
+  trackReorderDrag,
+  createSwitch,
+  onClickOut,
+  fireEvent,
+  blinkRed
 };
 
 /**
  * @abstract @class FormComponent
  */
 
-var FormComponent = function (_ViewController) {
+let FormComponent = function (_ViewController) {
   _inherits(FormComponent, _ViewController);
 
   _createClass(FormComponent, null, [{
@@ -2163,8 +2110,8 @@ var FormComponent = function (_ViewController) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
 
-    _this.cssPrefix = modulePrefix + '-FormComponent';
-    _this.html.container.classList.add(modulePrefix + '-FormComponent');
+    _this.cssPrefix = `${ modulePrefix }-FormComponent`;
+    _this.html.container.classList.add(`${ modulePrefix }-FormComponent`);
 
     _this.editables = new Set();
     _this.isRequired = false;
@@ -2184,13 +2131,11 @@ var FormComponent = function (_ViewController) {
   _createClass(FormComponent, [{
     key: 'buildHtml',
     value: function buildHtml() {
-      var _this2 = this;
-
-      var frag = document.createDocumentFragment();
+      const frag = document.createDocumentFragment();
 
       // -- Content --
       this.html.content = document.createElement('div');
-      this.html.content.classList.add(this.cssPrefix + '-content');
+      this.html.content.classList.add(`${ this.cssPrefix }-content`);
       frag.appendChild(this.html.content);
 
       this.html.title = document.createElement('h3');
@@ -2200,55 +2145,53 @@ var FormComponent = function (_ViewController) {
 
       // -- Configuration --
       this.html.configuration = document.createElement('div');
-      var configurationCssClass = this.cssPrefix + '-configuration';
+      const configurationCssClass = `${ this.cssPrefix }-configuration`;
       this.html.configuration.classList.add(configurationCssClass);
       frag.appendChild(this.html.configuration);
 
-      var configurationButtons = document.createElement('div');
-      configurationButtons.classList.add(this.cssPrefix + '-configuration-buttons');
+      const configurationButtons = document.createElement('div');
+      configurationButtons.classList.add(`${ this.cssPrefix }-configuration-buttons`);
       this.html.configuration.appendChild(configurationButtons);
 
       this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
-      this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
-      this.html.requiredSwitch.addEventListener('change', function (e) {
-        var checked = e.target.checked;
-        _this2.setRequired(checked);
+      this.html.requiredSwitch.classList.add(`${ configurationCssClass }-switch-required`);
+      this.html.requiredSwitch.addEventListener('change', e => {
+        const checked = e.target.checked;
+        this.setRequired(checked);
       });
       configurationButtons.appendChild(this.html.requiredSwitch);
 
-      var okBtn = document.createElement('button');
-      okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
+      const okBtn = document.createElement('button');
+      okBtn.classList.add(`${ configurationCssClass }-btn-ok`, 'btn', // Bootstrap
       'btn-sm', 'btn-default', 'glyphicon', // Font-awesome
       'glyphicon-ok');
       okBtn.type = 'button';
-      okBtn.addEventListener('click', function () {
-        _this2.configToggle();
+      okBtn.addEventListener('click', () => {
+        this.configToggle();
       });
       configurationButtons.appendChild(okBtn);
 
       // -- Sidebar --
       this.html.sidebar = document.createElement('div');
-      var sidebarCssClass = this.cssPrefix + '-sidebar';
+      const sidebarCssClass = `${ this.cssPrefix }-sidebar`;
       this.html.sidebar.classList.add(sidebarCssClass);
       frag.appendChild(this.html.sidebar);
 
-      var deleteBtn = document.createElement('button');
+      const deleteBtn = document.createElement('button');
       deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
       deleteBtn.type = 'button';
-      deleteBtn.addEventListener('click', function () {
-        return _this2.destroy();
-      });
+      deleteBtn.addEventListener('click', () => this.destroy());
       this.addSidebarButton(deleteBtn, 'delete');
 
-      var showConfigBtn = document.createElement('button');
+      const showConfigBtn = document.createElement('button');
       showConfigBtn.type = 'button';
       showConfigBtn.classList.add('glyphicon', // Font-awesome
       'glyphicon-cog');
       showConfigBtn.title = 'Configure form group';
       this.addSidebarButton(showConfigBtn, 'config');
 
-      showConfigBtn.addEventListener('click', function () {
-        _this2.configToggle();
+      showConfigBtn.addEventListener('click', () => {
+        this.configToggle();
       });
 
       this.html.container.appendChild(frag);
@@ -2256,7 +2199,7 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'addSidebarButton',
     value: function addSidebarButton(button, elementName) {
-      var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
+      const className = elementName ? `${ this.cssPrefix }-sidebar-btn-${ elementName }` : `${ this.cssPrefix }-sidebar-btn`;
       button.classList.add(className);
       this.html.sidebar.insertBefore(button, this.html.sidebar.children[0]);
     }
@@ -2269,7 +2212,7 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'addEditable',
     value: function addEditable(element) {
-      element.classList.add(this.cssPrefix + '-editable');
+      element.classList.add(`${ this.cssPrefix }-editable`);
       this.editables.add(element);
       if (this.isConfigVisible) {
         this.enableEditing(true);
@@ -2284,10 +2227,8 @@ var FormComponent = function (_ViewController) {
 
   }, {
     key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      this.editables.forEach(function (element) {
+    value: function enableEditing(enable = true) {
+      this.editables.forEach(element => {
         element.setAttribute('contenteditable', enable);
       });
     }
@@ -2300,26 +2241,22 @@ var FormComponent = function (_ViewController) {
 
   }, {
     key: 'configToggle',
-    value: function configToggle() {
-      var _this3 = this;
-
-      var newState = arguments.length <= 0 || arguments[0] === undefined ? !this.isConfigVisible : arguments[0];
-
+    value: function configToggle(newState = !this.isConfigVisible) {
       this.isConfigVisible = newState;
       if (!newState) {
         // hide
-        this.html.container.classList.remove(this.cssPrefix + '--configuration-visible');
+        this.html.container.classList.remove(`${ this.cssPrefix }--configuration-visible`);
         this.enableEditing(false);
         this.triggerChangeIfNeeded();
       } else {
         // show
-        this.html.container.classList.add(this.cssPrefix + '--configuration-visible');
+        this.html.container.classList.add(`${ this.cssPrefix }--configuration-visible`);
         this.enableEditing(true);
 
         // hide on clickOut
-        utils.onClickOut([this.html.container, this.html.configuration], function () {
-          if (_this3.isConfigVisible && !_this3.isDetroyed) {
-            _this3.configToggle();
+        utils.onClickOut([this.html.container, this.html.configuration], () => {
+          if (this.isConfigVisible && !this.isDetroyed) {
+            this.configToggle();
           }
         });
         this.focus();
@@ -2331,14 +2268,12 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'focus',
     value: function focus() {
-      var _this4 = this;
-
       if (this.focusElement) {
         // NOTE: There is a bug that for some reason it doesn't focus if you just
         // call focus() straight away. setTimeout solves it.
         // see http:// goo.gl/UjKOk5
-        setTimeout(function () {
-          _this4.focusElement.focus();
+        setTimeout(() => {
+          this.focusElement.focus();
         }, 15);
       }
     }
@@ -2392,7 +2327,7 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'importState',
     value: function importState(state) {
-      assert(state.type === this.constructor.name, 'Importing incompatible state. Expected ' + this.constructor.name + ', got ' + state.type);
+      assert(state.type === this.constructor.name, `Importing incompatible state. Expected ${ this.constructor.name }, got ${ state.type }`);
       this.html.title.textContent = state.title;
       this.setRequired(state.required);
     }
@@ -2406,11 +2341,11 @@ var FormComponent = function (_ViewController) {
   }, {
     key: 'triggerChangeIfNeeded',
     value: function triggerChangeIfNeeded() {
-      var currentState = this.exportState();
-      var currStateJson = JSON.stringify(currentState);
+      const currentState = this.exportState();
+      const currStateJson = JSON.stringify(currentState);
 
-      var lastStateJson = JSON.stringify(this.lastState);
-      var changeHappened = lastStateJson !== currStateJson;
+      const lastStateJson = JSON.stringify(this.lastState);
+      const changeHappened = lastStateJson !== currStateJson;
       if (changeHappened && this.lastState !== null) {
         this.trigger('change');
       }
@@ -2425,7 +2360,7 @@ var FormComponent = function (_ViewController) {
  * @class ControlBar
  */
 
-var ComponentsContainer = function (_ViewController) {
+let ComponentsContainer = function (_ViewController) {
   _inherits(ComponentsContainer, _ViewController);
 
   function ComponentsContainer(modulePrefix) {
@@ -2440,7 +2375,7 @@ var ComponentsContainer = function (_ViewController) {
     // Used with component.ondestroy;
     // This must be here and not together with other class methods because
     // of the binding of 'this'
-    _this.componentDestroyListener = function (component) {
+    _this.componentDestroyListener = component => {
       _this.deleteComponent(component);
       _this.trigger('change');
     };
@@ -2459,11 +2394,7 @@ var ComponentsContainer = function (_ViewController) {
 
   _createClass(ComponentsContainer, [{
     key: 'addComponent',
-    value: function addComponent(component) {
-      var _this2 = this;
-
-      var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
+    value: function addComponent(component, showConfig = true) {
       assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
       this.components.push(component);
       this.html.container.appendChild(component.getHtmlContainer());
@@ -2471,33 +2402,27 @@ var ComponentsContainer = function (_ViewController) {
 
       this.addDragButtonToComponent(component);
       component.configToggle(showConfig);
-      component.on('change', function () {
-        return _this2.trigger('change');
-      });
+      component.on('change', () => this.trigger('change'));
     }
   }, {
     key: 'addDragButtonToComponent',
     value: function addDragButtonToComponent(component) {
-      var _this3 = this;
-
-      var dragBtn = document.createElement('button');
+      const dragBtn = document.createElement('button');
       dragBtn.type = 'button';
       dragBtn.title = 'Drag to reorder';
       dragBtn.setAttribute('draggable', true);
       dragBtn.classList.add('glyphicon', // Font-awesome
       'glyphicon-menu-hamburger');
 
-      var draggingClass = this.modulePrefix + '--dragging';
-      dragBtn.addEventListener('dragstart', function (e) {
+      const draggingClass = `${ this.modulePrefix }--dragging`;
+      dragBtn.addEventListener('dragstart', e => {
         e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
-        if (_this3.components.length < 2) {
+        if (this.components.length < 2) {
           return;
         }
 
-        var container = component.getHtmlContainer();
-        var containersArray = _this3.components.map(function (c) {
-          return c.getHtmlContainer();
-        });
+        const container = component.getHtmlContainer();
+        const containersArray = this.components.map(c => c.getHtmlContainer());
 
         container.classList.add(draggingClass);
 
@@ -2505,22 +2430,20 @@ var ComponentsContainer = function (_ViewController) {
         utils.trackReorderDrag(e, container, containersArray);
       });
 
-      dragBtn.addEventListener('dragend', function () {
-        var container = component.getHtmlContainer();
-        setTimeout(function () {
-          return container.classList.remove(draggingClass);
-        }, 250);
+      dragBtn.addEventListener('dragend', () => {
+        const container = component.getHtmlContainer();
+        setTimeout(() => container.classList.remove(draggingClass), 250);
 
         // Reorder components according to their position.
-        var beforeReordering = JSON.stringify(_this3.components);
-        _this3.components.sort(function (el1, el2) {
+        const beforeReordering = JSON.stringify(this.components);
+        this.components.sort((el1, el2) => {
           return el1.getHtmlContainer().getBoundingClientRect().top > el2.getHtmlContainer().getBoundingClientRect().top;
         });
 
         // Trigger change if elements were reordered
-        var afterReordering = JSON.stringify(_this3.components);
+        const afterReordering = JSON.stringify(this.components);
         if (beforeReordering !== afterReordering) {
-          _this3.trigger('change');
+          this.trigger('change');
         }
       });
 
@@ -2534,7 +2457,7 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'deleteComponent',
     value: function deleteComponent(component) {
-      var componentIndex = this.components.indexOf(component);
+      const componentIndex = this.components.indexOf(component);
       if (componentIndex === -1) {
         console.warn('Removing component not in container');
         return;
@@ -2556,30 +2479,9 @@ var ComponentsContainer = function (_ViewController) {
       // NOTE: we create a new array because deleteComponent modifies
       // 'this.components', so we would have problems as we are
       // iterating trough an array being modified.
-      var components = Array.from(this.components);
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var comp = _step.value;
-
-          this.deleteComponent(comp);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      const components = Array.from(this.components);
+      for (const comp of components) {
+        this.deleteComponent(comp);
       }
     }
 
@@ -2593,25 +2495,21 @@ var ComponentsContainer = function (_ViewController) {
   }, {
     key: 'setComponents',
     value: function setComponents(components) {
-      var _this4 = this;
-
       this.deleteAllComponents();
-      components.forEach(function (comp) {
-        return _this4.addComponent(comp, false);
-      });
+      components.forEach(comp => this.addComponent(comp, false));
     }
   }]);
 
   return ComponentsContainer;
 }(ViewController);
 
-var OptionsComponent = function (_FormComponent) {
+let OptionsComponent = function (_FormComponent) {
   _inherits(OptionsComponent, _FormComponent);
 
   _createClass(OptionsComponent, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(OptionsComponent), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(OptionsComponent), 'getInfo', this).call(this);
       info.group = 'Options Components';
       return info;
     }
@@ -2637,12 +2535,10 @@ var OptionsComponent = function (_FormComponent) {
   _createClass(OptionsComponent, [{
     key: 'buildHtml',
     value: function buildHtml() {
-      var _this2 = this;
-
       _get(Object.getPrototypeOf(OptionsComponent.prototype), 'buildHtml', this).call(this);
 
-      var optionsConfig = document.createElement('div');
-      var optionsConfigCssClass = this.cssPrefix + '-configuration-options';
+      const optionsConfig = document.createElement('div');
+      const optionsConfigCssClass = `${ this.cssPrefix }-configuration-options`;
       optionsConfig.classList.add(optionsConfigCssClass);
 
       if (this.html.configuration.children[0]) {
@@ -2651,33 +2547,29 @@ var OptionsComponent = function (_FormComponent) {
         this.html.configuration.appendChild(optionsConfig);
       }
 
-      var removeBtn = document.createElement('button');
+      const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.title = 'Remove last option';
-      removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', optionsConfigCssClass + '-btn-remove');
-      removeBtn.addEventListener('click', function () {
-        return _this2.removeOption();
-      });
+      removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', `${ optionsConfigCssClass }-btn-remove`);
+      removeBtn.addEventListener('click', () => this.removeOption());
       optionsConfig.appendChild(removeBtn);
 
-      var addBtn = document.createElement('button');
+      const addBtn = document.createElement('button');
       addBtn.type = 'button';
       addBtn.title = 'Add new option';
-      addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
-      addBtn.addEventListener('click', function () {
-        return _this2.submitOptionFromConfigBar();
-      });
+      addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', `${ optionsConfigCssClass }-btn-add`);
+      addBtn.addEventListener('click', () => this.submitOptionFromConfigBar());
       optionsConfig.appendChild(addBtn);
 
       this.html.newOptionText = document.createElement('input');
       this.html.newOptionText.setAttribute('placeholder', 'Type a new option');
       this.html.newOptionText.setAttribute('type', 'text');
-      this.html.newOptionText.classList.add(optionsConfigCssClass + '-input');
+      this.html.newOptionText.classList.add(`${ optionsConfigCssClass }-input`);
       this.focusElement = this.html.newOptionText;
       optionsConfig.appendChild(this.html.newOptionText);
-      this.html.newOptionText.addEventListener('keypress', function (e) {
+      this.html.newOptionText.addEventListener('keypress', e => {
         if (e.which === 13) {
-          var click = new Event('click');
+          const click = new Event('click');
           addBtn.dispatchEvent(click);
           e.preventDefault();
           return false; //  returning false will prevent the event from bubbling up.
@@ -2710,15 +2602,15 @@ var OptionsComponent = function (_FormComponent) {
   }, {
     key: 'addOption',
     value: function addOption(text, optionType) {
-      var newOption = document.createElement('div');
-      newOption.classList.add(this.cssPrefix + '-option');
+      const newOption = document.createElement('div');
+      newOption.classList.add(`${ this.cssPrefix }-option`);
 
-      var optionCheckbox = document.createElement('input');
+      const optionCheckbox = document.createElement('input');
       optionCheckbox.type = optionType;
       newOption.appendChild(optionCheckbox);
 
-      var optionText = document.createElement('span');
-      optionText.classList.add(this.cssPrefix + '-option-text');
+      const optionText = document.createElement('span');
+      optionText.classList.add(`${ this.cssPrefix }-option-text`);
       optionText.textContent = text;
       newOption.appendChild(optionText);
 
@@ -2736,7 +2628,7 @@ var OptionsComponent = function (_FormComponent) {
   }, {
     key: 'removeOption',
     value: function removeOption() {
-      var optionToRemove = this.html.options.pop();
+      const optionToRemove = this.html.options.pop();
       if (optionToRemove) {
         optionToRemove.remove();
       }
@@ -2750,10 +2642,8 @@ var OptionsComponent = function (_FormComponent) {
   }, {
     key: 'exportState',
     value: function exportState() {
-      var output = _get(Object.getPrototypeOf(OptionsComponent.prototype), 'exportState', this).call(this);
-      output.options = this.html.options.map(function (o) {
-        return o.textContent;
-      });
+      const output = _get(Object.getPrototypeOf(OptionsComponent.prototype), 'exportState', this).call(this);
+      output.options = this.html.options.map(o => o.textContent);
       return output;
     }
 
@@ -2765,29 +2655,25 @@ var OptionsComponent = function (_FormComponent) {
   }, {
     key: 'importState',
     value: function importState(state) {
-      var _this3 = this;
-
       _get(Object.getPrototypeOf(OptionsComponent.prototype), 'importState', this).call(this, state);
-      var optionCount = this.html.options.length;
-      for (var i = 0; i < optionCount; i++) {
+      const optionCount = this.html.options.length;
+      for (let i = 0; i < optionCount; i++) {
         this.removeOption();
       }
-      state.options.forEach(function (o) {
-        return _this3.addOption(o);
-      });
+      state.options.forEach(o => this.addOption(o));
     }
   }]);
 
   return OptionsComponent;
 }(FormComponent);
 
-var RadioBtns = function (_OptionsComponent) {
+let RadioBtns = function (_OptionsComponent) {
   _inherits(RadioBtns, _OptionsComponent);
 
   _createClass(RadioBtns, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(RadioBtns), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(RadioBtns), 'getInfo', this).call(this);
       info.description = 'Radio Buttons';
       info.iconClass = 'glyphicon glyphicon-ok-circle';
       return info;
@@ -2820,13 +2706,13 @@ var RadioBtns = function (_OptionsComponent) {
   return RadioBtns;
 }(OptionsComponent);
 
-var Checkboxes = function (_OptionsComponent) {
+let Checkboxes = function (_OptionsComponent) {
   _inherits(Checkboxes, _OptionsComponent);
 
   _createClass(Checkboxes, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(Checkboxes), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(Checkboxes), 'getInfo', this).call(this);
       info.description = 'Checkboxes';
       info.iconClass = 'glyphicon glyphicon-check';
       return info;
@@ -2859,13 +2745,13 @@ var Checkboxes = function (_OptionsComponent) {
   return Checkboxes;
 }(OptionsComponent);
 
-var Dropdown = function (_OptionsComponent) {
+let Dropdown = function (_OptionsComponent) {
   _inherits(Dropdown, _OptionsComponent);
 
   _createClass(Dropdown, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(Dropdown), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(Dropdown), 'getInfo', this).call(this);
       info.description = 'Dropdown';
       info.iconClass = 'glyphicon glyphicon-collapse-down';
       return info;
@@ -2896,9 +2782,9 @@ var Dropdown = function (_OptionsComponent) {
   }, {
     key: 'buildComponent',
     value: function buildComponent() {
-      var dropdown = document.createElement('select');
+      const dropdown = document.createElement('select');
       dropdown.setAttribute('multiple', true);
-      dropdown.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
+      dropdown.classList.add(`${ this.cssPrefix }-${ this.constructor.name }`, 'form-control' // Bootstrap
       );
 
       this.html.dropdown = dropdown;
@@ -2908,15 +2794,15 @@ var Dropdown = function (_OptionsComponent) {
   }, {
     key: 'buildComponentSpecificConfiguration',
     value: function buildComponentSpecificConfiguration() {
-      var newOptionDisabledWrapper = document.createElement('label');
+      const newOptionDisabledWrapper = document.createElement('label');
 
-      var newOptionDisabled = document.createElement('input');
-      newOptionDisabled.classList.add(this.cssPrefix + '-configuration-options-optionDisabled');
+      const newOptionDisabled = document.createElement('input');
+      newOptionDisabled.classList.add(`${ this.cssPrefix }-configuration-options-optionDisabled`);
       newOptionDisabled.type = 'checkbox';
       newOptionDisabledWrapper.appendChild(newOptionDisabled);
       newOptionDisabledWrapper.appendChild(document.createTextNode('Divider'));
 
-      var optionConfig = this.html.configuration.children[0];
+      const optionConfig = this.html.configuration.children[0];
       this.html.newOptionDisabled = newOptionDisabled;
       optionConfig.appendChild(newOptionDisabledWrapper);
     }
@@ -2934,10 +2820,8 @@ var Dropdown = function (_OptionsComponent) {
     }
   }, {
     key: 'addOption',
-    value: function addOption(text) {
-      var disabled = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-
-      var newOption = document.createElement('option');
+    value: function addOption(text, disabled = false) {
+      const newOption = document.createElement('option');
       if (disabled) {
         newOption.setAttribute('disabled', true);
       }
@@ -2955,9 +2839,7 @@ var Dropdown = function (_OptionsComponent) {
 
   }, {
     key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
+    value: function enableEditing(enable = true) {
       _get(Object.getPrototypeOf(Dropdown.prototype), 'enableEditing', this).call(this, enable);
       if (!this.html.dropdown) {
         return;
@@ -2977,9 +2859,9 @@ var Dropdown = function (_OptionsComponent) {
   }, {
     key: 'exportState',
     value: function exportState() {
-      var output = _get(Object.getPrototypeOf(Dropdown.prototype), 'exportState', this).call(this);
+      const output = _get(Object.getPrototypeOf(Dropdown.prototype), 'exportState', this).call(this);
       output.disabledIndexes = [];
-      this.html.options.forEach(function (o, index) {
+      this.html.options.forEach((o, index) => {
         if (o.hasAttribute('disabled')) {
           output.disabledIndexes.push(index);
         }
@@ -2996,29 +2878,8 @@ var Dropdown = function (_OptionsComponent) {
     key: 'importState',
     value: function importState(state) {
       _get(Object.getPrototypeOf(Dropdown.prototype), 'importState', this).call(this, state);
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = state.disabledIndexes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var disabledIndex = _step.value;
-
-          this.html.options[disabledIndex].setAttribute('disabled', true);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      for (const disabledIndex of state.disabledIndexes) {
+        this.html.options[disabledIndex].setAttribute('disabled', true);
       }
     }
   }]);
@@ -3030,21 +2891,19 @@ var Dropdown = function (_OptionsComponent) {
  * @abstract @class TextComponent
  */
 
-var TextComponent = function (_FormComponent) {
+let TextComponent = function (_FormComponent) {
   _inherits(TextComponent, _FormComponent);
 
   _createClass(TextComponent, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(TextComponent), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(TextComponent), 'getInfo', this).call(this);
       info.group = 'Text Components';
       return info;
     }
   }]);
 
-  function TextComponent(modulePrefix, tagName) {
-    var fieldType = arguments.length <= 2 || arguments[2] === undefined ? 'text' : arguments[2];
-
+  function TextComponent(modulePrefix, tagName, fieldType = 'text') {
     _classCallCheck(this, TextComponent);
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextComponent).call(this, modulePrefix));
@@ -3059,10 +2918,10 @@ var TextComponent = function (_FormComponent) {
   _createClass(TextComponent, [{
     key: 'buildComponent',
     value: function buildComponent(tagName, fieldType) {
-      var textElement = document.createElement(tagName);
+      const textElement = document.createElement(tagName);
       textElement.type = fieldType;
 
-      textElement.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
+      textElement.classList.add(`${ this.cssPrefix }-${ this.constructor.name }`, 'form-control' // Bootstrap
       );
       this.html.textElement = textElement;
       this.focusElement = textElement;
@@ -3079,9 +2938,7 @@ var TextComponent = function (_FormComponent) {
 
   }, {
     key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
+    value: function enableEditing(enable = true) {
       _get(Object.getPrototypeOf(TextComponent.prototype), 'enableEditing', this).call(this, enable);
       if (!this.html.textElement) {
         return;
@@ -3119,7 +2976,7 @@ var TextComponent = function (_FormComponent) {
   }, {
     key: 'exportState',
     value: function exportState() {
-      var output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
+      const output = _get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
       output.placeholder = this.getPlaceholder();
       return output;
     }
@@ -3141,13 +2998,13 @@ var TextComponent = function (_FormComponent) {
   return TextComponent;
 }(FormComponent);
 
-var TextBox = function (_TextComponent) {
+let TextBox = function (_TextComponent) {
   _inherits(TextBox, _TextComponent);
 
   _createClass(TextBox, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(TextBox), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(TextBox), 'getInfo', this).call(this);
       info.description = 'Text Box';
       info.iconClass = 'glyphicon glyphicon-text-width';
       return info;
@@ -3163,13 +3020,13 @@ var TextBox = function (_TextComponent) {
   return TextBox;
 }(TextComponent);
 
-var TextArea = function (_TextComponent) {
+let TextArea = function (_TextComponent) {
   _inherits(TextArea, _TextComponent);
 
   _createClass(TextArea, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(TextArea), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(TextArea), 'getInfo', this).call(this);
       info.description = 'Text Area';
       info.iconClass = 'glyphicon glyphicon-text-height';
       return info;
@@ -3189,14 +3046,8 @@ var TextArea = function (_TextComponent) {
 
   _createClass(TextArea, [{
     key: 'buildComponent',
-    value: function buildComponent() {
-      var _get2;
-
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      (_get2 = _get(Object.getPrototypeOf(TextArea.prototype), 'buildComponent', this)).call.apply(_get2, [this].concat(args));
+    value: function buildComponent(...args) {
+      _get(Object.getPrototypeOf(TextArea.prototype), 'buildComponent', this).call(this, ...args);
       this.html.textElement.setAttribute('rows', 5);
     }
   }]);
@@ -3204,13 +3055,13 @@ var TextArea = function (_TextComponent) {
   return TextArea;
 }(TextComponent);
 
-var EmailBox = function (_TextComponent) {
+let EmailBox = function (_TextComponent) {
   _inherits(EmailBox, _TextComponent);
 
   _createClass(EmailBox, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(EmailBox), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(EmailBox), 'getInfo', this).call(this);
       info.description = 'Email Box';
       info.iconClass = 'glyphicon glyphicon-envelope';
       return info;
@@ -3226,13 +3077,13 @@ var EmailBox = function (_TextComponent) {
   return EmailBox;
 }(TextComponent);
 
-var TelephoneBox = function (_TextComponent) {
+let TelephoneBox = function (_TextComponent) {
   _inherits(TelephoneBox, _TextComponent);
 
   _createClass(TelephoneBox, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(TelephoneBox), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(TelephoneBox), 'getInfo', this).call(this);
       info.description = 'Telephone Box';
       info.iconClass = 'glyphicon glyphicon-earphone';
       return info;
@@ -3248,13 +3099,13 @@ var TelephoneBox = function (_TextComponent) {
   return TelephoneBox;
 }(TextComponent);
 
-var NumberBox = function (_TextComponent) {
+let NumberBox = function (_TextComponent) {
   _inherits(NumberBox, _TextComponent);
 
   _createClass(NumberBox, null, [{
     key: 'getInfo',
     value: function getInfo() {
-      var info = _get(Object.getPrototypeOf(NumberBox), 'getInfo', this).call(this);
+      const info = _get(Object.getPrototypeOf(NumberBox), 'getInfo', this).call(this);
       info.description = 'Number Box';
       info.iconClass = 'glyphicon glyphicon-subscript';
       return info;
@@ -3274,7 +3125,7 @@ var NumberBox = function (_TextComponent) {
  * @class ControlBar
  */
 
-var ComponentFabric = function () {
+let ComponentFabric = function () {
   function ComponentFabric(modulePrefix) {
     _classCallCheck(this, ComponentFabric);
 
@@ -3294,10 +3145,8 @@ var ComponentFabric = function () {
   _createClass(ComponentFabric, [{
     key: 'createComponent',
     value: function createComponent(componentName) {
-      var Comp = this.componentConstructors.find(function (c) {
-        return c.getInfo().name === componentName;
-      });
-      assert(Comp, 'Invalid component: ' + componentName);
+      const Comp = this.componentConstructors.find(c => c.getInfo().name === componentName);
+      assert(Comp, `Invalid component: ${ componentName }`);
       return new Comp(this.modulePrefix);
     }
 
@@ -3309,9 +3158,7 @@ var ComponentFabric = function () {
   }, {
     key: 'getComponentTypes',
     value: function getComponentTypes() {
-      var types = this.componentConstructors.map(function (component) {
-        return component.getInfo();
-      });
+      const types = this.componentConstructors.map(component => component.getInfo());
       return types;
     }
   }]);
@@ -3323,7 +3170,7 @@ var ComponentFabric = function () {
  * @class ControlBar
  */
 
-var ControlBar = function (_ViewController) {
+let ControlBar = function (_ViewController) {
   _inherits(ControlBar, _ViewController);
 
   function ControlBar(modulePrefix, moduleCoordinator) {
@@ -3340,95 +3187,48 @@ var ControlBar = function (_ViewController) {
   _createClass(ControlBar, [{
     key: 'buildHtml',
     value: function buildHtml() {
-      var _this2 = this;
-
-      var componentGroups = {};
-      var componentTypes = this.moduleCoordinator.getComponentTypes();
+      const componentGroups = {};
+      const componentTypes = this.moduleCoordinator.getComponentTypes();
 
       // Create component buttons
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = componentTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var component = _step.value;
-
-          componentGroups[component.group] = componentGroups[component.group] || [];
-          componentGroups[component.group].push(component);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      for (const component of componentTypes) {
+        componentGroups[component.group] = componentGroups[component.group] || [];
+        componentGroups[component.group].push(component);
       }
 
-      var componentsBtnGroups = createButtonGroup();
-      var buttonsClass = this.cssPrefix + '-button-component';
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = Object.keys(componentGroups)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var group = _step2.value;
-
-          var dropdown = createDropdown(group, componentGroups[group], buttonsClass);
-          componentsBtnGroups.appendChild(dropdown);
-        }
-
-        // Add listeners to all component creation buttons
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
+      const componentsBtnGroups = createButtonGroup();
+      const buttonsClass = `${ this.cssPrefix }-button-component`;
+      for (const group of Object.keys(componentGroups)) {
+        const dropdown = createDropdown(group, componentGroups[group], buttonsClass);
+        componentsBtnGroups.appendChild(dropdown);
       }
 
-      componentsBtnGroups.querySelectorAll('.' + buttonsClass).forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          _this2.moduleCoordinator.createComponent(btn.name);
+      // Add listeners to all component creation buttons
+      componentsBtnGroups.querySelectorAll(`.${ buttonsClass }`).forEach(btn => {
+        btn.addEventListener('click', () => {
+          this.moduleCoordinator.createComponent(btn.name);
         });
       });
 
-      var actionsBtnGroup = createButtonGroup();
+      const actionsBtnGroup = createButtonGroup();
       // Create Save button
-      var saveBtn = document.createElement('button');
-      saveBtn.className = this.cssPrefix + '-button-save';
+      const saveBtn = document.createElement('button');
+      saveBtn.className = `${ this.cssPrefix }-button-save`;
       saveBtn.classList.add('btn', // Bootstrap
       'btn-primary');
       saveBtn.textContent = 'Save';
-      saveBtn.addEventListener('click', function () {
-        return _this2.moduleCoordinator.save();
-      });
+      saveBtn.addEventListener('click', () => this.moduleCoordinator.save());
       actionsBtnGroup.appendChild(saveBtn);
 
       // Create Import button
-      var undoBtn = document.createElement('button');
-      undoBtn.className = this.cssPrefix + '-button-save';
+      const undoBtn = document.createElement('button');
+      undoBtn.className = `${ this.cssPrefix }-button-save`;
       undoBtn.classList.add('btn', 'btn-default'); // Bootstrap
       undoBtn.textContent = 'Undo';
-      undoBtn.addEventListener('click', function () {
-        var undoSuccess = _this2.moduleCoordinator.popHistoryState();
+      undoBtn.addEventListener('click', () => {
+        const undoSuccess = this.moduleCoordinator.popHistoryState();
         if (!undoSuccess) {
-          utils.blinkRed(undoBtn, _this2.modulePrefix);
+          utils.blinkRed(undoBtn, this.modulePrefix);
         }
       });
       actionsBtnGroup.appendChild(undoBtn);
@@ -3442,74 +3242,53 @@ var ControlBar = function (_ViewController) {
 }(ViewController);
 
 function createButtonGroup() {
-  var group = document.createElement('div');
+  const group = document.createElement('div');
   group.classList.add('btn-group');
   group.setAttribute('role', 'group');
   return group;
 }
 
 function createDropdown(buttonName, subButtons, subButtonsClass) {
-  var wrapper = document.createElement('div');
+  const wrapper = document.createElement('div');
   wrapper.classList.add('btn', // Bootstrap
   'btn-default', 'fl-fb-ControlBar-dropdown');
 
-  var toggleMechanism = document.createElement('input');
+  const toggleMechanism = document.createElement('input');
   toggleMechanism.type = 'checkbox';
   toggleMechanism.classList.add('fl-fb-ControlBar-dropdown-checkbox-toggle');
-  var randomNum = Date.now() + parseInt(Math.random() * 1000, 10);
-  toggleMechanism.id = 'fl-fb-ControlBar-dropdown-checkbox-' + randomNum;
+  const randomNum = Date.now() + parseInt(Math.random() * 1000, 10);
+  toggleMechanism.id = `fl-fb-ControlBar-dropdown-checkbox-${ randomNum }`;
   wrapper.appendChild(toggleMechanism);
 
-  var mainButton = document.createElement('label');
+  const mainButton = document.createElement('label');
   mainButton.classList.add('fl-fb-ControlBar-dropdown-checkbox-label');
   mainButton.setAttribute('for', toggleMechanism.id);
   mainButton.textContent = buttonName;
   wrapper.appendChild(mainButton);
 
-  var arrowDown = document.createElement('span');
+  const arrowDown = document.createElement('span');
   arrowDown.classList.add('caret');
   mainButton.appendChild(arrowDown);
 
-  var list = document.createElement('ul');
+  const list = document.createElement('ul');
   list.classList.add('dropdown-menu', 'fl-fb-ControlBar-dropdown-content');
 
-  var _iteratorNormalCompletion3 = true;
-  var _didIteratorError3 = false;
-  var _iteratorError3 = undefined;
+  for (const buttonInfo of subButtons) {
+    const listItem = document.createElement('li');
+    const clickable = document.createElement('a');
+    clickable.name = buttonInfo.name;
+    clickable.textContent = buttonInfo.description;
+    clickable.classList.add(subButtonsClass);
 
-  try {
-    for (var _iterator3 = subButtons[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-      var buttonInfo = _step3.value;
-
-      var listItem = document.createElement('li');
-      var clickable = document.createElement('a');
-      clickable.name = buttonInfo.name;
-      clickable.textContent = buttonInfo.description;
-      clickable.classList.add(subButtonsClass);
-
-      listItem.appendChild(clickable);
-      list.appendChild(listItem);
-    }
-  } catch (err) {
-    _didIteratorError3 = true;
-    _iteratorError3 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion3 && _iterator3.return) {
-        _iterator3.return();
-      }
-    } finally {
-      if (_didIteratorError3) {
-        throw _iteratorError3;
-      }
-    }
+    listItem.appendChild(clickable);
+    list.appendChild(listItem);
   }
 
   wrapper.appendChild(list);
   return wrapper;
 }
 
-var MAX_HISTORY_STATES = 15;
+const MAX_HISTORY_STATES = 15;
 /**
  * This class takes care of storing forms in local storage
  * as well as sending it to the database, and keeping intermediate states
@@ -3517,7 +3296,7 @@ var MAX_HISTORY_STATES = 15;
  * @class Storage
  */
 
-var Storage = function () {
+let Storage = function () {
   function Storage() {
     _classCallCheck(this, Storage);
 
@@ -3529,7 +3308,7 @@ var Storage = function () {
   _createClass(Storage, [{
     key: 'pushHistoryState',
     value: function pushHistoryState(state) {
-      assert(state, 'Invalid state being saved: ' + state);
+      assert(state, `Invalid state being saved: ${ state }`);
       if (this.history.length > MAX_HISTORY_STATES) {
         this.history = this.history.slice(1);
       }
@@ -3564,7 +3343,7 @@ var Storage = function () {
  * @class Coordinator
  */
 
-var ModuleCoordinator = function () {
+let ModuleCoordinator = function () {
   function ModuleCoordinator(modulePrefix, htmlContainer) {
     _classCallCheck(this, ModuleCoordinator);
 
@@ -3591,14 +3370,14 @@ var ModuleCoordinator = function () {
   }, {
     key: 'createComponent',
     value: function createComponent(compName) {
-      var newComponent = this.componentFabric.createComponent(compName);
+      const newComponent = this.componentFabric.createComponent(compName);
       this.componentsContainer.addComponent(newComponent);
       this.pushHistoryState();
     }
   }, {
     key: 'save',
     value: function save() {
-      var content = this.exportState();
+      const content = this.exportState();
       utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
     }
 
@@ -3613,33 +3392,11 @@ var ModuleCoordinator = function () {
   }, {
     key: 'exportState',
     value: function exportState() {
-      var components = this.componentsContainer.getAllComponents();
-      var outcome = [];
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var component = _step.value;
-
-          outcome.push(component.exportState());
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      const components = this.componentsContainer.getAllComponents();
+      const outcome = [];
+      for (const component of components) {
+        outcome.push(component.exportState());
       }
-
       return outcome;
     }
 
@@ -3652,17 +3409,12 @@ var ModuleCoordinator = function () {
 
   }, {
     key: 'importState',
-    value: function importState() {
-      var _this = this;
-
-      var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
-      var registerInHistory = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
+    value: function importState(state = this.exportState(), registerInHistory = true) {
       this.componentsContainer.deleteAllComponents();
 
-      var components = [];
-      state.forEach(function (componentState) {
-        var component = _this.componentFabric.createComponent(componentState.type);
+      const components = [];
+      state.forEach(componentState => {
+        const component = this.componentFabric.createComponent(componentState.type);
         component.importState(componentState);
         components.push(component);
       });
@@ -3683,7 +3435,7 @@ var ModuleCoordinator = function () {
   }, {
     key: 'pushHistoryState',
     value: function pushHistoryState() {
-      var currentState = this.exportState();
+      const currentState = this.exportState();
       this.storage.pushHistoryState(currentState);
     }
 
@@ -3697,7 +3449,7 @@ var ModuleCoordinator = function () {
   }, {
     key: 'popHistoryState',
     value: function popHistoryState() {
-      var lastState = this.storage.popHistoryState();
+      const lastState = this.storage.popHistoryState();
       if (lastState) {
         this.importState(lastState, false);
         return true;
@@ -3709,15 +3461,15 @@ var ModuleCoordinator = function () {
   return ModuleCoordinator;
 }();
 
-var MODULE_PREFIX = 'fl-fb';
+const MODULE_PREFIX = 'fl-fb';
 
-xController(function (xdiv) {
+xController(xdiv => {
   xdiv.classList.add(MODULE_PREFIX);
-  var coordinator = new ModuleCoordinator(MODULE_PREFIX, xdiv);
-  var jsonStateToRestore = xdiv.dataset.restoreState;
+  const coordinator = new ModuleCoordinator(MODULE_PREFIX, xdiv);
+  const jsonStateToRestore = xdiv.dataset.restoreState;
   if (jsonStateToRestore) {
     try {
-      var stateToRestore = JSON.parse(jsonStateToRestore);
+      const stateToRestore = JSON.parse(jsonStateToRestore);
       coordinator.importState(stateToRestore);
     } catch (e) {
       assert.warn(e);
@@ -3727,4 +3479,5 @@ xController(function (xdiv) {
   utils.fireEvent(xdiv, 'formBuilderLoaded', { instance: coordinator });
   return coordinator;
 });
+}());
 //# sourceMappingURL=fl-form-builder.js.map
