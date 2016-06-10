@@ -55,7 +55,7 @@
     var xdiv = document.createElement('x-div');
     xdiv.setAttribute('data-controller', '../dist/fl-form-builder');
 
-    xdiv.addEventListener('formBuilderLoaded', function (e) {
+    document.addEventListener('formBuilderLoaded', function (e) {
       e.detail.instance.importState(pastState);
     })
 
