@@ -4,7 +4,7 @@
 A native JS form builder
 
 - [Read the docs](https://fourlabsldn.github.io/fl-form-builder/)
-- [Demo](https://fourlabsldn.github.io/fl-form-builder/)
+- [Demo](https://fourlabsldn.github.io/fl-form-builder/demo/)
 
 # Getting started
 ## Creating a form-builder
