@@ -95,7 +95,7 @@
           </section>
           <div class="description"><p>The module coordinator contains all of the methods the consumer of the<br />application will need.</p> </div>
           <pre><code class="language-javascript">export default class ModuleCoordinator {
-  constructor(modulePrefix, xdiv) {
+  constructor(modulePrefix, htmlContainer) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
 
@@ -103,11 +103,11 @@
     this.componentsContainer.on('change', this.pushHistoryState.bind(this));
 
     this.controlBar = new ControlBar(modulePrefix, this);
+    this.htmlContainer = htmlContainer;
 
     Object.preventExtensions(this);
-    xdiv.appendChild(this.controlBar.getHtmlContainer());
-    xdiv.appendChild(this.componentsContainer.getHtmlContainer());
-
+    this.htmlContainer.appendChild(this.controlBar.getHtmlContainer());
+    this.htmlContainer.appendChild(this.componentsContainer.getHtmlContainer());
     this.pushHistoryState();
   }
 
@@ -123,7 +123,7 @@
 
   save() {
     const content = this.exportState();
-    this.storage.saveContent(content);
+    utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
   }</code></pre>
           <section id="exportState">
             <h1>exportState</h1>

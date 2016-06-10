@@ -1,6 +1,7 @@
 import ComponentsContainer from './ComponentsContainer';
 import ComponentFabric from './ComponentFabric';
 import ControlBar from './ControlBar';
+import utils from './utils/utils';
 import Storage from './Storage';
 
 /**
@@ -9,7 +10,7 @@ import Storage from './Storage';
  * @class Coordinator
  */
 export default class ModuleCoordinator {
-  constructor(modulePrefix, xdiv) {
+  constructor(modulePrefix, htmlContainer) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
 
@@ -17,11 +18,11 @@ export default class ModuleCoordinator {
     this.componentsContainer.on('change', this.pushHistoryState.bind(this));
 
     this.controlBar = new ControlBar(modulePrefix, this);
+    this.htmlContainer = htmlContainer;
 
     Object.preventExtensions(this);
-    xdiv.appendChild(this.controlBar.getHtmlContainer());
-    xdiv.appendChild(this.componentsContainer.getHtmlContainer());
-
+    this.htmlContainer.appendChild(this.controlBar.getHtmlContainer());
+    this.htmlContainer.appendChild(this.componentsContainer.getHtmlContainer());
     this.pushHistoryState();
   }
 
@@ -37,7 +38,7 @@ export default class ModuleCoordinator {
 
   save() {
     const content = this.exportState();
-    this.storage.saveContent(content);
+    utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
   }
 
   /**

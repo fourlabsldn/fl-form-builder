@@ -39,9 +39,24 @@
 
       <div class="col-sm-9">
         <h1 class="main-title">fl-Form-Builder</h1>
-        <x-div data-controller="../dist/fl-form-builder"></x-div>
+        <!-- <x-div data-controller="../dist/fl-form-builder"></x-div> -->
+        <div class="form-builder-container"></div>
       </div>
     </div>
   </div>
+
+  <script>
+    var container = document.querySelector('.form-builder-container');
+    var xdiv = document.createElement('x-div');
+    xdiv.dataset.controller = '../dist/fl-form-builder';
+
+    xdiv.addEventListener('formBuilderSave', (e) => {
+      console.log(e);
+      console.log(e.detail.formState);
+    });
+
+    container.appendChild(xdiv);
+
+  </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 /* globals xController */
 import assert from 'fl-assert';
 import ModuleCoordinator from './ModuleCoordinator';
+import utils from './utils/utils';
 const MODULE_PREFIX = 'fl-fb';
 
 xController((xdiv) => {
@@ -16,11 +17,6 @@ xController((xdiv) => {
     }
   }
 
-  const loadEvent = new CustomEvent('formBuilderLoaded', {
-    detail: {
-      instance: coordinator,
-    },
-  });
-  xdiv.dispatchEvent(loadEvent);
+  utils.fireEvent(xdiv, 'formBuilderLoaded', { instance: coordinator });
   return coordinator;
 });

@@ -2123,10 +2123,20 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
   init(paramE, paramEl, paramElements);
 }
 
+function fireEvent(targetElement, eventName, detailObj) {
+  assert(typeof eventName === 'string', 'Invalid event name: ' + eventName);
+  var targetIsHtmlNode = targetElement && targetElement.appendChild;
+  assert(targetIsHtmlNode, 'Target element is not an HTML element: ' + eventName);
+
+  var event = new CustomEvent(eventName, { detail: detailObj });
+  targetElement.dispatchEvent(event);
+}
+
 var utils = {
   trackReorderDrag: trackReorderDrag,
   createSwitch: createSwitch,
   onClickOut: onClickOut,
+  fireEvent: fireEvent,
   blinkRed: blinkRed
 };
 
@@ -3517,12 +3527,6 @@ var Storage = function () {
   }
 
   _createClass(Storage, [{
-    key: 'saveContent',
-    value: function saveContent(content) {
-      console.warn('Not implemented.');
-      console.log(JSON.stringify(content));
-    }
-  }, {
     key: 'pushHistoryState',
     value: function pushHistoryState(state) {
       assert(state, 'Invalid state being saved: ' + state);
@@ -3561,7 +3565,7 @@ var Storage = function () {
  */
 
 var ModuleCoordinator = function () {
-  function ModuleCoordinator(modulePrefix, xdiv) {
+  function ModuleCoordinator(modulePrefix, htmlContainer) {
     _classCallCheck(this, ModuleCoordinator);
 
     this.storage = new Storage();
@@ -3571,11 +3575,11 @@ var ModuleCoordinator = function () {
     this.componentsContainer.on('change', this.pushHistoryState.bind(this));
 
     this.controlBar = new ControlBar(modulePrefix, this);
+    this.htmlContainer = htmlContainer;
 
     Object.preventExtensions(this);
-    xdiv.appendChild(this.controlBar.getHtmlContainer());
-    xdiv.appendChild(this.componentsContainer.getHtmlContainer());
-
+    this.htmlContainer.appendChild(this.controlBar.getHtmlContainer());
+    this.htmlContainer.appendChild(this.componentsContainer.getHtmlContainer());
     this.pushHistoryState();
   }
 
@@ -3595,7 +3599,7 @@ var ModuleCoordinator = function () {
     key: 'save',
     value: function save() {
       var content = this.exportState();
-      this.storage.saveContent(content);
+      utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
     }
 
     /**
@@ -3720,12 +3724,7 @@ xController(function (xdiv) {
     }
   }
 
-  var loadEvent = new CustomEvent('formBuilderLoaded', {
-    detail: {
-      instance: coordinator
-    }
-  });
-  xdiv.dispatchEvent(loadEvent);
+  utils.fireEvent(xdiv, 'formBuilderLoaded', { instance: coordinator });
   return coordinator;
 });
 //# sourceMappingURL=fl-form-builder.js.map

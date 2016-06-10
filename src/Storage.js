@@ -15,11 +15,6 @@ export default class Storage {
     Object.preventExtensions(this);
   }
 
-  saveContent(content) {
-    console.warn('Not implemented.');
-    console.log(JSON.stringify(content));
-  }
-
   pushHistoryState(state) {
     assert(state, `Invalid state being saved: ${state}`);
     if (this.history.length > MAX_HISTORY_STATES) {
