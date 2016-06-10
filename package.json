@@ -9,7 +9,7 @@
     "demo": "gulp demo",
     "dev": "gulp demo",
     "build": "gulp build",
-    "test-debug": "gulp test-debug"
+    "test-debug": "gulp test-debug",
     "deploy-gh-pages": "echo \"There is no script setup for gh pages. Change to the gh-pages branch, merge master and push. Everything should work."
   },
   "author": "lazamar @ FourLabs",
