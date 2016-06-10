@@ -38,6 +38,10 @@ const paths = {
     main: './tests/build/**/*-specs.js',
     dest: './tests/build/',
   },
+  docs: {
+    main: './docs/index.html',
+    dest: './docs',
+  },
 };
 
 gulp.task('copy-dependencies', () => {
@@ -154,7 +158,11 @@ gulp.task('build:docs', () => {
       urlPrefix: `/${moduleName}/docs'`,
     }))
     .pipe(replace(/http:/g, 'https:'))
-    .pipe(gulp.dest('docs'));
+    .pipe(gulp.dest(paths.docs.dest));
+
+  // Copy index to module root
+  gulp.src(paths.docs.main)
+    .pipe(gulp.dest('.'));
 });
 
 // -------------------------------------------------------
