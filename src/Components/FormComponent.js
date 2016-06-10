@@ -199,7 +199,7 @@ export default class FormComponent extends ViewController {
   /**
    * Exports the information of a component in one object
    * @method exportState
-   * @return {[type]} [description]
+   * @return {Object}
    */
   exportState() {
     return {

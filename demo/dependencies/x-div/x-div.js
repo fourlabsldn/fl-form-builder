@@ -940,7 +940,7 @@ var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
   } return result;
 };
 
-// 19.4.1.1 Symbol([description])
+// 19.4.1.1 Symbol()
 if(!USE_NATIVE){
   $Symbol = function Symbol(){
     if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');

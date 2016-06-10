@@ -1921,7 +1921,7 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function resetElementsPositions
-   * @param {Array[HTMLElement]} els Elements being tracked
+   * @param {Array<HTMLElement>} els Elements being tracked
    */
   function resetElementsPositions(els) {
     els.forEach(function (el) {
@@ -1931,7 +1931,7 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function calculateElementHeight
-   * @param  {Array[HTMLElement]} els    Elements ordered by vertical position
+   * @param  {Array<HTMLElement>} els    Elements ordered by vertical position
    * @param  {Integer} elIndex
    * @return {void}
    */
@@ -1958,8 +1958,8 @@ function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function createDragMover
-   * @param  {Array[HTMLElements]} els         [description]
-   * @param  {Array[Integer]} tops        Initial tops
+   * @param  {Array<HTMLElement>} els
+   * @param  {Array<Integer>} tops        Initial tops
    * @param  {Integer} targetIndex Index of element being dragged around
    * @return {function}             The function to translate elements in the
    *                                  list to make room for the dragged element
@@ -2358,7 +2358,7 @@ var FormComponent = function (_ViewController) {
     /**
      * Exports the information of a component in one object
      * @method exportState
-     * @return {[type]} [description]
+     * @return {Object}
      */
 
   }, {
@@ -2620,7 +2620,7 @@ var OptionsComponent = function (_FormComponent) {
    * In addition to building the standard html structure, it adds
    * a field to add an option.
    * @method buildHtml
-   * @return {[type]} [description]
+   * @return {void}
    */
 
 
@@ -3549,12 +3549,14 @@ var Storage = function () {
 }();
 
 /**
+ * The module coordinator contains all of the methods the consumer of the
+ * application will need.
  * @class Coordinator
  */
 
-var Coordinator = function () {
-  function Coordinator(modulePrefix, xdiv) {
-    _classCallCheck(this, Coordinator);
+var ModuleCoordinator = function () {
+  function ModuleCoordinator(modulePrefix, xdiv) {
+    _classCallCheck(this, ModuleCoordinator);
 
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
@@ -3571,7 +3573,7 @@ var Coordinator = function () {
     this.pushHistoryState();
   }
 
-  _createClass(Coordinator, [{
+  _createClass(ModuleCoordinator, [{
     key: 'getComponentTypes',
     value: function getComponentTypes() {
       return this.componentFabric.getComponentTypes();
@@ -3591,8 +3593,11 @@ var Coordinator = function () {
     }
 
     /**
+     * Use this method to get the current state of the application
      * @method exportState
-     * @return {Array<Object>} - each component is a state object for a FormComponent
+     * @param {void}
+     * @return {Array<Object>} An array of objects that represents the current
+     * state of the application and which can be used to restore the application to that state.
      */
 
   }, {
@@ -3627,6 +3632,14 @@ var Coordinator = function () {
 
       return outcome;
     }
+
+    /**
+     * Use this function to import a past saved state
+     * @method importState
+     * @param  {Array<Object>} state - A state obtained previsously obtained.
+     * @return {void}
+     */
+
   }, {
     key: 'importState',
     value: function importState() {
@@ -3649,6 +3662,14 @@ var Coordinator = function () {
         this.pushHistoryState();
       }
     }
+
+    /**
+     * Add current state to the saved history.
+     * @private
+     * @method pushHistoryState
+     * @return {void}
+     */
+
   }, {
     key: 'pushHistoryState',
     value: function pushHistoryState() {
@@ -3658,6 +3679,7 @@ var Coordinator = function () {
 
     /**
      * Undo function
+     * @private
      * @method popHistoryState
      * @return {Boolean} success
      */
@@ -3674,14 +3696,14 @@ var Coordinator = function () {
     }
   }]);
 
-  return Coordinator;
+  return ModuleCoordinator;
 }();
 
 var MODULE_PREFIX = 'fl-fb';
 
 xController(function (xdiv) {
   xdiv.classList.add(MODULE_PREFIX);
-  var coordinator = new Coordinator(MODULE_PREFIX, xdiv);
+  var coordinator = new ModuleCoordinator(MODULE_PREFIX, xdiv);
   var jsonStateToRestore = xdiv.dataset.restoreState;
   if (jsonStateToRestore) {
     try {

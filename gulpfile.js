@@ -9,19 +9,21 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const jasmineBrowser = require('gulp-jasmine-browser');
-const moduleName = 'fl-form-builder';
 const watch = require('gulp-watch');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const open = require('gulp-open');
+const doxx = require('gulp-doxx');
 
+
+const moduleName = 'fl-form-builder';
 const paths = {
   demo: {
     src: './demo/index.html',
     dep: './demo/dependencies/',
   },
   js: {
-    src: './src/**/*',
+    src: './src/**/*.js',
     main: './src/main.js',
     dest: './dist/',
   },
@@ -141,6 +143,19 @@ gulp.task('open:test-browser', () => {
 });
 
 // -------------------------------------------------------
+//              Documentation
+// -------------------------------------------------------
+
+gulp.task('build:docs', () => {
+  gulp.src(['./src/ModuleCoordinator.js', 'README.md'], { base: '.' })
+    .pipe(doxx({
+      title: moduleName,
+      // urlPrefix: '/docs',
+    }))
+    .pipe(gulp.dest('docs'));
+});
+
+// -------------------------------------------------------
 //            MAIN TASKS
 // -------------------------------------------------------
 
@@ -148,6 +163,7 @@ gulp.task('build', [
   'build:src',
   'build:sass',
   'build:tests',
+  'build:docs',
 ]);
 
 gulp.task('watch', [

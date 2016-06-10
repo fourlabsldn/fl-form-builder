@@ -17,7 +17,7 @@ export default class OptionsComponent extends FormComponent {
    * In addition to building the standard html structure, it adds
    * a field to add an option.
    * @method buildHtml
-   * @return {[type]} [description]
+   * @return {void}
    */
   buildHtml() {
     super.buildHtml();

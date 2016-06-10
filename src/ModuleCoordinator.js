@@ -4,9 +4,11 @@ import ControlBar from './ControlBar';
 import Storage from './Storage';
 
 /**
+ * The module coordinator contains all of the methods the consumer of the
+ * application will need.
  * @class Coordinator
  */
-export default class Coordinator {
+export default class ModuleCoordinator {
   constructor(modulePrefix, xdiv) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
@@ -39,8 +41,11 @@ export default class Coordinator {
   }
 
   /**
+   * Use this method to get the current state of the application
    * @method exportState
-   * @return {Array<Object>} - each component is a state object for a FormComponent
+   * @param {void}
+   * @return {Array<Object>} An array of objects that represents the current
+   * state of the application and which can be used to restore the application to that state.
    */
   exportState() {
     const components = this.componentsContainer.getAllComponents();
@@ -51,6 +56,12 @@ export default class Coordinator {
     return outcome;
   }
 
+  /**
+   * Use this function to import a past saved state
+   * @method importState
+   * @param  {Array<Object>} state - A state obtained previsously obtained.
+   * @return {void}
+   */
   importState(state = this.exportState(), registerInHistory = true) {
     this.componentsContainer.deleteAllComponents();
 
@@ -67,6 +78,12 @@ export default class Coordinator {
     }
   }
 
+  /**
+   * Add current state to the saved history.
+   * @private
+   * @method pushHistoryState
+   * @return {void}
+   */
   pushHistoryState() {
     const currentState = this.exportState();
     this.storage.pushHistoryState(currentState);
@@ -74,6 +91,7 @@ export default class Coordinator {
 
   /**
    * Undo function
+   * @private
    * @method popHistoryState
    * @return {Boolean} success
    */

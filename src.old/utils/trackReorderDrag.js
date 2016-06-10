@@ -14,7 +14,7 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function resetElementsPositions
-   * @param {Array[HTMLElement]} els Elements being tracked
+   * @param {Array<HTMLElement>} els Elements being tracked
    */
   function resetElementsPositions(els) {
     els.forEach((el) => {
@@ -24,7 +24,7 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function calculateElementHeight
-   * @param  {Array[HTMLElement]} els    Elements ordered by vertical position
+   * @param  {Array<HTMLElement>} els    Elements ordered by vertical position
    * @param  {Integer} elIndex
    * @return {void}
    */
@@ -52,8 +52,8 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
   /**
    * @function createDragMover
-   * @param  {Array[HTMLElements]} els         [description]
-   * @param  {Array[Integer]} tops        Initial tops
+   * @param  {Array<HTMLElement>} els
+   * @param  {Array<Integer>} tops        Initial tops
    * @param  {Integer} targetIndex Index of element being dragged around
    * @return {function}             The function to translate elements in the
    *                                  list to make room for the dragged element
