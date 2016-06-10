@@ -86,16 +86,8 @@ function createDropdown(buttonName, subButtons, subButtonsClass) {
     'fl-fb-ControlBar-dropdown'
   );
 
-  const toggleMechanism = document.createElement('input');
-  toggleMechanism.type = 'checkbox';
-  toggleMechanism.classList.add('fl-fb-ControlBar-dropdown-checkbox-toggle');
-  const randomNum = Date.now() + parseInt(Math.random() * 1000, 10);
-  toggleMechanism.id = `fl-fb-ControlBar-dropdown-checkbox-${randomNum}`;
-  wrapper.appendChild(toggleMechanism);
-
   const mainButton = document.createElement('label');
   mainButton.classList.add('fl-fb-ControlBar-dropdown-checkbox-label');
-  mainButton.setAttribute('for', toggleMechanism.id);
   mainButton.textContent = buttonName;
   wrapper.appendChild(mainButton);
 
@@ -104,7 +96,7 @@ function createDropdown(buttonName, subButtons, subButtonsClass) {
   mainButton.appendChild(arrowDown);
 
   const list = document.createElement('ul');
-  list.classList.add('dropdown-menu', 'fl-fb-ControlBar-dropdown-content');
+  list.classList.add('fl-fb-ControlBar-dropdown-content');
 
   for (const buttonInfo of subButtons) {
     const listItem = document.createElement('li');

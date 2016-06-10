@@ -265,11 +265,37 @@
   z-index: 3 !important; }
 
 .fl-fb-ControlBar-dropdown-content {
-  position: absolute; }
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); }
 
 .fl-fb-ControlBar-dropdown-content {
   -webkit-transform: translate3d(0, -1px, 0);
           transform: translate3d(0, -1px, 0); }
+  .fl-fb-ControlBar-dropdown-content a {
+    display: block;
+    padding: 3px 20px;
+    white-space: nowrap;
+    color: inherit; }
+    .fl-fb-ControlBar-dropdown-content a:hover {
+      text-decoration: none;
+      background-color: #f5f5f5; }
 
 .fl-fb-ControlBar-dropdown-checkbox-label {
   margin: 0;
@@ -278,7 +304,7 @@
 .fl-fb-ControlBar-dropdown-checkbox-toggle {
   display: none; }
 
-.fl-fb-ControlBar-dropdown:hover > .dropdown-menu {
+.fl-fb-ControlBar-dropdown:hover > .fl-fb-ControlBar-dropdown-content {
   display: block; }
 
 /*# sourceMappingURL=fl-form-builder.css.map */
