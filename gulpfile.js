@@ -14,6 +14,7 @@ const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const open = require('gulp-open');
 const doxx = require('gulp-doxx');
+const replace = require('gulp-replace');
 
 
 const moduleName = 'fl-form-builder';
@@ -152,6 +153,7 @@ gulp.task('build:docs', () => {
       title: moduleName,
       // urlPrefix: '/docs',
     }))
+    .pipe(replace(/http\:/g, 'https:'))
     .pipe(gulp.dest('docs'));
 });
 
