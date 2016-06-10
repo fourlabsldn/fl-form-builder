@@ -6,8 +6,8 @@
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="../dist/fl-form-builder.css">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"> </script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"> </script> -->
   <script src="dependencies/x-div/x-div.js"> </script>
   <style>
     .navbar {
@@ -17,7 +17,8 @@
       background-color: #eee;
     }
     .sidebar {
-      min-height: 500px;
+      min-height: 1000px;
+      max-height: 100%;
     }
     @media (max-width: 750px) {
       .sidebar {
@@ -33,16 +34,30 @@
     <div class="row">
       <div class="col-sm-3 sidebar greyed-out">
       </div>
-      <div class="col-sm-9 xdiv-container">
+
+      <div class="fl-fb-dropdown btn btn-default">
+        <input type="checkbox" class="fl-fb-checkbox-toggle" id="mycheck">
+        <label class="fl-fb-checkbox-label" for="mycheck">
+          Opitons Content
+        </label>
+        <ul class="fl-fl-dropdown-content dropdown-menu">
+          <li><a>Item 1</a></li>
+          <li><a>Item 2</a></li>
+          <li><a>Item 3</a></li>
+        </ul>
       </div>
 
+      <!-- <h1>Form Builder loaded inline</h1>
       <div class="col-sm-9">
         <x-div
           data-controller="../dist/fl-form-builder"
           data-restore-state='[{"required":true,"title":"Element 1 Title [required]","type":"TextBox","placeholder":"element 1 placeholder"},{"required":false,"title":"Element 2 Title [3 options, not required]","type":"Checkboxes","options":["option 1","opiton 2","option 3"]},{"required":true,"title":"Element 3 Title [3 options, required]","type":"Dropdown","options":["Option 1","Option 2 [disabled]","Option 3"],"disabledIndexes":[1]}]'
           ></x-div>
-      </div>
+      </div> -->
 
+      <h1>Form Builder loaded via javascript</h1>
+      <div class="col-sm-9 xdiv-container">
+      </div>
     </div>
   </div>
 

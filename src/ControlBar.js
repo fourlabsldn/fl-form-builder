@@ -25,12 +25,12 @@ export default class ControlBar extends ViewController {
     const componentsBtnGroups = createButtonGroup();
     const buttonsClass = `${this.cssPrefix}-button-component`;
     for (const group of Object.keys(componentGroups)) {
-      const expansibleBtn = createExapansibleButton(
+      const dropdown = createDropdown(
         group,
         componentGroups[group],
         buttonsClass
       );
-      componentsBtnGroups.appendChild(expansibleBtn);
+      componentsBtnGroups.appendChild(dropdown);
     }
 
     // Add listeners to all component creation buttons
@@ -78,28 +78,33 @@ function createButtonGroup() {
   return group;
 }
 
-function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
-  const btnGroup = createButtonGroup();
-  const btn = document.createElement('button');
-  btn.classList.add(
-    'btn',
+function createDropdown(buttonName, subButtons, subButtonsClass) {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add(
+    'btn', // Bootstrap
     'btn-default',
-    'dropdown-toggle'
+    'fl-fb-ControlBar-dropdown'
   );
-  btn.setAttribute('type', 'button');
-  btn.setAttribute('data-toggle', 'dropdown');
-  btn.setAttribute('aria-haspopup', 'true');
-  btn.setAttribute('aria-expanded', 'false');
+
+  const toggleMechanism = document.createElement('input');
+  toggleMechanism.type = 'checkbox';
+  toggleMechanism.classList.add('fl-fb-ControlBar-dropdown-checkbox-toggle');
+  const randomNum = Date.now() + parseInt(Math.random() * 1000, 10);
+  toggleMechanism.id = `fl-fb-ControlBar-dropdown-checkbox-${randomNum}`;
+  wrapper.appendChild(toggleMechanism);
+
+  const mainButton = document.createElement('label');
+  mainButton.classList.add('fl-fb-ControlBar-dropdown-checkbox-label');
+  mainButton.setAttribute('for', toggleMechanism.id);
+  mainButton.textContent = buttonName;
+  wrapper.appendChild(mainButton);
 
   const arrowDown = document.createElement('span');
   arrowDown.classList.add('caret');
-
-  btn.textContent = buttonName;
-  btn.appendChild(arrowDown);
-  btnGroup.appendChild(btn);
+  mainButton.appendChild(arrowDown);
 
   const list = document.createElement('ul');
-  list.classList.add('dropdown-menu');
+  list.classList.add('dropdown-menu', 'fl-fb-ControlBar-dropdown-content');
 
   for (const buttonInfo of subButtons) {
     const listItem = document.createElement('li');
@@ -112,6 +117,6 @@ function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
     list.appendChild(listItem);
   }
 
-  btnGroup.appendChild(list);
-  return btnGroup;
+  wrapper.appendChild(list);
+  return wrapper;
 }

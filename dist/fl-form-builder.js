@@ -3372,8 +3372,8 @@ var ControlBar = function (_ViewController) {
         for (var _iterator2 = Object.keys(componentGroups)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var group = _step2.value;
 
-          var expansibleBtn = createExapansibleButton(group, componentGroups[group], buttonsClass);
-          componentsBtnGroups.appendChild(expansibleBtn);
+          var dropdown = createDropdown(group, componentGroups[group], buttonsClass);
+          componentsBtnGroups.appendChild(dropdown);
         }
 
         // Add listeners to all component creation buttons
@@ -3438,24 +3438,30 @@ function createButtonGroup() {
   return group;
 }
 
-function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
-  var btnGroup = createButtonGroup();
-  var btn = document.createElement('button');
-  btn.classList.add('btn', 'btn-default', 'dropdown-toggle');
-  btn.setAttribute('type', 'button');
-  btn.setAttribute('data-toggle', 'dropdown');
-  btn.setAttribute('aria-haspopup', 'true');
-  btn.setAttribute('aria-expanded', 'false');
+function createDropdown(buttonName, subButtons, subButtonsClass) {
+  var wrapper = document.createElement('div');
+  wrapper.classList.add('btn', // Bootstrap
+  'btn-default', 'fl-fb-ControlBar-dropdown');
+
+  var toggleMechanism = document.createElement('input');
+  toggleMechanism.type = 'checkbox';
+  toggleMechanism.classList.add('fl-fb-ControlBar-dropdown-checkbox-toggle');
+  var randomNum = Date.now() + parseInt(Math.random() * 1000, 10);
+  toggleMechanism.id = 'fl-fb-ControlBar-dropdown-checkbox-' + randomNum;
+  wrapper.appendChild(toggleMechanism);
+
+  var mainButton = document.createElement('label');
+  mainButton.classList.add('fl-fb-ControlBar-dropdown-checkbox-label');
+  mainButton.setAttribute('for', toggleMechanism.id);
+  mainButton.textContent = buttonName;
+  wrapper.appendChild(mainButton);
 
   var arrowDown = document.createElement('span');
   arrowDown.classList.add('caret');
-
-  btn.textContent = buttonName;
-  btn.appendChild(arrowDown);
-  btnGroup.appendChild(btn);
+  mainButton.appendChild(arrowDown);
 
   var list = document.createElement('ul');
-  list.classList.add('dropdown-menu');
+  list.classList.add('dropdown-menu', 'fl-fb-ControlBar-dropdown-content');
 
   var _iteratorNormalCompletion3 = true;
   var _didIteratorError3 = false;
@@ -3489,8 +3495,8 @@ function createExapansibleButton(buttonName, subButtons, subButtonsClass) {
     }
   }
 
-  btnGroup.appendChild(list);
-  return btnGroup;
+  wrapper.appendChild(list);
+  return wrapper;
 }
 
 var MAX_HISTORY_STATES = 15;

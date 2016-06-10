@@ -259,4 +259,24 @@
 [class*='fl-fb-ControlBar-button'] {
   cursor: pointer; }
 
+.fl-fb-ControlBar-dropdown {
+  position: relative; }
+
+.fl-fb-ControlBar-dropdown-content {
+  position: absolute; }
+
+.fl-fb-ControlBar-dropdown-content {
+  -webkit-transform: translate3d(0, -1px, 0);
+          transform: translate3d(0, -1px, 0); }
+
+.fl-fb-ControlBar-dropdown-checkbox-label {
+  margin: 0;
+  font-weight: normal; }
+
+.fl-fb-ControlBar-dropdown-checkbox-toggle {
+  display: none; }
+
+.fl-fb-ControlBar-dropdown:hover > .dropdown-menu {
+  display: block; }
+
 /*# sourceMappingURL=fl-form-builder.css.map */
