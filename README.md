@@ -10,7 +10,7 @@ A native JS form builder
 ### Creating a form-builder
 To create a form builder just insert the [`x-div`](https://github.com/fourlabsldn/x-div) element to the page as such:
 
-``` javascript
+```html
 <x-div data-controller="../dist/fl-form-builder"> </x-div>
 ```
 
