@@ -47,4 +47,4 @@ document.addEventListener('formBuilderLoaded', (e) => {
 ```
 
 # Docs
-Give a look at the documentation to see a bit more of `importState` and `exportState`
+Give a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`
