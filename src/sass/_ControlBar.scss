@@ -12,8 +12,9 @@
   cursor: pointer;
 }
 
-.fl-fb-ControlBar-dropdown {
+.fl-fb-ControlBar-dropdown.fl-fb-ControlBar-dropdown {
   position: relative;
+  z-index: $z-index-controlBar-dropdown !important;
 }
 
 .fl-fb-ControlBar-dropdown-content {

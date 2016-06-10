@@ -14,6 +14,12 @@ $c-danger-text: #fff;
 $fc-side-padding: 15px;
 $fc-bottom-padding: 10px;
 
+//z-indexes
+$z-index-component: 1;
+$z-index-component--config-visible: $z-index-component + 1;
+$z-index-controlBar-dropdown: $z-index-component--config-visible + 1;
+
+
 
 @mixin fade-hidden() {
   visibility: hidden;

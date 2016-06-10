@@ -49,7 +49,8 @@
   -webkit-transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
   transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
   transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out;
-  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out; }
+  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
+  z-index: 1; }
   .fl-fb-FormComponent:hover {
     background-color: #ebf4fc; }
 
@@ -259,8 +260,9 @@
 [class*='fl-fb-ControlBar-button'] {
   cursor: pointer; }
 
-.fl-fb-ControlBar-dropdown {
-  position: relative; }
+.fl-fb-ControlBar-dropdown.fl-fb-ControlBar-dropdown {
+  position: relative;
+  z-index: 3 !important; }
 
 .fl-fb-ControlBar-dropdown-content {
   position: absolute; }

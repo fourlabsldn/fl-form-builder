@@ -16,14 +16,14 @@
   transition: transform .2s ease-out,
               box-shadow .2s ease-out,
               background-color .2s ease-out;
-
+  z-index: $z-index-component;
   &:hover {
     background-color: $c-highlight;
   }
 }
 
 .fl-fb-FormComponent--configuration-visible {
-  z-index: 2;
+  z-index: $z-index-component--config-visible;
   background-color: $c-highlight;
 }
 
