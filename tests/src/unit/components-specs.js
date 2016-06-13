@@ -1,18 +1,16 @@
 /* eslint-env jasmine */
-import componentsArray from './helpers/componentsArray';
+import componentsArray from '../helpers/componentsArray';
 
-componentsArray.forEach((compHelper) => {
-  'use strict';
-
-  describe(`A ${compHelper.name} Component`, () => {
+componentsArray.forEach((ComponentContructor) => {
+  const MODULE_PREFIX = '-test-';
+  describe(`A ${ComponentContructor.name} ComponentContructor`, () => {
     let comp;
-    const name = 'My Component';
     beforeEach(() => {
-      comp = new window[compHelper.constructorName](name);
+      comp = new ComponentContructor(MODULE_PREFIX);
     });
 
     describe('when initialised should', () => {
-      it('create a component div', () => {
+      it('create a ComponentContructor div', () => {
         expect(comp.element).toBeDefined();
       });
 
@@ -56,7 +54,7 @@ componentsArray.forEach((compHelper) => {
         expect(comp.requiredSwitch.innerHTML).toBeDefined();
       });
 
-      if (compHelper.hasOptions) {
+      if (ComponentContructor.hasOptions) {
         it('have a placeHolder propperty', () => {
           expect(comp.placeHolder).toBeDefined();
           expect(comp.placeHolder.innerHTML).toBeDefined();
@@ -80,7 +78,7 @@ componentsArray.forEach((compHelper) => {
 
       it('have a componentType propperty correctly set', () => {
         expect(comp.componentType).toBeDefined();
-        expect(comp.componentType).toBe(compHelper.constructorName);
+        expect(comp.componentType).toBe(ComponentContructor.constructorName);
       });
 
       it('have a "required" function', () => {
@@ -90,7 +88,7 @@ componentsArray.forEach((compHelper) => {
     });
 
     describe('should with the function', () => {
-      if (compHelper.hasOptions) {
+      if (ComponentContructor.hasOptions) {
         it('getElements return all option elements', () => {
           const els = comp.getElements(); // Should return at least the placeholder
           expect(els).toBeDefined();
@@ -122,7 +120,7 @@ componentsArray.forEach((compHelper) => {
 
       describe('required', () => {
         beforeEach(() => {
-          if (compHelper.hasOptions) {
+          if (ComponentContructor.hasOptions) {
             comp.addOption('op1'); // Add an option just to make it 'requirable'
           }
         });

@@ -34,8 +34,8 @@ const paths = {
     dest: 'dist/',
   },
   tests: {
-    src: 'tests/src/**/*.*',
-    main: './tests/build/**/*-specs.js',
+    src: './tests/src/unit.js',
+    main: './tests/build/unit.js',
     dest: './tests/build/',
   },
   docs: {
