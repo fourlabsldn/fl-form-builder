@@ -1,6 +1,7 @@
 /* eslint-env jasmine */
 import ComponentsContainer from '../../../src/ComponentsContainer';
 import ControlBar from '../../../src/ControlBar';
+import ModuleCoordinator from '../../../src/ModuleCoordinator';
 import componentsArray from '../helpers/componentsArray';
 import isHtmlNode from '../helpers/isHtmlNode';
 
@@ -15,8 +16,16 @@ export default () => {
     describe(`${ViewControllerContructor.name}: A ViewController instance should`, () => {
       const MODULE_PREFIX = '-test-';
       let comp;
+
       beforeEach(() => {
-        comp = new ViewControllerContructor(MODULE_PREFIX);
+        if (ViewControllerContructor === ControlBar) {
+          comp = new ControlBar(
+            MODULE_PREFIX,
+            new ModuleCoordinator(MODULE_PREFIX, document.createElement('div'))
+          );
+        } else {
+          comp = new ViewControllerContructor(MODULE_PREFIX);
+        }
       });
 
       it('create an html object to hold DOM nodes', () => {
@@ -61,7 +70,7 @@ export default () => {
         const testEvent = 'test';
         comp.acceptEvents(testEvent);
         expect(() => comp.on(testEvent, testSpy)).not.toThrow();
-        comp.trigget(testEvent);
+        comp.trigger(testEvent);
         expect(testSpy).toHaveBeenCalled();
       });
     });

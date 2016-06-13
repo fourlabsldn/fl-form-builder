@@ -9,6 +9,7 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const jasmineBrowser = require('gulp-jasmine-browser');
+const jasmine = require('gulp-jasmine');
 const watch = require('gulp-watch');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
@@ -34,9 +35,13 @@ const paths = {
     dest: 'dist/',
   },
   tests: {
-    src: './tests/src/**/*.js',
-    main: './tests/src/unit.js',
+    src: ['./tests/src/unit.js'],
     dest: './tests/build/',
+    watch: './tests/src/**/*.js',
+    exec: [
+      'node_modules/babel-polyfill/dist/polyfill.js',
+      './tests/build/unit.js',
+    ],
   },
   docs: {
     main: './docs/index.html',
@@ -105,7 +110,7 @@ gulp.task('watch:sass', () => {
 //            TESTS
 // -------------------------------------------------------
 gulp.task('build:tests', () => {
-  gulp.src(paths.tests.main)
+  gulp.src(paths.tests.src)
   .pipe(sourcemaps.init())
   .pipe(rollup({
     plugins: [
@@ -128,19 +133,13 @@ gulp.task('build:tests', () => {
 });
 
 gulp.task('test-headless', () => {
-  return gulp.src([
-    'node_modules/babel-polyfill/dist/polyfill.js',
-    paths.tests.main,
-  ])
-  .pipe(jasmineBrowser.specRunner({ console: true }))
-  .pipe(jasmineBrowser.headless());
+  return gulp.src(paths.tests.exec)
+  .pipe(jasmine());
 });
 
 gulp.task('test-browser', () => {
-  gulp.src([
-    paths.tests.main,
-  ])
-  .pipe(watch(paths.tests.main))
+  gulp.src(paths.tests.exec)
+  .pipe(watch(paths.tests.exec))
   .pipe(jasmineBrowser.specRunner())
   .pipe(jasmineBrowser.server({ port: 8888 }));
 });
@@ -154,7 +153,7 @@ gulp.task('open:test-browser', () => {
 });
 
 gulp.task('watch:tests', () => {
-  gulp.watch(paths.tests.src, ['build:tests']);
+  gulp.watch(paths.tests.watch, ['build:tests']);
 });
 // -------------------------------------------------------
 //              Documentation
