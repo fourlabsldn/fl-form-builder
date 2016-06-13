@@ -12,3 +12,6 @@ optionsComponentSpecs();
 
 import componentFabricSpecs from './unit/ComponentFabric-specs';
 componentFabricSpecs();
+
+import moduleCoordinatorSpecs from './unit/ModuleCoordinator-specs';
+moduleCoordinatorSpecs();
