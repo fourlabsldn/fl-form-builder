@@ -61,7 +61,7 @@ export default () => {
       it('destroy the html container on destroy', () => {
         expect(comp.html !== null).toBeTruthy();
         comp.destroy();
-        expect(comp.getHtmlContainer() === undefined).toBeTruthy();
+        expect(comp.getHtmlContainer()).toBeFalsy();
       });
 
       it('execute events added via the "acceptEvents" method', () => {
