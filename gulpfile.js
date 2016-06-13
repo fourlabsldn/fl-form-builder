@@ -34,8 +34,8 @@ const paths = {
     dest: 'dist/',
   },
   tests: {
-    src: './tests/src/unit.js',
-    main: './tests/build/unit.js',
+    src: './tests/src/**/*.js',
+    main: './tests/src/unit.js',
     dest: './tests/build/',
   },
   docs: {
@@ -81,7 +81,7 @@ gulp.task('build:src', () => {
   .pipe(gulp.dest(paths.js.dest));
 });
 
-gulp.task('watch:build:src', () => {
+gulp.task('watch:src', () => {
   gulp.watch(paths.js.src, ['build']);
 });
 
@@ -96,7 +96,7 @@ gulp.task('build:sass', () => {
   .pipe(gulp.dest(paths.sass.dest));
 });
 
-gulp.task('watch:build:sass', () => {
+gulp.task('watch:sass', () => {
   gulp.watch(paths.sass.src, ['build']);
 });
 
@@ -105,7 +105,7 @@ gulp.task('watch:build:sass', () => {
 //            TESTS
 // -------------------------------------------------------
 gulp.task('build:tests', () => {
-  gulp.src(paths.tests.src)
+  gulp.src(paths.tests.main)
   .pipe(sourcemaps.init())
   .pipe(rollup({
     plugins: [
@@ -153,6 +153,9 @@ gulp.task('open:test-browser', () => {
   }));
 });
 
+gulp.task('watch:tests', () => {
+  gulp.watch(paths.tests.src, ['build:tests']);
+});
 // -------------------------------------------------------
 //              Documentation
 // -------------------------------------------------------
@@ -183,8 +186,9 @@ gulp.task('build', [
 ]);
 
 gulp.task('watch', [
-  'watch:build:sass',
-  'watch:build:src',
+  'watch:sass',
+  'watch:src',
+  'watch:tests',
 ]);
 
 gulp.task('open', [

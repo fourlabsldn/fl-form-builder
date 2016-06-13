@@ -52,7 +52,7 @@ export default () => {
 
       it('destroy the html container on destroy', () => {
         expect(comp.html !== null).toBeTruthy();
-        comp.delete();
+        comp.destroy();
         expect(comp.getHtmlContainer() === undefined).toBeTruthy();
       });
 
