@@ -7,7 +7,7 @@ import isHtmlNode from '../helpers/isHtmlNode';
 
 const viewControllerSubclasses = [
   ComponentsContainer,
-  ControlBar,
+  // ControlBar,
   ...componentsArray,
 ];
 
@@ -19,10 +19,9 @@ export default () => {
 
       beforeEach(() => {
         if (ViewControllerContructor === ControlBar) {
-          comp = new ControlBar(
-            MODULE_PREFIX,
-            new ModuleCoordinator(MODULE_PREFIX, document.createElement('div'))
-          );
+          const container = document.createElement('div');
+          const coordinator = new ModuleCoordinator(MODULE_PREFIX, container);
+          comp = new ControlBar(MODULE_PREFIX, coordinator);
         } else {
           comp = new ViewControllerContructor(MODULE_PREFIX);
         }

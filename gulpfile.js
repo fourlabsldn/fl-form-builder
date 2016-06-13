@@ -110,7 +110,7 @@ gulp.task('watch:sass', () => {
 //            TESTS
 // -------------------------------------------------------
 gulp.task('build:tests', () => {
-  gulp.src(paths.tests.src)
+  return gulp.src(paths.tests.src)
   .pipe(sourcemaps.init())
   .pipe(rollup({
     plugins: [
@@ -135,6 +135,7 @@ gulp.task('build:tests', () => {
 gulp.task('test-headless', () => {
   return gulp.src(paths.tests.exec)
   .pipe(jasmine({
+    includeStackTrace: true,
     integration: true,
   }));
 });
@@ -196,7 +197,7 @@ gulp.task('open', [
   'open:test-browser',
 ]);
 
-gulp.task('test', ['build', 'copy-dependencies', 'test-headless']);
+gulp.task('test', ['test-headless']);
 gulp.task('test-debug', ['build', 'copy-dependencies', 'open:test-browser', 'test-browser']);
 
 gulp.task('build-watch', ['build', 'watch']);

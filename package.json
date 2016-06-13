@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "gulp demo",
-    "test": "echo \"No tests set up.\" && exit 0",
+    "test": "gulp test",
     "demo": "gulp demo",
     "dev": "gulp demo",
     "build": "gulp build",
