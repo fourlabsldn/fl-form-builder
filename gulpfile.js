@@ -4,7 +4,6 @@ const sourcemaps = require('gulp-sourcemaps');
 const babel = require('rollup-plugin-babel');
 const rollup = require('gulp-rollup');
 const sass = require('gulp-sass');
-const DepLinker = require('dep-linker');
 const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
@@ -50,7 +49,7 @@ const paths = {
 };
 
 gulp.task('copy-dependencies', () => {
-  return DepLinker.copyDependenciesTo(paths.demo.dep, true);
+  return true; // to be removed
 });
 
 // -------------------------------------------------------
