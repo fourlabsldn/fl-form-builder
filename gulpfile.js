@@ -9,7 +9,7 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss');
 const rename = require('gulp-rename');
 const jasmineBrowser = require('gulp-jasmine-browser');
-const jasmine = require('gulp-jasmine');
+const jasmine = require('gulp-jasmine-phantom');
 const watch = require('gulp-watch');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
@@ -134,7 +134,9 @@ gulp.task('build:tests', () => {
 
 gulp.task('test-headless', () => {
   return gulp.src(paths.tests.exec)
-  .pipe(jasmine());
+  .pipe(jasmine({
+    integration: true,
+  }));
 });
 
 gulp.task('test-browser', () => {
