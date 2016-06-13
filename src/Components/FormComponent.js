@@ -183,7 +183,6 @@ export default class FormComponent extends ViewController {
   destroy() {
     if (this.isDetroyed) { return; }
     this.isDetroyed = true;
-    this.trigger('destroy');
     super.destroy();
   }
 

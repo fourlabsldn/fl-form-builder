@@ -62,6 +62,7 @@ export default class ViewController {
   }
 
   destroy() {
+    this.trigger('destroy');
     this.html.container.remove();
     this.listeners = null;
     this.html = {};
