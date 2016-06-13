@@ -70,13 +70,7 @@ gulp.task('build:src', () => {
       babel({
         runtimeHelpers: true,
         exclude: 'node_modules/**',
-        plugins: [
-          'transform-async-to-generator',
-          ['transform-runtime', {
-            polyfill: false,
-            regenerator: true,
-          }]],
-        // presets: ['es2015-rollup'],
+        presets: ['es2015-rollup'],
       }),
     ],
   }))
@@ -118,11 +112,6 @@ gulp.task('build:tests', () => {
       babel({
         runtimeHelpers: true,
         exclude: 'node_modules/**',
-        plugins: ['transform-async-to-generator', [
-          'transform-runtime', {
-            polyfill: false,
-            regenerator: true,
-          }]],
         presets: ['es2015-rollup'],
       }),
     ],
