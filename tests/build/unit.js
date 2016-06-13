@@ -2876,7 +2876,8 @@ var ControlBar = function (_ViewController) {
         }
       }
 
-      componentsBtnGroups.querySelectorAll('.' + buttonsClass).forEach(function (btn) {
+      var buttons = Array.from(componentsBtnGroups.querySelectorAll('.' + buttonsClass));
+      buttons.forEach(function (btn) {
         btn.addEventListener('click', function () {
           _this2.moduleCoordinator.createComponent(btn.name);
         });
@@ -3899,7 +3900,7 @@ function isHtmlNode(node) {
   return node.setAttribute && node.appendChild;
 }
 
-var viewControllerSubclasses = [ComponentsContainer].concat(_toConsumableArray(componentsArray));
+var viewControllerSubclasses = [ComponentsContainer, ControlBar].concat(_toConsumableArray(componentsArray));
 
 var viewControllerSpecs = (function () {
   viewControllerSubclasses.forEach(function (ViewControllerContructor) {
@@ -4183,12 +4184,9 @@ function createCoordinator() {
 var moduleCoordinatorSpecs = (function () {
   describe('A ModuleCoordinator should', function () {
     var coordinator = void 0;
-    var componentNames = void 0;
-    beforeAll(function () {
-      var fabric = new ComponentFabric(MODULE_PREFIX);
-      componentNames = fabric.getComponentTypes().map(function (c) {
-        return c.name;
-      });
+    var fabric = new ComponentFabric(MODULE_PREFIX);
+    var componentNames = fabric.getComponentTypes().map(function (c) {
+      return c.name;
     });
 
     beforeEach(function () {

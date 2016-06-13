@@ -7,7 +7,7 @@ import isHtmlNode from '../helpers/isHtmlNode';
 
 const viewControllerSubclasses = [
   ComponentsContainer,
-  // ControlBar,
+  ControlBar,
   ...componentsArray,
 ];
 

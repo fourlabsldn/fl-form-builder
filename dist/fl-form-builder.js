@@ -3204,7 +3204,8 @@ let ControlBar = function (_ViewController) {
       }
 
       // Add listeners to all component creation buttons
-      componentsBtnGroups.querySelectorAll(`.${ buttonsClass }`).forEach(btn => {
+      const buttons = Array.from(componentsBtnGroups.querySelectorAll(`.${ buttonsClass }`));
+      buttons.forEach(btn => {
         btn.addEventListener('click', () => {
           this.moduleCoordinator.createComponent(btn.name);
         });

@@ -10,11 +10,8 @@ function createCoordinator(container = document.createElement('div')) {
 export default () => {
   describe('A ModuleCoordinator should', () => {
     let coordinator;
-    let componentNames;
-    beforeAll(() => {
-      const fabric = new ComponentFabric(MODULE_PREFIX);
-      componentNames = fabric.getComponentTypes().map(c => c.name);
-    });
+    const fabric = new ComponentFabric(MODULE_PREFIX);
+    const componentNames = fabric.getComponentTypes().map(c => c.name);
 
     beforeEach(() => {
       coordinator = createCoordinator();
