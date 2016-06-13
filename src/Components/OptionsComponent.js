@@ -93,7 +93,7 @@ export default class OptionsComponent extends FormComponent {
    * define the optionType or change this method completely.
    * @method addOption
    * @param  {String} text
-   * @param  {Stirng} optionType
+   * @param  {String} optionType
    */
   addOption(text, optionType) {
     const newOption = document.createElement('div');

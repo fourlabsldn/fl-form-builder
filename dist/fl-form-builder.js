@@ -2596,7 +2596,7 @@ let OptionsComponent = function (_FormComponent) {
      * define the optionType or change this method completely.
      * @method addOption
      * @param  {String} text
-     * @param  {Stirng} optionType
+     * @param  {String} optionType
      */
 
   }, {
