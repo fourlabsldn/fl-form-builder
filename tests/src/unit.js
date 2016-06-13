@@ -4,8 +4,11 @@ viewControllerSpecs();
 import formComponentSpecs from './unit/FormComponent-specs';
 formComponentSpecs();
 
-import textcomponentSpecs from './unit/TextComponent-specs';
-textcomponentSpecs();
+import textComponentSpecs from './unit/TextComponent-specs';
+textComponentSpecs();
 
-import optionscomponentSpecs from './unit/OptionsComponent-specs';
-optionscomponentSpecs();
+import optionsComponentSpecs from './unit/OptionsComponent-specs';
+optionsComponentSpecs();
+
+import componentFabricSpecs from './unit/ComponentFabric-specs';
+componentFabricSpecs();
