@@ -2,7 +2,7 @@
   "name": "fl-form-builder",
   "version": "1.0.01",
   "description": "A vanilla JS form builder",
-  "main": "index.js",
+  "main": "dist/fl-form-builder.js",
   "scripts": {
     "start": "gulp demo",
     "test": "gulp test",
