@@ -1732,6 +1732,8 @@ var Dropdown = function (_OptionsComponent) {
   return Dropdown;
 }(OptionsComponent);
 
+var defaultPlaceholder = 'Insert a placeholder text';
+
 /**
  * @abstract @class TextComponent
  */
@@ -1755,7 +1757,6 @@ var TextComponent = function (_FormComponent) {
 
     _this.fieldType = fieldType;
     _this.buildComponent(tagName, fieldType);
-
     _this.focus();
     return _this;
   }
@@ -1772,7 +1773,7 @@ var TextComponent = function (_FormComponent) {
       this.focusElement = textElement;
       this.html.content.appendChild(textElement);
 
-      this.setPlaceholder('Insert a placeholder text');
+      this.setPlaceholder(defaultPlaceholder);
     }
 
     /**
@@ -1807,7 +1808,8 @@ var TextComponent = function (_FormComponent) {
       if (this.isConfigVisible) {
         this.html.textElement.value = text;
       }
-      this.html.textElement.setAttribute('placeholder', text);
+      var placeholder = text || defaultPlaceholder;
+      this.html.textElement.setAttribute('placeholder', placeholder);
     }
   }, {
     key: 'getPlaceholder',
@@ -1824,7 +1826,9 @@ var TextComponent = function (_FormComponent) {
     key: 'exportState',
     value: function exportState() {
       var output = babelHelpers.get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
-      output.placeholder = this.getPlaceholder();
+      var placeholder = this.getPlaceholder();
+      // We don't want to export the default placeholder.
+      output.placeholder = placeholder === defaultPlaceholder ? undefined : placeholder;
       return output;
     }
 

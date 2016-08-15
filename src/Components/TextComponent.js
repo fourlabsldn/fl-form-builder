@@ -1,5 +1,7 @@
 import FormComponent from './FormComponent';
 
+const defaultPlaceholder = 'Insert a placeholder text';
+
 /**
  * @abstract @class TextComponent
  */
@@ -14,7 +16,6 @@ export default class TextComponent extends FormComponent {
     super(modulePrefix);
     this.fieldType = fieldType;
     this.buildComponent(tagName, fieldType);
-
     this.focus();
   }
 
@@ -30,7 +31,7 @@ export default class TextComponent extends FormComponent {
     this.focusElement = textElement;
     this.html.content.appendChild(textElement);
 
-    this.setPlaceholder('Insert a placeholder text');
+    this.setPlaceholder(defaultPlaceholder);
   }
 
   /**
@@ -57,7 +58,8 @@ export default class TextComponent extends FormComponent {
     if (this.isConfigVisible) {
       this.html.textElement.value = text;
     }
-    this.html.textElement.setAttribute('placeholder', text);
+    const placeholder = text || defaultPlaceholder;
+    this.html.textElement.setAttribute('placeholder', placeholder);
   }
 
   getPlaceholder() {
@@ -70,7 +72,9 @@ export default class TextComponent extends FormComponent {
    */
   exportState() {
     const output = super.exportState();
-    output.placeholder = this.getPlaceholder();
+    const placeholder = this.getPlaceholder();
+    // We don't want to export the default placeholder.
+    output.placeholder = placeholder === defaultPlaceholder ? undefined : placeholder;
     return output;
   }
 
