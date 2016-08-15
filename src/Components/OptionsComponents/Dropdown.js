@@ -16,7 +16,7 @@ export default class Dropdown extends OptionsComponent {
     // Create placeholder
     this.addOption('Select an option');
     this.html.options[0].disabled = true;
-    this.html.options[0].selected = true;
+    this.html.options[0].setAttribute('selected', true);
   }
 
   buildHtml() {

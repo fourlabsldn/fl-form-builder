@@ -1393,7 +1393,7 @@ var Dropdown = function (_OptionsComponent) {
     // Create placeholder
     _this.addOption('Select an option');
     _this.html.options[0].disabled = true;
-    _this.html.options[0].selected = true;
+    _this.html.options[0].setAttribute('selected', true);
     return _this;
   }
 
