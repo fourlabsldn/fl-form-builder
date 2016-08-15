@@ -154,8 +154,17 @@
   margin-right: 5px;
 }
 
+.fl-fb-FormComponent-configuration-elementName {
+  margin: auto 0 auto auto;
+  font-weight: bold;
+  transform: translateY(.1em);
+  color: $c-font;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background-color: $c-background;
+}
+
 .fl-fb-FormComponent-configuration-btn-ok {
-  margin-left: auto;
 }
 
 [class*=fl-fb-FormComponent-configuration-options-btn] {

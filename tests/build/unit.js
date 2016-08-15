@@ -745,6 +745,11 @@ var FormComponent = function (_ViewController) {
       });
       configurationButtons.appendChild(this.html.requiredSwitch);
 
+      var elementName = document.createElement('span');
+      elementName.classList.add(configurationCssClass + '-elementName');
+      elementName.innerHTML = this.constructor.name;
+      configurationButtons.appendChild(elementName);
+
       var okBtn = document.createElement('button');
       okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
       'btn-sm', 'btn-default', 'glyphicon', // Font-awesome

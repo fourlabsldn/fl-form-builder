@@ -65,6 +65,11 @@ export default class FormComponent extends ViewController {
     });
     configurationButtons.appendChild(this.html.requiredSwitch);
 
+    const elementName = document.createElement('span');
+    elementName.classList.add(`${configurationCssClass}-elementName`);
+    elementName.innerHTML = this.constructor.name;
+    configurationButtons.appendChild(elementName);
+
     const okBtn = document.createElement('button');
     okBtn.classList.add(
       `${configurationCssClass}-btn-ok`,
