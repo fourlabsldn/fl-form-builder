@@ -52,7 +52,7 @@
 
     xdiv.addEventListener('formBuilderSave', (e) => {
       console.log(e);
-      console.log(e.detail.formState);
+      console.log(JSON.stringify(e.detail.formState));
     });
 
     container.appendChild(xdiv);

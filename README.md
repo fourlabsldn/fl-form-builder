@@ -1,7 +1,7 @@
 # fl-form-builder
-[![Build Status](https://travis-ci.org/fourlabsldn/fl-multi-calendar.svg?branch=master)](https://travis-ci.org/fourlabsldn/fl-multi-calendar)
+[![Build Status](https://travis-ci.org/fourlabsldn/fl-form-builder.svg?branch=master)](https://travis-ci.org/fourlabsldn/fl-form-builder)
 
-A native JS form builder
+A native JS form builder **inspired by Google Forms**.
 
 - **[Read the docs](https://fourlabsldn.github.io/fl-form-builder/)**
 - **[Demo](https://fourlabsldn.github.io/fl-form-builder/demo/)**
