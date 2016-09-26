@@ -2396,14 +2396,16 @@ var textComponentSpecs = (function () {
       });
 
       it('include the correct placeholder when exporting its state', function () {
-        var initialPlaceholder = comp.getPlaceholder();
         var state = comp.exportState();
-        expect(state.placeholder).toEqual(initialPlaceholder);
-
         var newPlaceholder = 'New Placeholder text';
         state.placeholder = newPlaceholder;
         comp.importState(state);
         expect(comp.getPlaceholder()).toEqual(newPlaceholder);
+      });
+
+      it('not export the default placeholder', function () {
+        var state = comp.exportState();
+        expect(state.placeholder).toBeFalsy();
       });
     }); // wrapping describe
   }); // forEach

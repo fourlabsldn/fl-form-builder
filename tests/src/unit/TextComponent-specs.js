@@ -22,14 +22,16 @@ export default () => {
       });
 
       it('include the correct placeholder when exporting its state', () => {
-        const initialPlaceholder = comp.getPlaceholder();
         const state = comp.exportState();
-        expect(state.placeholder).toEqual(initialPlaceholder);
-
         const newPlaceholder = 'New Placeholder text';
         state.placeholder = newPlaceholder;
         comp.importState(state);
         expect(comp.getPlaceholder()).toEqual(newPlaceholder);
+      });
+
+      it('not export the default placeholder', () => {
+        const state = comp.exportState();
+        expect(state.placeholder).toBeFalsy();
       });
     }); // wrapping describe
   }); // forEach
