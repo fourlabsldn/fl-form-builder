@@ -1917,21 +1917,21 @@
         });
 
         var actionsBtnGroup = createButtonGroup();
-        // Create Save button
-        var saveBtn = document.createElement('button');
-        saveBtn.className = this.cssPrefix + '-button-save';
-        saveBtn.classList.add('btn', // Bootstrap
-        'btn-primary');
-        saveBtn.textContent = 'Save';
-        saveBtn.addEventListener('click', function () {
-          return _this2.moduleCoordinator.save();
-        });
-        actionsBtnGroup.appendChild(saveBtn);
+        // // Create Save button
+        // const saveBtn = document.createElement('button');
+        // saveBtn.className = `${this.cssPrefix}-button-save`;
+        // saveBtn.classList.add(
+        //   'btn', // Bootstrap
+        //   'btn-primary'
+        // );
+        // saveBtn.textContent = 'Save';
+        // saveBtn.addEventListener('click', () => this.moduleCoordinator.save());
+        // actionsBtnGroup.appendChild(saveBtn);
 
         // Create Import button
         var undoBtn = document.createElement('button');
         undoBtn.className = this.cssPrefix + '-button-save';
-        undoBtn.classList.add('btn', 'btn-default'); // Bootstrap
+        undoBtn.classList.add('btn', 'btn-primary'); // Bootstrap
         undoBtn.textContent = 'Undo';
         undoBtn.addEventListener('click', function () {
           var undoSuccess = _this2.moduleCoordinator.popHistoryState();
