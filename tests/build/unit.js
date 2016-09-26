@@ -1825,7 +1825,7 @@ var TextComponent = function (_FormComponent) {
       var output = babelHelpers.get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
       var placeholder = this.getPlaceholder();
       // We don't want to export the default placeholder.
-      output.placeholder = placeholder === defaultPlaceholder ? undefined : placeholder;
+      output.placeholder = placeholder === defaultPlaceholder ? '' : placeholder;
       return output;
     }
 

@@ -71,7 +71,7 @@ export default class TextComponent extends FormComponent {
     const output = super.exportState();
     const placeholder = this.getPlaceholder();
     // We don't want to export the default placeholder.
-    output.placeholder = placeholder === defaultPlaceholder ? undefined : placeholder;
+    output.placeholder = placeholder === defaultPlaceholder ? '' : placeholder;
     return output;
   }
 
