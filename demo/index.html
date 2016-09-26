@@ -7,16 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <!--  Don't forget the module's style -->
   <link rel="stylesheet" href="../dist/fl-form-builder.css">
-
-  <!-- RequireJS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
-  <script type="text/javascript">
-    requirejs.config({
-      paths: {
-        'fl-form-builder': '../dist/fl-form-builder',
-      },
-    });
-  </script>
+  <script src="../dist/fl-form-builder.js"></script>
 </head>
 <body>
   <div class="container">
@@ -36,14 +27,12 @@
   </div>
 
   <script>
-    require(['fl-form-builder'], function (FormBuilder) {
-      var container = document.querySelector('.form-builder-container');
-      const fb = new FormBuilder(container);
+    var container = document.querySelector('.form-builder-container');
+    const fb = new FormBuilder(container);
 
-      const btn = document.querySelector('#exportBtn');
-      btn.addEventListener('click', function () {
-        console.log(fb.exportState())
-      });
+    const btn = document.querySelector('#exportBtn');
+    btn.addEventListener('click', function () {
+      console.log(fb.exportState())
     });
   </script>
 </body>

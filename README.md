@@ -8,44 +8,37 @@ A native JS form builder **inspired by Google Forms**.
 
 ## Getting started
 ### Creating a form-builder
-To create a form builder just insert the [`x-div`](https://github.com/fourlabsldn/x-div) element to the page as such:
+Just load the javascript and the CSS and call `new FormBuilder(container)`, using the
+`FormBuilder` global object.
 
 ```html
-<x-div data-controller="../dist/fl-form-builder"> </x-div>
-```
+<!-- RequireJS -->
+<link rel="stylesheet" href="../dist/fl-form-builder.css">
+<script src="../dist/fl-form-builder.js"></script>
 
-### Catching the form-builder element
-The form-builder element will emmit an event called `formBuilderLoaded`, which will contain an instance of the `ModuleCoordinator` element used to control the form. You can retrieve this instance like this:
+<div class="form-builder-container"></div>
 
-``` javascript
-document.addEventListener('formBuilderLoaded', (e) => {
-  const formBuilder = e.detail.instance;
-});
+<script>
+  var container = document.querySelector('.form-builder-container');
+  const formBuilder = new FormBuilder(container);
+</script>
 ```
 
 ### Saving the form state
-When the user clicks on the save button the `formBuilderSave` event will be fired containing an object representing the current form state. This is the element that you will want to save in the database so that you can later reconstruct the form that was built.
+To save the created form just store the object returned by `formBuilder.exportState()`.
 
 ``` javascript
-document.addEventListener('formBuilderSave', (e) => {
-  const formState = e.detail.formState;
-});
-```
-
-You can also retrieve the current form state at any moment by calling the `exportState` method on your `formBuilder` instance.
-
-``` javascript
-const formState = formBuilder.exportState();
+  // exporting
+  const state = formBuilder.exportState();
 ```
 
 ### Restoring a form state
 If you want to get the form-builder back to the way it was when the user last used it, you can just import the state you saved with the `importState` method. You could, for example, do that when the form loads.
 
 ``` javascript
-document.addEventListener('formBuilderLoaded', (e) => {
-  const formBuilder = e.detail.instance;
-  formBuilder.importState(mySavedState);
-});
+  // importing
+  const formBuilder = new FormBuilder(container);
+  formBuilder.importState(state);
 ```
 
 ## Docs
