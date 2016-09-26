@@ -64,6 +64,8 @@ gulp.task('build:src', () => {
     // are all beautifully namespaced.
     banner: '(function () {',
     footer: '}());',
+    format: 'umd',
+    moduleName: 'FormBuilder',
     plugins: [
       nodeResolve({ jsnext: true, main: true }),
       commonjs(),

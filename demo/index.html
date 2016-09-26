@@ -4,59 +4,47 @@
   <meta charset="UTF-8">
   <title>Form Builder - DEMO</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <!--  Don't forget the module's style -->
   <link rel="stylesheet" href="../dist/fl-form-builder.css">
-  <script src="dependencies/x-div/x-div.js"> </script>
-  <style>
-    .navbar {
-      height: 40px;
-    }
-    .greyed-out {
-      background-color: #eee;
-    }
-    .sidebar {
-      min-height: 1000px;
-      max-height: 100%;
-    }
-    @media (max-width: 750px) {
-      .sidebar {
-        display: none;
-      }
-    }
-    .main-title {
-      padding: 15px;
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
 
-  </style>
+  <!-- RequireJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
+  <script type="text/javascript">
+    requirejs.config({
+      paths: {
+        'fl-form-builder': '../dist/fl-form-builder',
+      },
+    });
+  </script>
 </head>
 <body>
   <div class="container">
     <div class="row navbar greyed-out"></div>
     <div class="row">
       <div class="col-sm-3 sidebar greyed-out">
+        Try exporting the current state to the console. <br>
+        <button id="exportBtn" class="btn btn-default">Print state</button>
       </div>
 
       <div class="col-sm-9">
         <h1 class="main-title">fl-Form-Builder</h1>
-        <!-- <x-div data-controller="../dist/fl-form-builder"></x-div> -->
+
         <div class="form-builder-container"></div>
       </div>
     </div>
   </div>
 
   <script>
-    var container = document.querySelector('.form-builder-container');
-    var xdiv = document.createElement('x-div');
-    xdiv.dataset.controller = '../dist/fl-form-builder';
+    require(['fl-form-builder'], function (FormBuilder) {
+      var container = document.querySelector('.form-builder-container');
+      const fb = new FormBuilder(container);
 
-    xdiv.addEventListener('formBuilderSave', (e) => {
-      console.log(e);
-      console.log(JSON.stringify(e.detail.formState));
+      const btn = document.querySelector('#exportBtn');
+      btn.addEventListener('click', function () {
+        console.log(fb.exportState())
+      });
     });
-
-    container.appendChild(xdiv);
-
   </script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import ModuleCoordinator from './ModuleCoordinator';
 import utils from './utils/utils';
 const MODULE_PREFIX = 'fl-fb';
 
-xController((xdiv) => {
+const FormBuilder = (xdiv) => {
   xdiv.classList.add(MODULE_PREFIX);
   const coordinator = new ModuleCoordinator(MODULE_PREFIX, xdiv);
   const jsonStateToRestore = xdiv.dataset.restoreState;
@@ -19,4 +19,6 @@ xController((xdiv) => {
 
   utils.fireEvent(xdiv, 'formBuilderLoaded', { instance: coordinator });
   return coordinator;
-});
+};
+
+export default FormBuilder;
