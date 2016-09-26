@@ -1605,9 +1605,7 @@ var TextComponent = function (_FormComponent) {
         this.html.textElement.type = 'text';
         return;
       }
-      if (this.html.textElement.value) {
-        this.setPlaceholder(this.html.textElement.value);
-      }
+      this.setPlaceholder(this.html.textElement.value);
       this.html.textElement.type = this.fieldType;
       this.html.textElement.value = '';
     }
@@ -1617,8 +1615,7 @@ var TextComponent = function (_FormComponent) {
       if (this.isConfigVisible) {
         this.html.textElement.value = text;
       }
-      var placeholder = text || defaultPlaceholder;
-      this.html.textElement.setAttribute('placeholder', placeholder);
+      this.html.textElement.setAttribute('placeholder', text);
     }
   }, {
     key: 'getPlaceholder',
