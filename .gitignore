@@ -2,4 +2,5 @@
 /**/bower_components/
 /**/.sass-cache/
 /**/.grunt/
+/**/npm-debug.log
 
