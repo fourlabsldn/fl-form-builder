@@ -42,4 +42,4 @@ If you want to get the form-builder back to the way it was when the user last us
 ```
 
 ## Docs
-Give a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`
+Have a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`
