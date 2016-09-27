@@ -25,7 +25,7 @@ Just load the javascript and the CSS and call `new FormBuilder(container)`, usin
 ```
 
 ### Saving the form state
-To save the created form just store the object returned by `formBuilder.exportState()`.
+To save the created form just store the object – or a serialization of it – returned by `formBuilder.exportState()`.
 
 ``` javascript
   // exporting
@@ -42,4 +42,5 @@ If you want to get the form-builder back to the way it was when the user last us
 ```
 
 ## Docs
-Have a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`
+Have a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`.
+
