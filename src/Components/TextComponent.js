@@ -21,7 +21,7 @@ export default class TextComponent extends FormComponent {
 
   buildComponent(tagName, fieldType) {
     const textElement = document.createElement(tagName);
-    textElement.type = fieldType;
+    textElement.setAttribute('type', fieldType);
 
     textElement.classList.add(
       `${this.cssPrefix}-${this.constructor.name}`,
@@ -44,11 +44,11 @@ export default class TextComponent extends FormComponent {
     if (!this.html.textElement) { return; }
     if (enable) {
       this.html.textElement.value = this.getPlaceholder();
-      this.html.textElement.type = 'text';
+      this.html.textElement.setAttribute('type', 'text');
       return;
     }
     this.setPlaceholder(this.html.textElement.value);
-    this.html.textElement.type = this.fieldType;
+    this.html.textElement.setAttribute('type', this.fieldType);
     this.html.textElement.value = '';
   }
 

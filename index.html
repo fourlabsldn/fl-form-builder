@@ -87,25 +87,25 @@
 </ul>
 <h2>Getting started</h2>
 <h3>Creating a form-builder</h3>
-<p>To create a form builder just insert the <a href="https://github.com/fourlabsldn/x-div"><code>x-div</code></a> element to the page as such:</p><pre><code class="lang-html">&lt;x-div data-controller=&quot;../dist/fl-form-builder&quot;&gt; &lt;/x-div&gt;
-</code></pre>
-<h3>Catching the form-builder element</h3>
-<p>The form-builder element will emmit an event called <code>formBuilderLoaded</code>, which will contain an instance of the <code>ModuleCoordinator</code> element used to control the form. You can retrieve this instance like this:</p><pre><code class="lang-javascript">document.addEventListener(&#39;formBuilderLoaded&#39;, (e) =&gt; {
-  const formBuilder = e.detail.instance;
-});
+<p>Just load the javascript and the CSS and call <code>new FormBuilder(container)</code>, using the<br /><code>FormBuilder</code> global object.</p><pre><code class="lang-html">&lt;!-- RequireJS --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../dist/fl-form-builder.css&quot;&gt;
+&lt;script src=&quot;../dist/fl-form-builder.js&quot;&gt;&lt;/script&gt;
+
+&lt;div class=&quot;form-builder-container&quot;&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  var container = document.querySelector(&#39;.form-builder-container&#39;);
+  const formBuilder = new FormBuilder(container);
+&lt;/script&gt;
 </code></pre>
 <h3>Saving the form state</h3>
-<p>When the user clicks on the save button the <code>formBuilderSave</code> event will be fired containing an object representing the current form state. This is the element that you will want to save in the database so that you can later reconstruct the form that was built.</p><pre><code class="lang-javascript">document.addEventListener(&#39;formBuilderSave&#39;, (e) =&gt; {
-  const formState = e.detail.formState;
-});
-</code></pre>
-<p>You can also retrieve the current form state at any moment by calling the <code>exportState</code> method on your <code>formBuilder</code> instance.</p><pre><code class="lang-javascript">const formState = formBuilder.exportState();
+<p>To save the created form just store the object returned by <code>formBuilder.exportState()</code>.</p><pre><code class="lang-javascript">  // exporting
+  const state = formBuilder.exportState();
 </code></pre>
 <h3>Restoring a form state</h3>
-<p>If you want to get the form-builder back to the way it was when the user last used it, you can just import the state you saved with the <code>importState</code> method. You could, for example, do that when the form loads.</p><pre><code class="lang-javascript">document.addEventListener(&#39;formBuilderLoaded&#39;, (e) =&gt; {
-  const formBuilder = e.detail.instance;
-  formBuilder.importState(mySavedState);
-});
+<p>If you want to get the form-builder back to the way it was when the user last used it, you can just import the state you saved with the <code>importState</code> method. You could, for example, do that when the form loads.</p><pre><code class="lang-javascript">  // importing
+  const formBuilder = new FormBuilder(container);
+  formBuilder.importState(state);
 </code></pre>
 <h2>Docs</h2>
 <p>Give a look at the <a href="https://fourlabsldn.github.io/fl-form-builder/">documentation</a> to see a bit more of <code>importState</code> and <code>exportState</code></p></section>

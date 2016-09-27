@@ -839,6 +839,9 @@ var FormComponent = function (_ViewController) {
 
       var newState = arguments.length <= 0 || arguments[0] === undefined ? !this.isConfigVisible : arguments[0];
 
+      if (this.isConfigVisible === newState) {
+        return;
+      }
       this.isConfigVisible = newState;
       if (!newState) {
         // hide
@@ -1765,7 +1768,7 @@ var TextComponent = function (_FormComponent) {
     key: 'buildComponent',
     value: function buildComponent(tagName, fieldType) {
       var textElement = document.createElement(tagName);
-      textElement.type = fieldType;
+      textElement.setAttribute('type', fieldType);
 
       textElement.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
@@ -1793,11 +1796,11 @@ var TextComponent = function (_FormComponent) {
       }
       if (enable) {
         this.html.textElement.value = this.getPlaceholder();
-        this.html.textElement.type = 'text';
+        this.html.textElement.setAttribute('type', 'text');
         return;
       }
       this.setPlaceholder(this.html.textElement.value);
-      this.html.textElement.type = this.fieldType;
+      this.html.textElement.setAttribute('type', this.fieldType);
       this.html.textElement.value = '';
     }
   }, {

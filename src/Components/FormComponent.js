@@ -153,6 +153,7 @@ export default class FormComponent extends ViewController {
    * @return {void}
    */
   configToggle(newState = !this.isConfigVisible) {
+    if (this.isConfigVisible === newState) { return; }
     this.isConfigVisible = newState;
     if (!newState) {
       // hide
