@@ -27,6 +27,7 @@ export default () => {
         state.placeholder = newPlaceholder;
         comp.importState(state);
         expect(comp.getPlaceholder()).toEqual(newPlaceholder);
+        expect(comp.html.textElement.getAttribute('placeholder')).toEqual(newPlaceholder);
       });
 
       it('not export the default placeholder', () => {
