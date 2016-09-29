@@ -1607,7 +1607,6 @@ var Dropdown = function (_OptionsComponent) {
     key: 'buildComponent',
     value: function buildComponent() {
       var dropdown = document.createElement('select');
-      dropdown.setAttribute('multiple', true);
       dropdown.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
       );
 
@@ -2404,6 +2403,7 @@ var textComponentSpecs = (function () {
         state.placeholder = newPlaceholder;
         comp.importState(state);
         expect(comp.getPlaceholder()).toEqual(newPlaceholder);
+        expect(comp.html.textElement.getAttribute('placeholder')).toEqual(newPlaceholder);
       });
 
       it('not export the default placeholder', function () {

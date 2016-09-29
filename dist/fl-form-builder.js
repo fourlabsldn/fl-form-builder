@@ -1422,7 +1422,6 @@
       key: 'buildComponent',
       value: function buildComponent() {
         var dropdown = document.createElement('select');
-        dropdown.setAttribute('multiple', true);
         dropdown.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
         );
 
