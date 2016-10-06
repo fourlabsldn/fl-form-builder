@@ -26,8 +26,8 @@ export default class ModuleCoordinator {
     this.pushHistoryState();
   }
 
-  getComponentTypes() {
-    return this.componentFabric.getComponentTypes();
+  getComponentsInfo() {
+    return this.componentFabric.getComponentsInfo();
   }
 
   createComponent(compName) {

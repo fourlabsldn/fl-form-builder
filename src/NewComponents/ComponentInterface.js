@@ -1,4 +1,10 @@
 export default class ComponentInterface {
+  static getInfo() {
+    return {
+      type: 'ComponentInterface',
+      group: 'General Components',
+    };
+  }
 
   // ========== Field editing ============
 

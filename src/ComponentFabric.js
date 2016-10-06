@@ -1,11 +1,3 @@
-import RadioBtns from './Components/OptionsComponents/RadioBtns';
-import Checkboxes from './Components/OptionsComponents/Checkboxes';
-import Dropdown from './Components/OptionsComponents/Dropdown';
-import TextBox from './Components/TextComponents/TextBox';
-import TextArea from './Components/TextComponents/TextArea';
-import EmailBox from './Components/TextComponents/EmailBox';
-import TelephoneBox from './Components/TextComponents/TelephoneBox';
-import NumberBox from './Components/TextComponents/NumberBox';
 import assert from 'fl-assert';
 
 /**
@@ -14,37 +6,36 @@ import assert from 'fl-assert';
 export default class ComponentFabric {
   constructor(modulePrefix) {
     this.modulePrefix = modulePrefix;
-    this.componentConstructors = [
-      RadioBtns,
-      Checkboxes,
-      Dropdown,
-      TextBox,
-      EmailBox,
-      TelephoneBox,
-      NumberBox,
-      TextArea,
-    ];
-
+    this.componentContructors = [];
     Object.preventExtensions(this);
   }
 
   /**
+   * @method addComponentConstructor
+   * @param {Function} constr - Component constructor Function
+   * @return {void}
+   */
+  addComponentConstructor(constr) {
+    this.componentConstructors = this.componentConstructors.concat([constr]);
+  }
+
+  /**
    * @method createComponent
-   * @param  {String} componentName
+   * @param  {String} componentType
    * @return {Component}
    */
-  createComponent(componentName) {
-    const Comp = this.componentConstructors.find(c => c.getInfo().name === componentName);
-    assert(Comp, `Invalid component: ${componentName}`);
-    return new Comp(this.modulePrefix);
+  createComponent(componentType) {
+    const Comp = this.componentConstructors.find(c => c.getInfo().type === componentType);
+    assert(Comp, `Invalid component: ${componentType}`);
+    return new Comp();
   }
 
   /**
    * @method getComponentTypes
    * @return {Array<Object>}
    */
-  getComponentTypes() {
-    const types = this.componentConstructors.map(component => component.getInfo());
-    return types;
+  getComponentsInfo() {
+    const info = this.componentConstructors.map(component => component.getInfo());
+    return info;
   }
 }

@@ -4,6 +4,8 @@ import { overshadow } from '../utils/utils';
 
 const defaultState = {
   required: false,
+  type: 'TextField',
+  group: 'Text Components',
   title: 'Add a title',
   placeholder: 'Add a placeholder',
 };
@@ -14,6 +16,15 @@ const defaultHtml = {
 };
 
 export default class TextField extends ComponentInterface {
+  /**
+   * @override @method getInfo
+   * @return {Object}
+   */
+  static getInfo() {
+    const { type, group } = defaultState;
+    return { type, group };
+  }
+
   constructor() {
     this.state = defaultState;
     this.html = defaultHtml;

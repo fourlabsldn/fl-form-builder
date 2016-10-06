@@ -1178,7 +1178,7 @@ var ControlBar = function (_ViewController) {
       var _this2 = this;
 
       var componentGroups = {};
-      var componentTypes = this.moduleCoordinator.getComponentTypes();
+      var conponentsInfo = this.moduleCoordinator.getComponentsInfo();
 
       // Create component buttons
       var _iteratorNormalCompletion = true;
@@ -1186,11 +1186,11 @@ var ControlBar = function (_ViewController) {
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = componentTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var component = _step.value;
+        for (var _iterator = conponentsInfo[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var info = _step.value;
 
-          componentGroups[component.group] = componentGroups[component.group] || [];
-          componentGroups[component.group].push(component);
+          componentGroups[info.group] = componentGroups[info.group] || [];
+          componentGroups[info.group].push(info);
         }
       } catch (err) {
         _didIteratorError = true;
@@ -1335,6 +1335,263 @@ function createDropdown(buttonName, subButtons, subButtonsClass) {
   wrapper.appendChild(list);
   return wrapper;
 }
+
+/**
+ * @class ControlBar
+ */
+
+var ComponentFabric = function () {
+  function ComponentFabric(modulePrefix) {
+    babelHelpers.classCallCheck(this, ComponentFabric);
+
+    this.modulePrefix = modulePrefix;
+    this.componentContructors = [];
+    Object.preventExtensions(this);
+  }
+
+  /**
+   * @method addComponentConstructor
+   * @param {Function} constr - Component constructor Function
+   * @return {void}
+   */
+
+
+  babelHelpers.createClass(ComponentFabric, [{
+    key: 'addComponentConstructor',
+    value: function addComponentConstructor(constr) {
+      this.componentConstructors = this.componentConstructors.concat([constr]);
+    }
+
+    /**
+     * @method createComponent
+     * @param  {String} componentType
+     * @return {Component}
+     */
+
+  }, {
+    key: 'createComponent',
+    value: function createComponent(componentType) {
+      var Comp = this.componentConstructors.find(function (c) {
+        return c.getInfo().type === componentType;
+      });
+      assert(Comp, 'Invalid component: ' + componentType);
+      return new Comp();
+    }
+
+    /**
+     * @method getComponentTypes
+     * @return {Array<Object>}
+     */
+
+  }, {
+    key: 'getComponentsInfo',
+    value: function getComponentsInfo() {
+      var info = this.componentConstructors.map(function (component) {
+        return component.getInfo();
+      });
+      return info;
+    }
+  }]);
+  return ComponentFabric;
+}();
+
+var MAX_HISTORY_STATES = 15;
+/**
+ * This class takes care of storing forms in local storage
+ * as well as sending it to the database, and keeping intermediate states
+ * so as to add the undo function.
+ * @class Storage
+ */
+
+var Storage = function () {
+  function Storage() {
+    babelHelpers.classCallCheck(this, Storage);
+
+    this.currentState = null;
+    this.history = [];
+    Object.preventExtensions(this);
+  }
+
+  babelHelpers.createClass(Storage, [{
+    key: 'pushHistoryState',
+    value: function pushHistoryState(state) {
+      assert(state, 'Invalid state being saved: ' + state);
+      if (this.history.length > MAX_HISTORY_STATES) {
+        this.history = this.history.slice(1);
+      }
+      if (this.currentState) {
+        this.history.push(this.currentState);
+      }
+      this.currentState = state;
+    }
+
+    /**
+     * @method popHistoryState
+     * @return {Object} - A State object
+     */
+
+  }, {
+    key: 'popHistoryState',
+    value: function popHistoryState() {
+      if (this.history.length > 0) {
+        this.currentState = this.history.pop();
+        return this.currentState;
+      }
+      return undefined;
+    }
+  }]);
+  return Storage;
+}();
+
+/**
+ * The module coordinator contains all of the methods the consumer of the
+ * application will need.
+ * @class Coordinator
+ */
+
+var ModuleCoordinator = function () {
+  function ModuleCoordinator(modulePrefix, htmlContainer) {
+    babelHelpers.classCallCheck(this, ModuleCoordinator);
+
+    this.storage = new Storage();
+    this.componentFabric = new ComponentFabric(modulePrefix);
+
+    this.componentsContainer = new ComponentsContainer(modulePrefix);
+    this.componentsContainer.on('change', this.pushHistoryState.bind(this));
+
+    this.controlBar = new ControlBar(modulePrefix, this);
+    this.htmlContainer = htmlContainer;
+
+    Object.preventExtensions(this);
+    this.htmlContainer.appendChild(this.controlBar.getHtmlContainer());
+    this.htmlContainer.appendChild(this.componentsContainer.getHtmlContainer());
+    this.pushHistoryState();
+  }
+
+  babelHelpers.createClass(ModuleCoordinator, [{
+    key: 'getComponentTypes',
+    value: function getComponentTypes() {
+      return this.componentFabric.getComponentTypes();
+    }
+  }, {
+    key: 'createComponent',
+    value: function createComponent(compName) {
+      var newComponent = this.componentFabric.createComponent(compName);
+      this.componentsContainer.addComponent(newComponent);
+      this.pushHistoryState();
+    }
+  }, {
+    key: 'save',
+    value: function save() {
+      var content = this.exportState();
+      utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
+    }
+
+    /**
+     * Use this method to get the current state of the application
+     * @method exportState
+     * @param {void}
+     * @return {Array<Object>} An array of objects that represents the current
+     * state of the application and which can be used to restore the application to that state.
+     */
+
+  }, {
+    key: 'exportState',
+    value: function exportState() {
+      var components = this.componentsContainer.getAllComponents();
+      var outcome = [];
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var component = _step.value;
+
+          outcome.push(component.exportState());
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return outcome;
+    }
+
+    /**
+     * Use this function to import a past saved state
+     * @method importState
+     * @param  {Array<Object>} state - A state obtained previsously obtained.
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState() {
+      var _this = this;
+
+      var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
+      var registerInHistory = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+      this.componentsContainer.deleteAllComponents();
+
+      var components = [];
+      state.forEach(function (componentState) {
+        var component = _this.componentFabric.createComponent(componentState.type);
+        component.importState(componentState);
+        components.push(component);
+      });
+
+      this.componentsContainer.setComponents(components);
+      if (registerInHistory) {
+        this.pushHistoryState();
+      }
+    }
+
+    /**
+     * Add current state to the saved history.
+     * @private
+     * @method pushHistoryState
+     * @return {void}
+     */
+
+  }, {
+    key: 'pushHistoryState',
+    value: function pushHistoryState() {
+      var currentState = this.exportState();
+      this.storage.pushHistoryState(currentState);
+    }
+
+    /**
+     * Undo function
+     * @private
+     * @method popHistoryState
+     * @return {Boolean} success
+     */
+
+  }, {
+    key: 'popHistoryState',
+    value: function popHistoryState() {
+      var lastState = this.storage.popHistoryState();
+      if (lastState) {
+        this.importState(lastState, false);
+        return true;
+      }
+      return false;
+    }
+  }]);
+  return ModuleCoordinator;
+}();
 
 var OptionsComponent = function (_FormComponent) {
   babelHelpers.inherits(OptionsComponent, _FormComponent);
@@ -1748,6 +2005,8 @@ var Dropdown = function (_OptionsComponent) {
   return Dropdown;
 }(OptionsComponent);
 
+var componentsArray$1 = [RadioBtns, Checkboxes, Dropdown];
+
 var defaultPlaceholder = 'Insert a placeholder text';
 
 /**
@@ -1978,254 +2237,6 @@ var NumberBox = function (_TextComponent) {
 
   return NumberBox;
 }(TextComponent);
-
-/**
- * @class ControlBar
- */
-
-var ComponentFabric = function () {
-  function ComponentFabric(modulePrefix) {
-    babelHelpers.classCallCheck(this, ComponentFabric);
-
-    this.modulePrefix = modulePrefix;
-    this.componentConstructors = [RadioBtns, Checkboxes, Dropdown, TextBox, EmailBox, TelephoneBox, NumberBox, TextArea];
-
-    Object.preventExtensions(this);
-  }
-
-  /**
-   * @method createComponent
-   * @param  {String} componentName
-   * @return {Component}
-   */
-
-
-  babelHelpers.createClass(ComponentFabric, [{
-    key: 'createComponent',
-    value: function createComponent(componentName) {
-      var Comp = this.componentConstructors.find(function (c) {
-        return c.getInfo().name === componentName;
-      });
-      assert(Comp, 'Invalid component: ' + componentName);
-      return new Comp(this.modulePrefix);
-    }
-
-    /**
-     * @method getComponentTypes
-     * @return {Array<Object>}
-     */
-
-  }, {
-    key: 'getComponentTypes',
-    value: function getComponentTypes() {
-      var types = this.componentConstructors.map(function (component) {
-        return component.getInfo();
-      });
-      return types;
-    }
-  }]);
-  return ComponentFabric;
-}();
-
-var MAX_HISTORY_STATES = 15;
-/**
- * This class takes care of storing forms in local storage
- * as well as sending it to the database, and keeping intermediate states
- * so as to add the undo function.
- * @class Storage
- */
-
-var Storage = function () {
-  function Storage() {
-    babelHelpers.classCallCheck(this, Storage);
-
-    this.currentState = null;
-    this.history = [];
-    Object.preventExtensions(this);
-  }
-
-  babelHelpers.createClass(Storage, [{
-    key: 'pushHistoryState',
-    value: function pushHistoryState(state) {
-      assert(state, 'Invalid state being saved: ' + state);
-      if (this.history.length > MAX_HISTORY_STATES) {
-        this.history = this.history.slice(1);
-      }
-      if (this.currentState) {
-        this.history.push(this.currentState);
-      }
-      this.currentState = state;
-    }
-
-    /**
-     * @method popHistoryState
-     * @return {Object} - A State object
-     */
-
-  }, {
-    key: 'popHistoryState',
-    value: function popHistoryState() {
-      if (this.history.length > 0) {
-        this.currentState = this.history.pop();
-        return this.currentState;
-      }
-      return undefined;
-    }
-  }]);
-  return Storage;
-}();
-
-/**
- * The module coordinator contains all of the methods the consumer of the
- * application will need.
- * @class Coordinator
- */
-
-var ModuleCoordinator = function () {
-  function ModuleCoordinator(modulePrefix, htmlContainer) {
-    babelHelpers.classCallCheck(this, ModuleCoordinator);
-
-    this.storage = new Storage();
-    this.componentFabric = new ComponentFabric(modulePrefix);
-
-    this.componentsContainer = new ComponentsContainer(modulePrefix);
-    this.componentsContainer.on('change', this.pushHistoryState.bind(this));
-
-    this.controlBar = new ControlBar(modulePrefix, this);
-    this.htmlContainer = htmlContainer;
-
-    Object.preventExtensions(this);
-    this.htmlContainer.appendChild(this.controlBar.getHtmlContainer());
-    this.htmlContainer.appendChild(this.componentsContainer.getHtmlContainer());
-    this.pushHistoryState();
-  }
-
-  babelHelpers.createClass(ModuleCoordinator, [{
-    key: 'getComponentTypes',
-    value: function getComponentTypes() {
-      return this.componentFabric.getComponentTypes();
-    }
-  }, {
-    key: 'createComponent',
-    value: function createComponent(compName) {
-      var newComponent = this.componentFabric.createComponent(compName);
-      this.componentsContainer.addComponent(newComponent);
-      this.pushHistoryState();
-    }
-  }, {
-    key: 'save',
-    value: function save() {
-      var content = this.exportState();
-      utils.fireEvent(this.htmlContainer, 'formBuilderSave', { formState: content });
-    }
-
-    /**
-     * Use this method to get the current state of the application
-     * @method exportState
-     * @param {void}
-     * @return {Array<Object>} An array of objects that represents the current
-     * state of the application and which can be used to restore the application to that state.
-     */
-
-  }, {
-    key: 'exportState',
-    value: function exportState() {
-      var components = this.componentsContainer.getAllComponents();
-      var outcome = [];
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var component = _step.value;
-
-          outcome.push(component.exportState());
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return outcome;
-    }
-
-    /**
-     * Use this function to import a past saved state
-     * @method importState
-     * @param  {Array<Object>} state - A state obtained previsously obtained.
-     * @return {void}
-     */
-
-  }, {
-    key: 'importState',
-    value: function importState() {
-      var _this = this;
-
-      var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
-      var registerInHistory = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-      this.componentsContainer.deleteAllComponents();
-
-      var components = [];
-      state.forEach(function (componentState) {
-        var component = _this.componentFabric.createComponent(componentState.type);
-        component.importState(componentState);
-        components.push(component);
-      });
-
-      this.componentsContainer.setComponents(components);
-      if (registerInHistory) {
-        this.pushHistoryState();
-      }
-    }
-
-    /**
-     * Add current state to the saved history.
-     * @private
-     * @method pushHistoryState
-     * @return {void}
-     */
-
-  }, {
-    key: 'pushHistoryState',
-    value: function pushHistoryState() {
-      var currentState = this.exportState();
-      this.storage.pushHistoryState(currentState);
-    }
-
-    /**
-     * Undo function
-     * @private
-     * @method popHistoryState
-     * @return {Boolean} success
-     */
-
-  }, {
-    key: 'popHistoryState',
-    value: function popHistoryState() {
-      var lastState = this.storage.popHistoryState();
-      if (lastState) {
-        this.importState(lastState, false);
-        return true;
-      }
-      return false;
-    }
-  }]);
-  return ModuleCoordinator;
-}();
-
-var componentsArray$1 = [RadioBtns, Checkboxes, Dropdown];
 
 var componentsArray$2 = [TextBox, TextArea, EmailBox, TelephoneBox, NumberBox];
 

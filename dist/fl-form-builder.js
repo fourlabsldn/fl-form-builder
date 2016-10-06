@@ -1151,649 +1151,6 @@
     return ComponentsContainer;
   }(ViewController);
 
-  var OptionsComponent = function (_FormComponent) {
-    babelHelpers.inherits(OptionsComponent, _FormComponent);
-    babelHelpers.createClass(OptionsComponent, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(OptionsComponent), 'getInfo', this).call(this);
-        info.group = 'Options Components';
-        return info;
-      }
-    }]);
-
-    function OptionsComponent(modulePrefix) {
-      babelHelpers.classCallCheck(this, OptionsComponent);
-
-      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(OptionsComponent).call(this, modulePrefix));
-
-      _this.html.options = [];
-      return _this;
-    }
-
-    /**
-     * In addition to building the standard html structure, it adds
-     * a field to add an option.
-     * @method buildHtml
-     * @return {void}
-     */
-
-
-    babelHelpers.createClass(OptionsComponent, [{
-      key: 'buildHtml',
-      value: function buildHtml() {
-        var _this2 = this;
-
-        babelHelpers.get(Object.getPrototypeOf(OptionsComponent.prototype), 'buildHtml', this).call(this);
-
-        var optionsConfig = document.createElement('div');
-        var optionsConfigCssClass = this.cssPrefix + '-configuration-options';
-        optionsConfig.classList.add(optionsConfigCssClass);
-
-        if (this.html.configuration.children[0]) {
-          this.html.configuration.insertBefore(optionsConfig, this.html.configuration.children[0]);
-        } else {
-          this.html.configuration.appendChild(optionsConfig);
-        }
-
-        var removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.title = 'Remove last option';
-        removeBtn.classList.add('glyphicon-minus-sign', 'glyphicon', optionsConfigCssClass + '-btn-remove');
-        removeBtn.addEventListener('click', function () {
-          return _this2.removeOption();
-        });
-        optionsConfig.appendChild(removeBtn);
-
-        var addBtn = document.createElement('button');
-        addBtn.type = 'button';
-        addBtn.title = 'Add new option';
-        addBtn.classList.add('glyphicon-plus-sign', 'glyphicon', optionsConfigCssClass + '-btn-add');
-        addBtn.addEventListener('click', function () {
-          return _this2.submitOptionFromConfigBar();
-        });
-        optionsConfig.appendChild(addBtn);
-
-        this.html.newOptionText = document.createElement('input');
-        this.html.newOptionText.setAttribute('placeholder', 'Type a new option');
-        this.html.newOptionText.setAttribute('type', 'text');
-        this.html.newOptionText.classList.add(optionsConfigCssClass + '-input');
-        this.focusElement = this.html.newOptionText;
-        optionsConfig.appendChild(this.html.newOptionText);
-        this.html.newOptionText.addEventListener('keypress', function (e) {
-          if (e.which === 13) {
-            var click = new Event('click');
-            addBtn.dispatchEvent(click);
-            e.preventDefault();
-            return false; //  returning false will prevent the event from bubbling up.
-          }
-          return true;
-        });
-
-        this.focus();
-      }
-    }, {
-      key: 'submitOptionFromConfigBar',
-      value: function submitOptionFromConfigBar() {
-        if (!this.html.newOptionText.value.trim()) {
-          utils.blinkRed(this.html.newOptionText, this.modulePrefix);
-          return;
-        }
-        this.addOption(this.html.newOptionText.value);
-        this.html.newOptionText.value = '';
-        this.triggerChangeIfNeeded();
-      }
-
-      /**
-       * This method is supposed to be extended by subclasses and they will
-       * define the optionType or change this method completely.
-       * @method addOption
-       * @param  {String} text
-       * @param  {String} optionType
-       */
-
-    }, {
-      key: 'addOption',
-      value: function addOption(text, optionType) {
-        var newOption = document.createElement('div');
-        newOption.classList.add(this.cssPrefix + '-option');
-
-        var optionCheckbox = document.createElement('input');
-        optionCheckbox.type = optionType;
-        newOption.appendChild(optionCheckbox);
-
-        var optionText = document.createElement('span');
-        optionText.classList.add(this.cssPrefix + '-option-text');
-        optionText.textContent = text;
-        newOption.appendChild(optionText);
-
-        this.html.options.push(newOption);
-        this.html.content.appendChild(newOption);
-        this.addEditable(optionText);
-      }
-
-      /**
-       * Removes an option element
-       * @method removeOption
-       * @return {void}
-       */
-
-    }, {
-      key: 'removeOption',
-      value: function removeOption() {
-        var optionToRemove = this.html.options.pop();
-        if (optionToRemove) {
-          optionToRemove.remove();
-        }
-      }
-
-      /**
-       * @override @method exportState
-       * @return {Object}
-       */
-
-    }, {
-      key: 'exportState',
-      value: function exportState() {
-        var output = babelHelpers.get(Object.getPrototypeOf(OptionsComponent.prototype), 'exportState', this).call(this);
-        output.options = this.html.options.map(function (o) {
-          return o.textContent;
-        });
-        return output;
-      }
-
-      /**
-       * @override @method importState
-       * @return {void}
-       */
-
-    }, {
-      key: 'importState',
-      value: function importState(state) {
-        var _this3 = this;
-
-        babelHelpers.get(Object.getPrototypeOf(OptionsComponent.prototype), 'importState', this).call(this, state);
-        var optionCount = this.html.options.length;
-        for (var i = 0; i < optionCount; i++) {
-          this.removeOption();
-        }
-        state.options.forEach(function (o) {
-          return _this3.addOption(o);
-        });
-      }
-    }]);
-    return OptionsComponent;
-  }(FormComponent);
-
-  var RadioBtns = function (_OptionsComponent) {
-    babelHelpers.inherits(RadioBtns, _OptionsComponent);
-    babelHelpers.createClass(RadioBtns, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(RadioBtns), 'getInfo', this).call(this);
-        info.description = 'Radio Buttons';
-        info.iconClass = 'glyphicon glyphicon-ok-circle';
-        return info;
-      }
-    }]);
-
-    function RadioBtns(modulePrefix) {
-      babelHelpers.classCallCheck(this, RadioBtns);
-
-      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(RadioBtns).call(this, modulePrefix));
-
-      Object.preventExtensions(_this);
-      _this.addOption('Insert an option');
-      return _this;
-    }
-
-    /**
-     * @override @method addOption
-     * @param  {String} text
-     */
-
-
-    babelHelpers.createClass(RadioBtns, [{
-      key: 'addOption',
-      value: function addOption(text) {
-        babelHelpers.get(Object.getPrototypeOf(RadioBtns.prototype), 'addOption', this).call(this, text, 'radio');
-      }
-    }]);
-    return RadioBtns;
-  }(OptionsComponent);
-
-  var Checkboxes = function (_OptionsComponent) {
-    babelHelpers.inherits(Checkboxes, _OptionsComponent);
-    babelHelpers.createClass(Checkboxes, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(Checkboxes), 'getInfo', this).call(this);
-        info.description = 'Checkboxes';
-        info.iconClass = 'glyphicon glyphicon-check';
-        return info;
-      }
-    }]);
-
-    function Checkboxes(modulePrefix) {
-      babelHelpers.classCallCheck(this, Checkboxes);
-
-      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Checkboxes).call(this, modulePrefix));
-
-      Object.preventExtensions(_this);
-      _this.addOption('Insert an option');
-      return _this;
-    }
-
-    /**
-     * @override @method addOption
-     * @param  {String} text
-     */
-
-
-    babelHelpers.createClass(Checkboxes, [{
-      key: 'addOption',
-      value: function addOption(text) {
-        babelHelpers.get(Object.getPrototypeOf(Checkboxes.prototype), 'addOption', this).call(this, text, 'checkbox');
-      }
-    }]);
-    return Checkboxes;
-  }(OptionsComponent);
-
-  var Dropdown = function (_OptionsComponent) {
-    babelHelpers.inherits(Dropdown, _OptionsComponent);
-    babelHelpers.createClass(Dropdown, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(Dropdown), 'getInfo', this).call(this);
-        info.description = 'Dropdown';
-        info.iconClass = 'glyphicon glyphicon-collapse-down';
-        return info;
-      }
-    }]);
-
-    function Dropdown(modulePrefix) {
-      babelHelpers.classCallCheck(this, Dropdown);
-
-      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this, modulePrefix));
-
-      Object.preventExtensions(_this);
-
-      // Create placeholder
-      _this.addOption('Select an option');
-      _this.html.options[0].disabled = true;
-      _this.html.options[0].setAttribute('selected', true);
-      return _this;
-    }
-
-    babelHelpers.createClass(Dropdown, [{
-      key: 'buildHtml',
-      value: function buildHtml() {
-        babelHelpers.get(Object.getPrototypeOf(Dropdown.prototype), 'buildHtml', this).call(this);
-        this.buildComponent();
-        this.buildComponentSpecificConfiguration();
-      }
-    }, {
-      key: 'buildComponent',
-      value: function buildComponent() {
-        var dropdown = document.createElement('select');
-        dropdown.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
-        );
-
-        this.html.dropdown = dropdown;
-        this.focusElement = dropdown;
-        this.html.content.appendChild(dropdown);
-      }
-    }, {
-      key: 'buildComponentSpecificConfiguration',
-      value: function buildComponentSpecificConfiguration() {
-        var newOptionDisabledWrapper = document.createElement('label');
-
-        var newOptionDisabled = document.createElement('input');
-        newOptionDisabled.classList.add(this.cssPrefix + '-configuration-options-optionDisabled');
-        newOptionDisabled.type = 'checkbox';
-        newOptionDisabledWrapper.appendChild(newOptionDisabled);
-        newOptionDisabledWrapper.appendChild(document.createTextNode('Divider'));
-
-        var optionConfig = this.html.configuration.children[0];
-        this.html.newOptionDisabled = newOptionDisabled;
-        optionConfig.appendChild(newOptionDisabledWrapper);
-      }
-    }, {
-      key: 'submitOptionFromConfigBar',
-      value: function submitOptionFromConfigBar() {
-        if (!this.html.newOptionText.value.trim()) {
-          utils.blinkRed(this.html.newOptionText, this.modulePrefix);
-          return;
-        }
-        this.addOption(this.html.newOptionText.value, this.html.newOptionDisabled.checked);
-        this.html.newOptionDisabled.checked = false;
-        this.html.newOptionText.value = '';
-        this.triggerChangeIfNeeded();
-      }
-    }, {
-      key: 'addOption',
-      value: function addOption(text) {
-        var disabled = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
-
-        var newOption = document.createElement('option');
-        if (disabled) {
-          newOption.setAttribute('disabled', true);
-        }
-        newOption.textContent = text;
-
-        this.html.options.push(newOption);
-        this.html.dropdown.appendChild(newOption);
-      }
-
-      /**
-       * @override @method enableEditing
-       * @param  {Boolean} enable
-       * @return {void}
-       */
-
-    }, {
-      key: 'enableEditing',
-      value: function enableEditing() {
-        var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-        babelHelpers.get(Object.getPrototypeOf(Dropdown.prototype), 'enableEditing', this).call(this, enable);
-        if (!this.html.dropdown) {
-          return;
-        }
-        if (enable) {
-          this.html.dropdown.setAttribute('multiple', true);
-        } else {
-          this.html.dropdown.removeAttribute('multiple');
-        }
-      }
-
-      /**
-       * @override @method exportState
-       * @return {Object}
-       */
-
-    }, {
-      key: 'exportState',
-      value: function exportState() {
-        var output = babelHelpers.get(Object.getPrototypeOf(Dropdown.prototype), 'exportState', this).call(this);
-        output.disabledIndexes = [];
-        this.html.options.forEach(function (o, index) {
-          if (o.hasAttribute('disabled')) {
-            output.disabledIndexes.push(index);
-          }
-        });
-        return output;
-      }
-
-      /**
-       * @override @method importState
-       * @return {void}
-       */
-
-    }, {
-      key: 'importState',
-      value: function importState(state) {
-        babelHelpers.get(Object.getPrototypeOf(Dropdown.prototype), 'importState', this).call(this, state);
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = state.disabledIndexes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var disabledIndex = _step.value;
-
-            this.html.options[disabledIndex].setAttribute('disabled', true);
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      }
-    }]);
-    return Dropdown;
-  }(OptionsComponent);
-
-  var defaultPlaceholder = 'Insert a placeholder text';
-
-  /**
-   * @abstract @class TextComponent
-   */
-
-  var TextComponent = function (_FormComponent) {
-    babelHelpers.inherits(TextComponent, _FormComponent);
-    babelHelpers.createClass(TextComponent, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(TextComponent), 'getInfo', this).call(this);
-        info.group = 'Text Components';
-        return info;
-      }
-    }]);
-
-    function TextComponent(modulePrefix, tagName) {
-      var fieldType = arguments.length <= 2 || arguments[2] === undefined ? 'text' : arguments[2];
-      babelHelpers.classCallCheck(this, TextComponent);
-
-      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TextComponent).call(this, modulePrefix));
-
-      _this.fieldType = fieldType;
-      _this.buildComponent(tagName, fieldType);
-      _this.focus();
-      return _this;
-    }
-
-    babelHelpers.createClass(TextComponent, [{
-      key: 'buildComponent',
-      value: function buildComponent(tagName, fieldType) {
-        var textElement = document.createElement(tagName);
-        textElement.setAttribute('type', fieldType);
-
-        textElement.classList.add(this.cssPrefix + '-' + this.constructor.name, 'form-control' // Bootstrap
-        );
-        this.html.textElement = textElement;
-        this.focusElement = textElement;
-        this.html.content.appendChild(textElement);
-
-        this.setPlaceholder(defaultPlaceholder);
-      }
-
-      /**
-       * @override @method enableEditing
-       * @param  {Boolean} enable
-       * @return {void}
-       */
-
-    }, {
-      key: 'enableEditing',
-      value: function enableEditing() {
-        var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-        babelHelpers.get(Object.getPrototypeOf(TextComponent.prototype), 'enableEditing', this).call(this, enable);
-        if (!this.html.textElement) {
-          return;
-        }
-        if (enable) {
-          this.html.textElement.value = this.getPlaceholder();
-          this.html.textElement.setAttribute('type', 'text');
-          return;
-        }
-        this.setPlaceholder(this.html.textElement.value);
-        this.html.textElement.setAttribute('type', this.fieldType);
-        this.html.textElement.value = '';
-      }
-    }, {
-      key: 'setPlaceholder',
-      value: function setPlaceholder(text) {
-        if (this.isConfigVisible) {
-          this.html.textElement.value = text;
-        }
-        this.html.textElement.setAttribute('placeholder', text);
-      }
-    }, {
-      key: 'getPlaceholder',
-      value: function getPlaceholder() {
-        return this.html.textElement.getAttribute('placeholder');
-      }
-
-      /**
-       * @override @method exportState
-       * @return {Object}
-       */
-
-    }, {
-      key: 'exportState',
-      value: function exportState() {
-        var output = babelHelpers.get(Object.getPrototypeOf(TextComponent.prototype), 'exportState', this).call(this);
-        var placeholder = this.getPlaceholder();
-        // We don't want to export the default placeholder.
-        output.placeholder = placeholder === defaultPlaceholder ? '' : placeholder;
-        return output;
-      }
-
-      /**
-       * @override @method importState
-       * @param  {Object} state
-       * @return {void}
-       */
-
-    }, {
-      key: 'importState',
-      value: function importState(state) {
-        babelHelpers.get(Object.getPrototypeOf(TextComponent.prototype), 'importState', this).call(this, state);
-        this.setPlaceholder(state.placeholder);
-      }
-    }]);
-    return TextComponent;
-  }(FormComponent);
-
-  var TextBox = function (_TextComponent) {
-    babelHelpers.inherits(TextBox, _TextComponent);
-    babelHelpers.createClass(TextBox, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(TextBox), 'getInfo', this).call(this);
-        info.description = 'Text Box';
-        info.iconClass = 'glyphicon glyphicon-text-width';
-        return info;
-      }
-    }]);
-
-    function TextBox(modulePrefix) {
-      babelHelpers.classCallCheck(this, TextBox);
-      return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TextBox).call(this, modulePrefix, 'input', 'text'));
-    }
-
-    return TextBox;
-  }(TextComponent);
-
-  var TextArea = function (_TextComponent) {
-    babelHelpers.inherits(TextArea, _TextComponent);
-    babelHelpers.createClass(TextArea, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(TextArea), 'getInfo', this).call(this);
-        info.description = 'Text Area';
-        info.iconClass = 'glyphicon glyphicon-text-height';
-        return info;
-      }
-    }]);
-
-    function TextArea(modulePrefix) {
-      babelHelpers.classCallCheck(this, TextArea);
-      return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TextArea).call(this, modulePrefix, 'textarea'));
-    }
-
-    /**
-     * @override @method buildComponent
-     */
-
-
-    babelHelpers.createClass(TextArea, [{
-      key: 'buildComponent',
-      value: function buildComponent() {
-        var _babelHelpers$get;
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-
-        (_babelHelpers$get = babelHelpers.get(Object.getPrototypeOf(TextArea.prototype), 'buildComponent', this)).call.apply(_babelHelpers$get, [this].concat(args));
-        this.html.textElement.setAttribute('rows', 5);
-      }
-    }]);
-    return TextArea;
-  }(TextComponent);
-
-  var EmailBox = function (_TextComponent) {
-    babelHelpers.inherits(EmailBox, _TextComponent);
-    babelHelpers.createClass(EmailBox, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(EmailBox), 'getInfo', this).call(this);
-        info.description = 'Email Box';
-        info.iconClass = 'glyphicon glyphicon-envelope';
-        return info;
-      }
-    }]);
-
-    function EmailBox(modulePrefix) {
-      babelHelpers.classCallCheck(this, EmailBox);
-      return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(EmailBox).call(this, modulePrefix, 'input', 'email'));
-    }
-
-    return EmailBox;
-  }(TextComponent);
-
-  var TelephoneBox = function (_TextComponent) {
-    babelHelpers.inherits(TelephoneBox, _TextComponent);
-    babelHelpers.createClass(TelephoneBox, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(TelephoneBox), 'getInfo', this).call(this);
-        info.description = 'Telephone Box';
-        info.iconClass = 'glyphicon glyphicon-earphone';
-        return info;
-      }
-    }]);
-
-    function TelephoneBox(modulePrefix) {
-      babelHelpers.classCallCheck(this, TelephoneBox);
-      return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TelephoneBox).call(this, modulePrefix, 'input', 'tel'));
-    }
-
-    return TelephoneBox;
-  }(TextComponent);
-
-  var NumberBox = function (_TextComponent) {
-    babelHelpers.inherits(NumberBox, _TextComponent);
-    babelHelpers.createClass(NumberBox, null, [{
-      key: 'getInfo',
-      value: function getInfo() {
-        var info = babelHelpers.get(Object.getPrototypeOf(NumberBox), 'getInfo', this).call(this);
-        info.description = 'Number Box';
-        info.iconClass = 'glyphicon glyphicon-subscript';
-        return info;
-      }
-    }]);
-
-    function NumberBox(modulePrefix) {
-      babelHelpers.classCallCheck(this, NumberBox);
-      return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(NumberBox).call(this, modulePrefix, 'input', 'number'));
-    }
-
-    return NumberBox;
-  }(TextComponent);
-
   /**
    * @class ControlBar
    */
@@ -1803,26 +1160,37 @@
       babelHelpers.classCallCheck(this, ComponentFabric);
 
       this.modulePrefix = modulePrefix;
-      this.componentConstructors = [RadioBtns, Checkboxes, Dropdown, TextBox, EmailBox, TelephoneBox, NumberBox, TextArea];
-
+      this.componentContructors = [];
       Object.preventExtensions(this);
     }
 
     /**
-     * @method createComponent
-     * @param  {String} componentName
-     * @return {Component}
+     * @method addComponentConstructor
+     * @param {Function} constr - Component constructor Function
+     * @return {void}
      */
 
 
     babelHelpers.createClass(ComponentFabric, [{
+      key: 'addComponentConstructor',
+      value: function addComponentConstructor(constr) {
+        this.componentConstructors = this.componentConstructors.concat([constr]);
+      }
+
+      /**
+       * @method createComponent
+       * @param  {String} componentType
+       * @return {Component}
+       */
+
+    }, {
       key: 'createComponent',
-      value: function createComponent(componentName) {
+      value: function createComponent(componentType) {
         var Comp = this.componentConstructors.find(function (c) {
-          return c.getInfo().name === componentName;
+          return c.getInfo().type === componentType;
         });
-        assert(Comp, 'Invalid component: ' + componentName);
-        return new Comp(this.modulePrefix);
+        assert(Comp, 'Invalid component: ' + componentType);
+        return new Comp();
       }
 
       /**
@@ -1831,12 +1199,12 @@
        */
 
     }, {
-      key: 'getComponentTypes',
-      value: function getComponentTypes() {
-        var types = this.componentConstructors.map(function (component) {
+      key: 'getComponentsInfo',
+      value: function getComponentsInfo() {
+        var info = this.componentConstructors.map(function (component) {
           return component.getInfo();
         });
-        return types;
+        return info;
       }
     }]);
     return ComponentFabric;
@@ -1866,7 +1234,7 @@
         var _this2 = this;
 
         var componentGroups = {};
-        var componentTypes = this.moduleCoordinator.getComponentTypes();
+        var conponentsInfo = this.moduleCoordinator.getComponentsInfo();
 
         // Create component buttons
         var _iteratorNormalCompletion = true;
@@ -1874,11 +1242,11 @@
         var _iteratorError = undefined;
 
         try {
-          for (var _iterator = componentTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var component = _step.value;
+          for (var _iterator = conponentsInfo[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var info = _step.value;
 
-            componentGroups[component.group] = componentGroups[component.group] || [];
-            componentGroups[component.group].push(component);
+            componentGroups[info.group] = componentGroups[info.group] || [];
+            componentGroups[info.group].push(info);
           }
         } catch (err) {
           _didIteratorError = true;
@@ -2098,9 +1466,9 @@
     }
 
     babelHelpers.createClass(ModuleCoordinator, [{
-      key: 'getComponentTypes',
-      value: function getComponentTypes() {
-        return this.componentFabric.getComponentTypes();
+      key: 'getComponentsInfo',
+      value: function getComponentsInfo() {
+        return this.componentFabric.getComponentsInfo();
       }
     }, {
       key: 'createComponent',

@@ -14,12 +14,12 @@ export default class ControlBar extends ViewController {
 
   buildHtml() {
     const componentGroups = {};
-    const componentTypes = this.moduleCoordinator.getComponentTypes();
+    const conponentsInfo = this.moduleCoordinator.getComponentsInfo();
 
     // Create component buttons
-    for (const component of componentTypes) {
-      componentGroups[component.group] = componentGroups[component.group] || [];
-      componentGroups[component.group].push(component);
+    for (const info of conponentsInfo) {
+      componentGroups[info.group] = componentGroups[info.group] || [];
+      componentGroups[info.group].push(info);
     }
 
     const componentsBtnGroups = createButtonGroup();
