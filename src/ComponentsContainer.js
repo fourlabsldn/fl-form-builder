@@ -1,7 +1,6 @@
 import ViewController from './ViewController';
 import ComponentShell from './ComponentShell';
 import utils from './utils/utils';
-import assert from 'fl-assert';
 
 /**
  * @class ControlBar
@@ -11,13 +10,13 @@ export default class ComponentsContainer extends ViewController {
     super(modulePrefix);
 
     // This is kept in the order they appear on screen.
-    this.components = [];
+    this.componentShells = [];
 
     // Used with component.ondestroy;
     // This must be here and not together with other class methods because
     // of the binding of 'this'
-    this.componentDestroyListener = (component) => {
-      this.deleteComponent(component);
+    this.componentDestroyListener = (shell) => {
+      this.deleteComponent(shell);
       this.trigger('change');
     };
 
@@ -30,37 +29,27 @@ export default class ComponentsContainer extends ViewController {
    * @param  {FormComponent} component
    * @param  {Boolean} showConfig
    */
-  addComponent(component, showConfig = true) {
-    this.components.push(component);
+  addComponent(component) {
     const shell = new ComponentShell;
-    shell.attachComponent(component);
     shell.setContent(component.importState({}));
+    shell.attachComponent(component);
+    this.componentShells.push(shell);
 
-    this.html.container.appendChild(component.getHtmlContainer());
-    component.on('destroy', this.componentDestroyListener);
+    this.html.container.appendChild(shell.getHtmlContainer());
+    shell.on('destroy', this.componentDestroyListener);
 
-    this.addDragButtonToComponent(component);
-    component.configToggle(showConfig);
-    component.on('change', () => this.trigger('change'));
+    this.addDragFunctionalityToShell(shell);
+    shell.on('change', () => this.trigger('change'));
   }
 
-  addDragButtonToComponent(component) {
-    const dragBtn = document.createElement('button');
-    dragBtn.type = 'button';
-    dragBtn.title = 'Drag to reorder';
-    dragBtn.setAttribute('draggable', true);
-    dragBtn.classList.add(
-      'glyphicon', // Font-awesome
-      'glyphicon-menu-hamburger'
-    );
-
+  addDragFunctionalityToShell(shell) {
     const draggingClass = `${this.modulePrefix}--dragging`;
-    dragBtn.addEventListener('dragstart', (e) => {
+    shell.on('ComponentDragstart', (sh, e) => {
       e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
-      if (this.components.length < 2) { return; }
+      if (this.componentShells.length < 2) { return; }
 
-      const container = component.getHtmlContainer();
-      const containersArray = this.components.map(c => c.getHtmlContainer());
+      const container = shell.getHtmlContainer();
+      const containersArray = this.componentShells.map(s => s.getHtmlContainer());
 
       container.classList.add(draggingClass);
 
@@ -68,42 +57,40 @@ export default class ComponentsContainer extends ViewController {
       utils.trackReorderDrag(e, container, containersArray);
     });
 
-    dragBtn.addEventListener('dragend', () => {
-      const container = component.getHtmlContainer();
+    shell.on('ComponentDragend', () => {
+      const container = shell.getHtmlContainer();
       setTimeout(() => container.classList.remove(draggingClass), 250);
 
 
       // Reorder components according to their position.
-      const beforeReordering = JSON.stringify(this.components);
-      this.components.sort((el1, el2) => {
+      const beforeReordering = JSON.stringify(this.componentShells);
+      this.componentShells.sort((el1, el2) => {
         return el1.getHtmlContainer().getBoundingClientRect().top >
                el2.getHtmlContainer().getBoundingClientRect().top;
       });
 
       // Trigger change if elements were reordered
-      const afterReordering = JSON.stringify(this.components);
+      const afterReordering = JSON.stringify(this.componentShells);
       if (beforeReordering !== afterReordering) {
         this.trigger('change');
       }
     });
-
-    component.addSidebarButton(dragBtn);
   }
 
   getAllComponents() {
-    return Array.from(this.components);
+    return Array.from(this.componentShells).map(s => s.getAttachedComponent());
   }
 
-  deleteComponent(component) {
-    const componentIndex = this.components.indexOf(component);
-    if (componentIndex === -1) {
+  deleteComponent(shell) {
+    const shellIndex = this.components.indexOf(shell);
+    if (shellIndex === -1) {
       console.warn('Removing component not in container');
       return;
     }
     // Delete element from components array
-    this.components.splice(componentIndex, 1);
-    component.removeListener('destroy', this.componentDestroyListener);
-    component.destroy();
+    this.componentShells.splice(shellIndex, 1);
+    shell.removeListener('destroy', this.componentDestroyListener);
+    shell.destroy();
   }
   /**
    * Deletes all components
@@ -114,9 +101,9 @@ export default class ComponentsContainer extends ViewController {
     // NOTE: we create a new array because deleteComponent modifies
     // 'this.components', so we would have problems as we are
     // iterating trough an array being modified.
-    const components = Array.from(this.components);
-    for (const comp of components) {
-      this.deleteComponent(comp);
+    const shells = Array.from(this.componentShells);
+    for (const shell of shells) {
+      this.deleteComponent(shell);
     }
   }
 
@@ -128,6 +115,6 @@ export default class ComponentsContainer extends ViewController {
    */
   setComponents(components) {
     this.deleteAllComponents();
-    components.forEach(comp => this.addComponent(comp, false));
+    components.forEach(comp => this.addComponent(comp));
   }
 }

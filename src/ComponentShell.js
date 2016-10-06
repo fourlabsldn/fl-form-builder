@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define*/
 
+import ViewController from './ViewController';
 import assert from 'fl-assert';
 import utils from './utils/utils';
 const cssPrefix = 'fl-fb-FormComponent';
@@ -14,64 +15,84 @@ const cssPrefix = 'fl-fb-FormComponent';
 //  const shell = new ComponentShell()
 //  shell.attachedComponent(comp);
 //  shell.setContent(comp.importState(state));
-//  shell.onDelete = myFunc;
 
-export default class ComponentShell {
-  constructor() {
-    this.state = {
-      html: buildHtml(),
-      attachedComponent: null,
-      onDelete: () => null,
-    };
+export default class ComponentShell extends ViewController {
+  constructor(modulePrefix) {
+    super(modulePrefix);
+    this.attachedComponent = null;
     Object.preventExtensions(this);
 
+    const shell = createShell();
+    this.html.container.appendChild(shell.root);
+    this.html.componentConfig = shell.componentConfig;
+    this.html.componentMain = shell.componentMain;
+    this.html.componentTypeField = shell.componentTypeField;
+
     // Listen to UI events from root.
-    const events = [
+    const uiEvents = [
       'requiredSwitchChange',
       'configHide',
       'configShow',
-      'componentDeleted',
+      'ComponentDragstart',
+      'ComponentDragend',
+      'deleteBtnClicked',
     ];
-    events.forEach(eName => {
-      this.state.html.root.addEventListener(eName, (e) => this.trigger(eName, e));
-    });
-  }
 
-  trigger(eventName, e) { // eslint-disable-line complexity
-    if (!this.attachedComponent) {
-      return;
-    }
-    switch (eventName) {
-    case 'requiredSwitchChange':
+    const acceptedEvents = [
+      ...uiEvents,
+      'change',
+      'destroy',
+    ];
+
+    this.acceptEvents(acceptedEvents);
+    uiEvents.forEach(eName => {
+      const listener = (e) => this.trigger(eName, e);
+      this.html.container.addEventListener(eName, listener);
+    });
+
+    this.on('requiredSwitchChange', (c, e) => {
+      if (!this.attachedComponent) { return; }
       this.attachedComponent.setRequired(e.target.checked);
-      break;
-    case 'configHide':
+    });
+
+    this.on('configHide', () => {
+      if (!this.attachedComponent) { return; }
       this.attachedComponent.onConfigClose();
-      break;
-    case 'configShow':
+    });
+
+    this.on('configShow', () => {
+      if (!this.attachedComponent) { return; }
       this.attachedComponent.onConfigOpen();
-      break;
-    case 'componentDeleted':
+    });
+
+    this.on('deleteBtnClicked', () => {
+      this.destroy();
+    });
+
+    this.on('destroy', () => {
+      if (!this.attachedComponent) { return; }
       this.attachedComponent.onDelete();
-      this.state.onDelete();
-      break;
-    default:
-      assert(false, `Unexpected event: ${eventName}`);
-    }
+    });
   }
 
   attachComponent(component) {
     assert(component, 'No component provided');
-    this.state.attachedComponent = component;
-    this.state.html.componentTypeField.innerHTML = component.getInfo().type;
+    this.attachedComponent = component;
+    this.html.componentTypeField.innerHTML = component.getInfo().type;
   }
 
   setContent({ main, config }) {
-    this.state.componentMain.innerHTMl = '';
-    this.state.componentMain.appendChild(main);
+    assert(main, 'No "main" html provided.');
+    assert(config, 'No "config" html provided.');
+    this.html.componentMain.innerHTMl = '';
+    this.html.componentMain.appendChild(main);
 
-    this.state.componentConfig.innerHTMl = '';
-    this.state.componentConfig.appendChild(config);
+    this.html.componentConfig.innerHTMl = '';
+    this.html.componentConfig.appendChild(config);
+  }
+
+  getAttachedComponent() {
+    return this.attachedComponent;
   }
 }
 
@@ -80,7 +101,7 @@ export default class ComponentShell {
  * @param  {ComponentInterface} component
  * @return {HTMLElement} frag HTML element ready to be added to the list.
  */
-function buildHtml() {
+function createShell() {
   // We will put everything in these two keys
   const html = {
     componentMain: null,
@@ -154,7 +175,7 @@ function buildHtml() {
   );
   deleteBtn.type = 'button';
   deleteBtn.addEventListener('click', () => {
-    utils.fireEvent(deleteBtn, 'componentDeleted');
+    utils.fireEvent(deleteBtn, 'deleteBtnClicked');
     html.root.remove();
   });
   addSidebarButton('delete', deleteBtn, sidebar);
@@ -166,11 +187,29 @@ function buildHtml() {
     'glyphicon-cog'
   );
   showConfigBtn.title = 'Configure form group';
-  this.addSidebarButton('config', showConfigBtn, sidebar);
+  addSidebarButton('config', showConfigBtn, sidebar);
 
   showConfigBtn.addEventListener('click', () => {
     showConfig(true, html);
     utils.fireEvent(okBtn, 'configHide');
+  });
+
+  const dragBtn = document.createElement('button');
+  dragBtn.type = 'button';
+  dragBtn.title = 'Drag to reorder';
+  dragBtn.setAttribute('draggable', true);
+  dragBtn.classList.add(
+    'glyphicon', // Font-awesome
+    'glyphicon-menu-hamburger'
+  );
+  addSidebarButton('drag', dragBtn, sidebar);
+
+  dragBtn.addEventListener('dragstart', (e) => {
+    utils.fireEvent(dragBtn, 'ComponentDragstart', e);
+  });
+
+  dragBtn.addEventListener('dragend', (e) => {
+    utils.fireEvent(dragBtn, 'ComponentDragend', e);
   });
 
   return html;

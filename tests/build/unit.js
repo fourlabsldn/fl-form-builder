@@ -696,63 +696,77 @@ var cssPrefix = 'fl-fb-FormComponent';
 //  const shell = new ComponentShell()
 //  shell.attachedComponent(comp);
 //  shell.setContent(comp.importState(state));
-//  shell.onDelete = myFunc;
 
-var ComponentShell = function () {
-  function ComponentShell() {
-    var _this = this;
+var ComponentShell = function (_ViewController) {
+  babelHelpers.inherits(ComponentShell, _ViewController);
 
+  function ComponentShell(modulePrefix) {
     babelHelpers.classCallCheck(this, ComponentShell);
 
-    this.state = {
-      html: buildHtml(),
-      attachedComponent: null,
-      onDelete: function onDelete() {
-        return null;
-      }
-    };
-    Object.preventExtensions(this);
+    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(ComponentShell).call(this, modulePrefix));
+
+    _this.attachedComponent = null;
+    Object.preventExtensions(_this);
+
+    var shell = createShell();
+    _this.html.container.appendChild(shell.root);
+    _this.html.componentConfig = shell.componentConfig;
+    _this.html.componentMain = shell.componentMain;
+    _this.html.componentTypeField = shell.componentTypeField;
 
     // Listen to UI events from root.
-    var events = ['requiredSwitchChange', 'configHide', 'configShow', 'componentDeleted'];
-    events.forEach(function (eName) {
-      _this.state.html.root.addEventListener(eName, function (e) {
+    var uiEvents = ['requiredSwitchChange', 'configHide', 'configShow', 'ComponentDragstart', 'ComponentDragend', 'deleteBtnClicked'];
+
+    var acceptedEvents = [].concat(uiEvents, ['change', 'destroy']);
+
+    _this.acceptEvents(acceptedEvents);
+    uiEvents.forEach(function (eName) {
+      var listener = function listener(e) {
         return _this.trigger(eName, e);
-      });
+      };
+      _this.html.container.addEventListener(eName, listener);
     });
+
+    _this.on('requiredSwitchChange', function (c, e) {
+      if (!_this.attachedComponent) {
+        return;
+      }
+      _this.attachedComponent.setRequired(e.target.checked);
+    });
+
+    _this.on('configHide', function () {
+      if (!_this.attachedComponent) {
+        return;
+      }
+      _this.attachedComponent.onConfigClose();
+    });
+
+    _this.on('configShow', function () {
+      if (!_this.attachedComponent) {
+        return;
+      }
+      _this.attachedComponent.onConfigOpen();
+    });
+
+    _this.on('deleteBtnClicked', function () {
+      _this.destroy();
+    });
+
+    _this.on('destroy', function () {
+      if (!_this.attachedComponent) {
+        return;
+      }
+      _this.attachedComponent.onDelete();
+    });
+    return _this;
   }
 
   babelHelpers.createClass(ComponentShell, [{
-    key: 'trigger',
-    value: function trigger(eventName, e) {
-      // eslint-disable-line complexity
-      if (!this.attachedComponent) {
-        return;
-      }
-      switch (eventName) {
-        case 'requiredSwitchChange':
-          this.attachedComponent.setRequired(e.target.checked);
-          break;
-        case 'configHide':
-          this.attachedComponent.onConfigClose();
-          break;
-        case 'configShow':
-          this.attachedComponent.onConfigOpen();
-          break;
-        case 'componentDeleted':
-          this.attachedComponent.onDelete();
-          this.state.onDelete();
-          break;
-        default:
-          assert(false, 'Unexpected event: ' + eventName);
-      }
-    }
-  }, {
     key: 'attachComponent',
     value: function attachComponent(component) {
       assert(component, 'No component provided');
-      this.state.attachedComponent = component;
-      this.state.html.componentTypeField.innerHTML = component.getInfo().type;
+      this.attachedComponent = component;
+      this.html.componentTypeField.innerHTML = component.getInfo().type;
     }
   }, {
     key: 'setContent',
@@ -760,17 +774,24 @@ var ComponentShell = function () {
       var main = _ref.main;
       var config = _ref.config;
 
-      this.state.componentMain.innerHTMl = '';
-      this.state.componentMain.appendChild(main);
+      assert(main, 'No "main" html provided.');
+      assert(config, 'No "config" html provided.');
+      this.html.componentMain.innerHTMl = '';
+      this.html.componentMain.appendChild(main);
 
-      this.state.componentConfig.innerHTMl = '';
-      this.state.componentConfig.appendChild(config);
+      this.html.componentConfig.innerHTMl = '';
+      this.html.componentConfig.appendChild(config);
+    }
+  }, {
+    key: 'getAttachedComponent',
+    value: function getAttachedComponent() {
+      return this.attachedComponent;
     }
   }]);
   return ComponentShell;
-}();
+}(ViewController);
 
-function buildHtml() {
+function createShell() {
   // We will put everything in these two keys
   var html = {
     componentMain: null,
@@ -834,7 +855,7 @@ function buildHtml() {
   deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
   deleteBtn.type = 'button';
   deleteBtn.addEventListener('click', function () {
-    utils.fireEvent(deleteBtn, 'componentDeleted');
+    utils.fireEvent(deleteBtn, 'deleteBtnClicked');
     html.root.remove();
   });
   addSidebarButton('delete', deleteBtn, sidebar);
@@ -844,11 +865,27 @@ function buildHtml() {
   showConfigBtn.classList.add('glyphicon', // Font-awesome
   'glyphicon-cog');
   showConfigBtn.title = 'Configure form group';
-  this.addSidebarButton('config', showConfigBtn, sidebar);
+  addSidebarButton('config', showConfigBtn, sidebar);
 
   showConfigBtn.addEventListener('click', function () {
     showConfig(true, html);
     utils.fireEvent(okBtn, 'configHide');
+  });
+
+  var dragBtn = document.createElement('button');
+  dragBtn.type = 'button';
+  dragBtn.title = 'Drag to reorder';
+  dragBtn.setAttribute('draggable', true);
+  dragBtn.classList.add('glyphicon', // Font-awesome
+  'glyphicon-menu-hamburger');
+  addSidebarButton('drag', dragBtn, sidebar);
+
+  dragBtn.addEventListener('dragstart', function (e) {
+    utils.fireEvent(dragBtn, 'ComponentDragstart', e);
+  });
+
+  dragBtn.addEventListener('dragend', function (e) {
+    utils.fireEvent(dragBtn, 'ComponentDragend', e);
   });
 
   return html;
@@ -898,13 +935,13 @@ var ComponentsContainer = function (_ViewController) {
 
     var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(ComponentsContainer).call(this, modulePrefix));
 
-    _this.components = [];
+    _this.componentShells = [];
 
     // Used with component.ondestroy;
     // This must be here and not together with other class methods because
     // of the binding of 'this'
-    _this.componentDestroyListener = function (component) {
-      _this.deleteComponent(component);
+    _this.componentDestroyListener = function (shell) {
+      _this.deleteComponent(shell);
       _this.trigger('change');
     };
 
@@ -925,44 +962,34 @@ var ComponentsContainer = function (_ViewController) {
     value: function addComponent(component) {
       var _this2 = this;
 
-      var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-      this.components.push(component);
       var shell = new ComponentShell();
-      shell.attachComponent(component);
       shell.setContent(component.importState({}));
+      shell.attachComponent(component);
+      this.componentShells.push(shell);
 
-      this.html.container.appendChild(component.getHtmlContainer());
-      component.on('destroy', this.componentDestroyListener);
+      this.html.container.appendChild(shell.getHtmlContainer());
+      shell.on('destroy', this.componentDestroyListener);
 
-      this.addDragButtonToComponent(component);
-      component.configToggle(showConfig);
-      component.on('change', function () {
+      this.addDragFunctionalityToShell(shell);
+      shell.on('change', function () {
         return _this2.trigger('change');
       });
     }
   }, {
-    key: 'addDragButtonToComponent',
-    value: function addDragButtonToComponent(component) {
+    key: 'addDragFunctionalityToShell',
+    value: function addDragFunctionalityToShell(shell) {
       var _this3 = this;
 
-      var dragBtn = document.createElement('button');
-      dragBtn.type = 'button';
-      dragBtn.title = 'Drag to reorder';
-      dragBtn.setAttribute('draggable', true);
-      dragBtn.classList.add('glyphicon', // Font-awesome
-      'glyphicon-menu-hamburger');
-
       var draggingClass = this.modulePrefix + '--dragging';
-      dragBtn.addEventListener('dragstart', function (e) {
+      shell.on('ComponentDragstart', function (sh, e) {
         e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
-        if (_this3.components.length < 2) {
+        if (_this3.componentShells.length < 2) {
           return;
         }
 
-        var container = component.getHtmlContainer();
-        var containersArray = _this3.components.map(function (c) {
-          return c.getHtmlContainer();
+        var container = shell.getHtmlContainer();
+        var containersArray = _this3.componentShells.map(function (s) {
+          return s.getHtmlContainer();
         });
 
         container.classList.add(draggingClass);
@@ -971,44 +998,44 @@ var ComponentsContainer = function (_ViewController) {
         utils.trackReorderDrag(e, container, containersArray);
       });
 
-      dragBtn.addEventListener('dragend', function () {
-        var container = component.getHtmlContainer();
+      shell.on('ComponentDragend', function () {
+        var container = shell.getHtmlContainer();
         setTimeout(function () {
           return container.classList.remove(draggingClass);
         }, 250);
 
         // Reorder components according to their position.
-        var beforeReordering = JSON.stringify(_this3.components);
-        _this3.components.sort(function (el1, el2) {
+        var beforeReordering = JSON.stringify(_this3.componentShells);
+        _this3.componentShells.sort(function (el1, el2) {
           return el1.getHtmlContainer().getBoundingClientRect().top > el2.getHtmlContainer().getBoundingClientRect().top;
         });
 
         // Trigger change if elements were reordered
-        var afterReordering = JSON.stringify(_this3.components);
+        var afterReordering = JSON.stringify(_this3.componentShells);
         if (beforeReordering !== afterReordering) {
           _this3.trigger('change');
         }
       });
-
-      component.addSidebarButton(dragBtn);
     }
   }, {
     key: 'getAllComponents',
     value: function getAllComponents() {
-      return Array.from(this.components);
+      return Array.from(this.componentShells).map(function (s) {
+        return s.getAttachedComponent();
+      });
     }
   }, {
     key: 'deleteComponent',
-    value: function deleteComponent(component) {
-      var componentIndex = this.components.indexOf(component);
-      if (componentIndex === -1) {
+    value: function deleteComponent(shell) {
+      var shellIndex = this.components.indexOf(shell);
+      if (shellIndex === -1) {
         console.warn('Removing component not in container');
         return;
       }
       // Delete element from components array
-      this.components.splice(componentIndex, 1);
-      component.removeListener('destroy', this.componentDestroyListener);
-      component.destroy();
+      this.componentShells.splice(shellIndex, 1);
+      shell.removeListener('destroy', this.componentDestroyListener);
+      shell.destroy();
     }
     /**
      * Deletes all components
@@ -1022,16 +1049,16 @@ var ComponentsContainer = function (_ViewController) {
       // NOTE: we create a new array because deleteComponent modifies
       // 'this.components', so we would have problems as we are
       // iterating trough an array being modified.
-      var components = Array.from(this.components);
+      var shells = Array.from(this.componentShells);
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var comp = _step.value;
+        for (var _iterator = shells[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var shell = _step.value;
 
-          this.deleteComponent(comp);
+          this.deleteComponent(shell);
         }
       } catch (err) {
         _didIteratorError = true;
@@ -1063,7 +1090,7 @@ var ComponentsContainer = function (_ViewController) {
 
       this.deleteAllComponents();
       components.forEach(function (comp) {
-        return _this4.addComponent(comp, false);
+        return _this4.addComponent(comp);
       });
     }
   }]);
