@@ -684,291 +684,204 @@ var utils = {
   overshadow: overshadow
 };
 
-/**
- * @abstract @class FormComponent
- */
+var cssPrefix = 'fl-fb-FormComponent';
 
-var FormComponent = function (_ViewController) {
-  babelHelpers.inherits(FormComponent, _ViewController);
-  babelHelpers.createClass(FormComponent, null, [{
-    key: 'getInfo',
-    value: function getInfo() {
-      return {
-        description: 'General Component',
-        iconClass: undefined,
-        name: this.name
-      };
-    }
-  }]);
+// This will create the wrapper for the element to be shown in the
+// form builder. It will take care of the show/hide config buttons
+// as well as the delete and move buttons.
+// It will take care of informing the component when any relevant action is
+// performed, such as the required button being toggled on/off
+// Use it as such
+//
+//  const shell = new ComponentShell()
+//  shell.attachedComponent(comp);
+//  shell.setContent(comp.importState(state));
+//  shell.onDelete = myFunc;
 
-  function FormComponent(modulePrefix) {
-    babelHelpers.classCallCheck(this, FormComponent);
+var ComponentShell = function () {
+  function ComponentShell() {
+    var _this = this;
 
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
+    babelHelpers.classCallCheck(this, ComponentShell);
 
-    _this.cssPrefix = modulePrefix + '-FormComponent';
-    _this.html.container.classList.add(modulePrefix + '-FormComponent');
+    this.state = {
+      html: buildHtml(),
+      attachedComponent: null,
+      onDelete: function onDelete() {
+        return null;
+      }
+    };
+    Object.preventExtensions(this);
 
-    _this.editables = new Set();
-    _this.isRequired = false;
-    _this.isConfigVisible = false;
-    _this.isDetroyed = false;
-    _this.lastState = null;
-
-    _this.acceptEvents('destroy', 'change');
-
-    // Focused on config show
-    _this.focusElement = null;
-    _this.buildHtml();
-    _this.setRequired(false);
-    return _this;
+    // Listen to UI events from root.
+    var events = ['requiredSwitchChange', 'configHide', 'configShow', 'componentDeleted'];
+    events.forEach(function (eName) {
+      _this.state.html.root.addEventListener(eName, function (e) {
+        return _this.trigger(eName, e);
+      });
+    });
   }
 
-  babelHelpers.createClass(FormComponent, [{
-    key: 'buildHtml',
-    value: function buildHtml() {
-      var _this2 = this;
-
-      var frag = document.createDocumentFragment();
-
-      // -- Content --
-      this.html.content = document.createElement('div');
-      this.html.content.classList.add(this.cssPrefix + '-content');
-      frag.appendChild(this.html.content);
-
-      this.html.title = document.createElement('h3');
-      this.html.title.innerText = 'Add a title';
-      this.addEditable(this.html.title);
-      this.html.content.appendChild(this.html.title);
-
-      // -- Configuration --
-      this.html.configuration = document.createElement('div');
-      var configurationCssClass = this.cssPrefix + '-configuration';
-      this.html.configuration.classList.add(configurationCssClass);
-      frag.appendChild(this.html.configuration);
-
-      var configurationButtons = document.createElement('div');
-      configurationButtons.classList.add(this.cssPrefix + '-configuration-buttons');
-      this.html.configuration.appendChild(configurationButtons);
-
-      this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
-      this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
-      this.html.requiredSwitch.addEventListener('change', function (e) {
-        var checked = e.target.checked;
-        _this2.setRequired(checked);
-      });
-      configurationButtons.appendChild(this.html.requiredSwitch);
-
-      var elementName = document.createElement('span');
-      elementName.classList.add(configurationCssClass + '-elementName');
-      elementName.innerHTML = this.constructor.name;
-      configurationButtons.appendChild(elementName);
-
-      var okBtn = document.createElement('button');
-      okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
-      'btn-sm', 'btn-default', 'glyphicon', // Font-awesome
-      'glyphicon-ok');
-      okBtn.type = 'button';
-      okBtn.addEventListener('click', function () {
-        _this2.configToggle();
-      });
-      configurationButtons.appendChild(okBtn);
-
-      // -- Sidebar --
-      this.html.sidebar = document.createElement('div');
-      var sidebarCssClass = this.cssPrefix + '-sidebar';
-      this.html.sidebar.classList.add(sidebarCssClass);
-      frag.appendChild(this.html.sidebar);
-
-      var deleteBtn = document.createElement('button');
-      deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
-      deleteBtn.type = 'button';
-      deleteBtn.addEventListener('click', function () {
-        return _this2.destroy();
-      });
-      this.addSidebarButton(deleteBtn, 'delete');
-
-      var showConfigBtn = document.createElement('button');
-      showConfigBtn.type = 'button';
-      showConfigBtn.classList.add('glyphicon', // Font-awesome
-      'glyphicon-cog');
-      showConfigBtn.title = 'Configure form group';
-      this.addSidebarButton(showConfigBtn, 'config');
-
-      showConfigBtn.addEventListener('click', function () {
-        _this2.configToggle();
-      });
-
-      this.html.container.appendChild(frag);
-    }
-  }, {
-    key: 'addSidebarButton',
-    value: function addSidebarButton(button, elementName) {
-      var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
-      button.classList.add(className);
-      this.html.sidebar.insertBefore(button, this.html.sidebar.children[0]);
-    }
-
-    /**
-     * @method addEditable
-     * @param  {HTMLElement} element
-     */
-
-  }, {
-    key: 'addEditable',
-    value: function addEditable(element) {
-      element.classList.add(this.cssPrefix + '-editable');
-      this.editables.add(element);
-      if (this.isConfigVisible) {
-        this.enableEditing(true);
-      }
-    }
-
-    /**
-     * @method enableEditing
-     * @param  {Boolean} enable - Whether to enable editing or not.
-     * @return {void}
-     */
-
-  }, {
-    key: 'enableEditing',
-    value: function enableEditing() {
-      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-      this.editables.forEach(function (element) {
-        element.setAttribute('contenteditable', enable);
-      });
-    }
-
-    /**
-     * @method configToggle
-     * @param  {Boolean} forceState Optional parameter to force a state.
-     * @return {void}
-     */
-
-  }, {
-    key: 'configToggle',
-    value: function configToggle() {
-      var _this3 = this;
-
-      var newState = arguments.length <= 0 || arguments[0] === undefined ? !this.isConfigVisible : arguments[0];
-
-      if (this.isConfigVisible === newState) {
+  babelHelpers.createClass(ComponentShell, [{
+    key: 'trigger',
+    value: function trigger(eventName, e) {
+      // eslint-disable-line complexity
+      if (!this.attachedComponent) {
         return;
       }
-      this.isConfigVisible = newState;
-      if (!newState) {
-        // hide
-        this.html.container.classList.remove(this.cssPrefix + '--configuration-visible');
-        this.enableEditing(false);
-        this.triggerChangeIfNeeded();
-      } else {
-        // show
-        this.html.container.classList.add(this.cssPrefix + '--configuration-visible');
-        this.enableEditing(true);
-
-        // hide on clickOut
-        utils.onClickOut([this.html.container, this.html.configuration], function () {
-          if (_this3.isConfigVisible && !_this3.isDetroyed) {
-            _this3.configToggle();
-          }
-        });
-        this.focus();
-      }
-    }
-
-    // Focus on the appropriate element
-
-  }, {
-    key: 'focus',
-    value: function focus() {
-      var _this4 = this;
-
-      if (this.focusElement) {
-        // NOTE: There is a bug that for some reason it doesn't focus if you just
-        // call focus() straight away. setTimeout solves it.
-        // see http:// goo.gl/UjKOk5
-        setTimeout(function () {
-          _this4.focusElement.focus();
-        }, 15);
+      switch (eventName) {
+        case 'requiredSwitchChange':
+          this.attachedComponent.setRequired(e.target.checked);
+          break;
+        case 'configHide':
+          this.attachedComponent.onConfigClose();
+          break;
+        case 'configShow':
+          this.attachedComponent.onConfigOpen();
+          break;
+        case 'componentDeleted':
+          this.attachedComponent.onDelete();
+          this.state.onDelete();
+          break;
+        default:
+          assert(false, 'Unexpected event: ' + eventName);
       }
     }
   }, {
-    key: 'destroy',
-    value: function destroy() {
-      if (this.isDetroyed) {
-        return;
-      }
-      this.isDetroyed = true;
-      babelHelpers.get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
+    key: 'attachComponent',
+    value: function attachComponent(component) {
+      assert(component, 'No component provided');
+      this.state.attachedComponent = component;
+      this.state.html.componentTypeField.innerHTML = component.getInfo().type;
     }
-
-    /**
-     * @method setRequired
-     * @param  {Boolean} required
-     */
-
   }, {
-    key: 'setRequired',
-    value: function setRequired(required) {
-      this.isRequired = !!required;
-      this.html.requiredSwitch.input.checked = !!required;
-    }
+    key: 'setContent',
+    value: function setContent(_ref) {
+      var main = _ref.main;
+      var config = _ref.config;
 
-    /**
-     * Exports the information of a component in one object
-     * @method exportState
-     * @return {Object}
-     */
+      this.state.componentMain.innerHTMl = '';
+      this.state.componentMain.appendChild(main);
 
-  }, {
-    key: 'exportState',
-    value: function exportState() {
-      return {
-        required: this.isRequired,
-        title: this.html.title.textContent,
-        type: this.constructor.name
-      };
-    }
-
-    /**
-     * Sets the component state the the options specified in the
-     * state object
-     * @method importState
-     * @param  {Object} state
-     * @return {void}
-     */
-
-  }, {
-    key: 'importState',
-    value: function importState(state) {
-      assert(state.type === this.constructor.name, 'Importing incompatible state. Expected ' + this.constructor.name + ', got ' + state.type);
-      this.html.title.textContent = state.title;
-      this.setRequired(state.required);
-    }
-
-    /**
-     * Triggers the change event if any change happened.
-     * @method triggerChangeIfNeeded
-     * @return {void}
-     */
-
-  }, {
-    key: 'triggerChangeIfNeeded',
-    value: function triggerChangeIfNeeded() {
-      var currentState = this.exportState();
-      var currStateJson = JSON.stringify(currentState);
-
-      var lastStateJson = JSON.stringify(this.lastState);
-      var changeHappened = lastStateJson !== currStateJson;
-      if (changeHappened && this.lastState !== null) {
-        this.trigger('change');
-      }
-      this.lastState = currentState;
+      this.state.componentConfig.innerHTMl = '';
+      this.state.componentConfig.appendChild(config);
     }
   }]);
-  return FormComponent;
-}(ViewController);
+  return ComponentShell;
+}();
+
+function buildHtml() {
+  // We will put everything in these two keys
+  var html = {
+    componentMain: null,
+    componentConfig: null,
+    root: document.createElement('div'),
+    componentTypeField: null
+  };
+  Object.preventExtensions(html);
+
+  // -- Main content --
+  html.componentMain = document.createElement('div');
+  html.componentMain.classList.add(cssPrefix + '-content');
+  html.root.appendChild(html.componentMain);
+
+  // -- Configuration --
+  var config = document.createElement('div');
+  var configurationCssClass = cssPrefix + '-configuration';
+  config.classList.add(configurationCssClass);
+  html.root.appendChild(config);
+
+  html.componentConfig = document.createElement('div');
+  html.componentConfig.classList.add('${cssPrefix}-configuration-options');
+  config.appendChild(configurationButtons);
+
+  var configurationButtons = document.createElement('div');
+  configurationButtons.classList.add(cssPrefix + '-configuration-buttons');
+  config.appendChild(configurationButtons);
+
+  var requiredSwitch = utils.createSwitch('Required', 'fl-fb');
+  requiredSwitch.classList.add(configurationCssClass + '-switch-required');
+
+  requiredSwitch.addEventListener('change', function (e) {
+    utils.fireEvent(e.target, 'requiredSwitchChange');
+  });
+
+  configurationButtons.appendChild(requiredSwitch);
+
+  html.componentTypeField = document.createElement('span');
+  html.componentTypeField.classList.add(configurationCssClass + '-elementName');
+  html.componentTypeField.innerHTML = 'Type not set';
+  configurationButtons.appendChild(html.componentTypeField);
+
+  var okBtn = document.createElement('button');
+  okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
+  'btn-sm', 'btn-default', 'glyphicon', // Font-awesome
+  'glyphicon-ok');
+  okBtn.type = 'button';
+  okBtn.addEventListener('click', function () {
+    showConfig(false, html);
+    utils.fireEvent(okBtn, 'configHide');
+  });
+  configurationButtons.appendChild(okBtn);
+
+  // -- Sidebar --
+  var sidebar = document.createElement('div');
+  var sidebarCssClass = cssPrefix + '-sidebar';
+  sidebar.classList.add(sidebarCssClass);
+  html.root.appendChild(sidebar);
+
+  var deleteBtn = document.createElement('button');
+  deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
+  deleteBtn.type = 'button';
+  deleteBtn.addEventListener('click', function () {
+    utils.fireEvent(deleteBtn, 'componentDeleted');
+    html.root.remove();
+  });
+  addSidebarButton('delete', deleteBtn, sidebar);
+
+  var showConfigBtn = document.createElement('button');
+  showConfigBtn.type = 'button';
+  showConfigBtn.classList.add('glyphicon', // Font-awesome
+  'glyphicon-cog');
+  showConfigBtn.title = 'Configure form group';
+  this.addSidebarButton('config', showConfigBtn, sidebar);
+
+  showConfigBtn.addEventListener('click', function () {
+    showConfig(true, html);
+    utils.fireEvent(okBtn, 'configHide');
+  });
+
+  return html;
+}
+
+/**
+ * @method showConfig
+ * @param  {Boolean} show
+ * @return {void}
+ */
+function showConfig(show, shellHtml) {
+  if (show) {
+    // show
+    shellHtml.main.classList.add(cssPrefix + '--configuration-visible');
+
+    // hide on clickOut
+    utils.onClickOut([shellHtml.main, shellHtml.config], function () {
+      var ComponentWasNotDeleted = shellHtml.root.parentElement;
+      if (ComponentWasNotDeleted) {
+        showConfig(false, shellHtml);
+      }
+    });
+  } else {
+    // hide
+    shellHtml.main.classList.remove(cssPrefix + '--configuration-visible');
+  }
+}
+
+function addSidebarButton(elementName, button, sidebar) {
+  var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
+  button.classList.add(className);
+  sidebar.insertBefore(button, sidebar.children[0]);
+}
 
 /**
  * @class ControlBar
@@ -1014,8 +927,11 @@ var ComponentsContainer = function (_ViewController) {
 
       var showConfig = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
 
-      assert(component instanceof FormComponent, 'Invalid component being added. No an instance of Component.');
       this.components.push(component);
+      var shell = new ComponentShell();
+      shell.attachComponent(component);
+      shell.setContent(component.importState({}));
+
       this.html.container.appendChild(component.getHtmlContainer());
       component.on('destroy', this.componentDestroyListener);
 
@@ -1469,9 +1385,9 @@ var ModuleCoordinator = function () {
   }
 
   babelHelpers.createClass(ModuleCoordinator, [{
-    key: 'getComponentTypes',
-    value: function getComponentTypes() {
-      return this.componentFabric.getComponentTypes();
+    key: 'getComponentsInfo',
+    value: function getComponentsInfo() {
+      return this.componentFabric.getComponentsInfo();
     }
   }, {
     key: 'createComponent',
@@ -1592,6 +1508,292 @@ var ModuleCoordinator = function () {
   }]);
   return ModuleCoordinator;
 }();
+
+/**
+ * @abstract @class FormComponent
+ */
+
+var FormComponent = function (_ViewController) {
+  babelHelpers.inherits(FormComponent, _ViewController);
+  babelHelpers.createClass(FormComponent, null, [{
+    key: 'getInfo',
+    value: function getInfo() {
+      return {
+        description: 'General Component',
+        iconClass: undefined,
+        name: this.name
+      };
+    }
+  }]);
+
+  function FormComponent(modulePrefix) {
+    babelHelpers.classCallCheck(this, FormComponent);
+
+    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(FormComponent).call(this, modulePrefix));
+
+    _this.cssPrefix = modulePrefix + '-FormComponent';
+    _this.html.container.classList.add(modulePrefix + '-FormComponent');
+
+    _this.editables = new Set();
+    _this.isRequired = false;
+    _this.isConfigVisible = false;
+    _this.isDetroyed = false;
+    _this.lastState = null;
+
+    _this.acceptEvents('destroy', 'change');
+
+    // Focused on config show
+    _this.focusElement = null;
+    _this.buildHtml();
+    _this.setRequired(false);
+    return _this;
+  }
+
+  babelHelpers.createClass(FormComponent, [{
+    key: 'buildHtml',
+    value: function buildHtml() {
+      var _this2 = this;
+
+      var frag = document.createDocumentFragment();
+
+      // -- Content --
+      this.html.content = document.createElement('div');
+      this.html.content.classList.add(this.cssPrefix + '-content');
+      frag.appendChild(this.html.content);
+
+      this.html.title = document.createElement('h3');
+      this.html.title.innerText = 'Add a title';
+      this.addEditable(this.html.title);
+      this.html.content.appendChild(this.html.title);
+
+      // -- Configuration --
+      this.html.configuration = document.createElement('div');
+      var configurationCssClass = this.cssPrefix + '-configuration';
+      this.html.configuration.classList.add(configurationCssClass);
+      frag.appendChild(this.html.configuration);
+
+      var configurationButtons = document.createElement('div');
+      configurationButtons.classList.add(this.cssPrefix + '-configuration-buttons');
+      this.html.configuration.appendChild(configurationButtons);
+
+      this.html.requiredSwitch = utils.createSwitch('Required', this.modulePrefix);
+      this.html.requiredSwitch.classList.add(configurationCssClass + '-switch-required');
+      this.html.requiredSwitch.addEventListener('change', function (e) {
+        var checked = e.target.checked;
+        _this2.setRequired(checked);
+      });
+      configurationButtons.appendChild(this.html.requiredSwitch);
+
+      var elementName = document.createElement('span');
+      elementName.classList.add(configurationCssClass + '-elementName');
+      elementName.innerHTML = this.constructor.name;
+      configurationButtons.appendChild(elementName);
+
+      var okBtn = document.createElement('button');
+      okBtn.classList.add(configurationCssClass + '-btn-ok', 'btn', // Bootstrap
+      'btn-sm', 'btn-default', 'glyphicon', // Font-awesome
+      'glyphicon-ok');
+      okBtn.type = 'button';
+      okBtn.addEventListener('click', function () {
+        _this2.configToggle();
+      });
+      configurationButtons.appendChild(okBtn);
+
+      // -- Sidebar --
+      this.html.sidebar = document.createElement('div');
+      var sidebarCssClass = this.cssPrefix + '-sidebar';
+      this.html.sidebar.classList.add(sidebarCssClass);
+      frag.appendChild(this.html.sidebar);
+
+      var deleteBtn = document.createElement('button');
+      deleteBtn.classList.add('glyphicon', 'glyphicon-trash');
+      deleteBtn.type = 'button';
+      deleteBtn.addEventListener('click', function () {
+        return _this2.destroy();
+      });
+      this.addSidebarButton(deleteBtn, 'delete');
+
+      var showConfigBtn = document.createElement('button');
+      showConfigBtn.type = 'button';
+      showConfigBtn.classList.add('glyphicon', // Font-awesome
+      'glyphicon-cog');
+      showConfigBtn.title = 'Configure form group';
+      this.addSidebarButton(showConfigBtn, 'config');
+
+      showConfigBtn.addEventListener('click', function () {
+        _this2.configToggle();
+      });
+
+      this.html.container.appendChild(frag);
+    }
+  }, {
+    key: 'addSidebarButton',
+    value: function addSidebarButton(button, elementName) {
+      var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
+      button.classList.add(className);
+      this.html.sidebar.insertBefore(button, this.html.sidebar.children[0]);
+    }
+
+    /**
+     * @method addEditable
+     * @param  {HTMLElement} element
+     */
+
+  }, {
+    key: 'addEditable',
+    value: function addEditable(element) {
+      element.classList.add(this.cssPrefix + '-editable');
+      this.editables.add(element);
+      if (this.isConfigVisible) {
+        this.enableEditing(true);
+      }
+    }
+
+    /**
+     * @method enableEditing
+     * @param  {Boolean} enable - Whether to enable editing or not.
+     * @return {void}
+     */
+
+  }, {
+    key: 'enableEditing',
+    value: function enableEditing() {
+      var enable = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+      this.editables.forEach(function (element) {
+        element.setAttribute('contenteditable', enable);
+      });
+    }
+
+    /**
+     * @method configToggle
+     * @param  {Boolean} forceState Optional parameter to force a state.
+     * @return {void}
+     */
+
+  }, {
+    key: 'configToggle',
+    value: function configToggle() {
+      var _this3 = this;
+
+      var newState = arguments.length <= 0 || arguments[0] === undefined ? !this.isConfigVisible : arguments[0];
+
+      if (this.isConfigVisible === newState) {
+        return;
+      }
+      this.isConfigVisible = newState;
+      if (!newState) {
+        // hide
+        this.html.container.classList.remove(this.cssPrefix + '--configuration-visible');
+        this.enableEditing(false);
+        this.triggerChangeIfNeeded();
+      } else {
+        // show
+        this.html.container.classList.add(this.cssPrefix + '--configuration-visible');
+        this.enableEditing(true);
+
+        // hide on clickOut
+        utils.onClickOut([this.html.container, this.html.configuration], function () {
+          if (_this3.isConfigVisible && !_this3.isDetroyed) {
+            _this3.configToggle();
+          }
+        });
+        this.focus();
+      }
+    }
+
+    // Focus on the appropriate element
+
+  }, {
+    key: 'focus',
+    value: function focus() {
+      var _this4 = this;
+
+      if (this.focusElement) {
+        // NOTE: There is a bug that for some reason it doesn't focus if you just
+        // call focus() straight away. setTimeout solves it.
+        // see http:// goo.gl/UjKOk5
+        setTimeout(function () {
+          _this4.focusElement.focus();
+        }, 15);
+      }
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      if (this.isDetroyed) {
+        return;
+      }
+      this.isDetroyed = true;
+      babelHelpers.get(Object.getPrototypeOf(FormComponent.prototype), 'destroy', this).call(this);
+    }
+
+    /**
+     * @method setRequired
+     * @param  {Boolean} required
+     */
+
+  }, {
+    key: 'setRequired',
+    value: function setRequired(required) {
+      this.isRequired = !!required;
+      this.html.requiredSwitch.input.checked = !!required;
+    }
+
+    /**
+     * Exports the information of a component in one object
+     * @method exportState
+     * @return {Object}
+     */
+
+  }, {
+    key: 'exportState',
+    value: function exportState() {
+      return {
+        required: this.isRequired,
+        title: this.html.title.textContent,
+        type: this.constructor.name
+      };
+    }
+
+    /**
+     * Sets the component state the the options specified in the
+     * state object
+     * @method importState
+     * @param  {Object} state
+     * @return {void}
+     */
+
+  }, {
+    key: 'importState',
+    value: function importState(state) {
+      assert(state.type === this.constructor.name, 'Importing incompatible state. Expected ' + this.constructor.name + ', got ' + state.type);
+      this.html.title.textContent = state.title;
+      this.setRequired(state.required);
+    }
+
+    /**
+     * Triggers the change event if any change happened.
+     * @method triggerChangeIfNeeded
+     * @return {void}
+     */
+
+  }, {
+    key: 'triggerChangeIfNeeded',
+    value: function triggerChangeIfNeeded() {
+      var currentState = this.exportState();
+      var currStateJson = JSON.stringify(currentState);
+
+      var lastStateJson = JSON.stringify(this.lastState);
+      var changeHappened = lastStateJson !== currStateJson;
+      if (changeHappened && this.lastState !== null) {
+        this.trigger('change');
+      }
+      this.lastState = currentState;
+    }
+  }]);
+  return FormComponent;
+}(ViewController);
 
 var OptionsComponent = function (_FormComponent) {
   babelHelpers.inherits(OptionsComponent, _FormComponent);

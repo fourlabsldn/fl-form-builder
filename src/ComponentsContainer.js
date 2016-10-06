@@ -1,5 +1,5 @@
 import ViewController from './ViewController';
-import FormComponent from './Components/FormComponent';
+import ComponentShell from './ComponentShell';
 import utils from './utils/utils';
 import assert from 'fl-assert';
 
@@ -31,9 +31,11 @@ export default class ComponentsContainer extends ViewController {
    * @param  {Boolean} showConfig
    */
   addComponent(component, showConfig = true) {
-    assert(component instanceof FormComponent,
-      'Invalid component being added. No an instance of Component.');
     this.components.push(component);
+    const shell = new ComponentShell;
+    shell.attachComponent(component);
+    shell.setContent(component.importState({}));
+
     this.html.container.appendChild(component.getHtmlContainer());
     component.on('destroy', this.componentDestroyListener);
 
