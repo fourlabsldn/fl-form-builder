@@ -662,12 +662,26 @@ function fireEvent(targetElement, eventName, detailObj) {
   targetElement.dispatchEvent(event);
 }
 
+// Creates a new object with properties of the old one
+// ovewritten by properties of the new object.
+// No new properties of the new Object are added.
+// overshadow Object -> Object -> Object
+function overshadow(oldObj, newObj) {
+  return Object.keys(oldObj).reduce(function (result, key) {
+    // We want to use values from newObj even if the value is set to undefined,
+    // but not use it if it is not set at all. That's why we use hasOwnProperty.
+    result[key] = newObj.hasOwnProperty(key) ? newObj[key] : oldObj[key]; // eslint-disable-line no-param-reassign, max-len
+    return result;
+  }, {});
+}
+
 var utils = {
   trackReorderDrag: trackReorderDrag,
   createSwitch: createSwitch,
   onClickOut: onClickOut,
   fireEvent: fireEvent,
-  blinkRed: blinkRed
+  blinkRed: blinkRed,
+  overshadow: overshadow
 };
 
 /**

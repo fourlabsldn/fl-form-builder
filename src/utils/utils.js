@@ -3,6 +3,7 @@ import onClickOut from './onClickOut';
 import blinkRed from './blinkRed';
 import trackReorderDrag from './trackReorderDrag';
 import fireEvent from './fireEvent';
+import overshadow from './overshadow';
 
 export default {
   trackReorderDrag,
@@ -10,4 +11,5 @@ export default {
   onClickOut,
   fireEvent,
   blinkRed,
+  overshadow,
 };

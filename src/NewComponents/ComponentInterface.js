@@ -30,9 +30,10 @@ export default class ComponentInterface {
   /**
    * Add required: true to the element's state
    * @method setRequired
+   * @param {Boolean} - whether setting required or not required.
    * @return {void}
    */
-  setRequired() {}
+  setRequired(required) {}
 
   /**
    * Return whether the elment is required or not.
@@ -49,7 +50,8 @@ export default class ComponentInterface {
   onConfigOpen() {}
 
   /**
-   * Chance to do something when config closes
+   * Chance to do something when config closes and add
+   * whatever was changed to your state
    * @method onConfigClose
    * @return void
    */
