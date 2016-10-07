@@ -6,7 +6,7 @@ import assert from 'fl-assert';
 export default class ComponentFabric {
   constructor(modulePrefix) {
     this.modulePrefix = modulePrefix;
-    this.componentContructors = [];
+    this.componentConstructors = [];
     Object.preventExtensions(this);
   }
 

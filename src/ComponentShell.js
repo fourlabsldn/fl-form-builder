@@ -44,7 +44,7 @@ export default class ComponentShell extends ViewController {
       'destroy',
     ];
 
-    this.acceptEvents(acceptedEvents);
+    this.acceptEvents(...acceptedEvents);
     uiEvents.forEach(eName => {
       const listener = (e) => this.trigger(eName, e);
       this.html.container.addEventListener(eName, listener);
@@ -78,7 +78,7 @@ export default class ComponentShell extends ViewController {
   attachComponent(component) {
     assert(component, 'No component provided');
     this.attachedComponent = component;
-    this.html.componentTypeField.innerHTML = component.getInfo().type;
+    this.html.componentTypeField.innerHTML = component.constructor.getInfo().type;
   }
 
   setContent({ main, config }) {
@@ -125,8 +125,8 @@ function createShell() {
   html.root.appendChild(config);
 
   html.componentConfig = document.createElement('div');
-  html.componentConfig.classList.add('${cssPrefix}-configuration-options');
-  config.appendChild(configurationButtons);
+  html.componentConfig.classList.add(`${cssPrefix}-configuration-options`);
+  config.appendChild(html.componentConfig);
 
   const configurationButtons = document.createElement('div');
   configurationButtons.classList.add(`${cssPrefix}-configuration-buttons`);
@@ -243,8 +243,8 @@ function showConfig(show, shellHtml) {
 
 function addSidebarButton(elementName, button, sidebar) {
   const className = elementName ?
-    `${this.cssPrefix}-sidebar-btn-${elementName}` :
-    `${this.cssPrefix}-sidebar-btn`;
+    `${cssPrefix}-sidebar-btn-${elementName}` :
+    `${cssPrefix}-sidebar-btn`;
   button.classList.add(className);
   sidebar.insertBefore(button, sidebar.children[0]);
 }

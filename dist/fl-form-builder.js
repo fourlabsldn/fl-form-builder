@@ -60,6 +60,16 @@
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
   };
 
+  babelHelpers.toConsumableArray = function (arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  };
+
   babelHelpers;
 
   // Bug checking function that will throw an error whenever
@@ -691,7 +701,7 @@
 
       var acceptedEvents = [].concat(uiEvents, ['change', 'destroy']);
 
-      _this.acceptEvents(acceptedEvents);
+      _this.acceptEvents.apply(_this, babelHelpers.toConsumableArray(acceptedEvents));
       uiEvents.forEach(function (eName) {
         var listener = function listener(e) {
           return _this.trigger(eName, e);
@@ -738,7 +748,7 @@
       value: function attachComponent(component) {
         assert(component, 'No component provided');
         this.attachedComponent = component;
-        this.html.componentTypeField.innerHTML = component.getInfo().type;
+        this.html.componentTypeField.innerHTML = component.constructor.getInfo().type;
       }
     }, {
       key: 'setContent',
@@ -785,8 +795,8 @@
     html.root.appendChild(config);
 
     html.componentConfig = document.createElement('div');
-    html.componentConfig.classList.add('${cssPrefix}-configuration-options');
-    config.appendChild(configurationButtons);
+    html.componentConfig.classList.add(cssPrefix + '-configuration-options');
+    config.appendChild(html.componentConfig);
 
     var configurationButtons = document.createElement('div');
     configurationButtons.classList.add(cssPrefix + '-configuration-buttons');
@@ -887,7 +897,7 @@
   }
 
   function addSidebarButton(elementName, button, sidebar) {
-    var className = elementName ? this.cssPrefix + '-sidebar-btn-' + elementName : this.cssPrefix + '-sidebar-btn';
+    var className = elementName ? cssPrefix + '-sidebar-btn-' + elementName : cssPrefix + '-sidebar-btn';
     button.classList.add(className);
     sidebar.insertBefore(button, sidebar.children[0]);
   }
@@ -934,7 +944,7 @@
       value: function addComponent(component) {
         var _this2 = this;
 
-        var shell = new ComponentShell();
+        var shell = new ComponentShell(this.modulePrefix);
         shell.setContent(component.importState({}));
         shell.attachComponent(component);
         this.componentShells.push(shell);
@@ -1078,7 +1088,7 @@
       babelHelpers.classCallCheck(this, ComponentFabric);
 
       this.modulePrefix = modulePrefix;
-      this.componentContructors = [];
+      this.componentConstructors = [];
       Object.preventExtensions(this);
     }
 
@@ -1284,8 +1294,8 @@
 
         var listItem = document.createElement('li');
         var clickable = document.createElement('a');
-        clickable.name = buttonInfo.name;
-        clickable.textContent = buttonInfo.description;
+        clickable.name = buttonInfo.type;
+        clickable.textContent = buttonInfo.displayName;
         clickable.classList.add(subButtonsClass);
 
         listItem.appendChild(clickable);
@@ -1358,6 +1368,355 @@
     return Storage;
   }();
 
+  var ComponentInterface = function () {
+    function ComponentInterface() {
+      babelHelpers.classCallCheck(this, ComponentInterface);
+    }
+
+    babelHelpers.createClass(ComponentInterface, [{
+      key: 'importState',
+
+
+      // ========== Field editing ============
+
+      /**
+       * This method is used for both importing a state and building the element
+       * for the first time. Every time a state is imported the element
+       * should be rebuilt from scratch
+       * @method importState
+       * @param {Object | null} state
+       * @return {Object} { main: HTMLElement, config: HTMLElement }
+       */
+      value: function importState(state) {}
+
+      /**
+       * This object should be sufficient to rebuild the element exactly the way
+       * it was at exporting time
+       * @method exportState
+       * @return {Object}
+       */
+
+    }, {
+      key: 'exportState',
+      value: function exportState() {}
+
+      /**
+       * Chance to do some cleanup before the component is destroyed
+       * @method onDelete
+       * @return {void}
+       */
+
+    }, {
+      key: 'onDelete',
+      value: function onDelete() {}
+
+      /**
+       * Add required: true to the element's state
+       * @method setRequired
+       * @param {Boolean} - whether setting required or not required.
+       * @return {void}
+       */
+
+    }, {
+      key: 'setRequired',
+      value: function setRequired(required) {}
+
+      /**
+       * Return whether the elment is required or not.
+       * @method isRequired
+       * @return {Boolean}
+       */
+
+    }, {
+      key: 'isRequired',
+      value: function isRequired() {}
+
+      /**
+       * Change to do somethign when config opens
+       * @method onConfigOpen
+       * @return void
+       */
+
+    }, {
+      key: 'onConfigOpen',
+      value: function onConfigOpen() {}
+
+      /**
+       * Chance to do something when config closes and add
+       * whatever was changed to your state
+       * @method onConfigClose
+       * @return void
+       */
+
+    }, {
+      key: 'onConfigClose',
+      value: function onConfigClose() {}
+
+      // ========== Field editing ============
+
+      /**
+       * Create the form element to be displayed in production
+       * @method createFormField
+       * @param {Object} state - The state that was exported during form building time
+       * @return {Object} { main: HTMLElement }
+       */
+
+    }, {
+      key: 'createFormField',
+      value: function createFormField() {}
+
+      /**
+       * @method getValue
+       * @return {Object | Array | String} Value to be sent to server.
+       */
+
+    }, {
+      key: 'getValue',
+      value: function getValue() {}
+    }], [{
+      key: 'getInfo',
+      value: function getInfo() {
+        return {
+          type: 'ComponentInterface',
+          group: 'General Components'
+        };
+      }
+    }]);
+    return ComponentInterface;
+  }();
+
+  var overshadow$1 = utils.overshadow;
+
+
+  var defaultState = {
+    required: false,
+    type: 'TextField',
+    displayName: 'Text field',
+    group: 'Text Components',
+    title: 'Add a title',
+    placeholder: 'Add a placeholder'
+  };
+
+  var defaultHtml = {
+    textBox: null,
+    titleBox: null
+  };
+
+  var TextField = function (_ComponentInterface) {
+    babelHelpers.inherits(TextField, _ComponentInterface);
+    babelHelpers.createClass(TextField, null, [{
+      key: 'getInfo',
+
+      /**
+       * @override @method getInfo
+       * @return {Object}
+       */
+      value: function getInfo() {
+        var type = defaultState.type;
+        var group = defaultState.group;
+        var displayName = defaultState.displayName;
+
+        return { type: type, group: group, displayName: displayName };
+      }
+    }]);
+
+    function TextField() {
+      babelHelpers.classCallCheck(this, TextField);
+
+      var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TextField).call(this));
+
+      _this.state = defaultState;
+      _this.html = defaultHtml;
+      Object.preventExtensions(_this);
+      return _this;
+    }
+
+    // ========= Private methods ============ //
+    /**
+     * Performs a shallow merge of old state and the newState passed. Only
+     * properties in defaultState are allowed
+     * @private
+     * @method setState
+     * @param {Object} newState
+     */
+
+
+    babelHelpers.createClass(TextField, [{
+      key: 'setState',
+      value: function setState(newState) {
+        this.state = overshadow$1(this.state, newState);
+      }
+
+      /**
+       * @method setCleanState sets the state based on the default state
+       */
+
+    }, {
+      key: 'setCleanState',
+      value: function setCleanState(newState) {
+        this.state = overshadow$1(defaultState, newState);
+      }
+
+      /**
+       * @method setHtml
+       * @param {Object<HTMLElement>} Reference to relevant html elements
+       */
+
+    }, {
+      key: 'setHtml',
+      value: function setHtml(newHtmlState) {
+        this.html = overshadow$1(this.html, newHtmlState);
+      }
+
+      // ========== Public API ============== //
+
+      /**
+       * @override @method importState
+       * @param {Object | null} state
+       * @return {Object} { main: HTMLElement, config: HTMLElement }
+       */
+
+    }, {
+      key: 'importState',
+      value: function importState(state) {
+        this.setCleanState(state);
+
+        var html = {};
+
+        var main = document.createElement('div');
+        html.textBox = document.createElement('input');
+        html.textBox.setAttribute('type', 'text');
+        html.textBox.placeholder = this.state.placeholder;
+        main.appendChild(html.textBox);
+
+        var config = document.createElement('div');
+        html.titleBox = document.createElement('h3');
+        html.titleBox.value = state.title;
+        config.appendChild(html.titleBox);
+        this.setHtml(html);
+
+        return { main: main, config: config };
+      }
+
+      /**
+       * @override @method exportState
+       * @return {Object}
+       */
+
+    }, {
+      key: 'exportState',
+      value: function exportState() {
+        // We export a copy, because we don't want anyone fiddling with out state.
+        return Object.assign({}, this.state);
+      }
+
+      /**
+       * @override @method onDelete
+       * @return {void}
+       */
+
+    }, {
+      key: 'onDelete',
+      value: function onDelete() {}
+
+      /**
+       * Add required: true to the element's state
+       * @override @method setRequired
+       * @param {Boolean} - whether setting required or not required.
+       * @return {void}
+       */
+
+    }, {
+      key: 'setRequired',
+      value: function setRequired(required) {
+        this.setState({ required: required });
+      }
+
+      /**
+       * @override @method isRequired
+       * @return {Boolean}
+       */
+
+    }, {
+      key: 'isRequired',
+      value: function isRequired() {
+        return this.state.required;
+      }
+
+      /**
+       * @override @method onConfigOpen
+       * @return void
+       */
+
+    }, {
+      key: 'onConfigOpen',
+      value: function onConfigOpen() {
+        this.html.titleBox.setAttribute('contenteditable', true);
+        this.html.textBox.value = this.state.placeholder;
+      }
+
+      /**
+       * @override @method onConfigClose
+       * @return void
+       */
+
+    }, {
+      key: 'onConfigClose',
+      value: function onConfigClose() {
+        var newState = {
+          title: this.html.titleBox.value,
+          placeholder: this.html.textBox.value
+        };
+
+        this.setState(newState);
+
+        this.html.titleBox.setAttribute('contenteditable', false);
+        this.html.textBox.value = '';
+        this.html.textBox.placeholder = this.state.placeholder;
+      }
+
+      // ========== Field editing ============
+
+      /**
+       * Create the form element to be displayed in production
+       * @override @method createFormField
+       * @param {Object} state - The state that was exported during form building time
+       * @return {Object} { main: HTMLElement }
+       */
+
+    }, {
+      key: 'createFormField',
+      value: function createFormField(state) {
+        this.setState(state);
+        var main = document.createElement('div');
+        var html = {};
+        html.textBox = document.createElement('input');
+        html.textBox.setAttribute('type', 'text');
+        main.appendChild(html.textBox);
+
+        this.setHtml(html);
+        return { main: main };
+      }
+
+      /**
+       * @override @method getValue
+       * @return {String} Value to be sent to server.
+       */
+
+    }, {
+      key: 'getValue',
+      value: function getValue() {
+        if (this.html.textBox) {
+          return this.html.textBox.value;
+        }
+        return '';
+      }
+    }]);
+    return TextField;
+  }(ComponentInterface);
+
+  var defaultComponents = [TextField];
+
   /**
    * The module coordinator contains all of the methods the consumer of the
    * application will need.
@@ -1366,10 +1725,18 @@
 
   var ModuleCoordinator = function () {
     function ModuleCoordinator(modulePrefix, htmlContainer) {
+      var _this = this;
+
+      var customComponents = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
       babelHelpers.classCallCheck(this, ModuleCoordinator);
 
       this.storage = new Storage();
       this.componentFabric = new ComponentFabric(modulePrefix);
+
+      var components = customComponents.concat(defaultComponents);
+      components.forEach(function (c) {
+        _this.componentFabric.addComponentConstructor(c);
+      });
 
       this.componentsContainer = new ComponentsContainer(modulePrefix);
       this.componentsContainer.on('change', this.pushHistoryState.bind(this));
@@ -1453,7 +1820,7 @@
     }, {
       key: 'importState',
       value: function importState() {
-        var _this = this;
+        var _this2 = this;
 
         var state = arguments.length <= 0 || arguments[0] === undefined ? this.exportState() : arguments[0];
         var registerInHistory = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
@@ -1462,7 +1829,7 @@
 
         var components = [];
         state.forEach(function (componentState) {
-          var component = _this.componentFabric.createComponent(componentState.type);
+          var component = _this2.componentFabric.createComponent(componentState.type);
           component.importState(componentState);
           components.push(component);
         });

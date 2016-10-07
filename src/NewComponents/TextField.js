@@ -1,10 +1,11 @@
 import ComponentInterface from './ComponentInterface';
-import { overshadow } from '../utils/utils';
-
+import utils from '../utils/utils';
+const { overshadow } = utils;
 
 const defaultState = {
   required: false,
   type: 'TextField',
+  displayName: 'Text field',
   group: 'Text Components',
   title: 'Add a title',
   placeholder: 'Add a placeholder',
@@ -21,11 +22,12 @@ export default class TextField extends ComponentInterface {
    * @return {Object}
    */
   static getInfo() {
-    const { type, group } = defaultState;
-    return { type, group };
+    const { type, group, displayName } = defaultState;
+    return { type, group, displayName };
   }
 
   constructor() {
+    super();
     this.state = defaultState;
     this.html = defaultHtml;
     Object.preventExtensions(this);
@@ -82,7 +84,7 @@ export default class TextField extends ComponentInterface {
     config.appendChild(html.titleBox);
     this.setHtml(html);
 
-    return { main, html };
+    return { main, config };
   }
 
   /**

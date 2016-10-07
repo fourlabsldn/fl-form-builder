@@ -95,9 +95,14 @@
           </section>
           <div class="description"><p>The module coordinator contains all of the methods the consumer of the<br />application will need.</p> </div>
           <pre><code class="language-javascript">export default class ModuleCoordinator {
-  constructor(modulePrefix, htmlContainer) {
+  constructor(modulePrefix, htmlContainer, customComponents = []) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
+
+    const components = customComponents.concat(defaultComponents);
+    components.forEach(c =&gt; {
+      this.componentFabric.addComponentConstructor(c);
+    });
 
     this.componentsContainer = new ComponentsContainer(modulePrefix);
     this.componentsContainer.on('change', this.pushHistoryState.bind(this));

@@ -30,7 +30,7 @@ export default class ComponentsContainer extends ViewController {
    * @param  {Boolean} showConfig
    */
   addComponent(component) {
-    const shell = new ComponentShell;
+    const shell = new ComponentShell(this.modulePrefix);
     shell.setContent(component.importState({}));
     shell.attachComponent(component);
     this.componentShells.push(shell);

@@ -4,15 +4,27 @@ import ControlBar from './ControlBar';
 import utils from './utils/utils';
 import Storage from './Storage';
 
+
+import TextField from './NewComponents/TextField';
+const defaultComponents = [
+  TextField,
+];
+
+
 /**
  * The module coordinator contains all of the methods the consumer of the
  * application will need.
  * @class Coordinator
  */
 export default class ModuleCoordinator {
-  constructor(modulePrefix, htmlContainer) {
+  constructor(modulePrefix, htmlContainer, customComponents = []) {
     this.storage = new Storage();
     this.componentFabric = new ComponentFabric(modulePrefix);
+
+    const components = customComponents.concat(defaultComponents);
+    components.forEach(c => {
+      this.componentFabric.addComponentConstructor(c);
+    });
 
     this.componentsContainer = new ComponentsContainer(modulePrefix);
     this.componentsContainer.on('change', this.pushHistoryState.bind(this));

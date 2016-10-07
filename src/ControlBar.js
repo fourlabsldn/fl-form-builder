@@ -102,8 +102,8 @@ function createDropdown(buttonName, subButtons, subButtonsClass) {
   for (const buttonInfo of subButtons) {
     const listItem = document.createElement('li');
     const clickable = document.createElement('a');
-    clickable.name = buttonInfo.name;
-    clickable.textContent = buttonInfo.description;
+    clickable.name = buttonInfo.type;
+    clickable.textContent = buttonInfo.displayName;
     clickable.classList.add(subButtonsClass);
 
     listItem.appendChild(clickable);
