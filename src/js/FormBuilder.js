@@ -29,6 +29,7 @@ export default class FormBuilder extends React.Component {
 
     const initialState = typeConstructor.initialState();
     initialState.id = Date.now();
+    initialState.configShowing = false;
 
     const fieldStates = this.state.fieldStates.concat([initialState]);
     this.setState({ fieldStates });

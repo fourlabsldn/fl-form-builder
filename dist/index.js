@@ -2540,7 +2540,7 @@ module.exports = curry;
 var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
 
 var isValidFieldState = function isValidFieldState(state) {
-  return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string';
+  return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
 };
 
 var Field = function Field(_ref) {
@@ -2549,19 +2549,16 @@ var Field = function Field(_ref) {
 
   assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
 
+  var updateFunction = function updateFunction(newState) {
+    console.log('Pretending to update to', newState);
+  };
+
+  var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
+
   return React.createElement(
     'div',
     { className: 'fb-Field' },
-    React.createElement(
-      'div',
-      { className: 'fb-Field-main' },
-      JSON.stringify(fieldState)
-    ),
-    React.createElement(
-      'div',
-      { className: 'fb-Field-config' },
-      JSON.stringify(fieldConstructor)
-    )
+    React.createElement(fieldComponent, { state: fieldState, update: updateFunction })
   );
 };
 
@@ -2744,6 +2741,7 @@ var FormBuilder$2 = function (_React$Component) {
 
       var initialState = typeConstructor.initialState();
       initialState.id = Date.now();
+      initialState.configShowing = false;
 
       var fieldStates = this.state.fieldStates.concat([initialState]);
       this.setState({ fieldStates: fieldStates });
