@@ -4,12 +4,9 @@
   "description": "A vanilla JS form builder",
   "main": "dist/fl-form-builder.js",
   "scripts": {
-    "start": "gulp demo",
     "test": "gulp test",
-    "demo": "gulp demo",
-    "dev": "gulp demo",
+    "demo": "gulp browser-sync",
     "build": "gulp build",
-    "test-debug": "gulp test-debug",
     "deploy-gh-pages": "echo \"There is no script setup for gh pages. Change to the gh-pages branch, merge master and push. Everything should work."
   },
   "author": "lazamar @ FourLabs",
