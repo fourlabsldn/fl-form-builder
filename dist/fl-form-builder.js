@@ -2859,7 +2859,7 @@ var FormBuilder$2 = function (_React$Component) {
         return state.id !== fieldState.id;
       });
 
-      assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened. Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
+      assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened.\n       Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
 
       this.pushHistoryState(fieldStates);
     }

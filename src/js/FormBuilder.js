@@ -55,7 +55,8 @@ export default class FormBuilder extends React.Component {
 
     assert(
       fieldStates.length < this.state.fieldStates.length,
-      `Something weird happened. Field with ID ${fieldState.is} didn\'t seem to be part of the existing states`
+      `Something weird happened.
+       Field with ID ${fieldState.is} didn\'t seem to be part of the existing states`
     );
 
     this.pushHistoryState(fieldStates);
