@@ -17,9 +17,11 @@ export default class FormBuilder extends React.Component {
     this.createField = this.createField.bind(this);
     this.deleteField = this.deleteField.bind(this);
     this.addFieldType = this.addFieldType.bind(this);
+    this.updateField = this.updateField.bind(this);
 
     EventHub.on('createField', this.createField);
     EventHub.on('deleteField', this.deleteField);
+    EventHub.on('updateField', this.updateField);
   }
 
   createField(fieldType) {
@@ -47,6 +49,20 @@ export default class FormBuilder extends React.Component {
     this.setState({ fieldStates });
   }
 
+
+  updateField(fieldState) {
+    const stateIndex = this.state.fieldStates.findIndex(s => s.id === fieldState.id);
+
+    assert(
+      stateIndex !== -1,
+      `Field with id ${fieldState.id} is not in field states`
+    );
+
+    const fieldStates = Array.from(this.state.fieldStates);
+    fieldStates[stateIndex] = fieldState;
+    this.setState({ fieldStates });
+  }
+
   addFieldType(newType) {
     assert(
       !this.state.fieldTypes.find(f => f.info.type === newType.info.type),
@@ -59,6 +75,7 @@ export default class FormBuilder extends React.Component {
   }
 
   render() {
+    console.log(this.state.fieldStates[0]);
     const {
       fieldTypes,
       fieldStates,

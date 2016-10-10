@@ -2539,6 +2539,20 @@ module.exports = curry;
 
 var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
 
+var updateField$1 = function updateField$1(newState) {
+  EventHub.trigger('updateField', newState);
+};
+
+var toggleConfig = function toggleConfig(fieldState) {
+  var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
+  updateField$1(newFieldState);
+};
+
+var toggleRequired = function toggleRequired(fieldState) {
+  var newFieldState = Object.assign({}, fieldState, { required: !fieldState.required });
+  updateField$1(newFieldState);
+};
+
 var isValidFieldState = function isValidFieldState(state) {
   return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
 };
@@ -2549,7 +2563,12 @@ var Sidebar = function Sidebar(_ref) {
     'div',
     { className: 'fl-fb-Field-sidebar' },
     React.createElement('button', { className: 'glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn' }),
-    fieldState.configShowing ? null : React.createElement('button', { className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config' }),
+    React.createElement('button', {
+      className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config',
+      onClick: function onClick() {
+        return toggleConfig(fieldState);
+      }
+    }),
     React.createElement('button', { className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete' })
   );
 };
@@ -2564,7 +2583,12 @@ var ConfigBar = function ConfigBar(_ref2) {
       { className: 'fl-fb-Field-configuration-buttons' },
       React.createElement(
         'label',
-        { className: 'fl-fb-Field-configuration-switch-required' },
+        {
+          className: 'fl-fb-Field-configuration-switch-required',
+          onMouseDown: function onMouseDown() {
+            return toggleRequired(fieldState);
+          }
+        },
         'Required',
         React.createElement(
           'div',
@@ -2572,7 +2596,8 @@ var ConfigBar = function ConfigBar(_ref2) {
           React.createElement('input', {
             className: 'fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round',
             type: 'checkbox',
-            id: 'fl-fb-ui-switch-' + fieldState.id
+            id: 'fl-fb-ui-switch-' + fieldState.id,
+            checked: fieldState.required
           }),
           React.createElement(
             'label',
@@ -2588,6 +2613,9 @@ var ConfigBar = function ConfigBar(_ref2) {
       ),
       React.createElement('button', {
         className: 'fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok',
+        onClick: function onClick() {
+          return toggleConfig(fieldState);
+        },
         type: 'button'
       })
     )
@@ -2600,10 +2628,6 @@ var Field = function Field(_ref3) {
 
   assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
 
-  var updateFunction = function updateFunction(newState) {
-    console.log('Pretending to update to', newState);
-  };
-
   var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
 
   var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
@@ -2611,7 +2635,7 @@ var Field = function Field(_ref3) {
   return React.createElement(
     'div',
     { className: topClasses },
-    React.createElement(fieldComponent, { state: fieldState, update: updateFunction }),
+    React.createElement(fieldComponent, { state: fieldState, update: updateField$1 }),
     React.createElement(ConfigBar, { fieldState: fieldState }),
     React.createElement(Sidebar, { fieldState: fieldState })
   );
@@ -2779,9 +2803,11 @@ var FormBuilder$2 = function (_React$Component) {
     _this.createField = _this.createField.bind(_this);
     _this.deleteField = _this.deleteField.bind(_this);
     _this.addFieldType = _this.addFieldType.bind(_this);
+    _this.updateField = _this.updateField.bind(_this);
 
     EventHub.on('createField', _this.createField);
     EventHub.on('deleteField', _this.deleteField);
+    EventHub.on('updateField', _this.updateField);
     return _this;
   }
 
@@ -2812,6 +2838,19 @@ var FormBuilder$2 = function (_React$Component) {
       this.setState({ fieldStates: fieldStates });
     }
   }, {
+    key: 'updateField',
+    value: function updateField(fieldState) {
+      var stateIndex = this.state.fieldStates.findIndex(function (s) {
+        return s.id === fieldState.id;
+      });
+
+      assert(stateIndex !== -1, 'Field with id ' + fieldState.id + ' is not in field states');
+
+      var fieldStates = Array.from(this.state.fieldStates);
+      fieldStates[stateIndex] = fieldState;
+      this.setState({ fieldStates: fieldStates });
+    }
+  }, {
     key: 'addFieldType',
     value: function addFieldType(newType) {
       assert(!this.state.fieldTypes.find(function (f) {
@@ -2825,6 +2864,7 @@ var FormBuilder$2 = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      console.log(this.state.fieldStates[0]);
       var _state = this.state;
       var fieldTypes = _state.fieldTypes;
       var fieldStates = _state.fieldStates;
