@@ -12,17 +12,23 @@ export default class FormBuilder extends React.Component {
     this.state = {
       fieldTypes: props.fieldTypes, // TODO: Add validation here
       fieldStates: [],
+      fieldStatesHistory: [], // array of fieldStates
     };
 
     this.createField = this.createField.bind(this);
     this.deleteField = this.deleteField.bind(this);
     this.addFieldType = this.addFieldType.bind(this);
     this.updateField = this.updateField.bind(this);
+    this.pushHistoryState = this.pushHistoryState.bind(this);
+    this.pullHistoryState = this.pullHistoryState.bind(this);
 
     EventHub.on('createField', this.createField);
     EventHub.on('deleteField', this.deleteField);
     EventHub.on('updateField', this.updateField);
+    EventHub.on('undoBtnPressed', this.pullHistoryState);
   }
+
+  // ==================== FIELDS HANDLING  ===========================
 
   createField(fieldType) {
     const typeConstructor = this.state.fieldTypes.find(f => f.info.type === fieldType);
@@ -39,7 +45,7 @@ export default class FormBuilder extends React.Component {
     );
 
     const fieldStates = otherFieldsStates.concat([initialState]);
-    this.setState({ fieldStates });
+    this.pushHistoryState(fieldStates);
   }
 
   deleteField(fieldState) {
@@ -52,7 +58,7 @@ export default class FormBuilder extends React.Component {
       `Something weird happened. Field with ID ${fieldState.is} didn\'t seem to be part of the existing states`
     );
 
-    this.setState({ fieldStates });
+    this.pushHistoryState(fieldStates);
   }
 
 
@@ -66,7 +72,7 @@ export default class FormBuilder extends React.Component {
 
     const fieldStates = Array.from(this.state.fieldStates);
     fieldStates[stateIndex] = fieldState;
-    this.setState({ fieldStates });
+    this.pushHistoryState(fieldStates);
   }
 
   addFieldType(newType) {
@@ -78,6 +84,29 @@ export default class FormBuilder extends React.Component {
     const fieldTypes = this.state.fieldTypes.concat([newType]);
 
     this.setState({ fieldTypes });
+  }
+
+  // ==================== HISTORY HANDLING  ===========================
+
+  pushHistoryState(fieldStates) {
+    // Add active state to head and set new state as active
+    const currentFieldStates = this.state.fieldStates;
+    const fieldStatesHistory = [currentFieldStates].concat(this.state.fieldStatesHistory);
+    this.setState({
+      fieldStatesHistory,
+      fieldStates,
+    });
+  }
+
+  pullHistoryState() {
+    // Remove head
+    const fieldStatesHistory = this.state.fieldStatesHistory.slice(1);
+    // Head is now the active state
+    const fieldStates = this.state.fieldStatesHistory[0] || [];
+    this.setState({
+      fieldStatesHistory,
+      fieldStates,
+    });
   }
 
   render() {

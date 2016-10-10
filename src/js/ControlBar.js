@@ -76,7 +76,10 @@ const ControlBar = ({ fieldTypes }) => {
   return (
     <div className="fl-fb-ControlBar">
       {buttonGroups}
-      <button className="btn btn-primary"> Undo </button>
+      <button
+        className="btn btn-primary"
+        onClick={() => EventHub.trigger('undoBtnPressed')}
+      > Undo </button>
     </div>
   );
 };

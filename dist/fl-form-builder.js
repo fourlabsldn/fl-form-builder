@@ -200,7 +200,12 @@ var ControlBar = function ControlBar(_ref3) {
     buttonGroups,
     React.createElement(
       'button',
-      { className: 'btn btn-primary' },
+      {
+        className: 'btn btn-primary',
+        onClick: function onClick() {
+          return EventHub.trigger('undoBtnPressed');
+        }
+      },
       ' Undo '
     )
   );
@@ -2806,19 +2811,25 @@ var FormBuilder$2 = function (_React$Component) {
 
     _this.state = {
       fieldTypes: props.fieldTypes, // TODO: Add validation here
-      fieldStates: []
-    };
+      fieldStates: [],
+      fieldStatesHistory: [] };
 
+    // array of fieldStates
     _this.createField = _this.createField.bind(_this);
     _this.deleteField = _this.deleteField.bind(_this);
     _this.addFieldType = _this.addFieldType.bind(_this);
     _this.updateField = _this.updateField.bind(_this);
+    _this.pushHistoryState = _this.pushHistoryState.bind(_this);
+    _this.pullHistoryState = _this.pullHistoryState.bind(_this);
 
     EventHub.on('createField', _this.createField);
     EventHub.on('deleteField', _this.deleteField);
     EventHub.on('updateField', _this.updateField);
+    EventHub.on('undoBtnPressed', _this.pullHistoryState);
     return _this;
   }
+
+  // ==================== FIELDS HANDLING  ===========================
 
   createClass(FormBuilder, [{
     key: 'createField',
@@ -2839,7 +2850,7 @@ var FormBuilder$2 = function (_React$Component) {
       });
 
       var fieldStates = otherFieldsStates.concat([initialState]);
-      this.setState({ fieldStates: fieldStates });
+      this.pushHistoryState(fieldStates);
     }
   }, {
     key: 'deleteField',
@@ -2850,7 +2861,7 @@ var FormBuilder$2 = function (_React$Component) {
 
       assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened. Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
 
-      this.setState({ fieldStates: fieldStates });
+      this.pushHistoryState(fieldStates);
     }
   }, {
     key: 'updateField',
@@ -2863,7 +2874,7 @@ var FormBuilder$2 = function (_React$Component) {
 
       var fieldStates = Array.from(this.state.fieldStates);
       fieldStates[stateIndex] = fieldState;
-      this.setState({ fieldStates: fieldStates });
+      this.pushHistoryState(fieldStates);
     }
   }, {
     key: 'addFieldType',
@@ -2875,6 +2886,32 @@ var FormBuilder$2 = function (_React$Component) {
       var fieldTypes = this.state.fieldTypes.concat([newType]);
 
       this.setState({ fieldTypes: fieldTypes });
+    }
+
+    // ==================== HISTORY HANDLING  ===========================
+
+  }, {
+    key: 'pushHistoryState',
+    value: function pushHistoryState(fieldStates) {
+      // Add active state to head and set new state as active
+      var currentFieldStates = this.state.fieldStates;
+      var fieldStatesHistory = [currentFieldStates].concat(this.state.fieldStatesHistory);
+      this.setState({
+        fieldStatesHistory: fieldStatesHistory,
+        fieldStates: fieldStates
+      });
+    }
+  }, {
+    key: 'pullHistoryState',
+    value: function pullHistoryState() {
+      // Remove head
+      var fieldStatesHistory = this.state.fieldStatesHistory.slice(1);
+      // Head is now the active state
+      var fieldStates = this.state.fieldStatesHistory[0] || [];
+      this.setState({
+        fieldStatesHistory: fieldStatesHistory,
+        fieldStates: fieldStates
+      });
     }
   }, {
     key: 'render',
