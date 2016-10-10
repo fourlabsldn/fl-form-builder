@@ -1,11 +1,11 @@
-.fl-fb-ComponentsContainer {
+.fl-fb-Fields {
   display: flex;
   flex-flow: column wrap;
   align-items: stretch;
 }
 
 
-.fl-fb-FormComponent {
+.fl-fb-Field {
   position: relative; // Because sidebars are absolute
 
 
@@ -22,12 +22,12 @@
   }
 }
 
-.fl-fb-FormComponent--configuration-visible {
+.fl-fb-Field--configuration-visible {
   z-index: $z-index-component--config-visible;
   background-color: $c-highlight;
 }
 
-.fl-fb-FormComponent-editable[contenteditable="true"] {
+.fl-fb-Field-editable[contenteditable="true"] {
   // border-bottom: 1px solid $c-font-dark;
   background-color: $c-text-highlight;
 }
@@ -42,27 +42,27 @@
 //                     Content
 // =========================================================
 
-.fl-fb-FormComponent-content {
+.fl-fb-Field-content {
 
 }
 
-.fl-fb-FormComponent-option {
+.fl-fb-Field-option {
   display: block;
 }
 
-.fl-fb-FormComponent-option-text {
+.fl-fb-Field-option-text {
   margin-left: 10px;
   font-weight: bold;
 }
 
-.fl-fb-FormComponent-TextArea {
+.fl-fb-Field-TextArea {
   resize: none;
 }
 // =========================================================
 //                     Sidebar
 // =========================================================
 
-.fl-fb-FormComponent-sidebar {
+.fl-fb-Field-sidebar {
   position: absolute;
   right: 0;
   top: 0;
@@ -82,14 +82,14 @@
 
   @include fade-hidden();
 
-  .fl-fb-FormComponent:hover &,
-  .fl-fb-FormComponent--configuration-visible & {
+  .fl-fb-Field:hover &,
+  .fl-fb-Field--configuration-visible & {
     @include fade-visible();
     opacity: .9;
   }
 }
 
-[class*=fl-fb-FormComponent-sidebar-btn] {
+[class*=fl-fb-Field-sidebar-btn] {
   background-color: transparent;
   border: 0;
 
@@ -102,13 +102,13 @@
   }
 }
 
-.fl-fb-FormComponent-sidebar-btn-delete {
+.fl-fb-Field-sidebar-btn-delete {
   margin-top: auto;
   color: $c-danger;
 }
 
-.fl-fb-FormComponent-sidebar-btn-config {
-  .fl-fb-FormComponent--configuration-visible & {
+.fl-fb-Field-sidebar-btn-config {
+  .fl-fb-Field--configuration-visible & {
     @include fade-hidden();
   }
 }
@@ -116,7 +116,7 @@
 //                     Configuration
 // =========================================================
 
-.fl-fb-FormComponent-configuration {
+.fl-fb-Field-configuration {
   background-color: $c-background;
   width: 100%;
   padding: 15px $fc-side-padding 2px;
@@ -133,14 +133,14 @@
 
   border-radius: 0 0 5px 5px;
 
-  .fl-fb-FormComponent--configuration-visible & {
+  .fl-fb-Field--configuration-visible & {
     visibility: visible;
     opacity: 1;
   }
 }
 
-.fl-fb-FormComponent-configuration-buttons,
-.fl-fb-FormComponent-configuration-options {
+.fl-fb-Field-configuration-buttons,
+.fl-fb-Field-configuration-options {
   display: flex;
   flex-flow: row nowrap;
   align-items: stretch;
@@ -149,12 +149,12 @@
 }
 
 // The class appears twice to solve a specificity issue with normalise.css
-.fl-fb-FormComponent-configuration-options-optionDisabled.fl-fb-FormComponent-configuration-options-optionDisabled {
+.fl-fb-Field-configuration-options-optionDisabled.fl-fb-Field-configuration-options-optionDisabled {
   margin-left: 5px;
   margin-right: 5px;
 }
 
-.fl-fb-FormComponent-configuration-elementName {
+.fl-fb-Field-configuration-elementName {
   margin: auto 0 auto auto;
   font-weight: bold;
   transform: translateY(.1em);
@@ -164,16 +164,16 @@
   background-color: $c-background;
 }
 
-.fl-fb-FormComponent-configuration-btn-ok {
+.fl-fb-Field-configuration-btn-ok {
 }
 
-[class*=fl-fb-FormComponent-configuration-options-btn] {
+[class*=fl-fb-Field-configuration-options-btn] {
   background-color: transparent;
   color: $c-font;
   border: 0;
 }
 
-.fl-fb-FormComponent-configuration-options-input {
+.fl-fb-Field-configuration-options-input {
   min-width: 50%;
   text-indent: 5px;
 }

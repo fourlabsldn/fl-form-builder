@@ -74,7 +74,7 @@ const ControlBar = ({ fieldTypes }) => {
     ));
 
   return (
-    <div className="fb-ControlBar">
+    <div className="fl-fb-ControlBar">
       {buttonGroups}
       <button className="btn btn-primary"> Undo </button>
     </div>

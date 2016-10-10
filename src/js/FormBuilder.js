@@ -29,7 +29,7 @@ export default class FormBuilder extends React.Component {
 
     const initialState = typeConstructor.initialState();
     initialState.id = Date.now();
-    initialState.configShowing = false;
+    initialState.configShowing = true;
 
     const fieldStates = this.state.fieldStates.concat([initialState]);
     this.setState({ fieldStates });
@@ -65,7 +65,7 @@ export default class FormBuilder extends React.Component {
     } = this.state;
 
     return (
-      <div className="fl-FormBuilder">
+      <div className="fl-fb">
         <ControlBar fieldTypes={fieldTypes} />
         <Fields fieldStates={fieldStates} fieldTypes={fieldTypes} />
       </div>

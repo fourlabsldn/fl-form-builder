@@ -15,7 +15,7 @@ const Fields = props => {
   } = props;
 
   return (
-    <div>
+    <div className="fl-fb-Fields">
       {fieldStates.map(compState => (
         <Field
           fieldState={compState}

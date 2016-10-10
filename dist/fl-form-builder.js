@@ -196,7 +196,7 @@ var ControlBar = function ControlBar(_ref3) {
 
   return React.createElement(
     'div',
-    { className: 'fb-ControlBar' },
+    { className: 'fl-fb-ControlBar' },
     buttonGroups,
     React.createElement(
       'button',
@@ -2543,9 +2543,60 @@ var isValidFieldState = function isValidFieldState(state) {
   return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
 };
 
-var Field = function Field(_ref) {
+var Sidebar = function Sidebar(_ref) {
   var fieldState = _ref.fieldState;
-  var fieldConstructor = _ref.fieldConstructor;
+  return React.createElement(
+    'div',
+    { className: 'fl-fb-Field-sidebar' },
+    React.createElement('button', { className: 'glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn' }),
+    fieldState.configShowing ? null : React.createElement('button', { className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config' }),
+    React.createElement('button', { className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete' })
+  );
+};
+
+var ConfigBar = function ConfigBar(_ref2) {
+  var fieldState = _ref2.fieldState;
+  return React.createElement(
+    'div',
+    { className: 'fl-fb-Field-configuration' },
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-configuration-buttons' },
+      React.createElement(
+        'label',
+        { className: 'fl-fb-Field-configuration-switch-required' },
+        'Required',
+        React.createElement(
+          'div',
+          { className: 'fl-fb-ui-switch' },
+          React.createElement('input', {
+            className: 'fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round',
+            type: 'checkbox',
+            id: 'fl-fb-ui-switch-' + fieldState.id
+          }),
+          React.createElement(
+            'label',
+            { htmlFor: 'fl-fb-ui-switch-' + fieldState.id },
+            ' '
+          )
+        )
+      ),
+      React.createElement(
+        'span',
+        { className: 'fl-fb-Field-configuration-elementName' },
+        fieldState.displayName
+      ),
+      React.createElement('button', {
+        className: 'fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok',
+        type: 'button'
+      })
+    )
+  );
+};
+
+var Field = function Field(_ref3) {
+  var fieldState = _ref3.fieldState;
+  var fieldConstructor = _ref3.fieldConstructor;
 
   assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
 
@@ -2555,10 +2606,14 @@ var Field = function Field(_ref) {
 
   var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
 
+  var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
+
   return React.createElement(
     'div',
-    { className: 'fb-Field' },
-    React.createElement(fieldComponent, { state: fieldState, update: updateFunction })
+    { className: topClasses },
+    React.createElement(fieldComponent, { state: fieldState, update: updateFunction }),
+    React.createElement(ConfigBar, { fieldState: fieldState }),
+    React.createElement(Sidebar, { fieldState: fieldState })
   );
 };
 
@@ -2580,7 +2635,7 @@ var Fields = function Fields(props) {
 
   return React.createElement(
     'div',
-    null,
+    { className: 'fl-fb-Fields' },
     fieldStates.map(function (compState) {
       return React.createElement(Field, {
         fieldState: compState,
@@ -2741,7 +2796,7 @@ var FormBuilder$2 = function (_React$Component) {
 
       var initialState = typeConstructor.initialState();
       initialState.id = Date.now();
-      initialState.configShowing = false;
+      initialState.configShowing = true;
 
       var fieldStates = this.state.fieldStates.concat([initialState]);
       this.setState({ fieldStates: fieldStates });
@@ -2777,7 +2832,7 @@ var FormBuilder$2 = function (_React$Component) {
 
       return React.createElement(
         'div',
-        { className: 'fl-FormBuilder' },
+        { className: 'fl-fb' },
         React.createElement(ControlBar, { fieldTypes: fieldTypes }),
         React.createElement(Fields, { fieldStates: fieldStates, fieldTypes: fieldTypes })
       );

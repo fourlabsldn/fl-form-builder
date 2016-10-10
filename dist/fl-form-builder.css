@@ -1,4 +1,4 @@
-.fb-ControlBar {
+.fl-fb-ControlBar {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -15,5 +15,226 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding-bottom: 10px; }
+
+.fl-fb-Fields {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column wrap;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch; }
+
+.fl-fb-Field {
+  position: relative;
+  padding: 0 15px 10px;
+  margin: 5px 0;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  -webkit-transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
+  transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
+  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out;
+  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
+  z-index: 1; }
+  .fl-fb-Field:hover {
+    background-color: #ebf4fc; }
+
+.fl-fb-Field--configuration-visible {
+  z-index: 2;
+  background-color: #ebf4fc; }
+
+.fl-fb-Field-editable[contenteditable="true"] {
+  background-color: #fcf8e3; }
+
+.fl-fb--dragging {
+  -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
+          box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  background-color: #ebf4fc; }
+
+.fl-fb-Field-option {
+  display: block; }
+
+.fl-fb-Field-option-text {
+  margin-left: 10px;
+  font-weight: bold; }
+
+.fl-fb-Field-TextArea {
+  resize: none; }
+
+.fl-fb-Field-sidebar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column nowrap;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  min-height: 100%;
+  padding: 5px 10px;
+  -webkit-border-radius: 0 5px 5px 0;
+          border-radius: 0 5px 5px 0;
+  text-align: center;
+  background-color: #eee;
+  -webkit-transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
+  transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
+  transition: all .1s ease, visibility 0s, box-shadow .2s;
+  transition: all .1s ease, visibility 0s, box-shadow .2s, -webkit-box-shadow .2s;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .2s ease, visibility 0s;
+  transition: all .2s ease, visibility 0s; }
+  .fl-fb-Field:hover .fl-fb-Field-sidebar,
+  .fl-fb-Field--configuration-visible .fl-fb-Field-sidebar {
+    visibility: visible;
+    opacity: 1;
+    opacity: .9; }
+
+[class*=fl-fb-Field-sidebar-btn] {
+  background-color: transparent;
+  border: 0;
+  visibility: visible;
+  opacity: 1;
+  opacity: .8;
+  margin: 2px 0; }
+  [class*=fl-fb-Field-sidebar-btn]:hover {
+    opacity: 1; }
+
+.fl-fb-Field-sidebar-btn-delete {
+  margin-top: auto;
+  color: #d9534f; }
+
+.fl-fb-Field--configuration-visible .fl-fb-Field-sidebar-btn-config {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .2s ease, visibility 0s;
+  transition: all .2s ease, visibility 0s; }
+
+.fl-fb-Field-configuration {
+  background-color: #eee;
+  width: 100%;
+  padding: 15px 15px 2px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease, visibility 0s;
+  transition: all 0.2s ease, visibility 0s;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  z-index: 2;
+  -webkit-transform: translateY(100%);
+      -ms-transform: translateY(100%);
+          transform: translateY(100%);
+  -webkit-border-radius: 0 0 5px 5px;
+          border-radius: 0 0 5px 5px; }
+  .fl-fb-Field--configuration-visible .fl-fb-Field-configuration {
+    visibility: visible;
+    opacity: 1; }
+
+.fl-fb-Field-configuration-buttons,
+.fl-fb-Field-configuration-options {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  margin-bottom: 10px; }
+
+.fl-fb-Field-configuration-options-optionDisabled.fl-fb-Field-configuration-options-optionDisabled {
+  margin-left: 5px;
+  margin-right: 5px; }
+
+.fl-fb-Field-configuration-elementName {
+  margin: auto 0 auto auto;
+  font-weight: bold;
+  -webkit-transform: translateY(0.1em);
+      -ms-transform: translateY(0.1em);
+          transform: translateY(0.1em);
+  color: #999;
+  padding: 6px 12px;
+  -webkit-border-radius: 4px;
+          border-radius: 4px;
+  background-color: #eee; }
+
+[class*=fl-fb-Field-configuration-options-btn] {
+  background-color: transparent;
+  color: #999;
+  border: 0; }
+
+.fl-fb-Field-configuration-options-input {
+  min-width: 50%;
+  text-indent: 5px; }
+
+.fl-fb-ui-switch {
+  display: inline-block;
+  margin: 0 5px; }
+  .fl-fb-ui-switch .fl-fb-ui-switch-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden; }
+  .fl-fb-ui-switch .fl-fb-ui-switch-toggle + label {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label {
+    padding: 2px;
+    width: -webkit-calc( 20px * 2);
+    width: calc( 20px * 2);
+    height: 20px;
+    background-color: #dddddd;
+    -webkit-border-radius: 20px;
+            border-radius: 20px; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:after,
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:before {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: ""; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 20px;
+            border-radius: 20px;
+    -webkit-transition: background 0.4s;
+    transition: background 0.4s; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:after {
+    width: -webkit-calc( 20px - 2px);
+    width: calc( 20px - 2px);
+    background-color: #fff;
+    -webkit-border-radius: 100%;
+            border-radius: 100%;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    -webkit-transition: margin 0.4s;
+    transition: margin 0.4s; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:before {
+    background-color: #63A8EB; }
+  .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:after {
+    margin-left: 20px; }
 
 /*# sourceMappingURL=fl-form-builder.css.map */
