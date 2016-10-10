@@ -26,6 +26,9 @@ export default class FormBuilder extends React.Component {
     EventHub.on('deleteField', this.deleteField);
     EventHub.on('updateField', this.updateField);
     EventHub.on('undoBtnPressed', this.pullHistoryState);
+
+    // Expose function to export state.
+    props.exportState(() => this.state.fieldStates);
   }
 
   // ==================== FIELDS HANDLING  ===========================
@@ -127,4 +130,5 @@ export default class FormBuilder extends React.Component {
 
 FormBuilder.propTypes = {
   fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
+  exportState: React.PropTypes.func,
 };

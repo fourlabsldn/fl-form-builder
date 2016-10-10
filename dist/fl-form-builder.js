@@ -2826,6 +2826,11 @@ var FormBuilder$2 = function (_React$Component) {
     EventHub.on('deleteField', _this.deleteField);
     EventHub.on('updateField', _this.updateField);
     EventHub.on('undoBtnPressed', _this.pullHistoryState);
+
+    // Expose function to export state.
+    props.exportState(function () {
+      return _this.state.fieldStates;
+    });
     return _this;
   }
 
@@ -2933,7 +2938,8 @@ var FormBuilder$2 = function (_React$Component) {
 }(React.Component);
 
 FormBuilder$2.propTypes = {
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
+  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
+  exportState: React.PropTypes.func
 };
 
 var typeInfo = {
@@ -3016,10 +3022,16 @@ function FormBuilder(container) {
 
   var customFieldTypes = components.concat(defaultTypes);
 
-  ReactDOM.render(React.createElement(FormBuilder$2, { fieldTypes: customFieldTypes }), container);
+  var exportFunc = void 0;
+  ReactDOM.render(React.createElement(FormBuilder$2, {
+    fieldTypes: customFieldTypes,
+    exportState: function exportState(f) {
+      return exportFunc = f;
+    }
+  }), container);
 
   this.exportState = function () {
-    throw new Error('Not working');
+    return exportFunc();
   };
 }
 
