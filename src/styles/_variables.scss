@@ -2,6 +2,7 @@
 $c-font: #999;
 $c-font-dark: #444;
 $c-background: #eee;
+$c-background-darker: darken($c-background, 10%);
 
 $c-active: #63A8EB;
 $c-highlight: lighten($c-active, 30%);

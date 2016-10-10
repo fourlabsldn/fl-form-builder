@@ -93,12 +93,23 @@
   background-color: transparent;
   border: 0;
 
-  @include fade-visible();
   opacity: .8;
   margin: 2px 0;
+  border-radius: 2px;
+  padding: .3em .5em;
+  @include fade-visible();
 
   &:hover {
     opacity: 1;
+    background-color: $c-background-darker;
+  }
+  &:active {
+    background-color: darken($c-background-darker, 5%);
+  }
+
+  &:active,
+  &:focus {
+    outline: 0;
   }
 }
 
@@ -165,6 +176,11 @@
 }
 
 .fl-fb-Field-configuration-btn-ok {
+  &:hover,
+  &:active,
+  &:focus {
+   outline: 0 !important;
+  }
 }
 
 [class*=fl-fb-Field-configuration-options-btn] {
