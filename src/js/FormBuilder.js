@@ -33,7 +33,12 @@ export default class FormBuilder extends React.Component {
     initialState.id = Date.now();
     initialState.configShowing = true;
 
-    const fieldStates = this.state.fieldStates.concat([initialState]);
+    // Make all other fields have config hidden
+    const otherFieldsStates = this.state.fieldStates.map(s =>
+      Object.assign({}, s, { configShowing: false })
+    );
+
+    const fieldStates = otherFieldsStates.concat([initialState]);
     this.setState({ fieldStates });
   }
 
@@ -43,9 +48,10 @@ export default class FormBuilder extends React.Component {
     );
 
     assert(
-      fieldStates.length < this.state.fieldStates,
-      'Something weird happened. The field didn\'t seem to be part of the existing states'
+      fieldStates.length < this.state.fieldStates.length,
+      `Something weird happened. Field with ID ${fieldState.is} didn\'t seem to be part of the existing states`
     );
+
     this.setState({ fieldStates });
   }
 
@@ -75,7 +81,6 @@ export default class FormBuilder extends React.Component {
   }
 
   render() {
-    console.log(this.state.fieldStates[0]);
     const {
       fieldTypes,
       fieldStates,

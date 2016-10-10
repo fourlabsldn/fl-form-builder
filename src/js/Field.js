@@ -6,6 +6,10 @@ const updateField = newState => {
   EventHub.trigger('updateField', newState);
 };
 
+const deleteField = fieldState => {
+  EventHub.trigger('deleteField', fieldState);
+};
+
 const toggleConfig = (fieldState) => {
   const newFieldState = Object.assign(
     {},
@@ -38,7 +42,10 @@ const Sidebar = ({ fieldState }) => (
       className="glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
       onClick={() => toggleConfig(fieldState)}
     />
-    <button className="glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete" />
+    <button
+      className="glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+      onClick={() => deleteField(fieldState)}
+    />
   </div>
 );
 

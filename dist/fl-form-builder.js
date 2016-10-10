@@ -2543,6 +2543,10 @@ var updateField$1 = function updateField$1(newState) {
   EventHub.trigger('updateField', newState);
 };
 
+var deleteField$1 = function deleteField$1(fieldState) {
+  EventHub.trigger('deleteField', fieldState);
+};
+
 var toggleConfig = function toggleConfig(fieldState) {
   var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
   updateField$1(newFieldState);
@@ -2569,7 +2573,12 @@ var Sidebar = function Sidebar(_ref) {
         return toggleConfig(fieldState);
       }
     }),
-    React.createElement('button', { className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete' })
+    React.createElement('button', {
+      className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete',
+      onClick: function onClick() {
+        return deleteField$1(fieldState);
+      }
+    })
   );
 };
 
@@ -2824,7 +2833,12 @@ var FormBuilder$2 = function (_React$Component) {
       initialState.id = Date.now();
       initialState.configShowing = true;
 
-      var fieldStates = this.state.fieldStates.concat([initialState]);
+      // Make all other fields have config hidden
+      var otherFieldsStates = this.state.fieldStates.map(function (s) {
+        return Object.assign({}, s, { configShowing: false });
+      });
+
+      var fieldStates = otherFieldsStates.concat([initialState]);
       this.setState({ fieldStates: fieldStates });
     }
   }, {
@@ -2834,7 +2848,8 @@ var FormBuilder$2 = function (_React$Component) {
         return state.id !== fieldState.id;
       });
 
-      assert(fieldStates.length < this.state.fieldStates, 'Something weird happened. The field didn\'t seem to be part of the existing states');
+      assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened. Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
+
       this.setState({ fieldStates: fieldStates });
     }
   }, {
@@ -2864,7 +2879,6 @@ var FormBuilder$2 = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.state.fieldStates[0]);
       var _state = this.state;
       var fieldTypes = _state.fieldTypes;
       var fieldStates = _state.fieldStates;
