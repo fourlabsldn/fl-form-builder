@@ -5,7 +5,7 @@
   "main": "dist/fl-form-builder.js",
   "scripts": {
     "test": "gulp test",
-    "demo": "gulp browser-sync",
+    "dev": "gulp browser-sync",
     "build": "gulp build",
     "deploy-gh-pages": "echo \"There is no script setup for gh pages. Change to the gh-pages branch, merge master and push. Everything should work."
   },
