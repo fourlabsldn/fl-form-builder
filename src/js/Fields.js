@@ -22,7 +22,8 @@ const Fields = props => {
 };
 
 Fields.propTypes = {
-  states: React.PropTypes.array,
+  fieldStates: React.PropTypes.array,
+  fieldTypes: React.PropTypes.array,
 };
 
 export default Fields;

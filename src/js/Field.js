@@ -1,14 +1,15 @@
 import React from 'react';
 import assert from 'fl-assert';
 
-const validateFieldState = state => {
+const isValidFieldState = state => {
   return typeof state.id === 'number'
     && typeof state.type === 'string'
     && typeof state.group === 'string';
 };
 
 const Field = ({ fieldState, fieldConstructor }) => {
-  assert(validateFieldState(fieldState), `Invalid field state: ${fieldState}`);
+  assert(isValidFieldState(fieldState), `Invalid field state: ${fieldState}`);
+
   return (
     <div className="fb-Field">
       <div className="fb-Field-main">

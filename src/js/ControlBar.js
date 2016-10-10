@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import EventHub from './EventHub';
-import { curry } from 'lodash/fp';
+import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
+
 
 const ButtonDropdownOption = ({ description }) => (
   <li>
@@ -22,34 +22,34 @@ ButtonDropdownOption.propTypes = {
   }),
 };
 
-const ButtonGroupDropdown = ({ groupName, groupButtons }) => (
-  <div className="fb-ControlBar-dropdown">
-    <button className="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      {groupName}
-      <span className="caret"></span>
-    </button>
-    <ul className="dropdown-menu">
-      {groupButtons.map(fieldDescription => (
-        <ButtonDropdownOption description={fieldDescription} />
-      ))}
-    </ul>
-  </div>
-);
-
+const ButtonGroupDropdown = ({ groupName, groupButtons }) => {
+  return (
+    <div className="fb-ControlBar-dropdown dropdown">
+      <button className="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        {groupName}
+        <span className="caret"></span>
+      </button>
+      <ul className="dropdown-menu">
+        {groupButtons.map(fieldDescription => (
+          <ButtonDropdownOption description={fieldDescription} />
+        ))}
+      </ul>
+    </div>
+  );
+};
 ButtonGroupDropdown.propTypes = {
   groupName: React.PropTypes.string,
   groupButtons: React.PropTypes.array,
 };
 
 
-const getDescrition = curry((fieldTypes, type) => {
-  const construct = fieldTypes[type];
+const getDescrition = typeConstructor => {
   return {
-    type,
-    displayName: construct.displayName,
-    group: construct.group,
+    type: typeConstructor.info.type,
+    displayName: typeConstructor.info.displayName,
+    group: typeConstructor.info.group,
   };
-});
+};
 
 const toGroups = (groups, description) => {
   // Add to group array if it exists. Create it if it doesn't
@@ -61,28 +61,28 @@ const toGroups = (groups, description) => {
 };
 
 const ControlBar = ({ fieldTypes }) => {
-  const fieldGroups = Object.keys(fieldTypes)
-    .map(getDescrition(fieldTypes))
+  const fieldGroups = fieldTypes
+    .map(getDescrition)
     .reduce(toGroups, {});
 
   const buttonGroups = Object.keys(fieldGroups)
     .map(groupName => (
       <ButtonGroupDropdown
         groupName={groupName}
-        groupButtons={buttonGroups[groupName]}
+        groupButtons={fieldGroups[groupName]}
       />
     ));
 
   return (
     <div className="fb-ControlBar">
       {buttonGroups}
-      <button> Undo </button>
+      <button className="btn btn-primary"> Undo </button>
     </div>
   );
 };
 
 ControlBar.propTypes = {
-  fieldTypes: React.PropTypes.array,
+  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
 };
 
 export default ControlBar;

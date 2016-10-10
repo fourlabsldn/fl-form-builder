@@ -2,6 +2,7 @@ import React from 'react';
 import ControlBar from './ControlBar';
 import Fields from './Fields';
 import assert from 'fl-assert';
+import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
 
 import EventHub from './EventHub';
 
@@ -9,24 +10,24 @@ export default class FormBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fieldTypes: {}, // each key is a fieldType and each value the type's react contructor
+      fieldTypes: props.fieldTypes, // TODO: Add validation here
       fieldStates: [],
     };
 
     this.createField = this.createField.bind(this);
     this.deleteField = this.deleteField.bind(this);
+    this.addFieldType = this.addFieldType.bind(this);
 
     EventHub.on('createField', this.createField);
     EventHub.on('deleteField', this.deleteField);
   }
 
   createField(fieldType) {
-    assert(
-      this.state.fieldTypes[fieldType],
-      `Field "${fieldType}" does not exist.`
-    );
+    const typeConstructor = this.state.fieldTypes.find(f => f.info.type === fieldType);
 
-    const initialState = this.fieldTypes[fieldType].initialState();
+    assert(typeConstructor, `Field "${fieldType}" does not exist.`);
+
+    const initialState = typeConstructor.initialState();
     initialState.id = Date.now();
 
     const fieldStates = this.state.fieldStates.concat([initialState]);
@@ -45,6 +46,17 @@ export default class FormBuilder extends React.Component {
     this.setState({ fieldStates });
   }
 
+  addFieldType(newType) {
+    assert(
+      !this.state.fieldTypes.find(f => f.info.type === newType.info.type),
+      `The field type ${newType.info.type} already exists`
+    );
+
+    const fieldTypes = this.state.fieldTypes.concat([newType]);
+
+    this.setState({ fieldTypes });
+  }
+
   render() {
     const {
       fieldTypes,
@@ -61,5 +73,5 @@ export default class FormBuilder extends React.Component {
 }
 
 FormBuilder.propTypes = {
-  components: React.PropTypes.array,
+  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
 };
