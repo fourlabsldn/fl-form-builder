@@ -8,11 +8,11 @@ const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
   sass: {
     src: path.join(src, 'styles/**/*.scss'),
-    dest: path.join(dest, 'styles'),
+    dest,
   },
   'transpile-react': {
     watch: path.join(src, 'js', '/**/*.js'),
-    src: path.join(src, 'js', 'index.js'),
+    src: path.join(src, 'js', 'fl-form-builder.js'),
     dest,
     config: {
       external: ['react', 'react-dom'],
