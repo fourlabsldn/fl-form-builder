@@ -1,7 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { curry } from 'lodash';
+import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
 
 import Field from './Field';
+
+const getTypeConstructor = curry((typeConstructors, type) => {
+  return typeConstructors.find(t => t.info.type === type);
+});
 
 const Fields = props => {
   const {
@@ -11,10 +16,10 @@ const Fields = props => {
 
   return (
     <div>
-      {fieldStates.forEach(compState => (
+      {fieldStates.map(compState => (
         <Field
           fieldState={compState}
-          fieldConstructor={fieldTypes[compState.type]}
+          fieldConstructor={getTypeConstructor(fieldTypes, compState.type)}
         />
       ))}
     </div>
@@ -23,7 +28,7 @@ const Fields = props => {
 
 Fields.propTypes = {
   fieldStates: React.PropTypes.array,
-  fieldTypes: React.PropTypes.array,
+  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
 };
 
 export default Fields;
