@@ -10,6 +10,7 @@ import React from 'react';
 import TextBox from './DefaultFields/TextBox';
 import EmailBox from './DefaultFields/EmailBox';
 import TelephoneBox from './DefaultFields/TelephoneBox';
+import NumberBox from './DefaultFields/NumberBox';
 
 function FormBuilder(container, components = []) {
   assert(
@@ -21,6 +22,7 @@ function FormBuilder(container, components = []) {
     TextBox,
     EmailBox,
     TelephoneBox,
+    NumberBox,
   ];
 
   const customFieldTypes = components.concat(defaultTypes);

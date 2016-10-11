@@ -3102,6 +3102,12 @@ var TextBox$2 = buildTextFieldConstructor({
   htmlInputType: 'tel'
 });
 
+var TextBox$3 = buildTextFieldConstructor({
+  type: 'NumberBox',
+  displayName: 'Number Box',
+  htmlInputType: 'number'
+});
+
 /* globals xController */
 //
 // Field Types
@@ -3110,7 +3116,7 @@ function FormBuilder(container) {
 
   assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
 
-  var defaultTypes = [TextBox, EmailBox, TextBox$2];
+  var defaultTypes = [TextBox, EmailBox, TextBox$2, TextBox$3];
 
   var customFieldTypes = components.concat(defaultTypes);
 
