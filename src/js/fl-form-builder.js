@@ -11,6 +11,7 @@ import TextBox from './DefaultFields/TextBox';
 import EmailBox from './DefaultFields/EmailBox';
 import TelephoneBox from './DefaultFields/TelephoneBox';
 import NumberBox from './DefaultFields/NumberBox';
+import TextArea from './DefaultFields/TextArea';
 
 function FormBuilder(container, components = []) {
   assert(
@@ -23,6 +24,7 @@ function FormBuilder(container, components = []) {
     EmailBox,
     TelephoneBox,
     NumberBox,
+    TextArea,
   ];
 
   const customFieldTypes = components.concat(defaultTypes);

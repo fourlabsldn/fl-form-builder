@@ -31,6 +31,7 @@ const templateTypeInfo = {
 
   // Field type specific
   htmlInputType: 'text',
+  htmlElement: 'input',
 };
 
 // These are the fields that will end up being
@@ -70,12 +71,13 @@ const createRenderConfigMode = curry((initialState, { state, update }) => {
           defaultValue={state.title}
         />
       </h2>
-      <input
-        type="text"
-        className="form-control"
-        onChange={updateField(update, state, 'placeholder')}
-        defaultValue={state.placeholder}
-      />
+
+      {React.createElement(state.htmlElement, {
+        type: 'text',
+        className: 'form-control',
+        defaultValue: state.placeholder,
+        onChange: updateField(update, state, initialState, 'placeholder'),
+      })}
     </ div>
   );
 });
@@ -84,11 +86,12 @@ const RenderFormMode = ({ state }) => {
   return (
     <div>
       <h2>{state.title}</h2>
-      <input
-        type={state.htmlInputType}
-        className="form-control"
-        placeholder={state.placeholder}
-      />
+
+      {React.createElement(state.htmlElement, {
+        type: state.htmlInputType,
+        className: 'form-control',
+        placeholder: state.placeholder,
+      })}
     </div>
   );
 };

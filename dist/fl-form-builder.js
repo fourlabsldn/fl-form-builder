@@ -2996,7 +2996,8 @@ var templateTypeInfo = {
   displayName: 'Text field',
 
   // Field type specific
-  htmlInputType: 'text'
+  htmlInputType: 'text',
+  htmlElement: 'input'
 };
 
 // These are the fields that will end up being
@@ -3039,11 +3040,11 @@ var createRenderConfigMode = _curry(function (initialState, _ref) {
         defaultValue: state.title
       })
     ),
-    React.createElement('input', {
+    React.createElement(state.htmlElement, {
       type: 'text',
       className: 'form-control',
-      onChange: updateField$2(update, state, 'placeholder'),
-      defaultValue: state.placeholder
+      defaultValue: state.placeholder,
+      onChange: updateField$2(update, state, initialState, 'placeholder')
     })
   );
 });
@@ -3059,7 +3060,7 @@ var RenderFormMode = function RenderFormMode(_ref2) {
       null,
       state.title
     ),
-    React.createElement('input', {
+    React.createElement(state.htmlElement, {
       type: state.htmlInputType,
       className: 'form-control',
       placeholder: state.placeholder
@@ -3108,6 +3109,12 @@ var TextBox$3 = buildTextFieldConstructor({
   htmlInputType: 'number'
 });
 
+var TextBox$4 = buildTextFieldConstructor({
+  type: 'TextArea',
+  displayName: 'Text Area',
+  htmlElement: 'textarea'
+});
+
 /* globals xController */
 //
 // Field Types
@@ -3116,7 +3123,7 @@ function FormBuilder(container) {
 
   assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
 
-  var defaultTypes = [TextBox, EmailBox, TextBox$2, TextBox$3];
+  var defaultTypes = [TextBox, EmailBox, TextBox$2, TextBox$3, TextBox$4];
 
   var customFieldTypes = components.concat(defaultTypes);
 
