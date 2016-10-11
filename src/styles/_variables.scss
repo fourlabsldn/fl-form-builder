@@ -4,6 +4,7 @@ $c-font-dark: #444;
 $c-background: #eee;
 $c-background-darker: darken($c-background, 10%);
 
+$c-border: darken($c-background-darker, 20%);
 $c-active: #63A8EB;
 $c-highlight: lighten($c-active, 30%);
 $c-text-highlight: #fcf8e3;

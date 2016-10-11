@@ -12,27 +12,36 @@
   padding: 0 $fc-side-padding $fc-bottom-padding;
   margin: 5px 0;
   border-radius: 5px;
+  border: 1px solid transparent;
 
   transition: transform .2s ease-out,
               box-shadow .2s ease-out,
               background-color .2s ease-out;
   z-index: $z-index-component;
+
   &:hover {
     background-color: $c-highlight;
+    border-color: $c-border;
   }
 }
 
 .fl-fb-Field--configuration-visible {
   z-index: $z-index-component--config-visible;
   background-color: $c-highlight;
+  border-color: $c-border;
 }
 
 .fl-fb-Field-editable {
-  background-color: $c-text-highlight;
+  background-color: transparent;
   border: 0;
-  border-radius: 3px;
-  padding: 0 5px;
   min-width: 80%;
+
+  &:hover,
+  &:active,
+  &:focus {
+    outline: 0;
+    color: #009688;
+  }
 }
 
 .fl-fb--dragging {
@@ -132,15 +141,17 @@
 
 .fl-fb-Field-configuration {
   background-color: $c-background;
-  width: 100%;
-  padding: 15px $fc-side-padding 2px;
+  width: calc(100% + 2px);
+  padding: 5px $fc-side-padding 2px;
+  border: 1px solid transparent;
+  border-width: 0 1px 1px;
 
   visibility: hidden;
   opacity: 0;
   transition: all 0.2s ease, visibility 0s;
 
   position: absolute;
-  right: 0;
+  right: -1px; // because of the border
   bottom: $fc-bottom-padding; // To cover the sidebar bottom right border-radius
   z-index: 2;
   transform: translateY(100%);
@@ -150,6 +161,7 @@
   .fl-fb-Field--configuration-visible & {
     visibility: visible;
     opacity: 1;
+    border-color: $c-border;
   }
 }
 
@@ -235,9 +247,9 @@
 }
 
 .fl-fb-Field-config-input {
-  min-width: 50%;
+  min-width: 400px;
   display: inline-block;
-  padding: 5px;
+  padding: 2px 5px;
 }
 
 // ============================================================

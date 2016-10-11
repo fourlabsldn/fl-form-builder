@@ -61,25 +61,28 @@
   margin: 5px 0;
   -webkit-border-radius: 5px;
           border-radius: 5px;
+  border: 1px solid transparent;
   -webkit-transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
   transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
   transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out;
   transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
   z-index: 1; }
   .fl-fb-Field:hover {
-    background-color: #ebf4fc; }
+    background-color: #ebf4fc;
+    border-color: #a2a2a2; }
 
 .fl-fb-Field--configuration-visible {
   z-index: 2;
-  background-color: #ebf4fc; }
+  background-color: #ebf4fc;
+  border-color: #a2a2a2; }
 
 .fl-fb-Field-editable {
-  background-color: #fcf8e3;
+  background-color: transparent;
   border: 0;
-  -webkit-border-radius: 3px;
-          border-radius: 3px;
-  padding: 0 5px;
   min-width: 80%; }
+  .fl-fb-Field-editable:hover, .fl-fb-Field-editable:active, .fl-fb-Field-editable:focus {
+    outline: 0;
+    color: #009688; }
 
 .fl-fb--dragging {
   -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
@@ -162,14 +165,17 @@
 
 .fl-fb-Field-configuration {
   background-color: #eee;
-  width: 100%;
-  padding: 15px 15px 2px;
+  width: -webkit-calc(100% + 2px);
+  width: calc(100% + 2px);
+  padding: 5px 15px 2px;
+  border: 1px solid transparent;
+  border-width: 0 1px 1px;
   visibility: hidden;
   opacity: 0;
   -webkit-transition: all 0.2s ease, visibility 0s;
   transition: all 0.2s ease, visibility 0s;
   position: absolute;
-  right: 0;
+  right: -1px;
   bottom: 20px;
   z-index: 2;
   -webkit-transform: translateY(100%);
@@ -179,7 +185,8 @@
           border-radius: 0 0 5px 5px; }
   .fl-fb-Field--configuration-visible .fl-fb-Field-configuration {
     visibility: visible;
-    opacity: 1; }
+    opacity: 1;
+    border-color: #a2a2a2; }
 
 .fl-fb-Field-configuration-buttons,
 .fl-fb-Field-configuration-options {
@@ -249,9 +256,9 @@
     color: #333333; }
 
 .fl-fb-Field-config-input {
-  min-width: 50%;
+  min-width: 400px;
   display: inline-block;
-  padding: 5px; }
+  padding: 2px 5px; }
 
 .fl-fb-ui-switch {
   display: inline-block;

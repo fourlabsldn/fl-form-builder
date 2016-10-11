@@ -3092,6 +3092,7 @@ function buildOptionsFieldConstructor(typeInfo) {
           className: 'fl-fb-Field-config-input',
           type: 'text',
           value: state.newOptionText,
+          placeholder: 'Type a new option',
           onChange: updateProperty('newOptionText'),
           onKeyPress: ifEnterPressed(addOption)
         })
@@ -3272,7 +3273,7 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
           'div',
           { className: 'fl-fb-Field-option' },
           React.createElement('input', {
-            className: 'fl-fb-Field--transparent',
+            className: 'fl-fb-Field-editable',
             type: 'text',
             value: optionText,
             onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
@@ -3287,8 +3288,9 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
       React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
       React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
       React.createElement('input', {
-        className: 'fl-fb-Field-config-input',
         type: 'text',
+        className: 'fl-fb-Field-config-input',
+        placeholder: 'Type a new option',
         value: state.newOptionText,
         onChange: updateProperty('newOptionText'),
         onKeyPress: ifEnterPressed(addOption)

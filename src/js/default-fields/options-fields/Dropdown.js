@@ -106,7 +106,7 @@ const RenderConfigMode = ({ state, update }) => {
         {state.options.map((optionText, optionIndex) => (
           <div className="fl-fb-Field-option">
             <input
-              className="fl-fb-Field--transparent"
+              className="fl-fb-Field-editable"
               type="text"
               value={optionText}
               onKeyPress={ifEnterPressed(removeIfOptionIsNull(optionIndex))}
@@ -120,8 +120,9 @@ const RenderConfigMode = ({ state, update }) => {
         <button onMouseDown={removeOption} className="glyphicon-minus-sign glyphicon fl-fb-Field-config-btn" />
         <button onMouseDown={addOption} className="glyphicon-plus-sign glyphicon fl-fb-Field-config-btn" />
         <input
-          className="fl-fb-Field-config-input"
           type="text"
+          className="fl-fb-Field-config-input"
+          placeholder="Type a new option"
           value={state.newOptionText}
           onChange={updateProperty('newOptionText')}
           onKeyPress={ifEnterPressed(addOption)}

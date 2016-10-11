@@ -116,6 +116,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
             className="fl-fb-Field-config-input"
             type="text"
             value={state.newOptionText}
+            placeholder="Type a new option"
             onChange={updateProperty('newOptionText')}
             onKeyPress={ifEnterPressed(addOption)}
           />
