@@ -2716,7 +2716,20 @@ var createClass = function () {
 
 
 
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
 
+  return obj;
+};
 
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
@@ -2942,6 +2955,19 @@ FormBuilder$2.propTypes = {
   exportState: React.PropTypes.func
 };
 
+// Creates a new object with properties of the old one
+// ovewritten by properties of the new object.
+// No new properties of the new Object are added.
+// overshadow Object -> Object -> Object
+function overshadow(oldObj, newObj) {
+  return Object.keys(oldObj).reduce(function (result, key) {
+    // We want to use values from newObj even if the value is set to undefined,
+    // but not use it if it is not set at all. That's why we use hasOwnProperty.
+    result[key] = newObj.hasOwnProperty(key) ? newObj[key] : oldObj[key]; // eslint-disable-line no-param-reassign, max-len
+    return result;
+  }, {});
+}
+
 var typeInfo = {
   type: 'TextField',
   group: 'Text Components',
@@ -2960,6 +2986,14 @@ var initialState = function initialState() {
   return Object.assign({}, typeInfo, componentFields);
 };
 
+var updateField$2 = _curry(function (update, state, fieldName, event) {
+  var value = event.target.value;
+  // Update or fallback to default value
+  var newValue = value || initialState()[fieldName];
+  var newState = overshadow(state, defineProperty({}, fieldName, newValue));
+  update(newState);
+});
+
 // When configuration is open, this is what is going to be displayed
 /**
  * @method RenderConfigMode
@@ -2976,14 +3010,19 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     React.createElement(
       'h2',
       null,
-      ' Config Mode '
+      React.createElement('input', {
+        type: 'text',
+        className: 'fl-fb-Field--transparent',
+        onChange: updateField$2(update, state, 'title'),
+        defaultValue: state.title
+      })
     ),
-    React.createElement(
-      'label',
-      null,
-      'Type a placeholder',
-      React.createElement('input', { type: 'text' })
-    )
+    React.createElement('input', {
+      type: 'text',
+      className: 'form-control',
+      onChange: updateField$2(update, state, 'placeholder'),
+      defaultValue: state.placeholder
+    })
   );
 };
 
@@ -2997,9 +3036,9 @@ var RenderFormMode = function RenderFormMode(_ref2) {
     React.createElement(
       'h2',
       null,
-      ' My Title '
+      state.title
     ),
-    React.createElement('input', { type: 'text' })
+    React.createElement('input', { type: 'text', className: 'form-control', placeholder: state.placeholder })
   );
 };
 

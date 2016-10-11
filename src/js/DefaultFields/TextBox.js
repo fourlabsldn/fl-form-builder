@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { overshadow } from './utils';
+import { curry } from 'lodash';
 
 const typeInfo = {
   type: 'TextField',
@@ -23,6 +24,14 @@ const initialState = () => {
   );
 };
 
+const updateField = curry((update, state, fieldName, event) => {
+  const value = event.target.value;
+  // Update or fallback to default value
+  const newValue = value || initialState()[fieldName];
+  const newState = overshadow(state, { [fieldName]: newValue });
+  update(newState);
+});
+
 // When configuration is open, this is what is going to be displayed
 /**
  * @method RenderConfigMode
@@ -32,11 +41,20 @@ const initialState = () => {
 const RenderConfigMode = ({ state, update }) => {
   return (
     <div>
-      <h2> Config Mode </h2>
-      <label>
-        Type a placeholder
-        <input type="text" />
-      </label>
+      <h2>
+        <input
+          type="text"
+          className="fl-fb-Field--transparent"
+          onChange={updateField(update, state, 'title')}
+          defaultValue={state.title}
+        />
+      </h2>
+      <input
+        type="text"
+        className="form-control"
+        onChange={updateField(update, state, 'placeholder')}
+        defaultValue={state.placeholder}
+      />
     </ div>
   );
 };
@@ -44,8 +62,8 @@ const RenderConfigMode = ({ state, update }) => {
 const RenderFormMode = ({ state, update }) => {
   return (
     <div>
-      <h2> My Title </h2>
-      <input type="text" />
+      <h2>{state.title}</h2>
+      <input type="text" className="form-control" placeholder={state.placeholder} />
     </div>
   );
 };
