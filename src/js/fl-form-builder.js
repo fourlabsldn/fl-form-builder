@@ -7,6 +7,8 @@ import React from 'react';
 
 
 // Field Types
+import RadioButtons from './default-fields/options-fields/RadioButtons';
+
 import TextBox from './default-fields/text-fields/TextBox';
 import TextArea from './default-fields/text-fields/TextArea';
 import EmailBox from './default-fields/text-fields/EmailBox';
@@ -20,6 +22,7 @@ function FormBuilder(container, components = []) {
   );
 
   const defaultTypes = [
+    RadioButtons,
     TextBox,
     EmailBox,
     TelephoneBox,

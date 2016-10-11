@@ -2968,6 +2968,155 @@ function overshadow(oldObj, newObj) {
   }, {});
 }
 
+var typeInfo = {
+  // Compulsory
+  type: 'RadioButtons',
+  displayName: 'Radio Button',
+  group: 'Options Components'
+
+};
+
+// These are the fields that will end up being
+// changed on updates
+// Field type specific
+var componentFields = {
+  // Compulsory fields
+  required: false,
+  // Component specific fields
+  title: 'Add a title',
+  options: ['Insert an option'],
+
+  // states needed to handle UI
+  newOptionText: ''
+};
+
+// For Text Fields the initialState function will only return an object.
+var initialState = function initialState() {
+  return Object.assign({}, typeInfo, componentFields);
+};
+
+// When configuration is open, this is what is going to be displayed
+/**
+ * @method RenderConfigMode
+ * @param  {Object} state : State
+ * @param  {Function} update : State -> void // Will trigger a re-render
+ */
+var RenderConfigMode = function RenderConfigMode(_ref) {
+  var state = _ref.state;
+  var update = _ref.update;
+
+  var removeOption = function removeOption() {
+    // Remove last option
+    var options = state.options.slice(0, state.options.length - 1);
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  };
+
+  var addOption = function addOption() {
+    if (!state.newOptionText.trim()) {
+      return;
+    }
+
+    var options = state.options.filter(function (o) {
+      return !initialState().options.includes(o);
+    }) // Remove default option
+    .concat([state.newOptionText]); // Add new option
+    var newOptionText = '';
+    var newState = overshadow(state, { options: options, newOptionText: newOptionText });
+    update(newState);
+  };
+
+  var updateProperty = _curry(function (propName, event) {
+    var value = event.target.value;
+    var newValue = value || initialState()[propName];
+    var newState = overshadow(state, defineProperty({}, propName, newValue));
+    update(newState);
+  });
+
+  var handleNewOptionKeydown = function handleNewOptionKeydown(event) {
+    if (event.key === 'Enter') {
+      addOption();
+    }
+  };
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      React.createElement('input', {
+        type: 'text',
+        className: 'fl-fb-Field--transparent',
+        onChange: updateProperty('title'),
+        defaultValue: state.title
+      })
+    ),
+    state.options.map(function (optionText) {
+      return React.createElement(
+        'div',
+        { className: 'fl-fb-Field-option' },
+        React.createElement('input', { type: 'radio' }),
+        React.createElement(
+          'span',
+          null,
+          ' ',
+          optionText,
+          ' '
+        )
+      );
+    }),
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-config' },
+      React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
+      React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
+      React.createElement('input', {
+        className: 'fl-fb-Field-config-input',
+        type: 'text',
+        value: state.newOptionText,
+        onChange: updateProperty('newOptionText'),
+        onKeyPress: handleNewOptionKeydown
+      })
+    )
+  );
+};
+
+var RenderFormMode = function RenderFormMode(_ref2) {
+  var state = _ref2.state;
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      state.title
+    ),
+    state.options.map(function (optionText) {
+      return React.createElement(
+        'div',
+        { className: 'fl-fb-Field-option' },
+        React.createElement('input', { type: 'radio' }),
+        React.createElement(
+          'span',
+          null,
+          ' ',
+          optionText,
+          ' '
+        )
+      );
+    })
+  );
+};
+
+var RadioButtons = {
+  info: typeInfo,
+  initialState: initialState,
+  RenderConfigMode: RenderConfigMode,
+  RenderFormMode: RenderFormMode
+};
+
 /**
  *
  *
@@ -3002,7 +3151,7 @@ var templateTypeInfo = {
 
 // These are the fields that will end up being
 // changed on updates
-var componentFields = {
+var componentFields$1 = {
   // Compulsory fields
   required: false,
   // Component specific fields
@@ -3049,7 +3198,7 @@ var createRenderConfigMode = _curry(function (initialState, _ref) {
   );
 });
 
-var RenderFormMode = function RenderFormMode(_ref2) {
+var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
   var state = _ref2.state;
 
   return React.createElement(
@@ -3071,7 +3220,7 @@ var RenderFormMode = function RenderFormMode(_ref2) {
 function buildTextFieldConstructor(customTypeInfo) {
   var typeInfo = overshadow(templateTypeInfo, customTypeInfo);
 
-  var initialState = createInitialState(typeInfo, componentFields);
+  var initialState = createInitialState(typeInfo, componentFields$1);
 
   var RenderConfigMode = createRenderConfigMode(initialState());
 
@@ -3079,7 +3228,7 @@ function buildTextFieldConstructor(customTypeInfo) {
     info: typeInfo,
     initialState: initialState,
     RenderConfigMode: RenderConfigMode,
-    RenderFormMode: RenderFormMode
+    RenderFormMode: RenderFormMode$1
   };
 
   return FieldConstructor;
@@ -3123,7 +3272,7 @@ function FormBuilder(container) {
 
   assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
 
-  var defaultTypes = [TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
+  var defaultTypes = [RadioButtons, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
 
   var customFieldTypes = components.concat(defaultTypes);
 

@@ -29,6 +29,33 @@
   border: 0;
   width: 100%; }
 
+.fl-fb-Field-config {
+  position: relative;
+  background-color: #eee;
+  padding: 10px 15px;
+  left: -15px;
+  margin-top: 15px; }
+
+.fl-fb-Field-config-btn {
+  color: #999;
+  padding: 0 6px;
+  background: transparent;
+  border: 0; }
+  .fl-fb-Field-config-btn:hover, .fl-fb-Field-config-btn:active, .fl-fb-Field-config-btn:focus {
+    outline: 0 !important; }
+  .fl-fb-Field-config-btn:hover {
+    color: gray; }
+  .fl-fb-Field-config-btn:active {
+    color: #333333; }
+
+.fl-fb-Field-option {
+  font-weight: bold; }
+
+.fl-fb-Field-config-input {
+  min-width: 50%;
+  display: inline-block;
+  padding: 5px; }
+
 .fl-fb-ControlBar {
   display: -webkit-box;
   display: -webkit-flex;
@@ -62,7 +89,7 @@
 
 .fl-fb-Field {
   position: relative;
-  padding: 0 15px 10px;
+  padding: 0 15px 20px;
   margin: 5px 0;
   -webkit-border-radius: 5px;
           border-radius: 5px;
@@ -113,7 +140,7 @@
       -ms-flex-align: stretch;
           align-items: stretch;
   min-height: 100%;
-  padding: 5px 10px;
+  padding: 5px 10px 20px;
   -webkit-border-radius: 0 5px 5px 0;
           border-radius: 0 5px 5px 0;
   text-align: center;
@@ -170,7 +197,7 @@
   transition: all 0.2s ease, visibility 0s;
   position: absolute;
   right: 0;
-  bottom: 5px;
+  bottom: 20px;
   z-index: 2;
   -webkit-transform: translateY(100%);
       -ms-transform: translateY(100%);
@@ -280,6 +307,6 @@
     margin-left: 20px; }
 
 .fl-fb-Field textarea {
-  min-height: 100px; }
+  min-height: 80px; }
 
 /*# sourceMappingURL=fl-form-builder.css.map */

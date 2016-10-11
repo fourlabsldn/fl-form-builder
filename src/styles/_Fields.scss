@@ -72,7 +72,7 @@
   align-items: stretch;
 
   min-height: 100%;
-  padding: 5px 10px;
+  padding: 5px 10px $fc-bottom-padding;
   border-radius: 0 5px 5px 0;
 
   text-align: center;
@@ -138,7 +138,7 @@
 
   position: absolute;
   right: 0;
-  bottom: 5px; // To cover the sidebar bottom right border-radius
+  bottom: $fc-bottom-padding; // To cover the sidebar bottom right border-radius
   z-index: 2;
   transform: translateY(100%);
 
