@@ -2,12 +2,12 @@ import buildOptionsFieldConstructor from './buildOptionsFieldConstructor';
 
 const typeInfo = {
   // Compulsory
-  type: 'RadioButtons',
-  displayName: 'Radio Button',
+  type: 'Checkboxes',
+  displayName: 'Checkboxes',
   group: 'Options Components',
 
   // Field type specific
-  htmlInputType: 'radio',
+  htmlInputType: 'checkbox',
 };
 
 
