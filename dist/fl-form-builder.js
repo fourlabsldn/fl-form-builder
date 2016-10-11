@@ -102,6 +102,7 @@ var EventHub = {
   trigger: trigger
 };
 
+// This works as the interface for the FieldCreator Type
 var FieldCreatorPropType = {
   info: React.PropTypes.shape({
     type: React.PropTypes.string,
@@ -109,9 +110,8 @@ var FieldCreatorPropType = {
     displayName: React.PropTypes.string
   }),
   initialState: React.PropTypes.func,
-  RenderConfigMode: React.PropTypes.func,
-  RenderFormMode: React.PropTypes.func
-};
+  RenderConfigMode: React.PropTypes.func, // React render function
+  RenderFormMode: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
   var description = _ref.description;
@@ -2968,31 +2968,53 @@ function overshadow(oldObj, newObj) {
   }, {});
 }
 
-var typeInfo = {
-  type: 'TextField',
-  group: 'Text Components',
-  displayName: 'Text field'
-};
+/**
+ *
+ *
+ * This is a group of functions to build a Text Field Constructor.
+ * It is not supposed to be used as a FieldConstructor, but used to build one.
+ *
+ *
+ */
 
-var initialState = function initialState() {
-  var componentFields = {
-    // Compulsory fields
-    required: false,
-    // Component specific fields
-    title: 'Add a title',
-    placeholder: 'Add a placeholder'
-  };
+// ========== UTILS =================== //
 
-  return Object.assign({}, typeInfo, componentFields);
-};
-
-var updateField$2 = _curry(function (update, state, fieldName, event) {
+var updateField$2 = _curry(function (update, state, initialState, fieldName, event) {
   var value = event.target.value;
   // Update or fallback to default value
-  var newValue = value || initialState()[fieldName];
+  var newValue = value || initialState[fieldName];
   var newState = overshadow(state, defineProperty({}, fieldName, newValue));
   update(newState);
 });
+
+// ========== END OF UTILS ============ //
+
+var typeInfo$1 = {
+  // Compulsory
+  type: 'TextField',
+  group: 'Text Components',
+  displayName: 'Text field',
+
+  // Field type specific
+  htmlInputType: 'text'
+};
+
+// These are the fields that will end up being
+// changed on updates
+var componentFields$1 = {
+  // Compulsory fields
+  required: false,
+  // Component specific fields
+  title: 'Add a title',
+  placeholder: 'Add a placeholder'
+};
+
+// For Text Fields the initialState function will only return an object.
+var createInitialState = function createInitialState(typeSpecific, componentSpecific) {
+  return function () {
+    return Object.assign({}, typeSpecific, componentSpecific);
+  };
+};
 
 // When configuration is open, this is what is going to be displayed
 /**
@@ -3000,7 +3022,7 @@ var updateField$2 = _curry(function (update, state, fieldName, event) {
  * @param  {Object} state : State
  * @param  {Function} update : State -> void // Will trigger a re-render
  */
-var RenderConfigMode = function RenderConfigMode(_ref) {
+var createRenderConfigMode = _curry(function (initialState, _ref) {
   var state = _ref.state;
   var update = _ref.update;
 
@@ -3011,9 +3033,9 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
       'h2',
       null,
       React.createElement('input', {
-        type: 'text',
+        type: state.htmlInputType,
         className: 'fl-fb-Field--transparent',
-        onChange: updateField$2(update, state, 'title'),
+        onChange: updateField$2(update, state, initialState, 'title'),
         defaultValue: state.title
       })
     ),
@@ -3024,11 +3046,10 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
       defaultValue: state.placeholder
     })
   );
-};
+});
 
-var RenderFormMode = function RenderFormMode(_ref2) {
+var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
   var state = _ref2.state;
-  var update = _ref2.update;
 
   return React.createElement(
     'div',
@@ -3038,9 +3059,35 @@ var RenderFormMode = function RenderFormMode(_ref2) {
       null,
       state.title
     ),
-    React.createElement('input', { type: 'text', className: 'form-control', placeholder: state.placeholder })
+    React.createElement('input', {
+      type: state.htmlInputType,
+      className: 'form-control',
+      placeholder: state.placeholder
+    })
   );
 };
+
+var AbstractTextField = {
+  typeInfo: typeInfo$1,
+  componentFields: componentFields$1,
+  createInitialState: createInitialState,
+  createRenderConfigMode: createRenderConfigMode,
+  RenderFormMode: RenderFormMode$1
+};
+
+var typeInfo = overshadow(AbstractTextField.typeInfo, {
+  type: 'TextField',
+  group: 'Text Components',
+  displayName: 'Text field'
+});
+
+var componentFields = Object.assign({}, AbstractTextField.componentFields);
+
+var initialState = AbstractTextField.createInitialState(typeInfo, componentFields);
+
+var RenderConfigMode = AbstractTextField.createRenderConfigMode(initialState());
+
+var RenderFormMode = AbstractTextField.RenderFormMode;
 
 var TextBox = {
   info: typeInfo,
