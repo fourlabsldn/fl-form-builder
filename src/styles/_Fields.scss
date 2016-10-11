@@ -194,6 +194,49 @@
   text-indent: 5px;
 }
 
+/// ============= COMPONENT SPECIFIC CONFIG =================
+
+.fl-fb-Field--transparent {
+  background-color: transparent;
+  border: 0;
+  min-width: 50%;
+}
+
+.fl-fb-Field-config {
+  position: relative;
+  background-color: $c-background;
+  padding: 10px $fc-side-padding;
+  left: -$fc-side-padding;
+  margin-top: $fc-side-padding;
+}
+
+.fl-fb-Field-config-btn {
+  color: $c-font;
+  padding: 0 6px;
+  background: transparent;
+  border: 0;
+  &:hover,
+  &:active,
+  &:focus {
+    outline: 0 !important;
+  }
+
+  &:hover {
+    color: darken($c-font, 10%);
+  }
+
+  &:active {
+    color: darken($c-font, 40%);
+  }
+
+}
+
+.fl-fb-Field-config-input {
+  min-width: 50%;
+  display: inline-block;
+  padding: 5px;
+}
+
 // ============================================================
 //   SWITCH
 // ============================================================

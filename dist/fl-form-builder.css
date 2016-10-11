@@ -24,35 +24,6 @@
   100% {
     outline: 1px solid transparent; } }
 
-.fl-fb-Field--transparent {
-  background-color: transparent;
-  border: 0;
-  min-width: 50%; }
-
-.fl-fb-Field-config {
-  position: relative;
-  background-color: #eee;
-  padding: 10px 15px;
-  left: -15px;
-  margin-top: 15px; }
-
-.fl-fb-Field-config-btn {
-  color: #999;
-  padding: 0 6px;
-  background: transparent;
-  border: 0; }
-  .fl-fb-Field-config-btn:hover, .fl-fb-Field-config-btn:active, .fl-fb-Field-config-btn:focus {
-    outline: 0 !important; }
-  .fl-fb-Field-config-btn:hover {
-    color: gray; }
-  .fl-fb-Field-config-btn:active {
-    color: #333333; }
-
-.fl-fb-Field-config-input {
-  min-width: 50%;
-  display: inline-block;
-  padding: 5px; }
-
 .fl-fb-ControlBar {
   display: -webkit-box;
   display: -webkit-flex;
@@ -247,6 +218,35 @@
 .fl-fb-Field-configuration-options-input {
   min-width: 50%;
   text-indent: 5px; }
+
+.fl-fb-Field--transparent {
+  background-color: transparent;
+  border: 0;
+  min-width: 50%; }
+
+.fl-fb-Field-config {
+  position: relative;
+  background-color: #eee;
+  padding: 10px 15px;
+  left: -15px;
+  margin-top: 15px; }
+
+.fl-fb-Field-config-btn {
+  color: #999;
+  padding: 0 6px;
+  background: transparent;
+  border: 0; }
+  .fl-fb-Field-config-btn:hover, .fl-fb-Field-config-btn:active, .fl-fb-Field-config-btn:focus {
+    outline: 0 !important; }
+  .fl-fb-Field-config-btn:hover {
+    color: gray; }
+  .fl-fb-Field-config-btn:active {
+    color: #333333; }
+
+.fl-fb-Field-config-input {
+  min-width: 50%;
+  display: inline-block;
+  padding: 5px; }
 
 .fl-fb-ui-switch {
   display: inline-block;

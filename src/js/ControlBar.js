@@ -24,7 +24,7 @@ ButtonDropdownOption.propTypes = {
 
 const ButtonGroupDropdown = ({ groupName, groupButtons }) => {
   return (
-    <div className="fb-ControlBar-dropdown dropdown">
+    <div className="btn-group">
       <button className="btn btn-default dropdown-toggle" data-toggle="dropdown">
         {groupName}
         <span className="caret"></span>
@@ -75,7 +75,9 @@ const ControlBar = ({ fieldTypes }) => {
 
   return (
     <div className="fl-fb-ControlBar">
-      {buttonGroups}
+      <div className="btn-group">
+        {buttonGroups}
+      </div>
       <button
         className="btn btn-primary"
         onClick={() => EventHub.trigger('undoBtnPressed')}

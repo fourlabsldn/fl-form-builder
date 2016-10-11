@@ -145,7 +145,7 @@ var ButtonGroupDropdown = function ButtonGroupDropdown(_ref2) {
 
   return React.createElement(
     'div',
-    { className: 'fb-ControlBar-dropdown dropdown' },
+    { className: 'btn-group' },
     React.createElement(
       'button',
       { className: 'btn btn-default dropdown-toggle', 'data-toggle': 'dropdown' },
@@ -197,7 +197,11 @@ var ControlBar = function ControlBar(_ref3) {
   return React.createElement(
     'div',
     { className: 'fl-fb-ControlBar' },
-    buttonGroups,
+    React.createElement(
+      'div',
+      { className: 'btn-group' },
+      buttonGroups
+    ),
     React.createElement(
       'button',
       {
