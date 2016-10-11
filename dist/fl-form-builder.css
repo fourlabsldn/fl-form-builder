@@ -73,8 +73,13 @@
   z-index: 2;
   background-color: #ebf4fc; }
 
-.fl-fb-Field-editable[contenteditable="true"] {
-  background-color: #fcf8e3; }
+.fl-fb-Field-editable {
+  background-color: #fcf8e3;
+  border: 0;
+  -webkit-border-radius: 3px;
+          border-radius: 3px;
+  padding: 0 5px;
+  min-width: 80%; }
 
 .fl-fb--dragging {
   -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);

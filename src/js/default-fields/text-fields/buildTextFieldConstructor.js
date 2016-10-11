@@ -66,7 +66,7 @@ const createRenderConfigMode = curry((initialState, { state, update }) => {
       <h2>
         <input
           type="text"
-          className="fl-fb-Field--transparent"
+          className="fl-fb-Field-editable"
           onChange={updateField(update, state, initialState, 'title')}
           defaultValue={state.title}
         />

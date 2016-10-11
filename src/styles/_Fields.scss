@@ -27,9 +27,12 @@
   background-color: $c-highlight;
 }
 
-.fl-fb-Field-editable[contenteditable="true"] {
-  // border-bottom: 1px solid $c-font-dark;
+.fl-fb-Field-editable {
   background-color: $c-text-highlight;
+  border: 0;
+  border-radius: 3px;
+  padding: 0 5px;
+  min-width: 80%;
 }
 
 .fl-fb--dragging {

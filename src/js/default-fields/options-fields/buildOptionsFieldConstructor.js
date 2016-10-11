@@ -90,7 +90,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
         <h2>
           <input
             type="text"
-            className="fl-fb-Field--transparent"
+            className="fl-fb-Field-editable"
             onChange={updateProperty('title')}
             defaultValue={state.title}
           />
@@ -101,7 +101,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
             <input type={state.htmlInputType} />
             <input
               type="text"
-              className="fl-fb-Field-option-text fl-fb-Field--transparent"
+              className="fl-fb-Field-option-text fl-fb-Field-editable"
               value={optionText}
               onKeyPress={ifEnterPressed(removeIfOptionIsNull(optionIndex))}
               onChange={updateOption(optionIndex)}

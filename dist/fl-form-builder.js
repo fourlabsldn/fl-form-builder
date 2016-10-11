@@ -3064,7 +3064,7 @@ function buildOptionsFieldConstructor(typeInfo) {
         null,
         React.createElement('input', {
           type: 'text',
-          className: 'fl-fb-Field--transparent',
+          className: 'fl-fb-Field-editable',
           onChange: updateProperty('title'),
           defaultValue: state.title
         })
@@ -3076,7 +3076,7 @@ function buildOptionsFieldConstructor(typeInfo) {
           React.createElement('input', { type: state.htmlInputType }),
           React.createElement('input', {
             type: 'text',
-            className: 'fl-fb-Field-option-text fl-fb-Field--transparent',
+            className: 'fl-fb-Field-option-text fl-fb-Field-editable',
             value: optionText,
             onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
             onChange: updateOption(optionIndex)
@@ -3228,7 +3228,7 @@ var createRenderConfigMode = _curry(function (initialState, _ref) {
       null,
       React.createElement('input', {
         type: 'text',
-        className: 'fl-fb-Field--transparent',
+        className: 'fl-fb-Field-editable',
         onChange: updateField$2(update, state, initialState, 'title'),
         defaultValue: state.title
       })
