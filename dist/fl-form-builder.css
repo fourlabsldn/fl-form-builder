@@ -279,4 +279,7 @@
   .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:after {
     margin-left: 20px; }
 
+.fl-fb-Field textarea {
+  min-height: 100px; }
+
 /*# sourceMappingURL=fl-form-builder.css.map */

@@ -7,11 +7,11 @@ import React from 'react';
 
 
 // Field Types
-import TextBox from './DefaultFields/TextBox';
-import EmailBox from './DefaultFields/EmailBox';
-import TelephoneBox from './DefaultFields/TelephoneBox';
-import NumberBox from './DefaultFields/NumberBox';
-import TextArea from './DefaultFields/TextArea';
+import TextBox from './default-fields/text-fields/TextBox';
+import TextArea from './default-fields/text-fields/TextArea';
+import EmailBox from './default-fields/text-fields/EmailBox';
+import NumberBox from './default-fields/text-fields/NumberBox';
+import TelephoneBox from './default-fields/text-fields/TelephoneBox';
 
 function FormBuilder(container, components = []) {
   assert(
@@ -38,7 +38,7 @@ function FormBuilder(container, components = []) {
     container
   );
 
-  this.exportState = () => { return exportFunc() };
+  this.exportState = () => { return exportFunc(); };
 }
 
 export default FormBuilder;

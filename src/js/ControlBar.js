@@ -1,6 +1,6 @@
 import React from 'react';
 import EventHub from './EventHub';
-import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
+import FieldCreatorPropType from './default-fields/FieldCreatorPropType';
 
 
 const ButtonDropdownOption = ({ description }) => (

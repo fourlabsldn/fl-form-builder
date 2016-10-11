@@ -3034,7 +3034,7 @@ var createRenderConfigMode = _curry(function (initialState, _ref) {
       'h2',
       null,
       React.createElement('input', {
-        type: state.htmlInputType,
+        type: 'text',
         className: 'fl-fb-Field--transparent',
         onChange: updateField$2(update, state, initialState, 'title'),
         defaultValue: state.title
@@ -3091,16 +3091,16 @@ var TextBox = buildTextFieldConstructor({
   htmlInputType: 'text'
 });
 
+var TextBox$2 = buildTextFieldConstructor({
+  type: 'TextArea',
+  displayName: 'Text Area',
+  htmlElement: 'textarea'
+});
+
 var EmailBox = buildTextFieldConstructor({
   type: 'EmailBox',
   displayName: 'Email Box',
   htmlInputType: 'email'
-});
-
-var TextBox$2 = buildTextFieldConstructor({
-  type: 'TelephoneBox',
-  displayName: 'Telephone Box',
-  htmlInputType: 'tel'
 });
 
 var TextBox$3 = buildTextFieldConstructor({
@@ -3110,9 +3110,9 @@ var TextBox$3 = buildTextFieldConstructor({
 });
 
 var TextBox$4 = buildTextFieldConstructor({
-  type: 'TextArea',
-  displayName: 'Text Area',
-  htmlElement: 'textarea'
+  type: 'TelephoneBox',
+  displayName: 'Telephone Box',
+  htmlInputType: 'tel'
 });
 
 /* globals xController */
@@ -3123,7 +3123,7 @@ function FormBuilder(container) {
 
   assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
 
-  var defaultTypes = [TextBox, EmailBox, TextBox$2, TextBox$3, TextBox$4];
+  var defaultTypes = [TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
 
   var customFieldTypes = components.concat(defaultTypes);
 

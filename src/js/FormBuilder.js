@@ -2,7 +2,7 @@ import React from 'react';
 import ControlBar from './ControlBar';
 import Fields from './Fields';
 import assert from 'fl-assert';
-import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
+import FieldCreatorPropType from './default-fields/FieldCreatorPropType';
 
 import EventHub from './EventHub';
 

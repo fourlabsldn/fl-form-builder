@@ -1,6 +1,6 @@
 import React from 'react';
 import { curry } from 'lodash';
-import FieldCreatorPropType from './DefaultFields/FieldCreatorPropType';
+import FieldCreatorPropType from './default-fields/FieldCreatorPropType';
 
 import Field from './Field';
 

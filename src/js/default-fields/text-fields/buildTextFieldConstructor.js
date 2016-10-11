@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { overshadow } from './utils';
+import { overshadow } from '../utils';
 import { curry } from 'lodash';
 
 // ========== UTILS =================== //
@@ -65,7 +65,7 @@ const createRenderConfigMode = curry((initialState, { state, update }) => {
     <div>
       <h2>
         <input
-          type={state.htmlInputType}
+          type="text"
           className="fl-fb-Field--transparent"
           onChange={updateField(update, state, initialState, 'title')}
           defaultValue={state.title}
