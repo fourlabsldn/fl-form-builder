@@ -2989,7 +2989,7 @@ var updateField$2 = _curry(function (update, state, initialState, fieldName, eve
 
 // ========== END OF UTILS ============ //
 
-var typeInfo$1 = {
+var templateTypeInfo = {
   // Compulsory
   type: 'TextField',
   group: 'Text Components',
@@ -3001,7 +3001,7 @@ var typeInfo$1 = {
 
 // These are the fields that will end up being
 // changed on updates
-var componentFields$1 = {
+var componentFields = {
   // Compulsory fields
   required: false,
   // Component specific fields
@@ -3048,7 +3048,7 @@ var createRenderConfigMode = _curry(function (initialState, _ref) {
   );
 });
 
-var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
+var RenderFormMode = function RenderFormMode(_ref2) {
   var state = _ref2.state;
 
   return React.createElement(
@@ -3067,34 +3067,40 @@ var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
   );
 };
 
-var AbstractTextField = {
-  typeInfo: typeInfo$1,
-  componentFields: componentFields$1,
-  createInitialState: createInitialState,
-  createRenderConfigMode: createRenderConfigMode,
-  RenderFormMode: RenderFormMode$1
-};
+function buildTextFieldConstructor(customTypeInfo) {
+  var typeInfo = overshadow(templateTypeInfo, customTypeInfo);
 
-var typeInfo = overshadow(AbstractTextField.typeInfo, {
-  type: 'TextField',
-  group: 'Text Components',
-  displayName: 'Text field'
+  var initialState = createInitialState(typeInfo, componentFields);
+
+  var RenderConfigMode = createRenderConfigMode(initialState());
+
+  var FieldConstructor = {
+    info: typeInfo,
+    initialState: initialState,
+    RenderConfigMode: RenderConfigMode,
+    RenderFormMode: RenderFormMode
+  };
+
+  return FieldConstructor;
+}
+
+var TextBox = buildTextFieldConstructor({
+  type: 'TextBox',
+  displayName: 'Text Box',
+  htmlInputType: 'text'
 });
 
-var componentFields = Object.assign({}, AbstractTextField.componentFields);
+var EmailBox = buildTextFieldConstructor({
+  type: 'EmailBox',
+  displayName: 'Email Box',
+  htmlInputType: 'email'
+});
 
-var initialState = AbstractTextField.createInitialState(typeInfo, componentFields);
-
-var RenderConfigMode = AbstractTextField.createRenderConfigMode(initialState());
-
-var RenderFormMode = AbstractTextField.RenderFormMode;
-
-var TextBox = {
-  info: typeInfo,
-  initialState: initialState,
-  RenderConfigMode: RenderConfigMode,
-  RenderFormMode: RenderFormMode
-};
+var TextBox$2 = buildTextFieldConstructor({
+  type: 'TelephoneBox',
+  displayName: 'Telephone Box',
+  htmlInputType: 'tel'
+});
 
 /* globals xController */
 //
@@ -3104,7 +3110,7 @@ function FormBuilder(container) {
 
   assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
 
-  var defaultTypes = [TextBox];
+  var defaultTypes = [TextBox, EmailBox, TextBox$2];
 
   var customFieldTypes = components.concat(defaultTypes);
 

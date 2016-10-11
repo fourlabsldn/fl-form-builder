@@ -1,9 +1,9 @@
 import buildTextFieldConstructor from './buildTextFieldConstructor';
 
 const TextBox = buildTextFieldConstructor({
-  type: 'TextBox',
-  displayName: 'Text Box',
-  htmlInputType: 'text',
+  type: 'TelephoneBox',
+  displayName: 'Telephone Box',
+  htmlInputType: 'tel',
 });
 
 export default TextBox;

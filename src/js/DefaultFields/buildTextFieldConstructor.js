@@ -23,7 +23,7 @@ const updateField = curry((update, state, initialState, fieldName, event) => {
 
 // ========== END OF UTILS ============ //
 
-const typeInfo = {
+const templateTypeInfo = {
   // Compulsory
   type: 'TextField',
   group: 'Text Components',
@@ -93,12 +93,20 @@ const RenderFormMode = ({ state }) => {
   );
 };
 
-const AbstractTextField = {
-  typeInfo,
-  componentFields,
-  createInitialState,
-  createRenderConfigMode,
-  RenderFormMode,
-};
 
-export default AbstractTextField;
+export default function buildTextFieldConstructor(customTypeInfo) {
+  const typeInfo = overshadow(templateTypeInfo, customTypeInfo);
+
+  const initialState = createInitialState(typeInfo, componentFields);
+
+  const RenderConfigMode = createRenderConfigMode(initialState());
+
+  const FieldConstructor = {
+    info: typeInfo,
+    initialState,
+    RenderConfigMode,
+    RenderFormMode,
+  };
+
+  return FieldConstructor;
+}

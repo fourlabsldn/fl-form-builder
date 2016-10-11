@@ -8,6 +8,8 @@ import React from 'react';
 
 // Field Types
 import TextBox from './DefaultFields/TextBox';
+import EmailBox from './DefaultFields/EmailBox';
+import TelephoneBox from './DefaultFields/TelephoneBox';
 
 function FormBuilder(container, components = []) {
   assert(
@@ -17,6 +19,8 @@ function FormBuilder(container, components = []) {
 
   const defaultTypes = [
     TextBox,
+    EmailBox,
+    TelephoneBox,
   ];
 
   const customFieldTypes = components.concat(defaultTypes);
