@@ -16,6 +16,11 @@ function on(eventName, func) {
 
 function trigger(eventName, data) {
   assert.warn(listeners[eventName], `No one listening to "${eventName}."`);
+
+  if (!listeners[eventName]) {
+    return;
+  }
+
   listeners[eventName].forEach(f => f(data));
 }
 

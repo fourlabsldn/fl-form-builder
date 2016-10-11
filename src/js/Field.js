@@ -1,6 +1,52 @@
 import React from 'react';
 import assert from 'fl-assert';
 import EventHub from './EventHub';
+import trackReorderDrag from './utils/trackReorderDrag';
+
+
+function addListenerOnce(eventName, el, f) {
+  function triggerAndRemove(event) {
+    f(event);
+    el.removeEventListener(eventName, triggerAndRemove);
+  }
+
+  el.addEventListener(eventName, triggerAndRemove);
+}
+
+function getParentField(el) {
+  if (!el || ! el.parentNode) { return el; }
+  return el.classList.contains('fl-fb-Field')
+    ? el
+    : getParentField(el.parentNode);
+}
+
+const onDragStart = event => {
+  const e = event.nativeEvent;
+  // hide any dragging image
+  e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+
+  const mainField = getParentField(e.target);
+  const trackedFields = Array.from(mainField.parentElement.children);
+
+  if (trackedFields.length < 2) { return; }
+  mainField.classList.add('fl-fb-Field--dragging');
+  trackReorderDrag(e, mainField, trackedFields);
+
+  // Post dragging
+  addListenerOnce('dragend', mainField, () => {
+    // remove dragging class after animation finishes
+    setTimeout(() => mainField.classList.remove('fl-fb-Field--dragging'), 250);
+
+    const reorderedIds = Array.from(trackedFields)
+      .sort((el1, el2) => {
+        return el1.getBoundingClientRect().top >
+               el2.getBoundingClientRect().top;
+      })
+      .map(f => f.dataset.id);
+
+    EventHub.trigger('fieldsReorder', reorderedIds);
+  });
+};
 
 const updateField = newState => {
   EventHub.trigger('updateField', newState);
@@ -37,7 +83,11 @@ const isValidFieldState = state => {
 
 const Sidebar = ({ fieldState }) => (
   <div className="fl-fb-Field-sidebar">
-    <button className="glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn" />
+    <button
+      className="glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn"
+      onDragStart={onDragStart}
+      draggable="true"
+    />
     <button
       className="glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
       onClick={() => toggleConfig(fieldState)}

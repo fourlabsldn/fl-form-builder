@@ -92,6 +92,11 @@ function on(eventName, func) {
 
 function trigger(eventName, data) {
   assert.warn(listeners[eventName], 'No one listening to "' + eventName + '."');
+
+  if (!listeners[eventName]) {
+    return;
+  }
+
   listeners[eventName].forEach(function (f) {
     return f(data);
   });
@@ -2548,149 +2553,57 @@ module.exports = curry;
 
 var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
 
-var updateField$1 = function updateField$1(newState) {
-  EventHub.trigger('updateField', newState);
+/**
+ * @function throttle
+ * @param  {integer}   FuncDelay
+ * @param  {Function} callback
+ * @return {Function}                  the throttled function
+ */
+function throttle(FuncDelay, callback) {
+  var lastCall = +new Date();
+  var delay = FuncDelay;
+  var params = void 0;
+  var context = {};
+  var calledDuringDelay = false;
+
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var now = +new Date();
+    var diff = now - lastCall;
+    var timeToEndOfDelay = void 0;
+
+    params = args;
+
+    if (diff > delay) {
+      callback.apply(context, params); // Call function with latest parameters
+      calledDuringDelay = false;
+      lastCall = now;
+    } else if (!calledDuringDelay) {
+      // If it wasn't called yet, call it when there is enough delay.
+      timeToEndOfDelay = delay - diff;
+
+      setTimeout(function () {
+        callback.apply(context, params); // Call function with latest parameters
+      }, timeToEndOfDelay);
+
+      calledDuringDelay = true;
+      lastCall = now + timeToEndOfDelay;
+    } // Otherwise do nothing.
+  };
+}
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
 };
 
-var deleteField$1 = function deleteField$1(fieldState) {
-  EventHub.trigger('deleteField', fieldState);
-};
-
-var toggleConfig = function toggleConfig(fieldState) {
-  var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
-  updateField$1(newFieldState);
-};
-
-var toggleRequired = function toggleRequired(fieldState) {
-  var newFieldState = Object.assign({}, fieldState, { required: !fieldState.required });
-  updateField$1(newFieldState);
-};
-
-var isValidFieldState = function isValidFieldState(state) {
-  return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
-};
-
-var Sidebar = function Sidebar(_ref) {
-  var fieldState = _ref.fieldState;
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Field-sidebar' },
-    React.createElement('button', { className: 'glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn' }),
-    React.createElement('button', {
-      className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config',
-      onClick: function onClick() {
-        return toggleConfig(fieldState);
-      }
-    }),
-    React.createElement('button', {
-      className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete',
-      onClick: function onClick() {
-        return deleteField$1(fieldState);
-      }
-    })
-  );
-};
-
-var ConfigBar = function ConfigBar(_ref2) {
-  var fieldState = _ref2.fieldState;
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Field-configuration' },
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-configuration-buttons' },
-      React.createElement(
-        'label',
-        {
-          className: 'fl-fb-Field-configuration-switch-required',
-          onMouseDown: function onMouseDown() {
-            return toggleRequired(fieldState);
-          }
-        },
-        'Required',
-        React.createElement(
-          'div',
-          { className: 'fl-fb-ui-switch' },
-          React.createElement('input', {
-            className: 'fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round',
-            type: 'checkbox',
-            id: 'fl-fb-ui-switch-' + fieldState.id,
-            checked: fieldState.required
-          }),
-          React.createElement(
-            'label',
-            { htmlFor: 'fl-fb-ui-switch-' + fieldState.id },
-            ' '
-          )
-        )
-      ),
-      React.createElement(
-        'span',
-        { className: 'fl-fb-Field-configuration-elementName' },
-        fieldState.displayName
-      ),
-      React.createElement('button', {
-        className: 'fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok',
-        onClick: function onClick() {
-          return toggleConfig(fieldState);
-        },
-        type: 'button'
-      })
-    )
-  );
-};
-
-var Field = function Field(_ref3) {
-  var fieldState = _ref3.fieldState;
-  var fieldConstructor = _ref3.fieldConstructor;
-
-  assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
-
-  var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
-
-  var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
-
-  return React.createElement(
-    'div',
-    { className: topClasses },
-    React.createElement(fieldComponent, { state: fieldState, update: updateField$1 }),
-    React.createElement(ConfigBar, { fieldState: fieldState }),
-    React.createElement(Sidebar, { fieldState: fieldState })
-  );
-};
-
-Field.propTypes = {
-  fieldState: React.PropTypes.object,
-  fieldConstructor: React.PropTypes.object
-};
-
-var getTypeConstructor = _curry(function (typeConstructors, type) {
-  return typeConstructors.find(function (t) {
-    return t.info.type === type;
-  });
-});
-
-var Fields = function Fields(props) {
-  var fieldStates = props.fieldStates;
-  var fieldTypes = props.fieldTypes;
 
 
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Fields' },
-    fieldStates.map(function (compState) {
-      return React.createElement(Field, {
-        fieldState: compState,
-        fieldConstructor: getTypeConstructor(fieldTypes, compState.type)
-      });
-    })
-  );
-};
 
-Fields.propTypes = {
-  fieldStates: React.PropTypes.array,
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
-};
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -2816,6 +2729,418 @@ var set = function set(object, property, value, receiver) {
   }
 
   return value;
+};
+
+/**
+ * Will take care of the dragging and reordering a list for one drag.
+ * @function trackReorderDrag
+ * @param  {event} paramE        The dragstart event, from which this should be called.
+ * @param  {HTMLElement} paramEl       The main Element being dragged
+ * @param  {Array<HTMLElement>} paramElements Array of elements to be tracked.
+ * @return {void}
+ */
+function trackReorderDrag(paramE, paramEl, paramElements) {
+  function setTranslation(el, val) {
+    el.style.transform = 'translate3d(0, ' + val + 'px, 0)'; //  eslint-disable-line no-param-reassign
+  }
+
+  /**
+   * @function resetElementsPositions
+   * @param {Array<HTMLElement>} els Elements being tracked
+   */
+  function resetElementsPositions(els) {
+    els.forEach(function (el) {
+      setTranslation(el, 0);
+    });
+  }
+
+  /**
+   * @function calculateElementHeight
+   * @param  {Array<HTMLElement>} els    Elements ordered by vertical position
+   * @param  {Integer} elIndex
+   * @return {void}
+   */
+  function calculateElementHeight(els, elIndex) {
+    var spaceOccupied = void 0;
+
+    // If not the last element
+    if (elIndex < els.length - 1) {
+      var elTop = els[elIndex].getBoundingClientRect().top;
+      var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
+      spaceOccupied = nextElTop - elTop;
+    } else {
+      // let's estimate the general vertical distance between elements by
+      // subtracting the size of the first element from the distance between
+      // its top and the next element.
+      var firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+      var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
+      var height = els[elIndex].clientHeight;
+      spaceOccupied = height + verticalDistance;
+    }
+
+    return spaceOccupied;
+  }
+
+  /**
+   * @function createDragMover
+   * @param  {Array<HTMLElement>} els
+   * @param  {Array<Integer>} tops        Initial tops
+   * @param  {Integer} targetIndex Index of element being dragged around
+   * @return {function}             The function to translate elements in the
+   *                                  list to make room for the dragged element
+   */
+  function createDragMover(els, tops, targetIndex) {
+    var target = els[targetIndex];
+    var targetInitialTop = tops[targetIndex];
+    var targetHeight = calculateElementHeight(els, targetIndex);
+    return function doDragMove() {
+      var targetTop = target.getBoundingClientRect().top;
+      var movedUp = targetTop < targetInitialTop;
+
+      var i = void 0;
+      for (i = 0; i < tops.length; i++) {
+        if (i === targetIndex) {
+          continue;
+        } else if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
+          setTranslation(els[i], -targetHeight);
+        } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
+          setTranslation(els[i], targetHeight);
+        } else {
+          setTranslation(els[i], 0);
+        }
+      }
+    };
+  }
+
+  function createDragListener(els, tops, targetIndex, initialY) {
+    var target = els[targetIndex];
+    var doDragMove = createDragMover(els, tops, targetIndex);
+    var shouldStopListening = void 0;
+    function dragListener(e) {
+      if (shouldStopListening) {
+        return;
+      }
+
+      doDragMove();
+      var newY = e.pageY;
+      if (newY === 0) {
+        return;
+      } // correct weird behaviour when mouse goes up
+
+      var diff = newY - initialY;
+      setTranslation(target, diff);
+    }
+
+    dragListener.stop = function () {
+      shouldStopListening = true;
+    };
+
+    return dragListener;
+  }
+
+  function getElementsCurrentTop(els) {
+    var tops = [];
+    els.forEach(function (el) {
+      tops.push(el.getBoundingClientRect().top);
+    });
+
+    return tops;
+  }
+
+  // function adjustElementsToTops(els, tops) {
+  //   const currentTops = getElementsCurrentTop(els);
+  //   els.forEach(function (el, i) {
+  //     const diff =  currentTops[i] - tops[i];
+  //     setTranslation(el, diff);
+  //   });
+  // }
+
+  function insertTargetInRightPlace(els, initialTops, targetIndex) {
+    var target = els[targetIndex];
+    var topsBeforeInsertion = getElementsCurrentTop(els);
+    var targetTop = topsBeforeInsertion[targetIndex];
+    var i = 0;
+
+    // Pass by all elements that are above the target
+    while (topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop || i === targetIndex) {
+      i++;
+    }
+
+    // Take away transitions from all elements and save them
+    var initialTransitions = [];
+    els.forEach(function (anEl) {
+      initialTransitions.push(anEl.style.transition);
+      anEl.style.transition = 'none'; // eslint-disable-line no-param-reassign
+    });
+
+    // Put everyone at translate3d(0,0,0) without transitions
+    resetElementsPositions(els);
+
+    // Add the element in the appropriate place. This will displace everyone else.
+    var parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
+    if (!parent || !parent.appendChild) {
+      throw new Error('trackReorderDrag(): No parent found in element list.');
+    } else if (els[i]) {
+      parent.insertBefore(target, els[i]);
+    } else {
+      var lastEl = els[els.length - 1];
+      parent.insertBefore(target, lastEl);
+      parent.insertBefore(lastEl, target);
+    }
+
+    // Now let's translate it to where it was just before it was repositioned
+    // All without transitions. It will seem like it never left that spot.
+    var futureTop = target.getBoundingClientRect().top;
+    var displacement = targetTop - futureTop;
+    setTranslation(target, displacement);
+
+    // Let's add a timeout to get the last place in the UI queue and let the
+    // CSS renderer to process the fact that all these elements do not have
+    // transitions and should appear wherever their coordinates say immediately.
+    setTimeout(function () {
+      // Restore all transitions
+      els.forEach(function (anEl, k) {
+        anEl.style.transition = initialTransitions[k]; // eslint-disable-line no-param-reassign
+      });
+
+      // Now transition the target can transition smoothly from where it
+      // was dropped to its final position at translate value 0.
+      setTranslation(target, 0);
+    }, 15);
+
+    //  adjustElementsToTops(els, topsBeforeInsertion);
+  }
+
+  function init(e, el, elements) {
+    if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) !== 'object') {
+      throw new Error('trackReorderDrag(): Invalid parameter');
+    }
+
+    // Reorder elements
+    elements.sort(function (el1, el2) {
+      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
+    });
+
+    // Set initial states
+    var initialTops = [];
+    elements.forEach(function (element) {
+      initialTops.push(element.getBoundingClientRect().top);
+    });
+
+    var elIndex = elements.indexOf(el);
+
+    // Create throttled drag listener
+    var initialY = e.pageY;
+    var dragListener = createDragListener(elements, initialTops, elIndex, initialY);
+    var throttledDragListener = throttle(50, dragListener);
+
+    // Listen to drags
+    var eventTarget = e.target;
+    eventTarget.addEventListener('drag', throttledDragListener);
+    eventTarget.addEventListener('dragend', function dragEndListener() {
+      dragListener.stop();
+      insertTargetInRightPlace(elements, initialTops, elIndex);
+      eventTarget.removeEventListener('drag', throttledDragListener);
+      eventTarget.removeEventListener('dragend', dragEndListener);
+    });
+  }
+
+  init(paramE, paramEl, paramElements);
+}
+
+function addListenerOnce(eventName, el, f) {
+  function triggerAndRemove(event) {
+    f(event);
+    el.removeEventListener(eventName, triggerAndRemove);
+  }
+
+  el.addEventListener(eventName, triggerAndRemove);
+}
+
+function getParentField(el) {
+  if (!el || !el.parentNode) {
+    return el;
+  }
+  return el.classList.contains('fl-fb-Field') ? el : getParentField(el.parentNode);
+}
+
+var onDragStart = function onDragStart(event) {
+  var e = event.nativeEvent;
+  // hide any dragging image
+  e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
+
+  var mainField = getParentField(e.target);
+  var trackedFields = Array.from(mainField.parentElement.children);
+
+  if (trackedFields.length < 2) {
+    return;
+  }
+  mainField.classList.add('fl-fb-Field--dragging');
+  trackReorderDrag(e, mainField, trackedFields);
+
+  // Post dragging
+  addListenerOnce('dragend', mainField, function () {
+    // remove dragging class after animation finishes
+    setTimeout(function () {
+      return mainField.classList.remove('fl-fb-Field--dragging');
+    }, 250);
+
+    var reorderedIds = Array.from(trackedFields).sort(function (el1, el2) {
+      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
+    }).map(function (f) {
+      return f.dataset.id;
+    });
+
+    EventHub.trigger('fieldsReorder', reorderedIds);
+  });
+};
+
+var updateField$1 = function updateField$1(newState) {
+  EventHub.trigger('updateField', newState);
+};
+
+var deleteField$1 = function deleteField$1(fieldState) {
+  EventHub.trigger('deleteField', fieldState);
+};
+
+var toggleConfig = function toggleConfig(fieldState) {
+  var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
+  updateField$1(newFieldState);
+};
+
+var toggleRequired = function toggleRequired(fieldState) {
+  var newFieldState = Object.assign({}, fieldState, { required: !fieldState.required });
+  updateField$1(newFieldState);
+};
+
+var isValidFieldState = function isValidFieldState(state) {
+  return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
+};
+
+var Sidebar = function Sidebar(_ref) {
+  var fieldState = _ref.fieldState;
+  return React.createElement(
+    'div',
+    { className: 'fl-fb-Field-sidebar' },
+    React.createElement('button', {
+      className: 'glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn',
+      onDragStart: onDragStart,
+      draggable: 'true'
+    }),
+    React.createElement('button', {
+      className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config',
+      onClick: function onClick() {
+        return toggleConfig(fieldState);
+      }
+    }),
+    React.createElement('button', {
+      className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete',
+      onClick: function onClick() {
+        return deleteField$1(fieldState);
+      }
+    })
+  );
+};
+
+var ConfigBar = function ConfigBar(_ref2) {
+  var fieldState = _ref2.fieldState;
+  return React.createElement(
+    'div',
+    { className: 'fl-fb-Field-configuration' },
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-configuration-buttons' },
+      React.createElement(
+        'label',
+        {
+          className: 'fl-fb-Field-configuration-switch-required',
+          onMouseDown: function onMouseDown() {
+            return toggleRequired(fieldState);
+          }
+        },
+        'Required',
+        React.createElement(
+          'div',
+          { className: 'fl-fb-ui-switch' },
+          React.createElement('input', {
+            className: 'fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round',
+            type: 'checkbox',
+            id: 'fl-fb-ui-switch-' + fieldState.id,
+            checked: fieldState.required
+          }),
+          React.createElement(
+            'label',
+            { htmlFor: 'fl-fb-ui-switch-' + fieldState.id },
+            ' '
+          )
+        )
+      ),
+      React.createElement(
+        'span',
+        { className: 'fl-fb-Field-configuration-elementName' },
+        fieldState.displayName
+      ),
+      React.createElement('button', {
+        className: 'fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok',
+        onClick: function onClick() {
+          return toggleConfig(fieldState);
+        },
+        type: 'button'
+      })
+    )
+  );
+};
+
+var Field = function Field(_ref3) {
+  var fieldState = _ref3.fieldState;
+  var fieldConstructor = _ref3.fieldConstructor;
+
+  assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
+
+  var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
+
+  var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
+
+  return React.createElement(
+    'div',
+    { className: topClasses },
+    React.createElement(fieldComponent, { state: fieldState, update: updateField$1 }),
+    React.createElement(ConfigBar, { fieldState: fieldState }),
+    React.createElement(Sidebar, { fieldState: fieldState })
+  );
+};
+
+Field.propTypes = {
+  fieldState: React.PropTypes.object,
+  fieldConstructor: React.PropTypes.object
+};
+
+var getTypeConstructor = _curry(function (typeConstructors, type) {
+  return typeConstructors.find(function (t) {
+    return t.info.type === type;
+  });
+});
+
+var Fields = function Fields(props) {
+  var fieldStates = props.fieldStates;
+  var fieldTypes = props.fieldTypes;
+
+
+  return React.createElement(
+    'div',
+    { className: 'fl-fb-Fields' },
+    fieldStates.map(function (compState) {
+      return React.createElement(Field, {
+        fieldState: compState,
+        fieldConstructor: getTypeConstructor(fieldTypes, compState.type)
+      });
+    })
+  );
+};
+
+Fields.propTypes = {
+  fieldStates: React.PropTypes.array,
+  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
 };
 
 var FormBuilder$2 = function (_React$Component) {
