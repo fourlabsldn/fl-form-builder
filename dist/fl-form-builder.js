@@ -3026,6 +3026,27 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     update(newState);
   };
 
+  var updateOption = _curry(function (optionIndex, event) {
+    var value = event.target.value;
+    var options = Array.from(state.options);
+    options[optionIndex] = value;
+
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  });
+
+  var removeIfOptionIsNull = _curry(function (optionIndex, event) {
+    var value = event.target.value;
+    if (value) {
+      return;
+    }
+    var optionsBefore = state.options.slice(0, optionIndex);
+    var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
+    var options = optionsBefore.concat(optionsAfter);
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  });
+
   var updateProperty = _curry(function (propName, event) {
     var value = event.target.value;
     var newValue = value || initialState()[propName];
@@ -3033,11 +3054,11 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     update(newState);
   });
 
-  var handleNewOptionKeydown = function handleNewOptionKeydown(event) {
+  var ifEnterPressed = _curry(function (f, e) {
     if (event.key === 'Enter') {
-      addOption();
+      f(e);
     }
-  };
+  });
 
   return React.createElement(
     'div',
@@ -3052,18 +3073,18 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
         defaultValue: state.title
       })
     ),
-    state.options.map(function (optionText) {
+    state.options.map(function (optionText, optionIndex) {
       return React.createElement(
         'div',
         { className: 'fl-fb-Field-option' },
         React.createElement('input', { type: 'radio' }),
-        React.createElement(
-          'span',
-          null,
-          ' ',
-          optionText,
-          ' '
-        )
+        React.createElement('input', {
+          type: 'text',
+          className: 'fl-fb-Field-option-text fl-fb-Field--transparent',
+          value: optionText,
+          onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
+          onChange: updateOption(optionIndex)
+        })
       );
     }),
     React.createElement(
@@ -3076,7 +3097,7 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
         type: 'text',
         value: state.newOptionText,
         onChange: updateProperty('newOptionText'),
-        onKeyPress: handleNewOptionKeydown
+        onKeyPress: ifEnterPressed(addOption)
       })
     )
   );
@@ -3100,7 +3121,7 @@ var RenderFormMode = function RenderFormMode(_ref2) {
         React.createElement('input', { type: 'radio' }),
         React.createElement(
           'span',
-          null,
+          { className: 'fl-fb-Field-option-text' },
           ' ',
           optionText,
           ' '

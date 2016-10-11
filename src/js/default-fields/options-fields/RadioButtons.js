@@ -61,6 +61,25 @@ const RenderConfigMode = ({ state, update }) => {
     update(newState);
   };
 
+  const updateOption = curry((optionIndex, event) => {
+    const value = event.target.value;
+    const options = Array.from(state.options);
+    options[optionIndex] = value;
+
+    const newState = overshadow(state, { options });
+    update(newState);
+  });
+
+  const removeIfOptionIsNull = curry((optionIndex, event) => {
+    const value = event.target.value;
+    if (value) { return; }
+    const optionsBefore = state.options.slice(0, optionIndex);
+    const optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
+    const options = optionsBefore.concat(optionsAfter);
+    const newState = overshadow(state, { options });
+    update(newState);
+  });
+
   const updateProperty = curry((propName, event) => {
     const value = event.target.value;
     const newValue = value || initialState()[propName];
@@ -68,11 +87,11 @@ const RenderConfigMode = ({ state, update }) => {
     update(newState);
   });
 
-  const handleNewOptionKeydown = (event) => {
+  const ifEnterPressed = curry((f, e) => {
     if (event.key === 'Enter') {
-      addOption();
+      f(e);
     }
-  };
+  });
 
   return (
     <div>
@@ -85,22 +104,28 @@ const RenderConfigMode = ({ state, update }) => {
         />
       </h2>
 
-      {state.options.map(optionText => (
+      {state.options.map((optionText, optionIndex) => (
         <div className="fl-fb-Field-option">
           <input type="radio" />
-          <span> {optionText} </span>
+          <input
+            type="text"
+            className="fl-fb-Field-option-text fl-fb-Field--transparent"
+            value={optionText}
+            onKeyPress={ifEnterPressed(removeIfOptionIsNull(optionIndex))}
+            onChange={updateOption(optionIndex)}
+          />
         </div>
       ))}
 
       <div className="fl-fb-Field-config">
-      <button onMouseDown={removeOption} className="glyphicon-minus-sign glyphicon fl-fb-Field-config-btn" />
+        <button onMouseDown={removeOption} className="glyphicon-minus-sign glyphicon fl-fb-Field-config-btn" />
         <button onMouseDown={addOption} className="glyphicon-plus-sign glyphicon fl-fb-Field-config-btn" />
         <input
           className="fl-fb-Field-config-input"
           type="text"
           value={state.newOptionText}
           onChange={updateProperty('newOptionText')}
-          onKeyPress={handleNewOptionKeydown}
+          onKeyPress={ifEnterPressed(addOption)}
         />
       </div>
     </div>
@@ -114,7 +139,7 @@ const RenderFormMode = ({ state }) => {
       {state.options.map(optionText => (
         <div className="fl-fb-Field-option">
           <input type="radio" />
-          <span> {optionText} </span>
+          <span className="fl-fb-Field-option-text"> {optionText} </span>
         </div>
       ))}
     </div>
