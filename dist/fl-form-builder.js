@@ -3190,6 +3190,18 @@ var FormBuilder$2 = function (_React$Component) {
     props.exportState(function () {
       return _this.state.fieldStates;
     });
+    props.importState(function (fieldStates) {
+      // Check that all types are ok.
+      fieldStates.forEach(function (s) {
+        if (!_this.state.fieldTypes.map(function (f) {
+          return f.info.type;
+        }).includes(s.type)) {
+          assert(false, s.type + ' is not included in field types.');
+        }
+      });
+
+      _this.pushHistoryState(fieldStates);
+    });
     return _this;
   }
 
@@ -3315,7 +3327,8 @@ var FormBuilder$2 = function (_React$Component) {
 
 FormBuilder$2.propTypes = {
   fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
-  exportState: React.PropTypes.func
+  exportState: React.PropTypes.func,
+  importState: React.PropTypes.func
 };
 
 // Creates a new object with properties of the old one
@@ -3873,15 +3886,22 @@ function FormBuilder(container) {
   var customFieldTypes = defaultTypes.concat(components);
 
   var exportFunc = void 0;
+  var importFunc = void 0;
   ReactDOM.render(React.createElement(FormBuilder$2, {
     fieldTypes: customFieldTypes,
     exportState: function exportState(f) {
       return exportFunc = f;
+    },
+    importState: function importState(f) {
+      return importFunc = f;
     }
   }), container);
 
   this.exportState = function () {
     return exportFunc();
+  };
+  this.importState = function (s) {
+    return importFunc(s);
   };
 }
 

@@ -37,15 +37,18 @@ function FormBuilder(container, components = []) {
   const customFieldTypes = defaultTypes.concat(components);
 
   let exportFunc;
+  let importFunc;
   ReactDOM.render((
     <ReactFormBuilder
       fieldTypes={customFieldTypes}
       exportState={f => (exportFunc = f)}
+      importState={f => (importFunc = f)}
     />),
     container
   );
 
   this.exportState = () => { return exportFunc(); };
+  this.importState = (s) => { return importFunc(s); };
 }
 
 export default FormBuilder;

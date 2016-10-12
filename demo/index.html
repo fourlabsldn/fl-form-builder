@@ -50,7 +50,7 @@
 
     const container = document.querySelector('.form-builder-container');
 
-    const fb = new FormBuilder(container, customComponents);
+    window.fb = new FormBuilder(container, customComponents);
 
     const btn = document.querySelector('#exportBtn');
     btn.addEventListener('click', function () {

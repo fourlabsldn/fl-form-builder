@@ -31,6 +31,16 @@ export default class FormBuilder extends React.Component {
 
     // Expose function to export state.
     props.exportState(() => this.state.fieldStates);
+    props.importState(fieldStates => {
+      // Check that all types are ok.
+      fieldStates.forEach(s => {
+        if (!this.state.fieldTypes.map(f => f.info.type).includes(s.type)) {
+          assert(false, `${s.type} is not included in field types.`);
+        }
+      });
+
+      this.pushHistoryState(fieldStates);
+    });
   }
 
   // ==================== FIELDS HANDLING  ===========================
@@ -145,4 +155,5 @@ export default class FormBuilder extends React.Component {
 FormBuilder.propTypes = {
   fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
   exportState: React.PropTypes.func,
+  importState: React.PropTypes.func,
 };
