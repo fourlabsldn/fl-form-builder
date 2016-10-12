@@ -3843,7 +3843,7 @@ function FormBuilder(container) {
 
   var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
 
-  var customFieldTypes = components.concat(defaultTypes);
+  var customFieldTypes = defaultTypes.concat(components);
 
   var exportFunc = void 0;
   ReactDOM.render(React.createElement(FormBuilder$2, {

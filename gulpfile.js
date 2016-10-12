@@ -12,7 +12,10 @@ organiser.registerAll('./gulp-tasks', {
   },
   'transpile-react': {
     watch: path.join(src, 'js', '/**/*.js'),
-    src: path.join(src, 'js', 'fl-form-builder.js'),
+    src: [
+      path.join(src, 'js', 'fl-form-builder.js'),
+      './demo/ImageCards.js',
+    ],
     dest,
     config: {
       external: ['react', 'react-dom'],

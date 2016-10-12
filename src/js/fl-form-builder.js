@@ -34,7 +34,7 @@ function FormBuilder(container, components = []) {
     TextArea,
   ];
 
-  const customFieldTypes = components.concat(defaultTypes);
+  const customFieldTypes = defaultTypes.concat(components);
 
   let exportFunc;
   ReactDOM.render((

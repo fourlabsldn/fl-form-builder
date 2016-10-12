@@ -19,6 +19,7 @@
         'react': 'http://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min',
         'react-dom': 'http://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min',
         'fl-form-builder': '../dist/fl-form-builder',
+        'ImageCards': '../dist/ImageCards',
       },
     });
   </script>
@@ -42,9 +43,14 @@
   </div>
 
   <script>
-  require(['fl-form-builder'], function (FormBuilder) {
-    var container = document.querySelector('.form-builder-container');
-    const fb = new FormBuilder(container);
+  require(['fl-form-builder', 'ImageCards'], function (FormBuilder, ImageCards) {
+
+    // Our custom components array:
+    const customComponents = [ImageCards];
+
+    const container = document.querySelector('.form-builder-container');
+
+    const fb = new FormBuilder(container, customComponents);
 
     const btn = document.querySelector('#exportBtn');
     btn.addEventListener('click', function () {

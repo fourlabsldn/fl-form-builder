@@ -19,3 +19,13 @@
   margin-bottom: 10px;
   font-weight: bold;
 }
+
+/* Custom component styling */
+.ImageCards-cards {
+
+}
+.ImageCards-card {
+  width: 150px;
+  border: 10px solid #ddd;
+  margin: 10px;
+}
