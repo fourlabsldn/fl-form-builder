@@ -104,11 +104,16 @@ export default function buildTextFieldConstructor(customTypeInfo) {
 
   const RenderConfigMode = createRenderConfigMode(initialState());
 
+  const RenderEditor = ({ state, update }) => {
+    return state.configShowing
+      ? RenderConfigMode({ state, update }) // eslint-disable-line new-cap
+      : RenderFormMode({ state, update }); // eslint-disable-line new-cap
+  };
+
   const FieldConstructor = {
     info: typeInfo,
     initialState,
-    RenderConfigMode,
-    RenderFormMode,
+    RenderEditor,
   };
 
   return FieldConstructor;

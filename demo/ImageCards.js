@@ -35,7 +35,7 @@ const initialState = () => Object.assign({}, typeInfo);
  * @param  {Object} state : State
  * @param  {Function} update : State -> void // Will trigger a re-render
  */
-const RenderConfigMode = ({ state, update }) => {
+const RenderEditor = ({ state, update }) => {
   const updateNewImageText = event => {
     const text = event.target.value;
     const newState = Object.assign(
@@ -63,25 +63,20 @@ const RenderConfigMode = ({ state, update }) => {
 
   return (
     <div>
-
       {state.images.map(img => <img alt={img} className="ImageCards-card" src={img} />)}
 
-      <div className="fl-fb-Field-config">
-        <input
-          type="text"
-          value={state.newImageText}
-          onChange={updateNewImageText}
-          onKeyDown={addNewImage}
-        />
-      </div>
-    </div>
-  );
-};
-
-const RenderFormMode = ({ state }) => {
-  return (
-    <div>
-      {state.images.map(img => <img alt={img} className="ImageCards-card" src={img} />)}
+      {!state.configShowing
+        ? null
+        : (
+        <div className="fl-fb-Field-config">
+          <input
+            type="text"
+            value={state.newImageText}
+            onChange={updateNewImageText}
+            onKeyDown={addNewImage}
+          />
+        </div>
+      )}
     </div>
   );
 };
@@ -89,8 +84,7 @@ const RenderFormMode = ({ state }) => {
 const ImageCards = {
   info: typeInfo,
   initialState,
-  RenderConfigMode,
-  RenderFormMode,
+  RenderEditor,
 };
 
 export default ImageCards;

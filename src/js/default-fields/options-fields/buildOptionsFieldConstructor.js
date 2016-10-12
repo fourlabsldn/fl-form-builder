@@ -139,11 +139,16 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     );
   };
 
+  const RenderEditor = ({ state, update }) => {
+    return state.configShowing
+      ? RenderConfigMode({ state, update }) // eslint-disable-line new-cap
+      : RenderFormMode({ state, update }); // eslint-disable-line new-cap
+  }
+
   const OptionsField = {
     info: typeInfo,
     initialState,
-    RenderConfigMode,
-    RenderFormMode,
+    RenderEditor,
   };
 
   return OptionsField;

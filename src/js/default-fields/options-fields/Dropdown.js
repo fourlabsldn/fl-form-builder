@@ -146,11 +146,16 @@ const RenderFormMode = ({ state }) => {
   );
 };
 
+const RenderEditor = ({ state, update }) => {
+  return state.configShowing
+    ? RenderConfigMode({ state, update }) // eslint-disable-line new-cap
+    : RenderFormMode({ state, update }); // eslint-disable-line new-cap
+}
+
 const Dropdown = {
   info: typeInfo,
   initialState,
-  RenderConfigMode,
-  RenderFormMode,
+  RenderEditor,
 };
 
 export default Dropdown;

@@ -132,9 +132,7 @@ const ConfigBar = ({ fieldState }) => (
 const Field = ({ fieldState, fieldConstructor }) => {
   assert(isValidFieldState(fieldState), `Invalid field state: ${fieldState}`);
 
-  const fieldComponent = fieldState.configShowing
-    ? fieldConstructor.RenderConfigMode
-    : fieldConstructor.RenderFormMode;
+  const fieldComponent = fieldConstructor.RenderEditor;
 
   const topClasses = fieldState.configShowing
     ? 'fl-fb-Field fl-fb-Field--configuration-visible'

@@ -39,7 +39,7 @@ var initialState = function initialState() {
  * @param  {Object} state : State
  * @param  {Function} update : State -> void // Will trigger a re-render
  */
-var RenderConfigMode = function RenderConfigMode(_ref) {
+var RenderEditor = function RenderEditor(_ref) {
   var state = _ref.state;
   var update = _ref.update;
 
@@ -68,7 +68,7 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     state.images.map(function (img) {
       return React.createElement('img', { alt: img, className: 'ImageCards-card', src: img });
     }),
-    React.createElement(
+    !state.configShowing ? null : React.createElement(
       'div',
       { className: 'fl-fb-Field-config' },
       React.createElement('input', {
@@ -81,23 +81,10 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
   );
 };
 
-var RenderFormMode = function RenderFormMode(_ref2) {
-  var state = _ref2.state;
-
-  return React.createElement(
-    'div',
-    null,
-    state.images.map(function (img) {
-      return React.createElement('img', { alt: img, className: 'ImageCards-card', src: img });
-    })
-  );
-};
-
 var ImageCards = {
   info: typeInfo,
   initialState: initialState,
-  RenderConfigMode: RenderConfigMode,
-  RenderFormMode: RenderFormMode
+  RenderEditor: RenderEditor
 };
 
 return ImageCards;

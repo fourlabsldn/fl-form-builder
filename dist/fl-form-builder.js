@@ -114,9 +114,15 @@ var FieldCreatorPropType = {
     group: React.PropTypes.string,
     displayName: React.PropTypes.string
   }),
-  initialState: React.PropTypes.func,
-  RenderConfigMode: React.PropTypes.func, // React render function
-  RenderFormMode: React.PropTypes.func };
+  initialState: React.PropTypes.shape({
+    type: React.PropTypes.string,
+    group: React.PropTypes.string,
+    displayName: React.PropTypes.string,
+
+    required: React.PropTypes.bool,
+    configShowing: React.PropTypes.bool
+  }),
+  RenderEditor: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
   var description = _ref.description;
@@ -3101,7 +3107,7 @@ var Field = function Field(_ref3) {
 
   assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
 
-  var fieldComponent = fieldState.configShowing ? fieldConstructor.RenderConfigMode : fieldConstructor.RenderFormMode;
+  var fieldComponent = fieldConstructor.RenderEditor;
 
   var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
 
@@ -3481,11 +3487,18 @@ function buildOptionsFieldConstructor(typeInfo) {
     );
   };
 
+  var RenderEditor = function RenderEditor(_ref3) {
+    var state = _ref3.state;
+    var update = _ref3.update;
+
+    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+    : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
+  };
+
   var OptionsField = {
     info: typeInfo,
     initialState: initialState,
-    RenderConfigMode: RenderConfigMode,
-    RenderFormMode: RenderFormMode
+    RenderEditor: RenderEditor
   };
 
   return OptionsField;
@@ -3679,11 +3692,18 @@ var RenderFormMode = function RenderFormMode(_ref2) {
   );
 };
 
+var RenderEditor = function RenderEditor(_ref3) {
+  var state = _ref3.state;
+  var update = _ref3.update;
+
+  return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+  : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
+};
+
 var Dropdown = {
   info: typeInfo$2,
   initialState: initialState,
-  RenderConfigMode: RenderConfigMode,
-  RenderFormMode: RenderFormMode
+  RenderEditor: RenderEditor
 };
 
 /**
@@ -3793,11 +3813,18 @@ function buildTextFieldConstructor(customTypeInfo) {
 
   var RenderConfigMode = createRenderConfigMode(initialState());
 
+  var RenderEditor = function RenderEditor(_ref3) {
+    var state = _ref3.state;
+    var update = _ref3.update;
+
+    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+    : RenderFormMode$1({ state: state, update: update }); // eslint-disable-line new-cap
+  };
+
   var FieldConstructor = {
     info: typeInfo,
     initialState: initialState,
-    RenderConfigMode: RenderConfigMode,
-    RenderFormMode: RenderFormMode$1
+    RenderEditor: RenderEditor
   };
 
   return FieldConstructor;
