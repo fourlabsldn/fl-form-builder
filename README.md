@@ -47,7 +47,30 @@ Have a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder
 
 # Plugins
 
-## Compulsory state fields:
-- required
-- type
-- group
+ You can add custom field types. They must follow this react signature:
+
+
+``` javascript
+  const FieldCreatorPropType = {
+    info: React.PropTypes.shape({
+      type: React.PropTypes.string,
+      group: React.PropTypes.string,
+      displayName: React.PropTypes.string,
+    }),
+    initialState: React.PropTypes.shape({
+      type: React.PropTypes.string,
+      group: React.PropTypes.string,
+      displayName: React.PropTypes.string,
+
+      required: React.PropTypes.bool,
+      configShowing: React.PropTypes.bool,
+    }),
+    RenderEditor: React.PropTypes.func, // React render function
+  };
+```
+
+To add your plugins just send them in an array at instantiation time.
+
+``` javascript
+  const formBuilder = new FormBuilder(container. [CustomPlugin1, CustomPlugin1]);
+```
