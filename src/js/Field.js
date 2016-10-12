@@ -39,9 +39,6 @@ const onDragStart = event => {
       })
       .map(f => f.dataset.id);
 
-
-    console.log(reorderedIds.join(', '));
-
     EventHub.trigger('fieldsReorder', reorderedIds);
   });
 };
@@ -145,9 +142,11 @@ const Field = ({ fieldState, fieldConstructor }) => {
 
   return (
     <div className={topClasses} data-id={fieldState.id}>
-      {React.createElement(fieldComponent, { state: fieldState, update: updateField })}
-      <ConfigBar fieldState={fieldState} />
+      <div className="fl-fb-Field-content">
+        {React.createElement(fieldComponent, { state: fieldState, update: updateField })}
+      </div>
       <Sidebar fieldState={fieldState} />
+      <ConfigBar fieldState={fieldState} />
     </div>
   );
 };

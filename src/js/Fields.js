@@ -18,6 +18,7 @@ const Fields = props => {
     <div className="fl-fb-Fields">
       {fieldStates.map(compState => (
         <Field
+          key={compState.id}
           fieldState={compState}
           fieldConstructor={getTypeConstructor(fieldTypes, compState.type)}
         />

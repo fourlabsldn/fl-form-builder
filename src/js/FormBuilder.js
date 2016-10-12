@@ -88,7 +88,6 @@ export default class FormBuilder extends React.Component {
     );
 
     const fieldTypes = this.state.fieldTypes.concat([newType]);
-
     this.setState({ fieldTypes });
   }
 
@@ -100,6 +99,8 @@ export default class FormBuilder extends React.Component {
       fieldStates.indexOf(undefined) === -1,
       'There are ids that do not correspond to any fieldState.'
     );
+
+    console.log('New order:', fieldStates.map(s => s.id).join(', '))
 
     this.pushHistoryState(fieldStates);
   }

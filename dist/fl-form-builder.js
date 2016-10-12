@@ -2993,8 +2993,6 @@ var onDragStart = function onDragStart(event) {
       return f.dataset.id;
     });
 
-    console.log(reorderedIds.join(', '));
-
     EventHub.trigger('fieldsReorder', reorderedIds);
   });
 };
@@ -3110,9 +3108,13 @@ var Field = function Field(_ref3) {
   return React.createElement(
     'div',
     { className: topClasses, 'data-id': fieldState.id },
-    React.createElement(fieldComponent, { state: fieldState, update: updateField$1 }),
-    React.createElement(ConfigBar, { fieldState: fieldState }),
-    React.createElement(Sidebar, { fieldState: fieldState })
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-content' },
+      React.createElement(fieldComponent, { state: fieldState, update: updateField$1 })
+    ),
+    React.createElement(Sidebar, { fieldState: fieldState }),
+    React.createElement(ConfigBar, { fieldState: fieldState })
   );
 };
 
@@ -3137,6 +3139,7 @@ var Fields = function Fields(props) {
     { className: 'fl-fb-Fields' },
     fieldStates.map(function (compState) {
       return React.createElement(Field, {
+        key: compState.id,
         fieldState: compState,
         fieldConstructor: getTypeConstructor(fieldTypes, compState.type)
       });
@@ -3239,7 +3242,6 @@ var FormBuilder$2 = function (_React$Component) {
       }), 'The field type ' + newType.info.type + ' already exists');
 
       var fieldTypes = this.state.fieldTypes.concat([newType]);
-
       this.setState({ fieldTypes: fieldTypes });
     }
   }, {
@@ -3254,6 +3256,10 @@ var FormBuilder$2 = function (_React$Component) {
       });
 
       assert(fieldStates.indexOf(undefined) === -1, 'There are ids that do not correspond to any fieldState.');
+
+      console.log('New order:', fieldStates.map(function (s) {
+        return s.id;
+      }).join(', '));
 
       this.pushHistoryState(fieldStates);
     }

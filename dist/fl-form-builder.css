@@ -56,8 +56,22 @@
           align-items: stretch; }
 
 .fl-fb-Field {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-align-content: stretch;
+      -ms-flex-line-pack: stretch;
+          align-content: stretch;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   position: relative;
-  padding: 0 15px 20px;
+  padding: 0 0 0 15px;
   margin: 5px 0;
   -webkit-border-radius: 3px;
           border-radius: 3px;
@@ -90,6 +104,11 @@
   z-index: 4;
   background-color: #ebf4fc; }
 
+.fl-fb-Field-content {
+  width: 100%;
+  padding-right: 15px;
+  padding-bottom: 20px; }
+
 .fl-fb-Field-option {
   display: block; }
 
@@ -101,9 +120,6 @@
   resize: none; }
 
 .fl-fb-Field-sidebar {
-  position: absolute;
-  right: 0;
-  top: 0;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -169,7 +185,7 @@
   transition: all 0.2s ease, visibility 0s;
   position: absolute;
   right: -1px;
-  bottom: 20px;
+  bottom: 3px;
   z-index: 2;
   -webkit-transform: translateY(100%);
       -ms-transform: translateY(100%);
@@ -233,8 +249,10 @@
   position: relative;
   background-color: #eee;
   padding: 10px 15px;
+  top: 20px;
   left: -15px;
-  margin-top: 15px; }
+  width: -webkit-calc(100% + 15px + 15px);
+  width: calc(100% + 15px + 15px); }
 
 .fl-fb-Field-config-btn {
   color: #999;

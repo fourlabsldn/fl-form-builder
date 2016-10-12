@@ -6,14 +6,16 @@
 
 
 .fl-fb-Field {
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: stretch;
+  justify-content: space-between;
+
   position: relative; // Because sidebars are absolute
-
-
-  padding: 0 $fc-side-padding $fc-bottom-padding;
+  padding: 0 0 0 $fc-side-padding;
   margin: 5px 0;
   border-radius: 3px;
   border: 1px solid transparent;
-
   transition: transform .2s ease-out;
               // box-shadow .2s ease-out;
               // background-color .2s ease-out;
@@ -55,7 +57,9 @@
 // =========================================================
 
 .fl-fb-Field-content {
-
+  width: 100%;
+  padding-right: $fc-side-padding;
+  padding-bottom: $fc-bottom-padding;
 }
 
 .fl-fb-Field-option {
@@ -75,10 +79,6 @@
 // =========================================================
 
 .fl-fb-Field-sidebar {
-  position: absolute;
-  right: 0;
-  top: 0;
-
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
@@ -150,7 +150,7 @@
 
   position: absolute;
   right: -1px; // because of the border
-  bottom: $fc-bottom-padding; // To cover the sidebar bottom right border-radius
+  bottom: 3px; // To cover the sidebar bottom right border-radius
   z-index: 2;
   transform: translateY(100%);
 
@@ -219,8 +219,9 @@
   position: relative;
   background-color: $c-background;
   padding: 10px $fc-side-padding;
+  top: $fc-bottom-padding;
   left: -$fc-side-padding;
-  margin-top: $fc-side-padding;
+  width: calc(100% + #{$fc-side-padding} + #{$fc-side-padding});
 }
 
 .fl-fb-Field-config-btn {
