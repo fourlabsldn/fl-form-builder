@@ -62,10 +62,10 @@
   -webkit-border-radius: 5px;
           border-radius: 5px;
   border: 1px solid transparent;
-  -webkit-transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
-  transition: background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
-  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out;
-  transition: transform .2s ease-out, box-shadow .2s ease-out, background-color .2s ease-out, -webkit-transform .2s ease-out, -webkit-box-shadow .2s ease-out;
+  -webkit-transition: -webkit-transform .2s ease-out;
+  transition: -webkit-transform .2s ease-out;
+  transition: transform .2s ease-out;
+  transition: transform .2s ease-out, -webkit-transform .2s ease-out;
   z-index: 1; }
   .fl-fb-Field:hover {
     background-color: #ebf4fc;
@@ -87,7 +87,7 @@
 .fl-fb-Field--dragging {
   -webkit-box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
           box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
-  z-index: 2;
+  z-index: 4;
   background-color: #ebf4fc; }
 
 .fl-fb-Field-option {
@@ -121,19 +121,12 @@
           border-radius: 0 5px 5px 0;
   text-align: center;
   background-color: #eee;
-  -webkit-transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
-  transition: all .1s ease, visibility 0s, -webkit-box-shadow .2s;
-  transition: all .1s ease, visibility 0s, box-shadow .2s;
-  transition: all .1s ease, visibility 0s, box-shadow .2s, -webkit-box-shadow .2s;
   visibility: hidden;
-  opacity: 0;
-  -webkit-transition: all .2s ease, visibility 0s;
-  transition: all .2s ease, visibility 0s; }
+  opacity: 0; }
   .fl-fb-Field:hover .fl-fb-Field-sidebar,
   .fl-fb-Field--configuration-visible .fl-fb-Field-sidebar {
     visibility: visible;
-    opacity: 1;
-    opacity: .9; }
+    opacity: 1; }
 
 [class*=fl-fb-Field-sidebar-btn] {
   background-color: transparent;

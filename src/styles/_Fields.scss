@@ -14,9 +14,9 @@
   border-radius: 5px;
   border: 1px solid transparent;
 
-  transition: transform .2s ease-out,
-              box-shadow .2s ease-out,
-              background-color .2s ease-out;
+  transition: transform .2s ease-out;
+              // box-shadow .2s ease-out;
+              // background-color .2s ease-out;
   z-index: $z-index-component;
 
   &:hover {
@@ -46,7 +46,7 @@
 
 .fl-fb-Field--dragging {
   box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.8);
-  z-index: 2;
+  z-index: $z-index-component--dragging;
   background-color: $c-highlight;
 }
 
@@ -89,15 +89,13 @@
 
   text-align: center;
   background-color: $c-background;
-  transition: all .1s ease,
-              visibility 0s, box-shadow .2s;
-
-  @include fade-hidden();
+  visibility: hidden;
+  opacity: 0;
 
   .fl-fb-Field:hover &,
   .fl-fb-Field--configuration-visible & {
-    @include fade-visible();
-    opacity: .9;
+    visibility: visible;
+    opacity: 1;
   }
 }
 
