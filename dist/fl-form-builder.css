@@ -59,8 +59,8 @@
   position: relative;
   padding: 0 15px 20px;
   margin: 5px 0;
-  -webkit-border-radius: 5px;
-          border-radius: 5px;
+  -webkit-border-radius: 3px;
+          border-radius: 3px;
   border: 1px solid transparent;
   -webkit-transition: -webkit-transform .2s ease-out;
   transition: -webkit-transform .2s ease-out;
@@ -117,8 +117,8 @@
           align-items: stretch;
   min-height: 100%;
   padding: 5px 10px 20px;
-  -webkit-border-radius: 0 5px 5px 0;
-          border-radius: 0 5px 5px 0;
+  -webkit-border-radius: 0 3px 3px 0;
+          border-radius: 0 3px 3px 0;
   text-align: center;
   background-color: #eee;
   visibility: hidden;
@@ -133,8 +133,8 @@
   border: 0;
   opacity: .8;
   margin: 2px 0;
-  -webkit-border-radius: 2px;
-          border-radius: 2px;
+  -webkit-border-radius: 3px;
+          border-radius: 3px;
   padding: .3em .5em;
   visibility: visible;
   opacity: 1; }
@@ -174,8 +174,8 @@
   -webkit-transform: translateY(100%);
       -ms-transform: translateY(100%);
           transform: translateY(100%);
-  -webkit-border-radius: 0 0 5px 5px;
-          border-radius: 0 0 5px 5px; }
+  -webkit-border-radius: 0 0 3px 3px;
+          border-radius: 0 0 3px 3px; }
   .fl-fb-Field--configuration-visible .fl-fb-Field-configuration {
     visibility: visible;
     opacity: 1;
@@ -208,8 +208,8 @@
           transform: translateY(0.1em);
   color: #999;
   padding: 6px 12px;
-  -webkit-border-radius: 4px;
-          border-radius: 4px;
+  -webkit-border-radius: 3px;
+          border-radius: 3px;
   background-color: #eee; }
 
 .fl-fb-Field-configuration-btn-ok:hover, .fl-fb-Field-configuration-btn-ok:active, .fl-fb-Field-configuration-btn-ok:focus {
