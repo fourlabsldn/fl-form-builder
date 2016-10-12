@@ -2957,6 +2957,8 @@ function addListenerOnce(eventName, el, f) {
   el.addEventListener(eventName, triggerAndRemove);
 }
 
+// =========== Handle drag
+
 function getParentField(el) {
   if (!el || !el.parentNode) {
     return el;
@@ -2991,9 +2993,13 @@ var onDragStart = function onDragStart(event) {
       return f.dataset.id;
     });
 
+    console.log(reorderedIds.join(', '));
+
     EventHub.trigger('fieldsReorder', reorderedIds);
   });
 };
+
+// =========== END OF Handle drag
 
 var updateField$1 = function updateField$1(newState) {
   EventHub.trigger('updateField', newState);
@@ -3103,7 +3109,7 @@ var Field = function Field(_ref3) {
 
   return React.createElement(
     'div',
-    { className: topClasses },
+    { className: topClasses, 'data-id': fieldState.id },
     React.createElement(fieldComponent, { state: fieldState, update: updateField$1 }),
     React.createElement(ConfigBar, { fieldState: fieldState }),
     React.createElement(Sidebar, { fieldState: fieldState })
@@ -3163,11 +3169,13 @@ var FormBuilder$2 = function (_React$Component) {
     _this.updateField = _this.updateField.bind(_this);
     _this.pushHistoryState = _this.pushHistoryState.bind(_this);
     _this.pullHistoryState = _this.pullHistoryState.bind(_this);
+    _this.reorderFields = _this.reorderFields.bind(_this);
 
     EventHub.on('createField', _this.createField);
     EventHub.on('deleteField', _this.deleteField);
     EventHub.on('updateField', _this.updateField);
     EventHub.on('undoBtnPressed', _this.pullHistoryState);
+    EventHub.on('fieldsReorder', _this.reorderFields);
 
     // Expose function to export state.
     props.exportState(function () {
@@ -3234,7 +3242,21 @@ var FormBuilder$2 = function (_React$Component) {
 
       this.setState({ fieldTypes: fieldTypes });
     }
+  }, {
+    key: 'reorderFields',
+    value: function reorderFields(newFieldsIdOrder) {
+      var _this2 = this;
 
+      var fieldStates = newFieldsIdOrder.map(function (id) {
+        return _this2.state.fieldStates.find(function (s) {
+          return s.id.toString() === id;
+        });
+      });
+
+      assert(fieldStates.indexOf(undefined) === -1, 'There are ids that do not correspond to any fieldState.');
+
+      this.pushHistoryState(fieldStates);
+    }
     // ==================== HISTORY HANDLING  ===========================
 
   }, {

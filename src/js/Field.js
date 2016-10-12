@@ -2,16 +2,11 @@ import React from 'react';
 import assert from 'fl-assert';
 import EventHub from './EventHub';
 import trackReorderDrag from './utils/trackReorderDrag';
+import addListenerOnce from './utils/addListenerOnce';
 
 
-function addListenerOnce(eventName, el, f) {
-  function triggerAndRemove(event) {
-    f(event);
-    el.removeEventListener(eventName, triggerAndRemove);
-  }
+// =========== Handle drag
 
-  el.addEventListener(eventName, triggerAndRemove);
-}
 
 function getParentField(el) {
   if (!el || ! el.parentNode) { return el; }
@@ -44,9 +39,15 @@ const onDragStart = event => {
       })
       .map(f => f.dataset.id);
 
+
+    console.log(reorderedIds.join(', '));
+
     EventHub.trigger('fieldsReorder', reorderedIds);
   });
 };
+
+// =========== END OF Handle drag
+
 
 const updateField = newState => {
   EventHub.trigger('updateField', newState);
@@ -143,7 +144,7 @@ const Field = ({ fieldState, fieldConstructor }) => {
     : 'fl-fb-Field';
 
   return (
-    <div className={topClasses}>
+    <div className={topClasses} data-id={fieldState.id}>
       {React.createElement(fieldComponent, { state: fieldState, update: updateField })}
       <ConfigBar fieldState={fieldState} />
       <Sidebar fieldState={fieldState} />

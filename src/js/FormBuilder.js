@@ -21,11 +21,13 @@ export default class FormBuilder extends React.Component {
     this.updateField = this.updateField.bind(this);
     this.pushHistoryState = this.pushHistoryState.bind(this);
     this.pullHistoryState = this.pullHistoryState.bind(this);
+    this.reorderFields = this.reorderFields.bind(this);
 
     EventHub.on('createField', this.createField);
     EventHub.on('deleteField', this.deleteField);
     EventHub.on('updateField', this.updateField);
     EventHub.on('undoBtnPressed', this.pullHistoryState);
+    EventHub.on('fieldsReorder', this.reorderFields);
 
     // Expose function to export state.
     props.exportState(() => this.state.fieldStates);
@@ -90,6 +92,17 @@ export default class FormBuilder extends React.Component {
     this.setState({ fieldTypes });
   }
 
+  reorderFields(newFieldsIdOrder) {
+    const fieldStates = newFieldsIdOrder
+      .map(id => this.state.fieldStates.find(s => s.id.toString() === id));
+
+    assert(
+      fieldStates.indexOf(undefined) === -1,
+      'There are ids that do not correspond to any fieldState.'
+    );
+
+    this.pushHistoryState(fieldStates);
+  }
   // ==================== HISTORY HANDLING  ===========================
 
   pushHistoryState(fieldStates) {
