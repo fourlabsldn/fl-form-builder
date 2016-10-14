@@ -1,6 +1,7 @@
 ---
 title: My Jekyll test
 ---
+<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/mojombo/tpw/master/css/syntax.css" />
 
 ## Nice title showing
 
