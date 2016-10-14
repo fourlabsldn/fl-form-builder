@@ -11,6 +11,7 @@ import React from 'react';
 
 const typeInfo = {
   // Compulsory
+  primitiveType: 'Dropdown',
   type: 'ImageCards',
   displayName: 'Image Cards',
   group: 'Custom Components',
@@ -18,7 +19,7 @@ const typeInfo = {
 
   // Component specific fields
   title: 'My image component',
-  images: [
+  options: [
     'http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png',
   ],
 

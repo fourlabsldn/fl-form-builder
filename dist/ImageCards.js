@@ -16,6 +16,7 @@ React = 'default' in React ? React['default'] : React;
 
 var typeInfo = {
   // Compulsory
+  primitiveType: 'Dropdown',
   type: 'ImageCards',
   displayName: 'Image Cards',
   group: 'Custom Components',
