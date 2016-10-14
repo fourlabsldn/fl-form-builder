@@ -6,4 +6,4 @@ title: My Jekyll test
 
 Url showing? [{{ site.github.repository_url}}]({{ site.github.repository_url}})
 
-{% include {{site.github.repository_url}}/README.md %}
+{% include_relative README.md %}
