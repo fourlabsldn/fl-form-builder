@@ -22752,18 +22752,38 @@ define(String.prototype, "padRight", "".padEnd);
 });
 });
 
-describe('FormBuiler constructs UI correctly', function () {
-  var component = renderer.create(React.createElement(FormBuilder, null));
+/* eslint-env jasmine */
 
-  it('works?', function () {
-    var tree = component.toJSON();
-    expect(tree).toEqual(tree);
+describe('The FormBuilder', function () {
+  it('can be created without any props', function () {
+    var component = renderer.create(React.createElement(FormBuilder, null));
+    expect(component.toJSON()).toBeTruthy();
   });
-});
 
-describe("A suite", function () {
-  it("contains spec with an expectation", function () {
-    expect(true).toBe(true);
+  it('can export state', function () {
+    var exportFunc = void 0;
+    renderer.create(React.createElement(FormBuilder, {
+      exportState: function exportState(f) {
+        return exportFunc = f;
+      }
+    }));
+
+    var emptyExport = exportFunc();
+    expect(JSON.stringify(emptyExport)).toEqual('[]');
+  });
+
+  it('can export state', function () {
+    var importFunc = void 0;
+    renderer.create(React.createElement(FormBuilder, {
+      importState: function importState(f) {
+        return importFunc = f;
+      }
+    }));
+
+    var doImport = function doImport() {
+      return importFunc([]);
+    };
+    expect(doImport).not.toThrow();
   });
 });
 
