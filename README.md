@@ -3,9 +3,10 @@
 
 A JS form builder **inspired by Google Forms**.
 
+- **[Try it online.](https://fourlabsldn.github.io/fl-form-builder/demo/)**
+
 ![Usage demo](https://fourlabsldn.github.io/fl-form-builder/demo/usage-demo.gif)
 
-- **[Demo](https://fourlabsldn.github.io/fl-form-builder/demo/)**
 
 ## Getting started
 ### Creating a form-builder
