@@ -3,7 +3,6 @@
 
 A native JS form builder **inspired by Google Forms**.
 
-- **[Read the docs](https://fourlabsldn.github.io/fl-form-builder/)**
 - **[Demo](https://fourlabsldn.github.io/fl-form-builder/demo/)**
 
 ## Getting started
