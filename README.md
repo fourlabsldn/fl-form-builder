@@ -1,7 +1,9 @@
 # fl-form-builder
 [![Build Status](https://travis-ci.org/fourlabsldn/fl-form-builder.svg?branch=master)](https://travis-ci.org/fourlabsldn/fl-form-builder)
 
-A native JS form builder **inspired by Google Forms**.
+A JS form builder **inspired by Google Forms**.
+
+![Usage demo](https://fourlabsldn.github.io/fl-form-builder/demo/usage-demo.gif)
 
 - **[Demo](https://fourlabsldn.github.io/fl-form-builder/demo/)**
 
