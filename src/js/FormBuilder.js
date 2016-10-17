@@ -10,7 +10,7 @@ export default class FormBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fieldTypes: props.fieldTypes, // TODO: Add validation here
+      fieldTypes: props.fieldTypes || [], // TODO: Add validation here
       fieldStates: [],
       fieldStatesHistory: [], // array of fieldStates
     };
@@ -30,17 +30,22 @@ export default class FormBuilder extends React.Component {
     EventHub.on('fieldsReorder', this.reorderFields);
 
     // Expose function to export state.
-    props.exportState(() => this.state.fieldStates);
-    props.importState(fieldStates => {
-      // Check that all types are ok.
-      fieldStates.forEach(s => {
-        if (!this.state.fieldTypes.map(f => f.info.type).includes(s.type)) {
-          assert(false, `${s.type} is not included in field types.`);
-        }
-      });
+    if (typeof props.exportState === 'function') {
+      props.exportState(() => this.state.fieldStates);
+    }
 
-      this.pushHistoryState(fieldStates);
-    });
+    if (typeof props.importState === 'function') {
+      props.importState(fieldStates => {
+        // Check that all types are ok.
+        fieldStates.forEach(s => {
+          if (!this.state.fieldTypes.map(f => f.info.type).includes(s.type)) {
+            assert(false, `${s.type} is not included in field types.`);
+          }
+        });
+
+        this.pushHistoryState(fieldStates);
+      });
+    }
   }
 
   // ==================== FIELDS HANDLING  ===========================

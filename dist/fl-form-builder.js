@@ -3167,7 +3167,7 @@ var FormBuilder$2 = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (FormBuilder.__proto__ || Object.getPrototypeOf(FormBuilder)).call(this, props));
 
     _this.state = {
-      fieldTypes: props.fieldTypes, // TODO: Add validation here
+      fieldTypes: props.fieldTypes || [], // TODO: Add validation here
       fieldStates: [],
       fieldStatesHistory: [] };
 
@@ -3187,21 +3187,26 @@ var FormBuilder$2 = function (_React$Component) {
     EventHub.on('fieldsReorder', _this.reorderFields);
 
     // Expose function to export state.
-    props.exportState(function () {
-      return _this.state.fieldStates;
-    });
-    props.importState(function (fieldStates) {
-      // Check that all types are ok.
-      fieldStates.forEach(function (s) {
-        if (!_this.state.fieldTypes.map(function (f) {
-          return f.info.type;
-        }).includes(s.type)) {
-          assert(false, s.type + ' is not included in field types.');
-        }
+    if (typeof props.exportState === 'function') {
+      props.exportState(function () {
+        return _this.state.fieldStates;
       });
+    }
 
-      _this.pushHistoryState(fieldStates);
-    });
+    if (typeof props.importState === 'function') {
+      props.importState(function (fieldStates) {
+        // Check that all types are ok.
+        fieldStates.forEach(function (s) {
+          if (!_this.state.fieldTypes.map(function (f) {
+            return f.info.type;
+          }).includes(s.type)) {
+            assert(false, s.type + ' is not included in field types.');
+          }
+        });
+
+        _this.pushHistoryState(fieldStates);
+      });
+    }
     return _this;
   }
 

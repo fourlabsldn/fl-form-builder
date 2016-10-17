@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import FormBuilder from '../js/FormBuilder';
+import polyfills from 'babel-polyfill';
 
 describe('FormBuiler constructs UI correctly', () => {
   const component = renderer.create(
