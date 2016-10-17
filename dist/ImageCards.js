@@ -1,8 +1,5 @@
 define(['react'], function (React) { 'use strict';
 
-var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
-function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports, __commonjs_global), module.exports; }
-
 React = 'default' in React ? React['default'] : React;
 
 //
@@ -24,7 +21,7 @@ var typeInfo = {
 
   // Component specific fields
   title: 'My image component',
-  images: ['http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png'],
+  options: ['http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png'],
 
   newImageText: ''
 };

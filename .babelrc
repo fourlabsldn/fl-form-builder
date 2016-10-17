@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-async-to-generator", "external-helpers-2", "lodash"],
+  "presets": ["es2015-rollup", "react"],
+}

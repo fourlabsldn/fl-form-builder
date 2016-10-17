@@ -4,6 +4,13 @@ const src = 'src';
 const dest = 'dist';
 const path = require('path');
 
+const reactConfig = {
+  external: ['react', 'react-dom'],
+  format: 'amd',
+  moduleName: 'FormBuilder',
+};
+
+
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
   sass: {
@@ -11,16 +18,21 @@ organiser.registerAll('./gulp-tasks', {
     dest,
   },
   'transpile-react': {
-    watch: path.join(src, 'js', '/**/*.js'),
-    src: [
-      path.join(src, 'js', 'fl-form-builder.js'),
-      './demo/ImageCards.js',
-    ],
-    dest,
-    config: {
-      external: ['react', 'react-dom'],
-      format: 'amd',
-      moduleName: 'FormBuilder',
+    watch: path.join(src, '/**/*.js'),
+    application: {
+      src: path.join(src, 'js', 'fl-form-builder.js'),
+      dest,
+      config: reactConfig,
+    },
+    demo: {
+      src: './demo/ImageCards.js',
+      dest,
+      config: reactConfig,
+    },
+    tests: {
+      src: path.join(src, '__tests__', '**/*.test.js'),
+      dest: path.join(dest, '__tests__'),
+      config: { format: 'iife' },
     },
   },
   'browser-sync': {
@@ -28,5 +40,8 @@ organiser.registerAll('./gulp-tasks', {
     reloadOn: ['transpile-react', 'sass'], // reload page when these tasks happen
     startPath: 'demo/index.html',
     baseDir: './',
+  },
+  'test-headless': {
+    src: path.join(dest, '__tests__', '**/*.test.js'),
   },
 });
