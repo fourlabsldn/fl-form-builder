@@ -1,4 +1,8 @@
-define(['react'], function (React) { 'use strict';
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
+  typeof define === 'function' && define.amd ? define(['react'], factory) :
+  (global.FormBuilder = factory(global.React));
+}(this, (function (React) { 'use strict';
 
 React = 'default' in React ? React['default'] : React;
 
@@ -87,6 +91,6 @@ var ImageCards = {
 
 return ImageCards;
 
-});
+})));
 
 //# sourceMappingURL=ImageCards.js.map

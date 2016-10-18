@@ -6,10 +6,9 @@ const path = require('path');
 
 const reactConfig = {
   external: ['react', 'react-dom'],
-  format: 'amd',
+  format: 'umd',
   moduleName: 'FormBuilder',
 };
-
 
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
@@ -30,9 +29,9 @@ organiser.registerAll('./gulp-tasks', {
       config: reactConfig,
     },
     tests: {
-      src: path.join(src, '__tests__', '**/*.test.js'),
-      dest: path.join(dest, '__tests__'),
-      config: { format: 'iife' },
+      src: path.join(src, 'js', '**/*.js'),
+      dest: path.join(dest, '__test-files__'),
+      config: reactConfig,
     },
   },
   'browser-sync': {

@@ -1,231 +1,13 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('react-dom')) :
-    typeof define === 'function' && define.amd ? define(['react', 'react-dom'], factory) :
-    (global.FormBuilder = factory(global.React,global.ReactDOM));
-}(this, (function (React,ReactDOM) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
+    typeof define === 'function' && define.amd ? define(['react'], factory) :
+    (global.FormBuilder = factory(global.React));
+}(this, (function (React) { 'use strict';
 
 var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
 function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports, __commonjs_global), module.exports; }
 
 React = 'default' in React ? React['default'] : React;
-ReactDOM = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
-
-// Bug checking function that will throw an error whenever
-// the condition sent to it is evaluated to false
-/**
- * Processes the message and outputs the correct message if the condition
- * is false. Otherwise it outputs null.
- * @api private
- * @method processCondition
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return {String | null}  - Error message if there is an error, nul otherwise.
- */
-function processCondition(condition, errorMessage) {
-  if (!condition) {
-    var completeErrorMessage = '';
-    var re = /at ([^\s]+)\s\(/g;
-    var stackTrace = new Error().stack;
-    var stackFunctions = [];
-
-    var funcName = re.exec(stackTrace);
-    while (funcName && funcName[1]) {
-      stackFunctions.push(funcName[1]);
-      funcName = re.exec(stackTrace);
-    }
-
-    // Number 0 is processCondition itself,
-    // Number 1 is assert,
-    // Number 2 is the caller function.
-    if (stackFunctions[2]) {
-      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
-    }
-
-    completeErrorMessage += errorMessage;
-    return completeErrorMessage;
-  }
-
-  return null;
-}
-
-/**
- * Throws an error if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert(myDate !== undefined, "Date cannot be undefined.");
- * @api public
- * @method assert
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-function assert(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    throw new Error(error);
-  }
-}
-
-/**
- * Logs a warning if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert.warn(myDate !== undefined, "No date provided.");
- * @api public
- * @method warn
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-assert.warn = function warn(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    console.warn(error);
-  }
-};
-
-//
-//
-//     Singleton
-//
-//
-
-var listeners = {};
-
-function on(eventName, func) {
-  listeners[eventName] = listeners[eventName] ? listeners[eventName].concat([func]) : [func];
-}
-
-function trigger(eventName, data) {
-  assert.warn(listeners[eventName], 'No one listening to "' + eventName + '."');
-
-  if (!listeners[eventName]) {
-    return;
-  }
-
-  listeners[eventName].forEach(function (f) {
-    return f(data);
-  });
-}
-
-var EventHub = {
-  on: on,
-  trigger: trigger
-};
-
-// This works as the interface for the FieldCreator Type
-var FieldCreatorPropType = {
-  info: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    group: React.PropTypes.string,
-    displayName: React.PropTypes.string
-  }),
-  initialState: React.PropTypes.func,
-  RenderEditor: React.PropTypes.func };
-
-var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
-  var description = _ref.description;
-  return React.createElement(
-    'li',
-    null,
-    React.createElement(
-      'a',
-      {
-        href: '#',
-        onClick: function onClick() {
-          return EventHub.trigger('createField', description.type);
-        }
-      },
-      description.displayName
-    )
-  );
-};
-
-ButtonDropdownOption.propTypes = {
-  description: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    displayName: React.PropTypes.string,
-    group: React.PropTypes.string
-  })
-};
-
-var ButtonGroupDropdown = function ButtonGroupDropdown(_ref2) {
-  var groupName = _ref2.groupName;
-  var groupButtons = _ref2.groupButtons;
-
-  return React.createElement(
-    'div',
-    { className: 'btn-group' },
-    React.createElement(
-      'button',
-      { className: 'btn btn-default dropdown-toggle', 'data-toggle': 'dropdown' },
-      groupName,
-      React.createElement('span', { className: 'caret' })
-    ),
-    React.createElement(
-      'ul',
-      { className: 'dropdown-menu' },
-      groupButtons.map(function (fieldDescription) {
-        return React.createElement(ButtonDropdownOption, { description: fieldDescription });
-      })
-    )
-  );
-};
-ButtonGroupDropdown.propTypes = {
-  groupName: React.PropTypes.string,
-  groupButtons: React.PropTypes.array
-};
-
-var getDescrition = function getDescrition(typeConstructor) {
-  return {
-    type: typeConstructor.info.type,
-    displayName: typeConstructor.info.displayName,
-    group: typeConstructor.info.group
-  };
-};
-
-var toGroups = function toGroups(groups, description) {
-  // Add to group array if it exists. Create it if it doesn't
-  groups[description.group] = groups[description.group] // eslint-disable-line no-param-reassign
-  ? groups[description.group].concat([description]) : [description];
-
-  return groups;
-};
-
-var ControlBar = function ControlBar(_ref3) {
-  var fieldTypes = _ref3.fieldTypes;
-
-  var fieldGroups = fieldTypes.map(getDescrition).reduce(toGroups, {});
-
-  var buttonGroups = Object.keys(fieldGroups).map(function (groupName) {
-    return React.createElement(ButtonGroupDropdown, {
-      groupName: groupName,
-      groupButtons: fieldGroups[groupName]
-    });
-  });
-
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-ControlBar' },
-    React.createElement(
-      'div',
-      { className: 'btn-group' },
-      buttonGroups
-    ),
-    React.createElement(
-      'button',
-      {
-        className: 'btn btn-primary',
-        onClick: function onClick() {
-          return EventHub.trigger('undoBtnPressed');
-        }
-      },
-      ' Undo '
-    )
-  );
-};
-
-ControlBar.propTypes = {
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
-};
 
 var isObjectLike = __commonjs(function (module) {
 /**
@@ -2556,6 +2338,117 @@ module.exports = curry;
 
 var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
 
+// This works as the interface for the FieldCreator Type
+var FieldCreatorPropType = {
+  info: React.PropTypes.shape({
+    type: React.PropTypes.string,
+    group: React.PropTypes.string,
+    displayName: React.PropTypes.string
+  }),
+  initialState: React.PropTypes.func,
+  RenderEditor: React.PropTypes.func };
+
+// Bug checking function that will throw an error whenever
+// the condition sent to it is evaluated to false
+/**
+ * Processes the message and outputs the correct message if the condition
+ * is false. Otherwise it outputs null.
+ * @api private
+ * @method processCondition
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return {String | null}  - Error message if there is an error, nul otherwise.
+ */
+function processCondition(condition, errorMessage) {
+  if (!condition) {
+    var completeErrorMessage = '';
+    var re = /at ([^\s]+)\s\(/g;
+    var stackTrace = new Error().stack;
+    var stackFunctions = [];
+
+    var funcName = re.exec(stackTrace);
+    while (funcName && funcName[1]) {
+      stackFunctions.push(funcName[1]);
+      funcName = re.exec(stackTrace);
+    }
+
+    // Number 0 is processCondition itself,
+    // Number 1 is assert,
+    // Number 2 is the caller function.
+    if (stackFunctions[2]) {
+      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
+    }
+
+    completeErrorMessage += errorMessage;
+    return completeErrorMessage;
+  }
+
+  return null;
+}
+
+/**
+ * Throws an error if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert(myDate !== undefined, "Date cannot be undefined.");
+ * @api public
+ * @method assert
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+function assert(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    throw new Error(error);
+  }
+}
+
+/**
+ * Logs a warning if the boolean passed to it evaluates to false.
+ * To be used like this:
+ * 		assert.warn(myDate !== undefined, "No date provided.");
+ * @api public
+ * @method warn
+ * @param  {Boolean} condition - Result of the evaluated condition
+ * @param  {String} errorMessage - Message explainig the error in case it is thrown
+ * @return void
+ */
+assert.warn = function warn(condition, errorMessage) {
+  var error = processCondition(condition, errorMessage);
+  if (typeof error === 'string') {
+    console.warn(error);
+  }
+};
+
+//
+//
+//     Singleton
+//
+//
+
+var listeners = {};
+
+function on(eventName, func) {
+  listeners[eventName] = listeners[eventName] ? listeners[eventName].concat([func]) : [func];
+}
+
+function trigger(eventName, data) {
+  assert.warn(listeners[eventName], 'No one listening to "' + eventName + '."');
+
+  if (!listeners[eventName]) {
+    return;
+  }
+
+  listeners[eventName].forEach(function (f) {
+    return f(data);
+  });
+}
+
+var EventHub = {
+  on: on,
+  trigger: trigger
+};
+
 /**
  * @function throttle
  * @param  {integer}   FuncDelay
@@ -2725,48 +2618,15 @@ var asyncGenerator = function () {
 
 
 
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
 
 
 
 
 
-var defineProperty = function (obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
 
-  return obj;
-};
+
+
+
 
 var get = function get(object, property, receiver) {
   if (object === null) object = Function.prototype;
@@ -2793,21 +2653,6 @@ var get = function get(object, property, receiver) {
   }
 };
 
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
 
 
 
@@ -2819,13 +2664,8 @@ var inherits = function (subClass, superClass) {
 
 
 
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
 
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
+
 
 
 
@@ -3121,22 +2961,22 @@ var onDragStart = function onDragStart(event) {
 // =========== END OF Handle drag
 
 
-var updateField$1 = function updateField$1(newState) {
+var updateField = function updateField(newState) {
   EventHub.trigger('updateField', newState);
 };
 
-var deleteField$1 = function deleteField$1(fieldState) {
+var deleteField = function deleteField(fieldState) {
   EventHub.trigger('deleteField', fieldState);
 };
 
 var toggleConfig = function toggleConfig(fieldState) {
   var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
-  updateField$1(newFieldState);
+  updateField(newFieldState);
 };
 
 var toggleRequired = function toggleRequired(fieldState) {
   var newFieldState = Object.assign({}, fieldState, { required: !fieldState.required });
-  updateField$1(newFieldState);
+  updateField(newFieldState);
 };
 
 var isValidFieldState = function isValidFieldState(state) {
@@ -3162,7 +3002,7 @@ var Sidebar = function Sidebar(_ref) {
     React.createElement('button', {
       className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete',
       onClick: function onClick() {
-        return deleteField$1(fieldState);
+        return deleteField(fieldState);
       }
     })
   );
@@ -3233,7 +3073,7 @@ var Field = function Field(_ref3) {
     React.createElement(
       'div',
       { className: 'fl-fb-Field-content' },
-      React.createElement(fieldComponent, { state: fieldState, update: updateField$1 })
+      React.createElement(fieldComponent, { state: fieldState, update: updateField })
     ),
     React.createElement(Sidebar, { fieldState: fieldState }),
     React.createElement(ConfigBar, { fieldState: fieldState })
@@ -3274,759 +3114,8 @@ Fields.propTypes = {
   fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
 };
 
-var FormBuilder$2 = function (_React$Component) {
-  inherits(FormBuilder, _React$Component);
-
-  function FormBuilder(props) {
-    classCallCheck(this, FormBuilder);
-
-    var _this = possibleConstructorReturn(this, (FormBuilder.__proto__ || Object.getPrototypeOf(FormBuilder)).call(this, props));
-
-    _this.state = {
-      fieldTypes: props.fieldTypes || [], // TODO: Add validation here
-      fieldStates: [],
-      fieldStatesHistory: [] };
-
-    _this.createField = _this.createField.bind(_this);
-    _this.deleteField = _this.deleteField.bind(_this);
-    _this.addFieldType = _this.addFieldType.bind(_this);
-    _this.updateField = _this.updateField.bind(_this);
-    _this.pushHistoryState = _this.pushHistoryState.bind(_this);
-    _this.pullHistoryState = _this.pullHistoryState.bind(_this);
-    _this.reorderFields = _this.reorderFields.bind(_this);
-
-    EventHub.on('createField', _this.createField);
-    EventHub.on('deleteField', _this.deleteField);
-    EventHub.on('updateField', _this.updateField);
-    EventHub.on('undoBtnPressed', _this.pullHistoryState);
-    EventHub.on('fieldsReorder', _this.reorderFields);
-
-    // Expose function to export state.
-    if (typeof props.exportState === 'function') {
-      props.exportState(function () {
-        return _this.state.fieldStates;
-      });
-    }
-
-    if (typeof props.importState === 'function') {
-      props.importState(function (fieldStates) {
-        // Check that all types are ok.
-        fieldStates.forEach(function (s) {
-          if (!_this.state.fieldTypes.map(function (f) {
-            return f.info.type;
-          }).includes(s.type)) {
-            assert(false, s.type + ' is not included in field types.');
-          }
-        });
-
-        _this.pushHistoryState(fieldStates);
-      });
-    }
-    return _this;
-  }
-
-  // ==================== FIELDS HANDLING  ===========================
-
-  createClass(FormBuilder, [{
-    key: 'createField',
-    value: function createField(fieldType) {
-      var typeConstructor = this.state.fieldTypes.find(function (f) {
-        return f.info.type === fieldType;
-      });
-
-      assert(typeConstructor, 'Field "' + fieldType + '" does not exist.');
-
-      var initialState = typeConstructor.initialState();
-      initialState.id = Date.now();
-      initialState.configShowing = true;
-
-      // Make all other fields have config hidden
-      var otherFieldsStates = this.state.fieldStates.map(function (s) {
-        return Object.assign({}, s, { configShowing: false });
-      });
-
-      var fieldStates = otherFieldsStates.concat([initialState]);
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'deleteField',
-    value: function deleteField(fieldState) {
-      var fieldStates = this.state.fieldStates.filter(function (state) {
-        return state.id !== fieldState.id;
-      });
-
-      assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened.\n       Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
-
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'updateField',
-    value: function updateField(fieldState) {
-      var stateIndex = this.state.fieldStates.findIndex(function (s) {
-        return s.id === fieldState.id;
-      });
-
-      assert(stateIndex !== -1, 'Field with id ' + fieldState.id + ' is not in field states');
-
-      var fieldStates = Array.from(this.state.fieldStates);
-      fieldStates[stateIndex] = fieldState;
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'addFieldType',
-    value: function addFieldType(newType) {
-      assert(!this.state.fieldTypes.find(function (f) {
-        return f.info.type === newType.info.type;
-      }), 'The field type ' + newType.info.type + ' already exists');
-
-      var fieldTypes = this.state.fieldTypes.concat([newType]);
-      this.setState({ fieldTypes: fieldTypes });
-    }
-  }, {
-    key: 'reorderFields',
-    value: function reorderFields(newFieldsIdOrder) {
-      var _this2 = this;
-
-      var fieldStates = newFieldsIdOrder.map(function (id) {
-        return _this2.state.fieldStates.find(function (s) {
-          return s.id.toString() === id;
-        });
-      });
-
-      assert(fieldStates.indexOf(undefined) === -1, 'There are ids that do not correspond to any fieldState.');
-
-      console.log('New order:', fieldStates.map(function (s) {
-        return s.id;
-      }).join(', '));
-
-      this.pushHistoryState(fieldStates);
-    }
-    // ==================== HISTORY HANDLING  ===========================
-
-  }, {
-    key: 'pushHistoryState',
-    value: function pushHistoryState(fieldStates) {
-      // Add active state to head and set new state as active
-      var currentFieldStates = this.state.fieldStates;
-      var fieldStatesHistory = [currentFieldStates].concat(this.state.fieldStatesHistory);
-      this.setState({
-        fieldStatesHistory: fieldStatesHistory,
-        fieldStates: fieldStates
-      });
-    }
-  }, {
-    key: 'pullHistoryState',
-    value: function pullHistoryState() {
-      // Remove head
-      var fieldStatesHistory = this.state.fieldStatesHistory.slice(1);
-      // Head is now the active state
-      var fieldStates = this.state.fieldStatesHistory[0] || [];
-      this.setState({
-        fieldStatesHistory: fieldStatesHistory,
-        fieldStates: fieldStates
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _state = this.state;
-      var fieldTypes = _state.fieldTypes;
-      var fieldStates = _state.fieldStates;
-
-
-      return React.createElement(
-        'div',
-        { className: 'fl-fb' },
-        React.createElement(ControlBar, { fieldTypes: fieldTypes }),
-        React.createElement(Fields, { fieldStates: fieldStates, fieldTypes: fieldTypes })
-      );
-    }
-  }]);
-  return FormBuilder;
-}(React.Component);
-
-FormBuilder$2.propTypes = {
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
-  exportState: React.PropTypes.func,
-  importState: React.PropTypes.func
-};
-
-// Creates a new object with properties of the old one
-// ovewritten by properties of the new object.
-// No new properties of the new Object are added.
-// overshadow Object -> Object -> Object
-function overshadow(oldObj, newObj) {
-  return Object.keys(oldObj).reduce(function (result, key) {
-    // We want to use values from newObj even if the value is set to undefined,
-    // but not use it if it is not set at all. That's why we use hasOwnProperty.
-    result[key] = newObj.hasOwnProperty(key) ? newObj[key] : oldObj[key]; // eslint-disable-line no-param-reassign, max-len
-    return result;
-  }, {});
-}
-
-function buildOptionsFieldConstructor(typeInfo) {
-  // These are the fields that will end up being
-  // changed on updates
-  var componentFields = {
-    // Compulsory fields
-    required: false,
-    // Component specific fields
-    title: 'Add a title',
-    options: ['Insert an option'],
-
-    // states needed to handle UI
-    newOptionText: ''
-  };
-
-  // For Text Fields the initialState function will only return an object.
-  var initialState = function initialState() {
-    return Object.assign({}, typeInfo, componentFields);
-  };
-
-  // When configuration is open, this is what is going to be displayed
-  /**
-   * @method RenderConfigMode
-   * @param  {Object} state : State
-   * @param  {Function} update : State -> void // Will trigger a re-render
-   */
-  var RenderConfigMode = function RenderConfigMode(_ref) {
-    var state = _ref.state;
-    var update = _ref.update;
-
-    var removeOption = function removeOption() {
-      // Remove last option
-      var options = state.options.slice(0, state.options.length - 1);
-      var newState = overshadow(state, { options: options });
-      update(newState);
-    };
-
-    var addOption = function addOption() {
-      if (!state.newOptionText.trim()) {
-        return;
-      }
-
-      var options = state.options.filter(function (o) {
-        return !initialState().options.includes(o);
-      }) // Remove default option
-      .concat([state.newOptionText]); // Add new option
-      var newOptionText = '';
-      var newState = overshadow(state, { options: options, newOptionText: newOptionText });
-      update(newState);
-    };
-
-    var updateOption = _curry(function (optionIndex, event) {
-      var value = event.target.value;
-      var options = Array.from(state.options);
-      options[optionIndex] = value;
-
-      var newState = overshadow(state, { options: options });
-      update(newState);
-    });
-
-    var removeIfOptionIsNull = _curry(function (optionIndex, event) {
-      var value = event.target.value;
-      if (value) {
-        return;
-      }
-      var optionsBefore = state.options.slice(0, optionIndex);
-      var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
-      var options = optionsBefore.concat(optionsAfter);
-      var newState = overshadow(state, { options: options });
-      update(newState);
-    });
-
-    var updateProperty = _curry(function (propName, event) {
-      var value = event.target.value;
-      var newValue = value || initialState()[propName];
-      var newState = overshadow(state, defineProperty({}, propName, newValue));
-      update(newState);
-    });
-
-    var ifEnterPressed = _curry(function (f, e) {
-      if (event.key === 'Enter') {
-        f(e);
-      }
-    });
-
-    return React.createElement(
-      'div',
-      null,
-      React.createElement(
-        'h2',
-        null,
-        React.createElement('input', {
-          type: 'text',
-          className: 'fl-fb-Field-editable',
-          onChange: updateProperty('title'),
-          defaultValue: state.title
-        })
-      ),
-      state.options.map(function (optionText, optionIndex) {
-        return React.createElement(
-          'div',
-          { className: 'fl-fb-Field-option' },
-          React.createElement('input', { type: state.htmlInputType }),
-          React.createElement('input', {
-            type: 'text',
-            className: 'fl-fb-Field-option-text fl-fb-Field-editable',
-            value: optionText,
-            onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
-            onChange: updateOption(optionIndex)
-          })
-        );
-      }),
-      React.createElement(
-        'div',
-        { className: 'fl-fb-Field-config' },
-        React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
-        React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
-        React.createElement('input', {
-          className: 'fl-fb-Field-config-input',
-          type: 'text',
-          value: state.newOptionText,
-          placeholder: 'Type a new option',
-          onChange: updateProperty('newOptionText'),
-          onKeyPress: ifEnterPressed(addOption)
-        })
-      )
-    );
-  };
-
-  var RenderFormMode = function RenderFormMode(_ref2) {
-    var state = _ref2.state;
-
-    return React.createElement(
-      'div',
-      null,
-      React.createElement(
-        'h2',
-        null,
-        state.title
-      ),
-      state.options.map(function (optionText) {
-        return React.createElement(
-          'div',
-          { className: 'fl-fb-Field-option' },
-          React.createElement('input', { type: state.htmlInputType }),
-          React.createElement(
-            'span',
-            { className: 'fl-fb-Field-option-text' },
-            ' ',
-            optionText,
-            ' '
-          )
-        );
-      })
-    );
-  };
-
-  var RenderEditor = function RenderEditor(_ref3) {
-    var state = _ref3.state;
-    var update = _ref3.update;
-
-    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
-    : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
-  };
-
-  var OptionsField = {
-    info: typeInfo,
-    initialState: initialState,
-    RenderEditor: RenderEditor
-  };
-
-  return OptionsField;
-}
-
-var typeInfo = {
-  // Compulsory
-  type: 'RadioButtons',
-  displayName: 'Radio Button',
-  group: 'Options Components',
-
-  // Field type specific
-  htmlInputType: 'radio'
-};
-
-var RadioButtons = buildOptionsFieldConstructor(typeInfo);
-
-var typeInfo$1 = {
-  // Compulsory
-  type: 'Checkboxes',
-  displayName: 'Checkboxes',
-  group: 'Options Components',
-
-  // Field type specific
-  htmlInputType: 'checkbox'
-};
-
-var RadioButtons$2 = buildOptionsFieldConstructor(typeInfo$1);
-
-var typeInfo$2 = {
-  // Compulsory
-  type: 'Dropdown',
-  displayName: 'Dropdown',
-  group: 'Options Components'
-};
-
-// These are the fields that will end up being
-// changed on updates
-var componentFields = {
-  // Compulsory fields
-  required: false,
-  // Component specific fields
-  title: 'Add a title',
-  options: ['Insert an option'],
-
-  // states needed to handle UI
-  newOptionText: ''
-};
-
-// For Text Fields the initialState function will only return an object.
-var initialState = function initialState() {
-  return Object.assign({}, typeInfo$2, componentFields);
-};
-
-// When configuration is open, this is what is going to be displayed
-/**
- * @method RenderConfigMode
- * @param  {Object} state : State
- * @param  {Function} update : State -> void // Will trigger a re-render
- */
-var RenderConfigMode = function RenderConfigMode(_ref) {
-  var state = _ref.state;
-  var update = _ref.update;
-
-  var removeOption = function removeOption() {
-    // Remove last option
-    var options = state.options.slice(0, state.options.length - 1);
-    var newState = overshadow(state, { options: options });
-    update(newState);
-  };
-
-  var addOption = function addOption() {
-    if (!state.newOptionText.trim()) {
-      return;
-    }
-
-    var options = state.options.filter(function (o) {
-      return !initialState().options.includes(o);
-    }) // Remove default option
-    .concat([state.newOptionText]); // Add new option
-    var newOptionText = '';
-    var newState = overshadow(state, { options: options, newOptionText: newOptionText });
-    update(newState);
-  };
-
-  var updateOption = _curry(function (optionIndex, event) {
-    var value = event.target.value;
-    var options = Array.from(state.options);
-    options[optionIndex] = value;
-
-    var newState = overshadow(state, { options: options });
-    update(newState);
-  });
-
-  var removeIfOptionIsNull = _curry(function (optionIndex, event) {
-    var value = event.target.value;
-    if (value) {
-      return;
-    }
-    var optionsBefore = state.options.slice(0, optionIndex);
-    var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
-    var options = optionsBefore.concat(optionsAfter);
-    var newState = overshadow(state, { options: options });
-    update(newState);
-  });
-
-  var updateProperty = _curry(function (propName, event) {
-    var value = event.target.value;
-    var newValue = value || initialState()[propName];
-    var newState = overshadow(state, defineProperty({}, propName, newValue));
-    update(newState);
-  });
-
-  var ifEnterPressed = _curry(function (f, e) {
-    if (event.key === 'Enter') {
-      f(e);
-    }
-  });
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      React.createElement('input', {
-        type: 'text',
-        className: 'fl-fb-Field-editable',
-        onChange: updateProperty('title'),
-        defaultValue: state.title
-      })
-    ),
-    React.createElement(
-      'div',
-      { className: 'form-control', style: { height: 'auto' } },
-      state.options.map(function (optionText, optionIndex) {
-        return React.createElement(
-          'div',
-          { className: 'fl-fb-Field-option' },
-          React.createElement('input', {
-            className: 'fl-fb-Field-editable',
-            type: 'text',
-            value: optionText,
-            onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
-            onChange: updateOption(optionIndex)
-          })
-        );
-      })
-    ),
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-config' },
-      React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
-      React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
-      React.createElement('input', {
-        type: 'text',
-        className: 'fl-fb-Field-config-input',
-        placeholder: 'Type a new option',
-        value: state.newOptionText,
-        onChange: updateProperty('newOptionText'),
-        onKeyPress: ifEnterPressed(addOption)
-      })
-    )
-  );
-};
-
-var RenderFormMode = function RenderFormMode(_ref2) {
-  var state = _ref2.state;
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      state.title
-    ),
-    React.createElement(
-      'select',
-      { className: 'form-control' },
-      state.options.map(function (optionText) {
-        return React.createElement(
-          'option',
-          null,
-          ' ',
-          optionText,
-          ' '
-        );
-      })
-    )
-  );
-};
-
-var RenderEditor = function RenderEditor(_ref3) {
-  var state = _ref3.state;
-  var update = _ref3.update;
-
-  return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
-  : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
-};
-
-var Dropdown = {
-  info: typeInfo$2,
-  initialState: initialState,
-  RenderEditor: RenderEditor
-};
-
-/**
- *
- *
- * This is a group of functions to build a Text Field Constructor.
- * It is not supposed to be used as a FieldConstructor, but used to build one.
- *
- *
- */
-
-// ========== UTILS =================== //
-
-var updateField$2 = _curry(function (update, state, initialState, fieldName, event) {
-  var value = event.target.value;
-  // Update or fallback to default value
-  var newValue = value || initialState[fieldName];
-  var newState = overshadow(state, defineProperty({}, fieldName, newValue));
-  update(newState);
-});
-
-// ========== END OF UTILS ============ //
-
-var templateTypeInfo = {
-  // Compulsory
-  type: 'TextField',
-  group: 'Text Components',
-  displayName: 'Text field',
-
-  // Field type specific
-  htmlInputType: 'text',
-  htmlElement: 'input'
-};
-
-// These are the fields that will end up being
-// changed on updates
-var componentFields$1 = {
-  // Compulsory fields
-  required: false,
-  // Component specific fields
-  title: 'Add a title',
-  placeholder: 'Add a placeholder'
-};
-
-// For Text Fields the initialState function will only return an object.
-var createInitialState = function createInitialState(typeSpecific, componentSpecific) {
-  return function () {
-    return Object.assign({}, typeSpecific, componentSpecific);
-  };
-};
-
-// When configuration is open, this is what is going to be displayed
-/**
- * @method RenderConfigMode
- * @param  {Object} state : State
- * @param  {Function} update : State -> void // Will trigger a re-render
- */
-var createRenderConfigMode = _curry(function (initialState, _ref) {
-  var state = _ref.state;
-  var update = _ref.update;
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      React.createElement('input', {
-        type: 'text',
-        className: 'fl-fb-Field-editable',
-        onChange: updateField$2(update, state, initialState, 'title'),
-        defaultValue: state.title
-      })
-    ),
-    React.createElement(state.htmlElement, {
-      type: 'text',
-      className: 'form-control',
-      defaultValue: state.placeholder,
-      onChange: updateField$2(update, state, initialState, 'placeholder')
-    })
-  );
-});
-
-var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
-  var state = _ref2.state;
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      state.title
-    ),
-    React.createElement(state.htmlElement, {
-      type: state.htmlInputType,
-      className: 'form-control',
-      placeholder: state.placeholder
-    })
-  );
-};
-
-function buildTextFieldConstructor(customTypeInfo) {
-  var typeInfo = overshadow(templateTypeInfo, customTypeInfo);
-
-  var initialState = createInitialState(typeInfo, componentFields$1);
-
-  var RenderConfigMode = createRenderConfigMode(initialState());
-
-  var RenderEditor = function RenderEditor(_ref3) {
-    var state = _ref3.state;
-    var update = _ref3.update;
-
-    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
-    : RenderFormMode$1({ state: state, update: update }); // eslint-disable-line new-cap
-  };
-
-  var FieldConstructor = {
-    info: typeInfo,
-    initialState: initialState,
-    RenderEditor: RenderEditor
-  };
-
-  return FieldConstructor;
-}
-
-var TextBox = buildTextFieldConstructor({
-  type: 'TextBox',
-  displayName: 'Text Box',
-  htmlInputType: 'text'
-});
-
-var TextBox$2 = buildTextFieldConstructor({
-  type: 'TextArea',
-  displayName: 'Text Area',
-  htmlElement: 'textarea'
-});
-
-var EmailBox = buildTextFieldConstructor({
-  type: 'EmailBox',
-  displayName: 'Email Box',
-  htmlInputType: 'email'
-});
-
-var TextBox$3 = buildTextFieldConstructor({
-  type: 'NumberBox',
-  displayName: 'Number Box',
-  htmlInputType: 'number'
-});
-
-var TextBox$4 = buildTextFieldConstructor({
-  type: 'TelephoneBox',
-  displayName: 'Telephone Box',
-  htmlInputType: 'tel'
-});
-
-/* globals xController */
-//
-// Field Types
-function FormBuilder(container) {
-  var components = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-  assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
-
-  var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
-
-  var customFieldTypes = defaultTypes.concat(components);
-
-  var exportFunc = void 0;
-  var importFunc = void 0;
-  ReactDOM.render(React.createElement(FormBuilder$2, {
-    fieldTypes: customFieldTypes,
-    exportState: function exportState(f) {
-      return exportFunc = f;
-    },
-    importState: function importState(f) {
-      return importFunc = f;
-    }
-  }), container);
-
-  this.exportState = function () {
-    return exportFunc();
-  };
-  this.importState = function (s) {
-    return importFunc(s);
-  };
-}
-
-return FormBuilder;
+return Fields;
 
 })));
 
-//# sourceMappingURL=fl-form-builder.js.map
+//# sourceMappingURL=Fields.js.map
