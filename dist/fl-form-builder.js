@@ -114,14 +114,7 @@ var FieldCreatorPropType = {
     group: React.PropTypes.string,
     displayName: React.PropTypes.string
   }),
-  initialState: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    group: React.PropTypes.string,
-    displayName: React.PropTypes.string,
-
-    required: React.PropTypes.bool,
-    configShowing: React.PropTypes.bool
-  }),
+  initialState: React.PropTypes.func,
   RenderEditor: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {

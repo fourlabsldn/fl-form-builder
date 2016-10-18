@@ -12131,14 +12131,7 @@ var FieldCreatorPropType = {
     group: React.PropTypes.string,
     displayName: React.PropTypes.string
   }),
-  initialState: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    group: React.PropTypes.string,
-    displayName: React.PropTypes.string,
-
-    required: React.PropTypes.bool,
-    configShowing: React.PropTypes.bool
-  }),
+  initialState: React.PropTypes.func,
   RenderEditor: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
@@ -23357,10 +23350,24 @@ describe('The FormBuilder', function () {
       }
     }));
 
-    var initial = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }, { "type": "RadioButtons", "displayName": "Radio Button", "group": "Options Components", "htmlInputType": "radio", "required": false, "title": "Add a title", "options": ["asdfasdf", "fdfsf", "dsfd fsasdf "], "newOptionText": "", "id": 1476724207216, "configShowing": false }];
-    importFunc(initial);
+    var initialState = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }, { "type": "RadioButtons", "displayName": "Radio Button", "group": "Options Components", "htmlInputType": "radio", "required": false, "title": "Add a title", "options": ["asdfasdf", "fdfsf", "dsfd fsasdf "], "newOptionText": "", "id": 1476724207216, "configShowing": false }];
+    importFunc(initialState);
     var exported = exportFunc();
-    expect(exported).toEqual(initial);
+    expect(exported).toEqual(initialState);
+  });
+
+  it('throws an error when creating types it doesn`t have', function () {
+    var importFunc = void 0;
+    renderer.create(React.createElement(FormBuilder, {
+      importState: function importState(f) {
+        return importFunc = f;
+      }
+    }));
+
+    var initialState = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }];
+    expect(function () {
+      return importFunc(initial);
+    }).toThrow();
   });
 });
 
