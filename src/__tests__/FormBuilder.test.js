@@ -5,6 +5,28 @@ import renderer from 'react-test-renderer';
 import FormBuilder from '../js/FormBuilder';
 import polyfills from 'babel-polyfill'; // eslint-disable-line
 
+// Field Types
+import RadioButtons from '../js/default-fields/options-fields/RadioButtons';
+import Checkboxes from '../js/default-fields/options-fields/Checkboxes';
+import Dropdown from '../js/default-fields/options-fields/Dropdown';
+
+import TextBox from '../js/default-fields/text-fields/TextBox';
+import TextArea from '../js/default-fields/text-fields/TextArea';
+import EmailBox from '../js/default-fields/text-fields/EmailBox';
+import NumberBox from '../js/default-fields/text-fields/NumberBox';
+import TelephoneBox from '../js/default-fields/text-fields/TelephoneBox';
+
+const defaultTypes = [
+  RadioButtons,
+  Checkboxes,
+  Dropdown,
+  TextBox,
+  EmailBox,
+  TelephoneBox,
+  NumberBox,
+  TextArea,
+];
+
 describe('The FormBuilder', () => {
   it('can be created without any props', () => {
     const component = renderer.create(
@@ -42,12 +64,13 @@ describe('The FormBuilder', () => {
     let exportFunc;
     renderer.create((
       <FormBuilder
+        fieldTypes={defaultTypes}
         importState={f => (importFunc = f)}
         exportState={f => (exportFunc = f)}
       />
     ));
 
-    const initial = [{"type":"TextBox","group":"Text Components","displayName":"Text Box","htmlInputType":"text","htmlElement":"input","required":false,"title":"asdasdfasdf asdfasdf ","placeholder":"Add a placeholdeasdfasdfr","id":1476724219155,"configShowing":false},{"type":"RadioButtons","displayName":"Radio Button","group":"Options Components","htmlInputType":"radio","required":false,"title":"Add a title","options":["asdfasdf","fdfsf","dsfd fsasdf "],"newOptionText":"","id":1476724207216,"configShowing":false},{"primitiveType":"Dropdown","type":"ImageCards","displayName":"Image Cards","group":"Custom Components","required":false,"title":"My image component","options":["http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png"],"newImageText":"","id":1476724232653,"configShowing":true}];
+    const initial = [{"type":"TextBox","group":"Text Components","displayName":"Text Box","htmlInputType":"text","htmlElement":"input","required":false,"title":"asdasdfasdf asdfasdf ","placeholder":"Add a placeholdeasdfasdfr","id":1476724219155,"configShowing":false},{"type":"RadioButtons","displayName":"Radio Button","group":"Options Components","htmlInputType":"radio","required":false,"title":"Add a title","options":["asdfasdf","fdfsf","dsfd fsasdf "],"newOptionText":"","id":1476724207216,"configShowing":false}];
     importFunc(initial);
     const exported = exportFunc();
     expect(exported).toEqual(initial);

@@ -14656,7 +14656,20 @@ var createClass = function () {
 
 
 
+var defineProperty$1 = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
 
+  return obj;
+};
 
 var get$1 = function get$1(object, property, receiver) {
   if (object === null) object = Function.prototype;
@@ -22752,7 +22765,552 @@ define(String.prototype, "padRight", "".padEnd);
 });
 });
 
+// Creates a new object with properties of the old one
+// ovewritten by properties of the new object.
+// No new properties of the new Object are added.
+// overshadow Object -> Object -> Object
+function overshadow(oldObj, newObj) {
+  return Object.keys(oldObj).reduce(function (result, key) {
+    // We want to use values from newObj even if the value is set to undefined,
+    // but not use it if it is not set at all. That's why we use hasOwnProperty.
+    result[key] = newObj.hasOwnProperty(key) ? newObj[key] : oldObj[key]; // eslint-disable-line no-param-reassign, max-len
+    return result;
+  }, {});
+}
+
+function buildOptionsFieldConstructor(typeInfo) {
+  // These are the fields that will end up being
+  // changed on updates
+  var componentFields = {
+    // Compulsory fields
+    required: false,
+    // Component specific fields
+    title: 'Add a title',
+    options: ['Insert an option'],
+
+    // states needed to handle UI
+    newOptionText: ''
+  };
+
+  // For Text Fields the initialState function will only return an object.
+  var initialState = function initialState() {
+    return Object.assign({}, typeInfo, componentFields);
+  };
+
+  // When configuration is open, this is what is going to be displayed
+  /**
+   * @method RenderConfigMode
+   * @param  {Object} state : State
+   * @param  {Function} update : State -> void // Will trigger a re-render
+   */
+  var RenderConfigMode = function RenderConfigMode(_ref) {
+    var state = _ref.state;
+    var update = _ref.update;
+
+    var removeOption = function removeOption() {
+      // Remove last option
+      var options = state.options.slice(0, state.options.length - 1);
+      var newState = overshadow(state, { options: options });
+      update(newState);
+    };
+
+    var addOption = function addOption() {
+      if (!state.newOptionText.trim()) {
+        return;
+      }
+
+      var options = state.options.filter(function (o) {
+        return !initialState().options.includes(o);
+      }) // Remove default option
+      .concat([state.newOptionText]); // Add new option
+      var newOptionText = '';
+      var newState = overshadow(state, { options: options, newOptionText: newOptionText });
+      update(newState);
+    };
+
+    var updateOption = _curry(function (optionIndex, event) {
+      var value = event.target.value;
+      var options = Array.from(state.options);
+      options[optionIndex] = value;
+
+      var newState = overshadow(state, { options: options });
+      update(newState);
+    });
+
+    var removeIfOptionIsNull = _curry(function (optionIndex, event) {
+      var value = event.target.value;
+      if (value) {
+        return;
+      }
+      var optionsBefore = state.options.slice(0, optionIndex);
+      var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
+      var options = optionsBefore.concat(optionsAfter);
+      var newState = overshadow(state, { options: options });
+      update(newState);
+    });
+
+    var updateProperty = _curry(function (propName, event) {
+      var value = event.target.value;
+      var newValue = value || initialState()[propName];
+      var newState = overshadow(state, defineProperty$1({}, propName, newValue));
+      update(newState);
+    });
+
+    var ifEnterPressed = _curry(function (f, e) {
+      if (event.key === 'Enter') {
+        f(e);
+      }
+    });
+
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h2',
+        null,
+        React.createElement('input', {
+          type: 'text',
+          className: 'fl-fb-Field-editable',
+          onChange: updateProperty('title'),
+          defaultValue: state.title
+        })
+      ),
+      state.options.map(function (optionText, optionIndex) {
+        return React.createElement(
+          'div',
+          { className: 'fl-fb-Field-option' },
+          React.createElement('input', { type: state.htmlInputType }),
+          React.createElement('input', {
+            type: 'text',
+            className: 'fl-fb-Field-option-text fl-fb-Field-editable',
+            value: optionText,
+            onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
+            onChange: updateOption(optionIndex)
+          })
+        );
+      }),
+      React.createElement(
+        'div',
+        { className: 'fl-fb-Field-config' },
+        React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
+        React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
+        React.createElement('input', {
+          className: 'fl-fb-Field-config-input',
+          type: 'text',
+          value: state.newOptionText,
+          placeholder: 'Type a new option',
+          onChange: updateProperty('newOptionText'),
+          onKeyPress: ifEnterPressed(addOption)
+        })
+      )
+    );
+  };
+
+  var RenderFormMode = function RenderFormMode(_ref2) {
+    var state = _ref2.state;
+
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h2',
+        null,
+        state.title
+      ),
+      state.options.map(function (optionText) {
+        return React.createElement(
+          'div',
+          { className: 'fl-fb-Field-option' },
+          React.createElement('input', { type: state.htmlInputType }),
+          React.createElement(
+            'span',
+            { className: 'fl-fb-Field-option-text' },
+            ' ',
+            optionText,
+            ' '
+          )
+        );
+      })
+    );
+  };
+
+  var RenderEditor = function RenderEditor(_ref3) {
+    var state = _ref3.state;
+    var update = _ref3.update;
+
+    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+    : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
+  };
+
+  var OptionsField = {
+    info: typeInfo,
+    initialState: initialState,
+    RenderEditor: RenderEditor
+  };
+
+  return OptionsField;
+}
+
+var typeInfo = {
+  // Compulsory
+  type: 'RadioButtons',
+  displayName: 'Radio Button',
+  group: 'Options Components',
+
+  // Field type specific
+  htmlInputType: 'radio'
+};
+
+var RadioButtons = buildOptionsFieldConstructor(typeInfo);
+
+var typeInfo$1 = {
+  // Compulsory
+  type: 'Checkboxes',
+  displayName: 'Checkboxes',
+  group: 'Options Components',
+
+  // Field type specific
+  htmlInputType: 'checkbox'
+};
+
+var RadioButtons$2 = buildOptionsFieldConstructor(typeInfo$1);
+
+var typeInfo$2 = {
+  // Compulsory
+  type: 'Dropdown',
+  displayName: 'Dropdown',
+  group: 'Options Components'
+};
+
+// These are the fields that will end up being
+// changed on updates
+var componentFields = {
+  // Compulsory fields
+  required: false,
+  // Component specific fields
+  title: 'Add a title',
+  options: ['Insert an option'],
+
+  // states needed to handle UI
+  newOptionText: ''
+};
+
+// For Text Fields the initialState function will only return an object.
+var initialState = function initialState() {
+  return Object.assign({}, typeInfo$2, componentFields);
+};
+
+// When configuration is open, this is what is going to be displayed
+/**
+ * @method RenderConfigMode
+ * @param  {Object} state : State
+ * @param  {Function} update : State -> void // Will trigger a re-render
+ */
+var RenderConfigMode = function RenderConfigMode(_ref) {
+  var state = _ref.state;
+  var update = _ref.update;
+
+  var removeOption = function removeOption() {
+    // Remove last option
+    var options = state.options.slice(0, state.options.length - 1);
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  };
+
+  var addOption = function addOption() {
+    if (!state.newOptionText.trim()) {
+      return;
+    }
+
+    var options = state.options.filter(function (o) {
+      return !initialState().options.includes(o);
+    }) // Remove default option
+    .concat([state.newOptionText]); // Add new option
+    var newOptionText = '';
+    var newState = overshadow(state, { options: options, newOptionText: newOptionText });
+    update(newState);
+  };
+
+  var updateOption = _curry(function (optionIndex, event) {
+    var value = event.target.value;
+    var options = Array.from(state.options);
+    options[optionIndex] = value;
+
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  });
+
+  var removeIfOptionIsNull = _curry(function (optionIndex, event) {
+    var value = event.target.value;
+    if (value) {
+      return;
+    }
+    var optionsBefore = state.options.slice(0, optionIndex);
+    var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
+    var options = optionsBefore.concat(optionsAfter);
+    var newState = overshadow(state, { options: options });
+    update(newState);
+  });
+
+  var updateProperty = _curry(function (propName, event) {
+    var value = event.target.value;
+    var newValue = value || initialState()[propName];
+    var newState = overshadow(state, defineProperty$1({}, propName, newValue));
+    update(newState);
+  });
+
+  var ifEnterPressed = _curry(function (f, e) {
+    if (event.key === 'Enter') {
+      f(e);
+    }
+  });
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      React.createElement('input', {
+        type: 'text',
+        className: 'fl-fb-Field-editable',
+        onChange: updateProperty('title'),
+        defaultValue: state.title
+      })
+    ),
+    React.createElement(
+      'div',
+      { className: 'form-control', style: { height: 'auto' } },
+      state.options.map(function (optionText, optionIndex) {
+        return React.createElement(
+          'div',
+          { className: 'fl-fb-Field-option' },
+          React.createElement('input', {
+            className: 'fl-fb-Field-editable',
+            type: 'text',
+            value: optionText,
+            onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
+            onChange: updateOption(optionIndex)
+          })
+        );
+      })
+    ),
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-config' },
+      React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
+      React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
+      React.createElement('input', {
+        type: 'text',
+        className: 'fl-fb-Field-config-input',
+        placeholder: 'Type a new option',
+        value: state.newOptionText,
+        onChange: updateProperty('newOptionText'),
+        onKeyPress: ifEnterPressed(addOption)
+      })
+    )
+  );
+};
+
+var RenderFormMode = function RenderFormMode(_ref2) {
+  var state = _ref2.state;
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      state.title
+    ),
+    React.createElement(
+      'select',
+      { className: 'form-control' },
+      state.options.map(function (optionText) {
+        return React.createElement(
+          'option',
+          null,
+          ' ',
+          optionText,
+          ' '
+        );
+      })
+    )
+  );
+};
+
+var RenderEditor = function RenderEditor(_ref3) {
+  var state = _ref3.state;
+  var update = _ref3.update;
+
+  return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+  : RenderFormMode({ state: state, update: update }); // eslint-disable-line new-cap
+};
+
+var Dropdown = {
+  info: typeInfo$2,
+  initialState: initialState,
+  RenderEditor: RenderEditor
+};
+
+/**
+ *
+ *
+ * This is a group of functions to build a Text Field Constructor.
+ * It is not supposed to be used as a FieldConstructor, but used to build one.
+ *
+ *
+ */
+
+// ========== UTILS =================== //
+
+var updateField$2 = _curry(function (update, state, initialState, fieldName, event) {
+  var value = event.target.value;
+  // Update or fallback to default value
+  var newValue = value || initialState[fieldName];
+  var newState = overshadow(state, defineProperty$1({}, fieldName, newValue));
+  update(newState);
+});
+
+// ========== END OF UTILS ============ //
+
+var templateTypeInfo = {
+  // Compulsory
+  type: 'TextField',
+  group: 'Text Components',
+  displayName: 'Text field',
+
+  // Field type specific
+  htmlInputType: 'text',
+  htmlElement: 'input'
+};
+
+// These are the fields that will end up being
+// changed on updates
+var componentFields$1 = {
+  // Compulsory fields
+  required: false,
+  // Component specific fields
+  title: 'Add a title',
+  placeholder: 'Add a placeholder'
+};
+
+// For Text Fields the initialState function will only return an object.
+var createInitialState = function createInitialState(typeSpecific, componentSpecific) {
+  return function () {
+    return Object.assign({}, typeSpecific, componentSpecific);
+  };
+};
+
+// When configuration is open, this is what is going to be displayed
+/**
+ * @method RenderConfigMode
+ * @param  {Object} state : State
+ * @param  {Function} update : State -> void // Will trigger a re-render
+ */
+var createRenderConfigMode = _curry(function (initialState, _ref) {
+  var state = _ref.state;
+  var update = _ref.update;
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      React.createElement('input', {
+        type: 'text',
+        className: 'fl-fb-Field-editable',
+        onChange: updateField$2(update, state, initialState, 'title'),
+        defaultValue: state.title
+      })
+    ),
+    React.createElement(state.htmlElement, {
+      type: 'text',
+      className: 'form-control',
+      defaultValue: state.placeholder,
+      onChange: updateField$2(update, state, initialState, 'placeholder')
+    })
+  );
+});
+
+var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
+  var state = _ref2.state;
+
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h2',
+      null,
+      state.title
+    ),
+    React.createElement(state.htmlElement, {
+      type: state.htmlInputType,
+      className: 'form-control',
+      placeholder: state.placeholder
+    })
+  );
+};
+
+function buildTextFieldConstructor(customTypeInfo) {
+  var typeInfo = overshadow(templateTypeInfo, customTypeInfo);
+
+  var initialState = createInitialState(typeInfo, componentFields$1);
+
+  var RenderConfigMode = createRenderConfigMode(initialState());
+
+  var RenderEditor = function RenderEditor(_ref3) {
+    var state = _ref3.state;
+    var update = _ref3.update;
+
+    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
+    : RenderFormMode$1({ state: state, update: update }); // eslint-disable-line new-cap
+  };
+
+  var FieldConstructor = {
+    info: typeInfo,
+    initialState: initialState,
+    RenderEditor: RenderEditor
+  };
+
+  return FieldConstructor;
+}
+
+var TextBox = buildTextFieldConstructor({
+  type: 'TextBox',
+  displayName: 'Text Box',
+  htmlInputType: 'text'
+});
+
+var TextBox$2 = buildTextFieldConstructor({
+  type: 'TextArea',
+  displayName: 'Text Area',
+  htmlElement: 'textarea'
+});
+
+var EmailBox = buildTextFieldConstructor({
+  type: 'EmailBox',
+  displayName: 'Email Box',
+  htmlInputType: 'email'
+});
+
+var TextBox$3 = buildTextFieldConstructor({
+  type: 'NumberBox',
+  displayName: 'Number Box',
+  htmlInputType: 'number'
+});
+
+var TextBox$4 = buildTextFieldConstructor({
+  type: 'TelephoneBox',
+  displayName: 'Telephone Box',
+  htmlInputType: 'tel'
+});
+
 /* eslint-env jasmine */
+
+// Field Types
+var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2];
 
 describe('The FormBuilder', function () {
   it('can be created without any props', function () {
@@ -22790,6 +23348,7 @@ describe('The FormBuilder', function () {
     var importFunc = void 0;
     var exportFunc = void 0;
     renderer.create(React.createElement(FormBuilder, {
+      fieldTypes: defaultTypes,
       importState: function importState(f) {
         return importFunc = f;
       },
@@ -22798,7 +23357,7 @@ describe('The FormBuilder', function () {
       }
     }));
 
-    var initial = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }, { "type": "RadioButtons", "displayName": "Radio Button", "group": "Options Components", "htmlInputType": "radio", "required": false, "title": "Add a title", "options": ["asdfasdf", "fdfsf", "dsfd fsasdf "], "newOptionText": "", "id": 1476724207216, "configShowing": false }, { "primitiveType": "Dropdown", "type": "ImageCards", "displayName": "Image Cards", "group": "Custom Components", "required": false, "title": "My image component", "options": ["http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png"], "newImageText": "", "id": 1476724232653, "configShowing": true }];
+    var initial = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }, { "type": "RadioButtons", "displayName": "Radio Button", "group": "Options Components", "htmlInputType": "radio", "required": false, "title": "Add a title", "options": ["asdfasdf", "fdfsf", "dsfd fsasdf "], "newOptionText": "", "id": 1476724207216, "configShowing": false }];
     importFunc(initial);
     var exported = exportFunc();
     expect(exported).toEqual(initial);
