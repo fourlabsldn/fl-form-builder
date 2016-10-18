@@ -22760,7 +22760,7 @@ describe('The FormBuilder', function () {
     expect(component.toJSON()).toBeTruthy();
   });
 
-  it('can export state', function () {
+  it('does the setup of the export state function', function () {
     var exportFunc = void 0;
     renderer.create(React.createElement(FormBuilder, {
       exportState: function exportState(f) {
@@ -22772,7 +22772,7 @@ describe('The FormBuilder', function () {
     expect(JSON.stringify(emptyExport)).toEqual('[]');
   });
 
-  it('can export state', function () {
+  it('does the setup of the import state function', function () {
     var importFunc = void 0;
     renderer.create(React.createElement(FormBuilder, {
       importState: function importState(f) {
@@ -22784,6 +22784,24 @@ describe('The FormBuilder', function () {
       return importFunc([]);
     };
     expect(doImport).not.toThrow();
+  });
+
+  it('can export the correct object after importing it', function () {
+    var importFunc = void 0;
+    var exportFunc = void 0;
+    renderer.create(React.createElement(FormBuilder, {
+      importState: function importState(f) {
+        return importFunc = f;
+      },
+      exportState: function exportState(f) {
+        return exportFunc = f;
+      }
+    }));
+
+    var initial = [{ "type": "TextBox", "group": "Text Components", "displayName": "Text Box", "htmlInputType": "text", "htmlElement": "input", "required": false, "title": "asdasdfasdf asdfasdf ", "placeholder": "Add a placeholdeasdfasdfr", "id": 1476724219155, "configShowing": false }, { "type": "RadioButtons", "displayName": "Radio Button", "group": "Options Components", "htmlInputType": "radio", "required": false, "title": "Add a title", "options": ["asdfasdf", "fdfsf", "dsfd fsasdf "], "newOptionText": "", "id": 1476724207216, "configShowing": false }, { "primitiveType": "Dropdown", "type": "ImageCards", "displayName": "Image Cards", "group": "Custom Components", "required": false, "title": "My image component", "options": ["http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png"], "newImageText": "", "id": 1476724232653, "configShowing": true }];
+    importFunc(initial);
+    var exported = exportFunc();
+    expect(exported).toEqual(initial);
   });
 });
 
