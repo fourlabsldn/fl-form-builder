@@ -1,4 +1,31 @@
 /* eslint-disable global-require */
+
+/**
+ *
+ *  This module allows you to test that React components are being rendered
+ *  appropriately.
+ *
+ * A JSON image of the rendered component is saved in a file with the same name
+ * as the test file being used, but with the extension `snapshots.json`.
+ *
+ * USAGE:
+ *    Instantiate it with the test mode. If you want to set the JSON images
+ *    to be used, use `SET`, if you want to check if the images are correct
+ *    use `CHECK`. You can force the mode on `matchesSnapshot` calls.
+ *
+ *      const shots = new UiSnapshots('CHECK');
+ *
+ *    When testing your components just call `matchesSnapshot`. It will compare
+ *    the sent component with the one registered in the JSON file.
+ *    Order matters.
+ *    The first component set will be checked agains the first component tested.
+ *
+ *
+ *      const myElement = renderer.create(React.createElement(MyElement));
+ *      shots.matchesSnapshot(myElement);
+ */
+// =============================================================================
+
 const fs = require('fs');
 const path = require('path');
 const assert = (invariant, err) => {
@@ -7,7 +34,7 @@ const assert = (invariant, err) => {
   }
 };
 
-// =================== GET INVOKING FILE ====================== //
+// ========================= GET INVOKING FILE =================================
 
 // Impure
 // File that invoked this script right now
@@ -91,7 +118,7 @@ const setSnapshot = (shot, shotId) => {
 
 const GLOBAL = {
   MODES: {
-    UPDATE: 'UPDATE',
+    SET: 'SET',
     CHECK: 'CHECK',
   },
 };
@@ -106,7 +133,7 @@ module.exports = class UiSnapshots {
     this.mode = GLOBAL.MODES[mode];
 
     // If it is an update, then let's remove all previous snapshots
-    if (this.mode === GLOBAL.MODES.UPDATE) {
+    if (this.mode === GLOBAL.MODES.SET) {
       setSnapshotsFileContent({});
     }
 
@@ -127,7 +154,7 @@ module.exports = class UiSnapshots {
 
     this.increaseShotId();
 
-    if (mode === GLOBAL.MODES.UPDATE) {
+    if (mode === GLOBAL.MODES.SET) {
       setSnapshot(shot, shotId);
       return true;
     }
