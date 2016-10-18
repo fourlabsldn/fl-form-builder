@@ -11,7 +11,7 @@ describe('The FormBuilder`s ui', () => {
     const formBuildder = renderer.create(React.createElement(FormBuilder));
 
     expect(
-      shots.matchesSnapshot(formBuildder.toJSON(), 'test1')
+      shots.matchesSnapshot(formBuildder.toJSON())
     ).toBe(true);
   });
 });

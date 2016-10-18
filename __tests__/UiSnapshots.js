@@ -59,6 +59,19 @@ const snapshotsFileAddress = () => {
   return path.join(getInvokingFile().dir, snapshotsFileName());
 };
 
+const setSnapshotsFileContent = (content) => {
+  try {
+    fs.writeFileSync(
+      snapshotsFileAddress(),
+      JSON.stringify(content, null, '\t')
+    );
+  } catch (e) {
+    // do nothing
+  }
+};
+
+// Returns the content of the snapshots file for the specific
+// invoking file
 const getSnapshots = () => {
   try {
     return require(snapshotsFileAddress());
@@ -67,9 +80,11 @@ const getSnapshots = () => {
   }
 };
 
+// Sets the content of the snapshots file for the specific
+// invoking file.
 const setSnapshot = (shot, shotId) => {
   const newSnapshot = Object.assign({}, getSnapshots(), { [shotId]: shot });
-  fs.writeFileSync(snapshotsFileAddress(), JSON.stringify(newSnapshot));
+  setSnapshotsFileContent(newSnapshot);
 };
 
 // =============================================================================
@@ -82,29 +97,45 @@ const GLOBAL = {
 };
 
 
-// =================================
+// =============================================================================
 
 
 module.exports = class UiSnapshots {
   constructor(mode) {
     assert(GLOBAL.MODES[mode], `Invalid mode in constructor: ${mode}`);
     this.mode = GLOBAL.MODES[mode];
+
+    // If it is an update, then let's remove all previous snapshots
+    if (this.mode === GLOBAL.MODES.UPDATE) {
+      setSnapshotsFileContent({});
+    }
+
+    // Shots are registered in the order they appear in the
+    // test file
+    this.shotId = 0;
     Object.preventExtensions(this);
   }
 
-  matchesSnapshot(shot, matchingShotId, forceMode) {
+  increaseShotId() {
+    this.shotId = this.shotId + 1;
+  }
+
+  matchesSnapshot(shot, forceMode) {
     const mode = forceMode || this.mode;
+    const shotId = this.shotId;
     assert(GLOBAL.MODES[mode], `Invalid mode set ${mode}`);
 
+    this.increaseShotId();
+
     if (mode === GLOBAL.MODES.UPDATE) {
-      setSnapshot(shot, matchingShotId);
+      setSnapshot(shot, shotId);
       return true;
     }
 
     if (mode === GLOBAL.MODES.CHECK) {
       const snapshots = getSnapshots();
-      assert(snapshots[matchingShotId], `No snapshot registered for ${matchingShotId}`);
-      return JSON.stringify(snapshots[matchingShotId]) === JSON.stringify(shot);
+      assert(snapshots[shotId], `No snapshot registered for ${shotId}`);
+      return JSON.stringify(snapshots[shotId]) === JSON.stringify(shot);
     }
 
     assert(false, `Invalid mode: ${mode}.`);

@@ -1,1 +1,41 @@
-{"test1":{"type":"div","props":{"className":"fl-fb"},"children":[{"type":"div","props":{"className":"fl-fb-ControlBar"},"children":[{"type":"div","props":{"className":"btn-group"},"children":null},{"type":"button","props":{"className":"btn btn-primary"},"children":[" Undo "]}]},{"type":"div","props":{"className":"fl-fb-Fields"},"children":null}]}}
+{
+	"0": {
+		"type": "div",
+		"props": {
+			"className": "fl-fb"
+		},
+		"children": [
+			{
+				"type": "div",
+				"props": {
+					"className": "fl-fb-ControlBar"
+				},
+				"children": [
+					{
+						"type": "div",
+						"props": {
+							"className": "btn-group"
+						},
+						"children": null
+					},
+					{
+						"type": "button",
+						"props": {
+							"className": "btn btn-primary"
+						},
+						"children": [
+							" Undo "
+						]
+					}
+				]
+			},
+			{
+				"type": "div",
+				"props": {
+					"className": "fl-fb-Fields"
+				},
+				"children": null
+			}
+		]
+	}
+}
