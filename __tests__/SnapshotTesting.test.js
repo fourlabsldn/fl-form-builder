@@ -1,9 +1,9 @@
 /* eslint-env jasmine */
 const React = require('react');
 const renderer = require('react-test-renderer');
-const FormBuilder = require('../dist/__test-files__/FormBuilder');
 const UiSnapshots = require('./UiSnapshots');
 
+const FormBuilder = require('../dist/__test-files__/FormBuilder');
 // Field Types
 const Checkboxes = require('../dist/__test-files__/Checkboxes');
 const Dropdown = require('../dist/__test-files__/Dropdown');
@@ -157,8 +157,8 @@ describe('The FormBuilder`s ui', () => {
 // ==  Test snapshot for each item
 
 tests.forEach(({ type, name, state }) => {
-  describe(`The ${name} ui`, () => {
-    it('is created correctly when empty', () => {
+  describe(`The FormBuilder with the ${name} component`, () => {
+    it('creates the correct ui when empty', () => {
       const formBuildder = renderer.create(
         React.createElement(FormBuilder, {
           fieldTypes: [type],
@@ -170,7 +170,7 @@ tests.forEach(({ type, name, state }) => {
       ).toBe(true);
     });
 
-    it('is created correctly with one item', () => {
+    it('creates the correct ui with one item', () => {
       let importFunc;
       const formBuildder = renderer.create(
         React.createElement(FormBuilder, {

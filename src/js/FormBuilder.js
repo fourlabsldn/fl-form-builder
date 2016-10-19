@@ -6,6 +6,8 @@ import FieldCreatorPropType from './default-fields/FieldCreatorPropType';
 
 import EventHub from './EventHub';
 
+const createId = () => Date.now();
+
 export default class FormBuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +38,11 @@ export default class FormBuilder extends React.Component {
 
     if (typeof props.importState === 'function') {
       props.importState(fieldStates => {
+        assert(
+          Array.isArray(fieldStates),
+          `Invalid states sent with importState. Expected Array but received ${typeof fieldStates}`
+        );
+
         // Check that all types are ok.
         fieldStates.forEach(s => {
           if (!this.state.fieldTypes.map(f => f.info.type).includes(s.type)) {
@@ -43,7 +50,18 @@ export default class FormBuilder extends React.Component {
           }
         });
 
-        this.pushHistoryState(fieldStates);
+        // Add required properties that are not managed by the field
+        // component but by the FormBuilder component itself, so may
+        // not be there.
+        const processedFieldStates = fieldStates.map(s => Object.assign({
+          configShowing: false,
+          id: createId(),
+          required: false,
+        }, s));
+
+        console.log(processedFieldStates);
+
+        this.pushHistoryState(processedFieldStates);
       });
     }
   }
@@ -56,7 +74,7 @@ export default class FormBuilder extends React.Component {
     assert(typeConstructor, `Field "${fieldType}" does not exist.`);
 
     const initialState = typeConstructor.initialState();
-    initialState.id = Date.now();
+    initialState.id = createId();
     initialState.configShowing = true;
 
     // Make all other fields have config hidden

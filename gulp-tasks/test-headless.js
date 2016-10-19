@@ -11,7 +11,7 @@ module.exports = organiser.register((task) => {
       reporter: new jasmineReporters.TerminalReporter({
         verbosity: 3,
         color: true,
-        showStack: false,
+        showStack: true,
       }),
     }));
   });

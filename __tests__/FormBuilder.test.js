@@ -82,3 +82,41 @@ describe('The FormBuilder', () => {
     expect(() => importFunc(initial)).toThrow();
   })
 });
+
+
+defaultTypes.forEach((component) => {
+  const { info, initialState, RenderEditor } = component;
+
+  describe(`The ${info.displayName} component`, () => {
+    it('exports the correct info keys', () => {
+      expect(typeof info.type).toEqual('string');
+      expect(typeof info.displayName).toEqual('string');
+      expect(typeof info.group).toEqual('string');
+    });
+
+    it('has an initialState function that returns the correct values', () => {
+      const state = initialState();
+      expect(state.type).toEqual(info.type);
+      expect(state.displayName).toEqual(info.displayName);
+      expect(state.group).toEqual(info.group);
+    });
+
+    it('exports the correct keys after inseted into FormBuilder', () => {
+      let importFunc;
+      let exportFunc;
+      renderer.create(
+        React.createElement(FormBuilder, {
+          importState: f => (importFunc = f),
+          exportState: f => (exportFunc = f),
+          fieldTypes: [component],
+        })
+      );
+      importFunc([initialState()]);
+      const exportedState = exportFunc()[0];
+      expect(exportedState.type).toEqual(info.type);
+      expect(exportedState.displayName).toEqual(info.displayName);
+      expect(exportedState.group).toEqual(info.group);
+      expect(typeof exportedState.required).toEqual('boolean');
+    });
+  });
+});

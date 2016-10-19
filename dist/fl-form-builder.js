@@ -3274,6 +3274,10 @@ Fields.propTypes = {
   fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
 };
 
+var createId = function createId() {
+  return Date.now();
+};
+
 var FormBuilder$2 = function (_React$Component) {
   inherits(FormBuilder, _React$Component);
 
@@ -3310,6 +3314,8 @@ var FormBuilder$2 = function (_React$Component) {
 
     if (typeof props.importState === 'function') {
       props.importState(function (fieldStates) {
+        assert(Array.isArray(fieldStates), 'Invalid states sent with importState. Expected Array but received ' + (typeof fieldStates === 'undefined' ? 'undefined' : _typeof(fieldStates)));
+
         // Check that all types are ok.
         fieldStates.forEach(function (s) {
           if (!_this.state.fieldTypes.map(function (f) {
@@ -3319,7 +3325,20 @@ var FormBuilder$2 = function (_React$Component) {
           }
         });
 
-        _this.pushHistoryState(fieldStates);
+        // Add required properties that are not managed by the field
+        // component but by the FormBuilder component itself, so may
+        // not be there.
+        var processedFieldStates = fieldStates.map(function (s) {
+          return Object.assign({
+            configShowing: false,
+            id: createId(),
+            required: false
+          }, s);
+        });
+
+        console.log(processedFieldStates);
+
+        _this.pushHistoryState(processedFieldStates);
       });
     }
     return _this;
@@ -3337,7 +3356,7 @@ var FormBuilder$2 = function (_React$Component) {
       assert(typeConstructor, 'Field "' + fieldType + '" does not exist.');
 
       var initialState = typeConstructor.initialState();
-      initialState.id = Date.now();
+      initialState.id = createId();
       initialState.configShowing = true;
 
       // Make all other fields have config hidden
