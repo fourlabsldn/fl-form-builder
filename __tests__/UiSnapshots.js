@@ -28,11 +28,39 @@
 
 const fs = require('fs');
 const path = require('path');
+require('colors');
+const jsdiff = require('diff');
 const assert = (invariant, err) => {
   if (!invariant) {
     throw new Error(err);
   }
 };
+
+const logDifference = (one, other) => {
+  const diff = jsdiff.diffJson(one, other);
+
+  diff.forEach((part) => {
+    // green for additions, red for deletions
+    // grey for common parts
+    let color;
+    if (part.added) {
+      color = 'green';
+    } else if (part.removed) {
+      color = 'red';
+    } else {
+      color = 'grey';
+    }
+
+    if (part.value[color]) {
+      process.stderr.write(part.value[color]);
+    }
+  });
+
+  console.log();
+};
+
+
+
 
 // ========================= GET INVOKING FILE =================================
 
@@ -163,7 +191,15 @@ module.exports = class UiSnapshots {
     if (mode === GLOBAL.MODES.CHECK) {
       const snapshots = getSnapshots();
       assert(snapshots[shotId], `No snapshot registered for ${shotId}`);
-      return JSON.stringify(snapshots[shotId]) === JSON.stringify(shot);
+
+      const saved = JSON.stringify(snapshots[shotId], null, 2);
+      const beingChecked = JSON.stringify(shot, null, 2);
+
+      if (saved !== beingChecked) {
+        logDifference(saved, beingChecked);
+        return false;
+      }
+      return true;
     }
 
     assert(false, `Invalid mode: ${mode}.`);

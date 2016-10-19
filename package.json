@@ -24,6 +24,8 @@
     "babel-preset-es2017": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "browser-sync": "^2.17.0",
+    "colors": "^1.1.2",
+    "diff": "^3.0.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "^1.0.1",
