@@ -28,7 +28,7 @@
 
 const fs = require('fs');
 const path = require('path');
-require('colors');
+const colors = require('colors');
 const jsdiff = require('diff');
 const assert = (invariant, err) => {
   if (!invariant) {
@@ -51,9 +51,7 @@ const logDifference = (one, other) => {
       color = 'grey';
     }
 
-    if (part.value[color]) {
-      process.stderr.write(part.value[color]);
-    }
+    process.stderr.write(colors[color](part.value));
   });
 
   console.log();
@@ -196,6 +194,7 @@ module.exports = class UiSnapshots {
       const beingChecked = JSON.stringify(shot, null, 2);
 
       if (saved !== beingChecked) {
+        console.log(colors.white('Differences found between snapshots:'));
         logDifference(saved, beingChecked);
         return false;
       }

@@ -11,7 +11,13 @@
 					"className": "fl-fb-ControlBar"
 				},
 				"children": [
-          { "asdf": "asdfasdfasdfsafd" },
+					{
+						"type": "div",
+						"props": {
+							"className": "btn-group"
+						},
+						"children": null
+					},
 					{
 						"type": "button",
 						"props": {
