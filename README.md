@@ -44,10 +44,6 @@ If you want to get the form-builder back to the way it was when the user last us
   formBuilder.importState(state);
 ```
 
-## Docs
-Have a look at the [documentation](https://fourlabsldn.github.io/fl-form-builder/) to see a bit more of `importState` and `exportState`.
-
-
 # Plugins
 
  You can add custom field types. They must follow this react signature:
