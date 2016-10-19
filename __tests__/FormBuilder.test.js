@@ -1,19 +1,18 @@
 /* eslint-env jasmine */
-
 const React = require('react');
 const renderer = require('react-test-renderer');
-const FormBuilder = require('../dist/FormBuilder');
+const FormBuilder = require('../dist/__test-files__/FormBuilder');
 
 // Field Types
-const RadioButtons = require('../dist/RadioButtons');
-const Checkboxes = require('../dist/Checkboxes');
-const Dropdown = require('../dist/Dropdown');
+const RadioButtons = require('../dist/__test-files__/RadioButtons');
+const Checkboxes = require('../dist/__test-files__/Checkboxes');
+const Dropdown = require('../dist/__test-files__/Dropdown');
 
-const TextBox = require('../dist/TextBox');
-const TextArea = require('../dist/TextArea');
-const EmailBox = require('../dist/EmailBox');
-const NumberBox = require('../dist/NumberBox');
-const TelephoneBox = require('../dist/TelephoneBox');
+const TextBox = require('../dist/__test-files__/TextBox');
+const TextArea = require('../dist/__test-files__/TextArea');
+const EmailBox = require('../dist/__test-files__/EmailBox');
+const NumberBox = require('../dist/__test-files__/NumberBox');
+const TelephoneBox = require('../dist/__test-files__/TelephoneBox');
 
 const defaultTypes = [
   RadioButtons,

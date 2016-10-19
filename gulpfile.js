@@ -41,6 +41,6 @@ organiser.registerAll('./gulp-tasks', {
     baseDir: './',
   },
   'test-headless': {
-    src: path.join(dest, '__tests__', '**/*.test.js'),
+    src: '__tests__/*.test.js',
   },
 });
