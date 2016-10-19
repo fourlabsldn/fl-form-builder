@@ -101,7 +101,8 @@ const setSnapshotsFileContent = (content) => {
 // invoking file
 const getSnapshots = () => {
   try {
-    return require(snapshotsFileAddress());
+    const file = fs.readFileSync(snapshotsFileAddress());
+    return JSON.parse(file.toString());
   } catch (e) {
     return {};
   }

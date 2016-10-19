@@ -48,6 +48,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.6",
+    "jasmine-reporters": "^2.2.0",
     "lodash": "^4.16.4",
     "path": "^0.12.7",
     "react": "^15.3.2",
