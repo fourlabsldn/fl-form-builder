@@ -7,8 +7,8 @@ const path = require('path');
 const reactConfig = {
   external: ['react', 'react-dom'],
   format: 'umd',
-  moduleName: 'FormBuilder',
 };
+
 
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
@@ -21,17 +21,17 @@ organiser.registerAll('./gulp-tasks', {
     application: {
       src: path.join(src, 'js', 'fl-form-builder.js'),
       dest,
-      config: reactConfig,
+      config: Object.assign({}, reactConfig, { moduleName: 'FormBuilder' }),
     },
     demo: {
       src: './demo/ImageCards.js',
       dest,
-      config: reactConfig,
+      config: Object.assign({}, reactConfig, { moduleName: 'ImageCards' }),
     },
     tests: {
       src: path.join(src, 'js', '**/*.js'),
       dest: path.join(dest, '__test-files__'),
-      config: reactConfig,
+      config: Object.assign({}, reactConfig, { moduleName: 'FormBuilderTests' }),
     },
   },
   'browser-sync': {

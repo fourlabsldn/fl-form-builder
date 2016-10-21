@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('react-dom')) :
     typeof define === 'function' && define.amd ? define(['react', 'react-dom'], factory) :
-    (global.FormBuilder = factory(global.React,global.ReactDOM));
+    (global.FormBuilderTests = factory(global.React,global.ReactDOM));
 }(this, (function (React,ReactDOM) { 'use strict';
 
 var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;

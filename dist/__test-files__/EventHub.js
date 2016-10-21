@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.FormBuilder = factory());
+  (global.FormBuilderTests = factory());
 }(this, (function () { 'use strict';
 
 // Bug checking function that will throw an error whenever

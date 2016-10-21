@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react')) :
   typeof define === 'function' && define.amd ? define(['react'], factory) :
-  (global.FormBuilder = factory(global.React));
+  (global.FormBuilderTests = factory(global.React));
 }(this, (function (React) { 'use strict';
 
 function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports), module.exports; }
