@@ -24,8 +24,8 @@ organiser.registerAll('./gulp-tasks', {
       config: Object.assign({}, reactConfig, { moduleName: 'FormBuilder' }),
     },
     demo: {
-      src: './demo/ImageCards.js',
-      dest,
+      src: './demo/custom-type/src/ImageCards.js',
+      dest: './demo/custom-type/dist',
       config: Object.assign({}, reactConfig, { moduleName: 'ImageCards' }),
     },
     tests: {
