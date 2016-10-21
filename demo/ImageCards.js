@@ -55,7 +55,7 @@ const RenderEditor = ({ state, update }) => {
       {},
       state,
       { newImageText: '',
-        images: state.images.concat([text]),
+        images: state.options.concat([text]),
       }
     );
 
@@ -64,7 +64,7 @@ const RenderEditor = ({ state, update }) => {
 
   return (
     <div>
-      {state.images.map(img => <img alt={img} className="ImageCards-card" src={img} />)}
+      {state.options.map(img => <img alt={img} className="ImageCards-card" src={img} />)}
 
       {!state.configShowing
         ? null

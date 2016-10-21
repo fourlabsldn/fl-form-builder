@@ -58,7 +58,7 @@ var RenderEditor = function RenderEditor(_ref) {
     }
     var text = event.target.value;
     var newState = Object.assign({}, state, { newImageText: '',
-      images: state.images.concat([text])
+      images: state.options.concat([text])
     });
 
     update(newState);
@@ -67,7 +67,7 @@ var RenderEditor = function RenderEditor(_ref) {
   return React.createElement(
     'div',
     null,
-    state.images.map(function (img) {
+    state.options.map(function (img) {
       return React.createElement('img', { alt: img, className: 'ImageCards-card', src: img });
     }),
     !state.configShowing ? null : React.createElement(
