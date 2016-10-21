@@ -327,21 +327,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -668,21 +671,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -1052,21 +1058,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -1368,21 +1377,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -1684,21 +1696,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -2000,21 +2015,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -2316,21 +2334,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}
@@ -2632,21 +2653,24 @@
 										"type": "button",
 										"props": {
 											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true"
+											"draggable": "true",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
+											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
+											"type": "button"
 										},
 										"children": null
 									},
 									{
 										"type": "button",
 										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
+											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
+											"type": "button"
 										},
 										"children": null
 									}

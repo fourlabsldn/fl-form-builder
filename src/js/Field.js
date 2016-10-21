@@ -85,14 +85,17 @@ const Sidebar = ({ fieldState }) => (
       className="glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn"
       onDragStart={onDragStart}
       draggable="true"
+      type="button"
     />
     <button
       className="glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
       onClick={() => toggleConfig(fieldState)}
+      type="button"
     />
     <button
       className="glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
       onClick={() => deleteField(fieldState)}
+      type="button"
     />
   </div>
 );
