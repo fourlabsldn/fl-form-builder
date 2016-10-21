@@ -91,6 +91,9 @@ const RenderFormMode = ({ state }) => {
         type: state.htmlInputType,
         className: 'form-control',
         placeholder: state.placeholder,
+        defaultValue: '',
+        // Give it a unique random key so it always applies the default value
+        key: Date.now() + Math.random(),
       })}
     </div>
   );

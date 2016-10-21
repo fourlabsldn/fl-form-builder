@@ -3953,7 +3953,10 @@ var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
     React.createElement(state.htmlElement, {
       type: state.htmlInputType,
       className: 'form-control',
-      placeholder: state.placeholder
+      placeholder: state.placeholder,
+      defaultValue: '',
+      // Give it a unique random key so it always applies the default value
+      key: Date.now() + Math.random()
     })
   );
 };
