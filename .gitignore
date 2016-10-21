@@ -3,4 +3,5 @@
 /**/.sass-cache/
 /**/.grunt/
 /**/npm-debug.log
-
+/dist/__test-files__/
+/dist/default-fields/
