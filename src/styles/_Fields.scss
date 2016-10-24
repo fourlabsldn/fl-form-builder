@@ -245,10 +245,28 @@
 
 }
 
-.fl-fb-Field-config-input {
+.fl-fb-Field-config-captionInput {
   min-width: 400px;
   display: inline-block;
   padding: 2px 5px;
+}
+
+.fl-fb-Field-config-valueInput {
+  width: 50px;
+  display: inline-block;
+  padding: 2px 5px;
+}
+
+.fl-fb-Field-configuration-options-captionInput {
+  min-width: 50%;
+  text-indent: 5px;
+}
+
+
+.fl-fb-Field-configuration-options-valueInput {
+  width: 25;
+  text-indent: 5px;
+  text-align: center;
 }
 
 // ============================================================

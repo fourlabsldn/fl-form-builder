@@ -1,6 +1,6 @@
 import React from 'react';
 import { overshadow } from '../utils';
-import { curry } from 'lodash';
+import { curry, get } from 'lodash/fp';
 
 export default function buildOptionsFieldConstructor(typeInfo) {
   // These are the fields that will end up being
@@ -11,11 +11,12 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     // Component specific fields
     title: 'Add a title',
     options: [
-      'Insert an option',
+      { value: 0, caption: 'Insert an option' },
     ],
 
     // states needed to handle UI
-    newOptionText: '',
+    newOptionValue: '1',
+    newOptionCaption: '',
   };
 
 
@@ -41,30 +42,47 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     };
 
     const addOption = () => {
-      if (!state.newOptionText.trim()) {
+      const newOption = {
+        value: state.newOptionValue.trim(),
+        caption: state.newOptionCaption.trim(),
+      };
+
+      const optionIsEmpty = !newOption.caption;
+      const valueIsEmpty = !newOption.value;
+      const valueAlreadyExists = state.options
+        .map(get('value'))
+        .indexOf(newOption.value) !== -1;
+
+      if (optionIsEmpty || valueIsEmpty || valueAlreadyExists) {
         return;
       }
 
+      // Add option and remove default option
+      const defaultOptionCaption = initialState().options[0].caption;
       const options = state.options
-        .filter(o => !initialState().options.includes(o)) // Remove default option
-        .concat([state.newOptionText]); // Add new option
-      const newOptionText = '';
-      const newState = overshadow(state, { options, newOptionText });
+        .filter(o => o.caption !== defaultOptionCaption) // Remove default option
+        .concat([newOption]); // Add new option
+
+      const newState = overshadow(state, {
+        options,
+        newOptionValue: '',
+        newOptionCaption: '',
+      });
       update(newState);
     };
 
     const updateOption = curry((optionIndex, event) => {
-      const value = event.target.value;
+      const caption = event.target.value;
       const options = Array.from(state.options);
-      options[optionIndex] = value;
+      options[optionIndex] = overshadow(options[optionIndex], { caption });
 
       const newState = overshadow(state, { options });
       update(newState);
     });
 
     const removeIfOptionIsNull = curry((optionIndex, event) => {
-      const value = event.target.value;
-      if (value) { return; }
+      const caption = event.target.value;
+      if (caption) { return; }
       const optionsBefore = state.options.slice(0, optionIndex);
       const optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
       const options = optionsBefore.concat(optionsAfter);
@@ -96,13 +114,13 @@ export default function buildOptionsFieldConstructor(typeInfo) {
           />
         </h2>
 
-        {state.options.map((optionText, optionIndex) => (
+        {state.options.map((option, optionIndex) => (
           <div className="fl-fb-Field-option">
-            <input type={state.htmlInputType} />
+            <input type={state.htmlInputType} value={option.value} />
             <input
               type="text"
               className="fl-fb-Field-option-text fl-fb-Field-editable"
-              value={optionText}
+              value={option.caption}
               onKeyPress={ifEnterPressed(removeIfOptionIsNull(optionIndex))}
               onChange={updateOption(optionIndex)}
             />
@@ -113,11 +131,19 @@ export default function buildOptionsFieldConstructor(typeInfo) {
           <button onMouseDown={removeOption} className="glyphicon-minus-sign glyphicon fl-fb-Field-config-btn" />
           <button onMouseDown={addOption} className="glyphicon-plus-sign glyphicon fl-fb-Field-config-btn" />
           <input
-            className="fl-fb-Field-config-input"
+            className="fl-fb-Field-config-valueInput"
             type="text"
-            value={state.newOptionText}
-            placeholder="Type a new option"
-            onChange={updateProperty('newOptionText')}
+            value={state.newOptionValue}
+            placeholder="Type a new option value"
+            onChange={updateProperty('newOptionValue')}
+            onKeyPress={ifEnterPressed(addOption)}
+          />
+          <input
+            className="fl-fb-Field-config-captionInput"
+            type="text"
+            value={state.newOptionCaption}
+            placeholder="Type a new option caption"
+            onChange={updateProperty('newOptionCaption')}
             onKeyPress={ifEnterPressed(addOption)}
           />
         </div>
@@ -129,10 +155,10 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     return (
       <div>
         <h2>{state.title}</h2>
-        {state.options.map(optionText => (
+        {state.options.map(option => (
           <div className="fl-fb-Field-option">
-            <input type={state.htmlInputType} />
-            <span className="fl-fb-Field-option-text"> {optionText} </span>
+            <input type={state.htmlInputType} value={option.value} />
+            <span className="fl-fb-Field-option-text"> {option.caption} </span>
           </div>
         ))}
       </div>
@@ -143,7 +169,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     return state.configShowing
       ? RenderConfigMode({ state, update }) // eslint-disable-line new-cap
       : RenderFormMode({ state, update }); // eslint-disable-line new-cap
-  }
+  };
 
   const OptionsField = {
     info: typeInfo,
