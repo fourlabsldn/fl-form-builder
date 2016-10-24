@@ -1,4 +1,6 @@
+import React from 'react';
 import buildOptionsFieldConstructor from './buildOptionsFieldConstructor';
+import { renderRadioOrCheckboxOptions } from './options-utils';
 
 const typeInfo = {
   // Compulsory
@@ -11,6 +13,7 @@ const typeInfo = {
 };
 
 
-const RadioButtons = buildOptionsFieldConstructor(typeInfo);
+
+const RadioButtons = buildOptionsFieldConstructor(typeInfo, renderRadioOrCheckboxOptions);
 
 export default RadioButtons;
