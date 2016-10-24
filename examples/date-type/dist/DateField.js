@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('react-dom')) :
     typeof define === 'function' && define.amd ? define(['react', 'react-dom'], factory) :
-    (global.FormBuilder = factory(global.React,global.ReactDOM));
+    (global.DateField = factory(global.React,global.ReactDOM));
 }(this, (function (React,ReactDOM) { 'use strict';
 
 var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
@@ -10,222 +10,16 @@ function __commonjs(fn, module) { return module = { exports: {} }, fn(module, mo
 React = 'default' in React ? React['default'] : React;
 ReactDOM = 'default' in ReactDOM ? ReactDOM['default'] : ReactDOM;
 
-// Bug checking function that will throw an error whenever
-// the condition sent to it is evaluated to false
+var placeholder = __commonjs(function (module) {
 /**
- * Processes the message and outputs the correct message if the condition
- * is false. Otherwise it outputs null.
- * @api private
- * @method processCondition
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return {String | null}  - Error message if there is an error, nul otherwise.
+ * The default argument placeholder value for methods.
+ *
+ * @type {Object}
  */
-function processCondition(condition, errorMessage) {
-  if (!condition) {
-    var completeErrorMessage = '';
-    var re = /at ([^\s]+)\s\(/g;
-    var stackTrace = new Error().stack;
-    var stackFunctions = [];
+module.exports = {};
+});
 
-    var funcName = re.exec(stackTrace);
-    while (funcName && funcName[1]) {
-      stackFunctions.push(funcName[1]);
-      funcName = re.exec(stackTrace);
-    }
-
-    // Number 0 is processCondition itself,
-    // Number 1 is assert,
-    // Number 2 is the caller function.
-    if (stackFunctions[2]) {
-      completeErrorMessage = stackFunctions[2] + ': ' + completeErrorMessage;
-    }
-
-    completeErrorMessage += errorMessage;
-    return completeErrorMessage;
-  }
-
-  return null;
-}
-
-/**
- * Throws an error if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert(myDate !== undefined, "Date cannot be undefined.");
- * @api public
- * @method assert
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-function assert(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    throw new Error(error);
-  }
-}
-
-/**
- * Logs a warning if the boolean passed to it evaluates to false.
- * To be used like this:
- * 		assert.warn(myDate !== undefined, "No date provided.");
- * @api public
- * @method warn
- * @param  {Boolean} condition - Result of the evaluated condition
- * @param  {String} errorMessage - Message explainig the error in case it is thrown
- * @return void
- */
-assert.warn = function warn(condition, errorMessage) {
-  var error = processCondition(condition, errorMessage);
-  if (typeof error === 'string') {
-    console.warn(error);
-  }
-};
-
-//
-//
-//     Singleton
-//
-//
-
-var listeners = {};
-
-function on(eventName, func) {
-  listeners[eventName] = listeners[eventName] ? listeners[eventName].concat([func]) : [func];
-}
-
-function trigger(eventName, data) {
-  assert.warn(listeners[eventName], 'No one listening to "' + eventName + '."');
-
-  if (!listeners[eventName]) {
-    return;
-  }
-
-  listeners[eventName].forEach(function (f) {
-    return f(data);
-  });
-}
-
-var EventHub = {
-  on: on,
-  trigger: trigger
-};
-
-// This works as the interface for the FieldCreator Type
-var FieldCreatorPropType = {
-  info: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    group: React.PropTypes.string,
-    displayName: React.PropTypes.string
-  }),
-  initialState: React.PropTypes.func,
-  RenderEditor: React.PropTypes.func };
-
-var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
-  var description = _ref.description;
-  return React.createElement(
-    'li',
-    null,
-    React.createElement(
-      'a',
-      {
-        href: '#',
-        onClick: function onClick() {
-          return EventHub.trigger('createField', description.type);
-        }
-      },
-      description.displayName
-    )
-  );
-};
-
-ButtonDropdownOption.propTypes = {
-  description: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    displayName: React.PropTypes.string,
-    group: React.PropTypes.string
-  })
-};
-
-var ButtonGroupDropdown = function ButtonGroupDropdown(_ref2) {
-  var groupName = _ref2.groupName;
-  var groupButtons = _ref2.groupButtons;
-
-  return React.createElement(
-    'div',
-    { className: 'btn-group' },
-    React.createElement(
-      'button',
-      { className: 'btn btn-default dropdown-toggle', 'data-toggle': 'dropdown' },
-      groupName,
-      React.createElement('span', { className: 'caret' })
-    ),
-    React.createElement(
-      'ul',
-      { className: 'dropdown-menu' },
-      groupButtons.map(function (fieldDescription) {
-        return React.createElement(ButtonDropdownOption, { description: fieldDescription });
-      })
-    )
-  );
-};
-ButtonGroupDropdown.propTypes = {
-  groupName: React.PropTypes.string,
-  groupButtons: React.PropTypes.array
-};
-
-var getDescrition = function getDescrition(typeConstructor) {
-  return {
-    type: typeConstructor.info.type,
-    displayName: typeConstructor.info.displayName,
-    group: typeConstructor.info.group
-  };
-};
-
-var toGroups = function toGroups(groups, description) {
-  // Add to group array if it exists. Create it if it doesn't
-  groups[description.group] = groups[description.group] // eslint-disable-line no-param-reassign
-  ? groups[description.group].concat([description]) : [description];
-
-  return groups;
-};
-
-var ControlBar = function ControlBar(_ref3) {
-  var fieldTypes = _ref3.fieldTypes;
-
-  var fieldGroups = fieldTypes.map(getDescrition).reduce(toGroups, {});
-
-  var buttonGroups = Object.keys(fieldGroups).map(function (groupName) {
-    return React.createElement(ButtonGroupDropdown, {
-      groupName: groupName,
-      groupButtons: fieldGroups[groupName]
-    });
-  });
-
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-ControlBar' },
-    React.createElement(
-      'div',
-      { className: 'btn-group' },
-      buttonGroups
-    ),
-    React.createElement(
-      'button',
-      {
-        className: 'btn btn-primary',
-        onClick: function onClick() {
-          return EventHub.trigger('undoBtnPressed');
-        }
-      },
-      ' Undo '
-    )
-  );
-};
-
-ControlBar.propTypes = {
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
-};
+var require$$0 = (placeholder && typeof placeholder === 'object' && 'default' in placeholder ? placeholder['default'] : placeholder);
 
 var isObjectLike = __commonjs(function (module) {
 /**
@@ -259,10 +53,10 @@ function isObjectLike(value) {
 module.exports = isObjectLike;
 });
 
-var require$$0$5 = (isObjectLike && typeof isObjectLike === 'object' && 'default' in isObjectLike ? isObjectLike['default'] : isObjectLike);
+var require$$0$6 = (isObjectLike && typeof isObjectLike === 'object' && 'default' in isObjectLike ? isObjectLike['default'] : isObjectLike);
 
 var isSymbol = __commonjs(function (module) {
-var isObjectLike = require$$0$5;
+var isObjectLike = require$$0$6;
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -302,7 +96,7 @@ function isSymbol(value) {
 module.exports = isSymbol;
 });
 
-var require$$0$4 = (isSymbol && typeof isSymbol === 'object' && 'default' in isSymbol ? isSymbol['default'] : isSymbol);
+var require$$0$5 = (isSymbol && typeof isSymbol === 'object' && 'default' in isSymbol ? isSymbol['default'] : isSymbol);
 
 var isObject = __commonjs(function (module) {
 /**
@@ -342,7 +136,7 @@ var require$$1 = (isObject && typeof isObject === 'object' && 'default' in isObj
 
 var toNumber = __commonjs(function (module) {
 var isObject = require$$1,
-    isSymbol = require$$0$4;
+    isSymbol = require$$0$5;
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -409,10 +203,10 @@ function toNumber(value) {
 module.exports = toNumber;
 });
 
-var require$$0$3 = (toNumber && typeof toNumber === 'object' && 'default' in toNumber ? toNumber['default'] : toNumber);
+var require$$0$4 = (toNumber && typeof toNumber === 'object' && 'default' in toNumber ? toNumber['default'] : toNumber);
 
 var toFinite = __commonjs(function (module) {
-var toNumber = require$$0$3;
+var toNumber = require$$0$4;
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0,
@@ -456,10 +250,10 @@ function toFinite(value) {
 module.exports = toFinite;
 });
 
-var require$$0$2 = (toFinite && typeof toFinite === 'object' && 'default' in toFinite ? toFinite['default'] : toFinite);
+var require$$0$3 = (toFinite && typeof toFinite === 'object' && 'default' in toFinite ? toFinite['default'] : toFinite);
 
 var toInteger = __commonjs(function (module) {
-var toFinite = require$$0$2;
+var toFinite = require$$0$3;
 
 /**
  * Converts `value` to an integer.
@@ -497,7 +291,7 @@ function toInteger(value) {
 module.exports = toInteger;
 });
 
-var require$$0$1 = (toInteger && typeof toInteger === 'object' && 'default' in toInteger ? toInteger['default'] : toInteger);
+var require$$0$2 = (toInteger && typeof toInteger === 'object' && 'default' in toInteger ? toInteger['default'] : toInteger);
 
 var _strictIndexOf = __commonjs(function (module) {
 /**
@@ -525,7 +319,7 @@ function strictIndexOf(array, value, fromIndex) {
 module.exports = strictIndexOf;
 });
 
-var require$$0$10 = (_strictIndexOf && typeof _strictIndexOf === 'object' && 'default' in _strictIndexOf ? _strictIndexOf['default'] : _strictIndexOf);
+var require$$0$11 = (_strictIndexOf && typeof _strictIndexOf === 'object' && 'default' in _strictIndexOf ? _strictIndexOf['default'] : _strictIndexOf);
 
 var _baseIsNaN = __commonjs(function (module) {
 /**
@@ -576,7 +370,7 @@ var require$$2 = (_baseFindIndex && typeof _baseFindIndex === 'object' && 'defau
 var _baseIndexOf = __commonjs(function (module) {
 var baseFindIndex = require$$2,
     baseIsNaN = require$$1$1,
-    strictIndexOf = require$$0$10;
+    strictIndexOf = require$$0$11;
 
 /**
  * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
@@ -596,10 +390,10 @@ function baseIndexOf(array, value, fromIndex) {
 module.exports = baseIndexOf;
 });
 
-var require$$0$9 = (_baseIndexOf && typeof _baseIndexOf === 'object' && 'default' in _baseIndexOf ? _baseIndexOf['default'] : _baseIndexOf);
+var require$$0$10 = (_baseIndexOf && typeof _baseIndexOf === 'object' && 'default' in _baseIndexOf ? _baseIndexOf['default'] : _baseIndexOf);
 
 var _arrayIncludes = __commonjs(function (module) {
-var baseIndexOf = require$$0$9;
+var baseIndexOf = require$$0$10;
 
 /**
  * A specialized version of `_.includes` for arrays without support for
@@ -618,7 +412,7 @@ function arrayIncludes(array, value) {
 module.exports = arrayIncludes;
 });
 
-var require$$0$8 = (_arrayIncludes && typeof _arrayIncludes === 'object' && 'default' in _arrayIncludes ? _arrayIncludes['default'] : _arrayIncludes);
+var require$$0$9 = (_arrayIncludes && typeof _arrayIncludes === 'object' && 'default' in _arrayIncludes ? _arrayIncludes['default'] : _arrayIncludes);
 
 var _arrayEach = __commonjs(function (module) {
 /**
@@ -649,7 +443,7 @@ var require$$14 = (_arrayEach && typeof _arrayEach === 'object' && 'default' in 
 
 var _updateWrapDetails = __commonjs(function (module) {
 var arrayEach = require$$14,
-    arrayIncludes = require$$0$8;
+    arrayIncludes = require$$0$9;
 
 /** Used to compose bitmasks for function metadata. */
 var BIND_FLAG = 1,
@@ -696,7 +490,7 @@ function updateWrapDetails(details, bitmask) {
 module.exports = updateWrapDetails;
 });
 
-var require$$0$7 = (_updateWrapDetails && typeof _updateWrapDetails === 'object' && 'default' in _updateWrapDetails ? _updateWrapDetails['default'] : _updateWrapDetails);
+var require$$0$8 = (_updateWrapDetails && typeof _updateWrapDetails === 'object' && 'default' in _updateWrapDetails ? _updateWrapDetails['default'] : _updateWrapDetails);
 
 var _shortOut = __commonjs(function (module) {
 /** Used to detect hot functions by number of calls within a span of milliseconds. */
@@ -738,7 +532,7 @@ function shortOut(func) {
 module.exports = shortOut;
 });
 
-var require$$0$12 = (_shortOut && typeof _shortOut === 'object' && 'default' in _shortOut ? _shortOut['default'] : _shortOut);
+var require$$0$13 = (_shortOut && typeof _shortOut === 'object' && 'default' in _shortOut ? _shortOut['default'] : _shortOut);
 
 var identity = __commonjs(function (module) {
 /**
@@ -782,7 +576,7 @@ function getValue(object, key) {
 module.exports = getValue;
 });
 
-var require$$0$14 = (_getValue && typeof _getValue === 'object' && 'default' in _getValue ? _getValue['default'] : _getValue);
+var require$$0$15 = (_getValue && typeof _getValue === 'object' && 'default' in _getValue ? _getValue['default'] : _getValue);
 
 var _toSource = __commonjs(function (module) {
 /** Used for built-in method references. */
@@ -813,7 +607,7 @@ function toSource(func) {
 module.exports = toSource;
 });
 
-var require$$0$15 = (_toSource && typeof _toSource === 'object' && 'default' in _toSource ? _toSource['default'] : _toSource);
+var require$$0$16 = (_toSource && typeof _toSource === 'object' && 'default' in _toSource ? _toSource['default'] : _toSource);
 
 var _freeGlobal = __commonjs(function (module, exports, global) {
 /** Detect free variable `global` from Node.js. */
@@ -822,10 +616,10 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 module.exports = freeGlobal;
 });
 
-var require$$0$18 = (_freeGlobal && typeof _freeGlobal === 'object' && 'default' in _freeGlobal ? _freeGlobal['default'] : _freeGlobal);
+var require$$0$19 = (_freeGlobal && typeof _freeGlobal === 'object' && 'default' in _freeGlobal ? _freeGlobal['default'] : _freeGlobal);
 
 var _root = __commonjs(function (module) {
-var freeGlobal = require$$0$18;
+var freeGlobal = require$$0$19;
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -836,10 +630,10 @@ var root = freeGlobal || freeSelf || Function('return this')();
 module.exports = root;
 });
 
-var require$$0$17 = (_root && typeof _root === 'object' && 'default' in _root ? _root['default'] : _root);
+var require$$0$18 = (_root && typeof _root === 'object' && 'default' in _root ? _root['default'] : _root);
 
 var _coreJsData = __commonjs(function (module) {
-var root = require$$0$17;
+var root = require$$0$18;
 
 /** Used to detect overreaching core-js shims. */
 var coreJsData = root['__core-js_shared__'];
@@ -847,10 +641,10 @@ var coreJsData = root['__core-js_shared__'];
 module.exports = coreJsData;
 });
 
-var require$$0$16 = (_coreJsData && typeof _coreJsData === 'object' && 'default' in _coreJsData ? _coreJsData['default'] : _coreJsData);
+var require$$0$17 = (_coreJsData && typeof _coreJsData === 'object' && 'default' in _coreJsData ? _coreJsData['default'] : _coreJsData);
 
 var _isMasked = __commonjs(function (module) {
-var coreJsData = require$$0$16;
+var coreJsData = require$$0$17;
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
@@ -925,7 +719,7 @@ var _baseIsNative = __commonjs(function (module) {
 var isFunction = require$$1$5,
     isMasked = require$$2$2,
     isObject = require$$1,
-    toSource = require$$0$15;
+    toSource = require$$0$16;
 
 /**
  * Used to match `RegExp`
@@ -975,7 +769,7 @@ var require$$1$4 = (_baseIsNative && typeof _baseIsNative === 'object' && 'defau
 
 var _getNative = __commonjs(function (module) {
 var baseIsNative = require$$1$4,
-    getValue = require$$0$14;
+    getValue = require$$0$15;
 
 /**
  * Gets the native function at `key` of `object`.
@@ -1009,7 +803,7 @@ var defineProperty = (function() {
 module.exports = defineProperty;
 });
 
-var require$$0$13 = (_defineProperty && typeof _defineProperty === 'object' && 'default' in _defineProperty ? _defineProperty['default'] : _defineProperty);
+var require$$0$14 = (_defineProperty && typeof _defineProperty === 'object' && 'default' in _defineProperty ? _defineProperty['default'] : _defineProperty);
 
 var constant = __commonjs(function (module) {
 /**
@@ -1044,7 +838,7 @@ var require$$2$3 = (constant && typeof constant === 'object' && 'default' in con
 
 var _baseSetToString = __commonjs(function (module) {
 var constant = require$$2$3,
-    defineProperty = require$$0$13,
+    defineProperty = require$$0$14,
     identity = require$$2$1;
 
 /**
@@ -1071,7 +865,7 @@ var require$$1$2 = (_baseSetToString && typeof _baseSetToString === 'object' && 
 
 var _setToString = __commonjs(function (module) {
 var baseSetToString = require$$1$2,
-    shortOut = require$$0$12;
+    shortOut = require$$0$13;
 
 /**
  * Sets the `toString` method of `func` to return `string`.
@@ -1086,7 +880,7 @@ var setToString = shortOut(baseSetToString);
 module.exports = setToString;
 });
 
-var require$$0$11 = (_setToString && typeof _setToString === 'object' && 'default' in _setToString ? _setToString['default'] : _setToString);
+var require$$0$12 = (_setToString && typeof _setToString === 'object' && 'default' in _setToString ? _setToString['default'] : _setToString);
 
 var _insertWrapDetails = __commonjs(function (module) {
 /** Used to match wrap detail comments. */
@@ -1141,8 +935,8 @@ var require$$3 = (_getWrapDetails && typeof _getWrapDetails === 'object' && 'def
 var _setWrapToString = __commonjs(function (module) {
 var getWrapDetails = require$$3,
     insertWrapDetails = require$$2$4,
-    setToString = require$$0$11,
-    updateWrapDetails = require$$0$7;
+    setToString = require$$0$12,
+    updateWrapDetails = require$$0$8;
 
 /**
  * Sets the `toString` method of `wrapper` to mimic the source of `reference`
@@ -1162,11 +956,11 @@ function setWrapToString(wrapper, reference, bitmask) {
 module.exports = setWrapToString;
 });
 
-var require$$0$6 = (_setWrapToString && typeof _setWrapToString === 'object' && 'default' in _setWrapToString ? _setWrapToString['default'] : _setWrapToString);
+var require$$0$7 = (_setWrapToString && typeof _setWrapToString === 'object' && 'default' in _setWrapToString ? _setWrapToString['default'] : _setWrapToString);
 
 var _WeakMap = __commonjs(function (module) {
 var getNative = require$$1$3,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /* Built-in method references that are verified to be native. */
 var WeakMap = getNative(root, 'WeakMap');
@@ -1211,7 +1005,7 @@ var require$$1$7 = (_baseSetData && typeof _baseSetData === 'object' && 'default
 
 var _setData = __commonjs(function (module) {
 var baseSetData = require$$1$7,
-    shortOut = require$$0$12;
+    shortOut = require$$0$13;
 
 /**
  * Sets metadata for `func`.
@@ -1473,11 +1267,11 @@ function noop() {
 module.exports = noop;
 });
 
-var require$$0$19 = (noop && typeof noop === 'object' && 'default' in noop ? noop['default'] : noop);
+var require$$0$20 = (noop && typeof noop === 'object' && 'default' in noop ? noop['default'] : noop);
 
 var _getData = __commonjs(function (module) {
 var metaMap = require$$1$8,
-    noop = require$$0$19;
+    noop = require$$0$20;
 
 /**
  * Gets metadata for `func`.
@@ -1596,12 +1390,12 @@ function apply(func, thisArg, args) {
 module.exports = apply;
 });
 
-var require$$0$20 = (_apply && typeof _apply === 'object' && 'default' in _apply ? _apply['default'] : _apply);
+var require$$0$21 = (_apply && typeof _apply === 'object' && 'default' in _apply ? _apply['default'] : _apply);
 
 var _createPartial = __commonjs(function (module) {
-var apply = require$$0$20,
+var apply = require$$0$21,
     createCtor = require$$1$10,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /** Used to compose bitmasks for function metadata. */
 var BIND_FLAG = 1;
@@ -1763,11 +1557,11 @@ function baseLodash() {
 module.exports = baseLodash;
 });
 
-var require$$0$23 = (_baseLodash && typeof _baseLodash === 'object' && 'default' in _baseLodash ? _baseLodash['default'] : _baseLodash);
+var require$$0$24 = (_baseLodash && typeof _baseLodash === 'object' && 'default' in _baseLodash ? _baseLodash['default'] : _baseLodash);
 
 var _LodashWrapper = __commonjs(function (module) {
 var baseCreate = require$$2$7,
-    baseLodash = require$$0$23;
+    baseLodash = require$$0$24;
 
 /**
  * The base constructor for creating `lodash` wrapper objects.
@@ -1794,7 +1588,7 @@ var require$$1$12 = (_LodashWrapper && typeof _LodashWrapper === 'object' && 'de
 
 var _LazyWrapper = __commonjs(function (module) {
 var baseCreate = require$$2$7,
-    baseLodash = require$$0$23;
+    baseLodash = require$$0$24;
 
 /** Used as references for the maximum length and index of an array. */
 var MAX_ARRAY_LENGTH = 4294967295;
@@ -1851,7 +1645,7 @@ function wrapperClone(wrapper) {
 module.exports = wrapperClone;
 });
 
-var require$$0$22 = (_wrapperClone && typeof _wrapperClone === 'object' && 'default' in _wrapperClone ? _wrapperClone['default'] : _wrapperClone);
+var require$$0$23 = (_wrapperClone && typeof _wrapperClone === 'object' && 'default' in _wrapperClone ? _wrapperClone['default'] : _wrapperClone);
 
 var isArray = __commonjs(function (module) {
 /**
@@ -1882,15 +1676,15 @@ var isArray = Array.isArray;
 module.exports = isArray;
 });
 
-var require$$0$24 = (isArray && typeof isArray === 'object' && 'default' in isArray ? isArray['default'] : isArray);
+var require$$0$25 = (isArray && typeof isArray === 'object' && 'default' in isArray ? isArray['default'] : isArray);
 
 var wrapperLodash = __commonjs(function (module) {
 var LazyWrapper = require$$2$11,
     LodashWrapper = require$$1$12,
-    baseLodash = require$$0$23,
-    isArray = require$$0$24,
-    isObjectLike = require$$0$5,
-    wrapperClone = require$$0$22;
+    baseLodash = require$$0$24,
+    isArray = require$$0$25,
+    isObjectLike = require$$0$6,
+    wrapperClone = require$$0$23;
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -2034,7 +1828,7 @@ lodash.prototype.constructor = lodash;
 module.exports = lodash;
 });
 
-var require$$0$21 = (wrapperLodash && typeof wrapperLodash === 'object' && 'default' in wrapperLodash ? wrapperLodash['default'] : wrapperLodash);
+var require$$0$22 = (wrapperLodash && typeof wrapperLodash === 'object' && 'default' in wrapperLodash ? wrapperLodash['default'] : wrapperLodash);
 
 var _realNames = __commonjs(function (module) {
 /** Used to lookup unminified function names. */
@@ -2043,10 +1837,10 @@ var realNames = {};
 module.exports = realNames;
 });
 
-var require$$0$25 = (_realNames && typeof _realNames === 'object' && 'default' in _realNames ? _realNames['default'] : _realNames);
+var require$$0$26 = (_realNames && typeof _realNames === 'object' && 'default' in _realNames ? _realNames['default'] : _realNames);
 
 var _getFuncName = __commonjs(function (module) {
-var realNames = require$$0$25;
+var realNames = require$$0$26;
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -2085,7 +1879,7 @@ var _isLaziable = __commonjs(function (module) {
 var LazyWrapper = require$$2$11,
     getData = require$$2$6,
     getFuncName = require$$1$13,
-    lodash = require$$0$21;
+    lodash = require$$0$22;
 
 /**
  * Checks if `func` has a lazy counterpart.
@@ -2117,7 +1911,7 @@ var require$$2$10 = (_isLaziable && typeof _isLaziable === 'object' && 'default'
 var _createRecurry = __commonjs(function (module) {
 var isLaziable = require$$2$10,
     setData = require$$1$6,
-    setWrapToString = require$$0$6;
+    setWrapToString = require$$0$7;
 
 /** Used to compose bitmasks for function metadata. */
 var BIND_FLAG = 1,
@@ -2210,7 +2004,7 @@ var composeArgs = require$$8,
     getHolder = require$$2$9,
     reorder = require$$2$8,
     replaceHolders = require$$1$9,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /** Used to compose bitmasks for function metadata. */
 var BIND_FLAG = 1,
@@ -2299,13 +2093,13 @@ module.exports = createHybrid;
 var require$$4 = (_createHybrid && typeof _createHybrid === 'object' && 'default' in _createHybrid ? _createHybrid['default'] : _createHybrid);
 
 var _createCurry = __commonjs(function (module) {
-var apply = require$$0$20,
+var apply = require$$0$21,
     createCtor = require$$1$10,
     createHybrid = require$$4,
     createRecurry = require$$3$2,
     getHolder = require$$2$9,
     replaceHolders = require$$1$9,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /**
  * Creates a function that wraps `func` to enable currying.
@@ -2351,7 +2145,7 @@ var require$$7$1 = (_createCurry && typeof _createCurry === 'object' && 'default
 
 var _createBind = __commonjs(function (module) {
 var createCtor = require$$1$10,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /** Used to compose bitmasks for function metadata. */
 var BIND_FLAG = 1;
@@ -2391,8 +2185,8 @@ var baseSetData = require$$1$7,
     getData = require$$2$6,
     mergeData = require$$3$1,
     setData = require$$1$6,
-    setWrapToString = require$$0$6,
-    toInteger = require$$0$1;
+    setWrapToString = require$$0$7,
+    toInteger = require$$0$2;
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -2492,10 +2286,10 @@ function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arit
 module.exports = createWrap;
 });
 
-var require$$0 = (_createWrap && typeof _createWrap === 'object' && 'default' in _createWrap ? _createWrap['default'] : _createWrap);
+var require$$0$1 = (_createWrap && typeof _createWrap === 'object' && 'default' in _createWrap ? _createWrap['default'] : _createWrap);
 
-var curry = __commonjs(function (module) {
-var createWrap = require$$0;
+var curry$1 = __commonjs(function (module) {
+var createWrap = require$$0$1;
 
 /** Used to compose bitmasks for function metadata. */
 var CURRY_FLAG = 8;
@@ -2554,938 +2348,10 @@ curry.placeholder = {};
 module.exports = curry;
 });
 
-var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
-
-/**
- * @function throttle
- * @param  {integer}   FuncDelay
- * @param  {Function} callback
- * @return {Function}                  the throttled function
- */
-function throttle(FuncDelay, callback) {
-  var lastCall = +new Date();
-  var delay = FuncDelay;
-  var params = void 0;
-  var context = {};
-  var calledDuringDelay = false;
-
-  return function () {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    var now = +new Date();
-    var diff = now - lastCall;
-    var timeToEndOfDelay = void 0;
-
-    params = args;
-
-    if (diff > delay) {
-      callback.apply(context, params); // Call function with latest parameters
-      calledDuringDelay = false;
-      lastCall = now;
-    } else if (!calledDuringDelay) {
-      // If it wasn't called yet, call it when there is enough delay.
-      timeToEndOfDelay = delay - diff;
-
-      setTimeout(function () {
-        callback.apply(context, params); // Call function with latest parameters
-      }, timeToEndOfDelay);
-
-      calledDuringDelay = true;
-      lastCall = now + timeToEndOfDelay;
-    } // Otherwise do nothing.
-  };
-}
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-  return typeof obj;
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-};
-
-
-
-
-
-var asyncGenerator = function () {
-  function AwaitValue(value) {
-    this.value = value;
-  }
-
-  function AsyncGenerator(gen) {
-    var front, back;
-
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
-    }
-
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg);
-        var value = result.value;
-
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(function (arg) {
-            resume("next", arg);
-          }, function (arg) {
-            resume("throw", arg);
-          });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({
-            value: value,
-            done: true
-          });
-          break;
-
-        case "throw":
-          front.reject(value);
-          break;
-
-        default:
-          front.resolve({
-            value: value,
-            done: false
-          });
-          break;
-      }
-
-      front = front.next;
-
-      if (front) {
-        resume(front.key, front.arg);
-      } else {
-        back = null;
-      }
-    }
-
-    this._invoke = send;
-
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
-    }
-  }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
-      return this;
-    };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) {
-    return this._invoke("next", arg);
-  };
-
-  AsyncGenerator.prototype.throw = function (arg) {
-    return this._invoke("throw", arg);
-  };
-
-  AsyncGenerator.prototype.return = function (arg) {
-    return this._invoke("return", arg);
-  };
-
-  return {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
-}();
-
-
-
-
-
-var classCallCheck = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-var createClass = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-
-
-
-
-var defineProperty = function (obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-};
-
-var get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-
-    if (getter === undefined) {
-      return undefined;
-    }
-
-    return getter.call(receiver);
-  }
-};
-
-var inherits = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-
-
-
-
-
-
-
-
-
-
-var possibleConstructorReturn = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && (typeof call === "object" || typeof call === "function") ? call : self;
-};
-
-
-
-var set = function set(object, property, value, receiver) {
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent !== null) {
-      set(parent, property, value, receiver);
-    }
-  } else if ("value" in desc && desc.writable) {
-    desc.value = value;
-  } else {
-    var setter = desc.set;
-
-    if (setter !== undefined) {
-      setter.call(receiver, value);
-    }
-  }
-
-  return value;
-};
-
-/**
- * Will take care of the dragging and reordering a list for one drag.
- * @function trackReorderDrag
- * @param  {event} paramE        The dragstart event, from which this should be called.
- * @param  {HTMLElement} paramEl       The main Element being dragged
- * @param  {Array<HTMLElement>} paramElements Array of elements to be tracked.
- * @return {void}
- */
-function trackReorderDrag(paramE, paramEl, paramElements) {
-  function setTranslation(el, val) {
-    el.style.transform = 'translate3d(0, ' + val + 'px, 0)'; //  eslint-disable-line no-param-reassign
-  }
-
-  /**
-   * @function resetElementsPositions
-   * @param {Array<HTMLElement>} els Elements being tracked
-   */
-  function resetElementsPositions(els) {
-    els.forEach(function (el) {
-      setTranslation(el, 0);
-    });
-  }
-
-  /**
-   * @function calculateElementHeight
-   * @param  {Array<HTMLElement>} els    Elements ordered by vertical position
-   * @param  {Integer} elIndex
-   * @return {void}
-   */
-  function calculateElementHeight(els, elIndex) {
-    var spaceOccupied = void 0;
-
-    // If not the last element
-    if (elIndex < els.length - 1) {
-      var elTop = els[elIndex].getBoundingClientRect().top;
-      var nextElTop = els[elIndex + 1].getBoundingClientRect().top;
-      spaceOccupied = nextElTop - elTop;
-    } else {
-      // let's estimate the general vertical distance between elements by
-      // subtracting the size of the first element from the distance between
-      // its top and the next element.
-      var firstElSpaceOccupied = els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
-      var verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
-      var height = els[elIndex].clientHeight;
-      spaceOccupied = height + verticalDistance;
-    }
-
-    return spaceOccupied;
-  }
-
-  /**
-   * @function createDragMover
-   * @param  {Array<HTMLElement>} els
-   * @param  {Array<Integer>} tops        Initial tops
-   * @param  {Integer} targetIndex Index of element being dragged around
-   * @return {function}             The function to translate elements in the
-   *                                  list to make room for the dragged element
-   */
-  function createDragMover(els, tops, targetIndex) {
-    var target = els[targetIndex];
-    var targetInitialTop = tops[targetIndex];
-    var targetHeight = calculateElementHeight(els, targetIndex);
-    return function doDragMove() {
-      var targetTop = target.getBoundingClientRect().top;
-      var movedUp = targetTop < targetInitialTop;
-
-      var i = void 0;
-      for (i = 0; i < tops.length; i++) {
-        if (i === targetIndex) {
-          continue;
-        } else if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
-          setTranslation(els[i], -targetHeight);
-        } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
-          setTranslation(els[i], targetHeight);
-        } else {
-          setTranslation(els[i], 0);
-        }
-      }
-    };
-  }
-
-  function createDragListener(els, tops, targetIndex, initialY) {
-    var target = els[targetIndex];
-    var doDragMove = createDragMover(els, tops, targetIndex);
-    var shouldStopListening = void 0;
-    function dragListener(e) {
-      if (shouldStopListening) {
-        return;
-      }
-
-      doDragMove();
-      var newY = e.pageY;
-      if (newY === 0) {
-        return;
-      } // correct weird behaviour when mouse goes up
-
-      var diff = newY - initialY;
-      setTranslation(target, diff);
-    }
-
-    dragListener.stop = function () {
-      shouldStopListening = true;
-    };
-
-    return dragListener;
-  }
-
-  function getElementsCurrentTop(els) {
-    var tops = [];
-    els.forEach(function (el) {
-      tops.push(el.getBoundingClientRect().top);
-    });
-
-    return tops;
-  }
-
-  // function adjustElementsToTops(els, tops) {
-  //   const currentTops = getElementsCurrentTop(els);
-  //   els.forEach(function (el, i) {
-  //     const diff =  currentTops[i] - tops[i];
-  //     setTranslation(el, diff);
-  //   });
-  // }
-
-  function insertTargetInRightPlace(els, initialTops, targetIndex) {
-    var target = els[targetIndex];
-    var topsBeforeInsertion = getElementsCurrentTop(els);
-    var targetTop = topsBeforeInsertion[targetIndex];
-    var i = 0;
-
-    // Pass by all elements that are above the target
-    while (topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop || i === targetIndex) {
-      i++;
-    }
-
-    // Take away transitions from all elements and save them
-    var initialTransitions = [];
-    els.forEach(function (anEl) {
-      initialTransitions.push(anEl.style.transition);
-      anEl.style.transition = 'none'; // eslint-disable-line no-param-reassign
-    });
-
-    // Put everyone at translate3d(0,0,0) without transitions
-    resetElementsPositions(els);
-
-    // Add the element in the appropriate place. This will displace everyone else.
-    var parent = els[i] ? els[i].parentElement : els[els.length - 1].parentElement;
-    if (!parent || !parent.appendChild) {
-      throw new Error('trackReorderDrag(): No parent found in element list.');
-    } else if (els[i]) {
-      parent.insertBefore(target, els[i]);
-    } else {
-      var lastEl = els[els.length - 1];
-      parent.insertBefore(target, lastEl);
-      parent.insertBefore(lastEl, target);
-    }
-
-    // Now let's translate it to where it was just before it was repositioned
-    // All without transitions. It will seem like it never left that spot.
-    var futureTop = target.getBoundingClientRect().top;
-    var displacement = targetTop - futureTop;
-    setTranslation(target, displacement);
-
-    // Let's add a timeout to get the last place in the UI queue and let the
-    // CSS renderer to process the fact that all these elements do not have
-    // transitions and should appear wherever their coordinates say immediately.
-    setTimeout(function () {
-      // Restore all transitions
-      els.forEach(function (anEl, k) {
-        anEl.style.transition = initialTransitions[k]; // eslint-disable-line no-param-reassign
-      });
-
-      // Now transition the target can transition smoothly from where it
-      // was dropped to its final position at translate value 0.
-      setTranslation(target, 0);
-    }, 15);
-
-    //  adjustElementsToTops(els, topsBeforeInsertion);
-  }
-
-  function init(e, el, elements) {
-    if ((typeof el === 'undefined' ? 'undefined' : _typeof(el)) !== 'object') {
-      throw new Error('trackReorderDrag(): Invalid parameter');
-    }
-
-    // Reorder elements
-    elements.sort(function (el1, el2) {
-      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
-    });
-
-    // Set initial states
-    var initialTops = [];
-    elements.forEach(function (element) {
-      initialTops.push(element.getBoundingClientRect().top);
-    });
-
-    var elIndex = elements.indexOf(el);
-
-    // Create throttled drag listener
-    var initialY = e.pageY;
-    var dragListener = createDragListener(elements, initialTops, elIndex, initialY);
-    var throttledDragListener = throttle(50, dragListener);
-
-    // Listen to drags
-    var eventTarget = e.target;
-    eventTarget.addEventListener('drag', throttledDragListener);
-    eventTarget.addEventListener('dragend', function dragEndListener() {
-      dragListener.stop();
-      insertTargetInRightPlace(elements, initialTops, elIndex);
-      eventTarget.removeEventListener('drag', throttledDragListener);
-      eventTarget.removeEventListener('dragend', dragEndListener);
-    });
-  }
-
-  init(paramE, paramEl, paramElements);
-}
-
-function addListenerOnce(eventName, el, f) {
-  function triggerAndRemove(event) {
-    f(event);
-    el.removeEventListener(eventName, triggerAndRemove);
-  }
-
-  el.addEventListener(eventName, triggerAndRemove);
-}
-
-// =========== Handle drag
-
-
-function getParentField(el) {
-  if (!el || !el.parentNode) {
-    return el;
-  }
-  return el.classList.contains('fl-fb-Field') ? el : getParentField(el.parentNode);
-}
-
-var onDragStart = function onDragStart(event) {
-  var e = event.nativeEvent;
-  // hide any dragging image
-  e.dataTransfer.setDragImage(document.createElement('img'), 0, 0);
-
-  var mainField = getParentField(e.target);
-  var trackedFields = Array.from(mainField.parentElement.children);
-
-  if (trackedFields.length < 2) {
-    return;
-  }
-  mainField.classList.add('fl-fb-Field--dragging');
-  trackReorderDrag(e, mainField, trackedFields);
-
-  // Post dragging
-  addListenerOnce('dragend', mainField, function () {
-    // remove dragging class after animation finishes
-    setTimeout(function () {
-      return mainField.classList.remove('fl-fb-Field--dragging');
-    }, 250);
-
-    var reorderedIds = Array.from(trackedFields).sort(function (el1, el2) {
-      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
-    }).map(function (f) {
-      return f.dataset.id;
-    });
-
-    EventHub.trigger('fieldsReorder', reorderedIds);
-  });
-};
-
-// =========== END OF Handle drag
-
-
-var updateField$1 = function updateField$1(newState) {
-  EventHub.trigger('updateField', newState);
-};
-
-var deleteField$1 = function deleteField$1(fieldState) {
-  EventHub.trigger('deleteField', fieldState);
-};
-
-var toggleConfig = function toggleConfig(fieldState) {
-  var newFieldState = Object.assign({}, fieldState, { configShowing: !fieldState.configShowing });
-  updateField$1(newFieldState);
-};
-
-var toggleRequired = function toggleRequired(fieldState) {
-  var newFieldState = Object.assign({}, fieldState, { required: !fieldState.required });
-  updateField$1(newFieldState);
-};
-
-var isValidFieldState = function isValidFieldState(state) {
-  return typeof state.id === 'number' && typeof state.type === 'string' && typeof state.group === 'string' && typeof state.configShowing === 'boolean';
-};
-
-var Sidebar = function Sidebar(_ref) {
-  var fieldState = _ref.fieldState;
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Field-sidebar' },
-    React.createElement('button', {
-      className: 'glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn',
-      onDragStart: onDragStart,
-      draggable: 'true',
-      type: 'button'
-    }),
-    React.createElement('button', {
-      className: 'glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config',
-      onClick: function onClick() {
-        return toggleConfig(fieldState);
-      },
-      type: 'button'
-    }),
-    React.createElement('button', {
-      className: 'glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete',
-      onClick: function onClick() {
-        return deleteField$1(fieldState);
-      },
-      type: 'button'
-    })
-  );
-};
-
-var ConfigBar = function ConfigBar(_ref2) {
-  var fieldState = _ref2.fieldState;
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Field-configuration' },
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-configuration-buttons' },
-      React.createElement(
-        'label',
-        {
-          className: 'fl-fb-Field-configuration-switch-required',
-          onMouseDown: function onMouseDown() {
-            return toggleRequired(fieldState);
-          }
-        },
-        'Required',
-        React.createElement(
-          'div',
-          { className: 'fl-fb-ui-switch' },
-          React.createElement('input', {
-            className: 'fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round',
-            type: 'checkbox',
-            id: 'fl-fb-ui-switch-' + fieldState.id,
-            checked: fieldState.required
-          }),
-          React.createElement(
-            'label',
-            { htmlFor: 'fl-fb-ui-switch-' + fieldState.id },
-            ' '
-          )
-        )
-      ),
-      React.createElement(
-        'span',
-        { className: 'fl-fb-Field-configuration-elementName' },
-        fieldState.displayName
-      ),
-      React.createElement('button', {
-        className: 'fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok',
-        onClick: function onClick() {
-          return toggleConfig(fieldState);
-        },
-        type: 'button'
-      })
-    )
-  );
-};
-
-var Field = function Field(_ref3) {
-  var fieldState = _ref3.fieldState;
-  var fieldConstructor = _ref3.fieldConstructor;
-
-  assert(isValidFieldState(fieldState), 'Invalid field state: ' + fieldState);
-
-  var fieldComponent = fieldConstructor.RenderEditor;
-
-  var topClasses = fieldState.configShowing ? 'fl-fb-Field fl-fb-Field--configuration-visible' : 'fl-fb-Field';
-
-  return React.createElement(
-    'div',
-    { className: topClasses, 'data-id': fieldState.id },
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-content' },
-      React.createElement(fieldComponent, { state: fieldState, update: updateField$1 })
-    ),
-    React.createElement(Sidebar, { fieldState: fieldState }),
-    React.createElement(ConfigBar, { fieldState: fieldState })
-  );
-};
-
-Field.propTypes = {
-  fieldState: React.PropTypes.object,
-  fieldConstructor: React.PropTypes.object
-};
-
-var getTypeConstructor = _curry(function (typeConstructors, type) {
-  return typeConstructors.find(function (t) {
-    return t.info.type === type;
-  });
-});
-
-var Fields = function Fields(props) {
-  var fieldStates = props.fieldStates;
-  var fieldTypes = props.fieldTypes;
-
-
-  return React.createElement(
-    'div',
-    { className: 'fl-fb-Fields' },
-    fieldStates.map(function (compState) {
-      return React.createElement(Field, {
-        key: compState.id,
-        fieldState: compState,
-        fieldConstructor: getTypeConstructor(fieldTypes, compState.type)
-      });
-    })
-  );
-};
-
-Fields.propTypes = {
-  fieldStates: React.PropTypes.array,
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType)
-};
-
-var createId = function createId() {
-  return Date.now();
-};
-
-var FormBuilder$2 = function (_React$Component) {
-  inherits(FormBuilder, _React$Component);
-
-  function FormBuilder(props) {
-    classCallCheck(this, FormBuilder);
-
-    var _this = possibleConstructorReturn(this, (FormBuilder.__proto__ || Object.getPrototypeOf(FormBuilder)).call(this, props));
-
-    _this.state = {
-      fieldTypes: props.fieldTypes || [], // TODO: Add validation here
-      fieldStates: [],
-      fieldStatesHistory: [] };
-
-    _this.createField = _this.createField.bind(_this);
-    _this.deleteField = _this.deleteField.bind(_this);
-    _this.addFieldType = _this.addFieldType.bind(_this);
-    _this.updateField = _this.updateField.bind(_this);
-    _this.pushHistoryState = _this.pushHistoryState.bind(_this);
-    _this.pullHistoryState = _this.pullHistoryState.bind(_this);
-    _this.reorderFields = _this.reorderFields.bind(_this);
-
-    EventHub.on('createField', _this.createField);
-    EventHub.on('deleteField', _this.deleteField);
-    EventHub.on('updateField', _this.updateField);
-    EventHub.on('undoBtnPressed', _this.pullHistoryState);
-    EventHub.on('fieldsReorder', _this.reorderFields);
-
-    // Expose function to export state.
-    if (typeof props.exportState === 'function') {
-      props.exportState(function () {
-        return _this.state.fieldStates;
-      });
-    }
-
-    if (typeof props.importState === 'function') {
-      props.importState(function (fieldStates) {
-        assert(Array.isArray(fieldStates), 'Invalid states sent with importState. Expected Array but received ' + (typeof fieldStates === 'undefined' ? 'undefined' : _typeof(fieldStates)));
-
-        // Check that all types are ok.
-        fieldStates.forEach(function (s) {
-          if (!_this.state.fieldTypes.map(function (f) {
-            return f.info.type;
-          }).includes(s.type)) {
-            assert(false, s.type + ' is not included in field types.');
-          }
-        });
-
-        // Add required properties that are not managed by the field
-        // component but by the FormBuilder component itself, so may
-        // not be there.
-        var processedFieldStates = fieldStates.map(function (s) {
-          return Object.assign({
-            configShowing: false,
-            id: createId(),
-            required: false
-          }, s);
-        });
-
-        console.log(processedFieldStates);
-
-        _this.pushHistoryState(processedFieldStates);
-      });
-    }
-    return _this;
-  }
-
-  // ==================== FIELDS HANDLING  ===========================
-
-  createClass(FormBuilder, [{
-    key: 'createField',
-    value: function createField(fieldType) {
-      var typeConstructor = this.state.fieldTypes.find(function (f) {
-        return f.info.type === fieldType;
-      });
-
-      assert(typeConstructor, 'Field "' + fieldType + '" does not exist.');
-
-      var initialState = typeConstructor.initialState();
-      initialState.id = createId();
-      initialState.configShowing = true;
-
-      // Make all other fields have config hidden
-      var otherFieldsStates = this.state.fieldStates.map(function (s) {
-        return Object.assign({}, s, { configShowing: false });
-      });
-
-      var fieldStates = otherFieldsStates.concat([initialState]);
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'deleteField',
-    value: function deleteField(fieldState) {
-      var fieldStates = this.state.fieldStates.filter(function (state) {
-        return state.id !== fieldState.id;
-      });
-
-      assert(fieldStates.length < this.state.fieldStates.length, 'Something weird happened.\n       Field with ID ' + fieldState.is + ' didn\'t seem to be part of the existing states');
-
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'updateField',
-    value: function updateField(fieldState) {
-      var stateIndex = this.state.fieldStates.findIndex(function (s) {
-        return s.id === fieldState.id;
-      });
-
-      assert(stateIndex !== -1, 'Field with id ' + fieldState.id + ' is not in field states');
-
-      var fieldStates = Array.from(this.state.fieldStates);
-      fieldStates[stateIndex] = fieldState;
-      this.pushHistoryState(fieldStates);
-    }
-  }, {
-    key: 'addFieldType',
-    value: function addFieldType(newType) {
-      assert(!this.state.fieldTypes.find(function (f) {
-        return f.info.type === newType.info.type;
-      }), 'The field type ' + newType.info.type + ' already exists');
-
-      var fieldTypes = this.state.fieldTypes.concat([newType]);
-      this.setState({ fieldTypes: fieldTypes });
-    }
-  }, {
-    key: 'reorderFields',
-    value: function reorderFields(newFieldsIdOrder) {
-      var _this2 = this;
-
-      var fieldStates = newFieldsIdOrder.map(function (id) {
-        return _this2.state.fieldStates.find(function (s) {
-          return s.id.toString() === id;
-        });
-      });
-
-      assert(fieldStates.indexOf(undefined) === -1, 'There are ids that do not correspond to any fieldState.');
-
-      console.log('New order:', fieldStates.map(function (s) {
-        return s.id;
-      }).join(', '));
-
-      this.pushHistoryState(fieldStates);
-    }
-    // ==================== HISTORY HANDLING  ===========================
-
-  }, {
-    key: 'pushHistoryState',
-    value: function pushHistoryState(fieldStates) {
-      // Add active state to head and set new state as active
-      var currentFieldStates = this.state.fieldStates;
-      var fieldStatesHistory = [currentFieldStates].concat(this.state.fieldStatesHistory);
-      this.setState({
-        fieldStatesHistory: fieldStatesHistory,
-        fieldStates: fieldStates
-      });
-    }
-  }, {
-    key: 'pullHistoryState',
-    value: function pullHistoryState() {
-      // Remove head
-      var fieldStatesHistory = this.state.fieldStatesHistory.slice(1);
-      // Head is now the active state
-      var fieldStates = this.state.fieldStatesHistory[0] || [];
-      this.setState({
-        fieldStatesHistory: fieldStatesHistory,
-        fieldStates: fieldStates
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _state = this.state;
-      var fieldTypes = _state.fieldTypes;
-      var fieldStates = _state.fieldStates;
-
-
-      return React.createElement(
-        'div',
-        { className: 'fl-fb' },
-        React.createElement(ControlBar, { fieldTypes: fieldTypes }),
-        React.createElement(Fields, { fieldStates: fieldStates, fieldTypes: fieldTypes })
-      );
-    }
-  }]);
-  return FormBuilder;
-}(React.Component);
-
-FormBuilder$2.propTypes = {
-  fieldTypes: React.PropTypes.arrayOf(FieldCreatorPropType),
-  exportState: React.PropTypes.func,
-  importState: React.PropTypes.func
-};
-
-var placeholder = __commonjs(function (module) {
-/**
- * The default argument placeholder value for methods.
- *
- * @type {Object}
- */
-module.exports = {};
-});
-
-var require$$0$26 = (placeholder && typeof placeholder === 'object' && 'default' in placeholder ? placeholder['default'] : placeholder);
+var require$$9 = (curry$1 && typeof curry$1 === 'object' && 'default' in curry$1 ? curry$1['default'] : curry$1);
 
 var _toKey = __commonjs(function (module) {
-var isSymbol = require$$0$4;
+var isSymbol = require$$0$5;
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -3537,7 +2403,7 @@ module.exports = arrayMap;
 var require$$2$13 = (_arrayMap && typeof _arrayMap === 'object' && 'default' in _arrayMap ? _arrayMap['default'] : _arrayMap);
 
 var _Symbol = __commonjs(function (module) {
-var root = require$$0$17;
+var root = require$$0$18;
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -3550,8 +2416,8 @@ var require$$0$33 = (_Symbol && typeof _Symbol === 'object' && 'default' in _Sym
 var _baseToString = __commonjs(function (module) {
 var Symbol = require$$0$33,
     arrayMap = require$$2$13,
-    isArray = require$$0$24,
-    isSymbol = require$$0$4;
+    isArray = require$$0$25,
+    isSymbol = require$$0$5;
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
@@ -3759,7 +2625,7 @@ var require$$3$3 = (_mapCacheDelete && typeof _mapCacheDelete === 'object' && 'd
 
 var _Map = __commonjs(function (module) {
 var getNative = require$$1$3,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /* Built-in method references that are verified to be native. */
 var Map = getNative(root, 'Map');
@@ -4400,8 +3266,8 @@ var require$$0$30 = (_stringToPath && typeof _stringToPath === 'object' && 'defa
 var toPath = __commonjs(function (module) {
 var arrayMap = require$$2$13,
     copyArray = require$$10,
-    isArray = require$$0$24,
-    isSymbol = require$$0$4,
+    isArray = require$$0$25,
+    isSymbol = require$$0$5,
     stringToPath = require$$0$30,
     toKey = require$$0$29;
 
@@ -4494,7 +3360,7 @@ module.exports = castSlice;
 var require$$1$19 = (_castSlice && typeof _castSlice === 'object' && 'default' in _castSlice ? _castSlice['default'] : _castSlice);
 
 var _overRest = __commonjs(function (module) {
-var apply = require$$0$20;
+var apply = require$$0$21;
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
@@ -4537,7 +3403,7 @@ var require$$1$20 = (_overRest && typeof _overRest === 'object' && 'default' in 
 var _baseRest = __commonjs(function (module) {
 var identity = require$$2$1,
     overRest = require$$1$20,
-    setToString = require$$0$11;
+    setToString = require$$0$12;
 
 /**
  * The base implementation of `_.rest` which doesn't validate or coerce arguments.
@@ -4582,11 +3448,11 @@ module.exports = arrayPush;
 var require$$1$21 = (_arrayPush && typeof _arrayPush === 'object' && 'default' in _arrayPush ? _arrayPush['default'] : _arrayPush);
 
 var spread = __commonjs(function (module) {
-var apply = require$$0$20,
+var apply = require$$0$21,
     arrayPush = require$$1$21,
     baseRest = require$$2$19,
     castSlice = require$$1$19,
-    toInteger = require$$0$1;
+    toInteger = require$$0$2;
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -4650,7 +3516,7 @@ module.exports = spread;
 var require$$2$18 = (spread && typeof spread === 'object' && 'default' in spread ? spread['default'] : spread);
 
 var _baseIsArguments = __commonjs(function (module) {
-var isObjectLike = require$$0$5;
+var isObjectLike = require$$0$6;
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -4683,7 +3549,7 @@ var require$$1$22 = (_baseIsArguments && typeof _baseIsArguments === 'object' &&
 
 var isArguments = __commonjs(function (module) {
 var baseIsArguments = require$$1$22,
-    isObjectLike = require$$0$5;
+    isObjectLike = require$$0$6;
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -4725,7 +3591,7 @@ var require$$4$4 = (isArguments && typeof isArguments === 'object' && 'default' 
 var _isFlattenable = __commonjs(function (module) {
 var Symbol = require$$0$33,
     isArguments = require$$4$4,
-    isArray = require$$0$24;
+    isArray = require$$0$25;
 
 /** Built-in value references. */
 var spreadableSymbol = Symbol ? Symbol.isConcatSpreadable : undefined;
@@ -4820,7 +3686,7 @@ var require$$2$20 = (flatten && typeof flatten === 'object' && 'default' in flat
 var _flatRest = __commonjs(function (module) {
 var flatten = require$$2$20,
     overRest = require$$1$20,
-    setToString = require$$0$11;
+    setToString = require$$0$12;
 
 /**
  * A specialized version of `baseRest` which flattens the rest array.
@@ -4839,7 +3705,7 @@ module.exports = flatRest;
 var require$$0$46 = (_flatRest && typeof _flatRest === 'object' && 'default' in _flatRest ? _flatRest['default'] : _flatRest);
 
 var rearg = __commonjs(function (module) {
-var createWrap = require$$0,
+var createWrap = require$$0$1,
     flatRest = require$$0$46;
 
 /** Used to compose bitmasks for function metadata. */
@@ -4966,8 +3832,8 @@ module.exports = baseKeys;
 var require$$1$23 = (_baseKeys && typeof _baseKeys === 'object' && 'default' in _baseKeys ? _baseKeys['default'] : _baseKeys);
 
 var _isKey = __commonjs(function (module) {
-var isArray = require$$0$24,
-    isSymbol = require$$0$4;
+var isArray = require$$0$25,
+    isSymbol = require$$0$5;
 
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -5000,7 +3866,7 @@ module.exports = isKey;
 var require$$2$21 = (_isKey && typeof _isKey === 'object' && 'default' in _isKey ? _isKey['default'] : _isKey);
 
 var _castPath = __commonjs(function (module) {
-var isArray = require$$0$24,
+var isArray = require$$0$25,
     stringToPath = require$$0$30;
 
 /**
@@ -5214,7 +4080,7 @@ var require$$0$56 = (isLength && typeof isLength === 'object' && 'default' in is
 var _hasPath = __commonjs(function (module) {
 var castPath = require$$6$1,
     isArguments = require$$4$4,
-    isArray = require$$0$24,
+    isArray = require$$0$25,
     isIndex = require$$1$11,
     isKey = require$$2$21,
     isLength = require$$0$56,
@@ -5313,7 +4179,7 @@ module.exports = hasIn;
 
 var require$$4$5 = (hasIn && typeof hasIn === 'object' && 'default' in hasIn ? hasIn['default'] : hasIn);
 
-var get$1 = __commonjs(function (module) {
+var get = __commonjs(function (module) {
 var baseGet = require$$0$53;
 
 /**
@@ -5349,10 +4215,10 @@ function get(object, path, defaultValue) {
 module.exports = get;
 });
 
-var require$$1$27 = (get$1 && typeof get$1 === 'object' && 'default' in get$1 ? get$1['default'] : get$1);
+var require$$5$2 = (get && typeof get === 'object' && 'default' in get ? get['default'] : get);
 
 var _nodeUtil = __commonjs(function (module, exports) {
-var freeGlobal = require$$0$18;
+var freeGlobal = require$$0$19;
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -5395,11 +4261,11 @@ function baseUnary(func) {
 module.exports = baseUnary;
 });
 
-var require$$1$28 = (_baseUnary && typeof _baseUnary === 'object' && 'default' in _baseUnary ? _baseUnary['default'] : _baseUnary);
+var require$$1$27 = (_baseUnary && typeof _baseUnary === 'object' && 'default' in _baseUnary ? _baseUnary['default'] : _baseUnary);
 
 var _baseIsTypedArray = __commonjs(function (module) {
 var isLength = require$$0$56,
-    isObjectLike = require$$0$5;
+    isObjectLike = require$$0$6;
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -5473,7 +4339,7 @@ var require$$2$24 = (_baseIsTypedArray && typeof _baseIsTypedArray === 'object' 
 
 var isTypedArray = __commonjs(function (module) {
 var baseIsTypedArray = require$$2$24,
-    baseUnary = require$$1$28,
+    baseUnary = require$$1$27,
     nodeUtil = require$$0$59;
 
 /* Node.js helper references. */
@@ -5527,7 +4393,7 @@ module.exports = stubFalse;
 var require$$0$60 = (stubFalse && typeof stubFalse === 'object' && 'default' in stubFalse ? stubFalse['default'] : stubFalse);
 
 var isBuffer = __commonjs(function (module, exports) {
-var root = require$$0$17,
+var root = require$$0$18,
     stubFalse = require$$0$60;
 
 /** Detect free variable `exports`. */
@@ -5594,11 +4460,11 @@ function baseGetTag(value) {
 module.exports = baseGetTag;
 });
 
-var require$$1$29 = (_baseGetTag && typeof _baseGetTag === 'object' && 'default' in _baseGetTag ? _baseGetTag['default'] : _baseGetTag);
+var require$$1$28 = (_baseGetTag && typeof _baseGetTag === 'object' && 'default' in _baseGetTag ? _baseGetTag['default'] : _baseGetTag);
 
 var _Set = __commonjs(function (module) {
 var getNative = require$$1$3,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /* Built-in method references that are verified to be native. */
 var Set = getNative(root, 'Set');
@@ -5610,7 +4476,7 @@ var require$$3$9 = (_Set && typeof _Set === 'object' && 'default' in _Set ? _Set
 
 var _Promise = __commonjs(function (module) {
 var getNative = require$$1$3,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /* Built-in method references that are verified to be native. */
 var Promise = getNative(root, 'Promise');
@@ -5622,7 +4488,7 @@ var require$$4$6 = (_Promise && typeof _Promise === 'object' && 'default' in _Pr
 
 var _DataView = __commonjs(function (module) {
 var getNative = require$$1$3,
-    root = require$$0$17;
+    root = require$$0$18;
 
 /* Built-in method references that are verified to be native. */
 var DataView = getNative(root, 'DataView');
@@ -5638,8 +4504,8 @@ var DataView = require$$6$2,
     Promise = require$$4$6,
     Set = require$$3$9,
     WeakMap = require$$2$5,
-    baseGetTag = require$$1$29,
-    toSource = require$$0$15;
+    baseGetTag = require$$1$28,
+    toSource = require$$0$16;
 
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
@@ -5766,12 +4632,12 @@ function baseTimes(n, iteratee) {
 module.exports = baseTimes;
 });
 
-var require$$5$2 = (_baseTimes && typeof _baseTimes === 'object' && 'default' in _baseTimes ? _baseTimes['default'] : _baseTimes);
+var require$$5$3 = (_baseTimes && typeof _baseTimes === 'object' && 'default' in _baseTimes ? _baseTimes['default'] : _baseTimes);
 
 var _arrayLikeKeys = __commonjs(function (module) {
-var baseTimes = require$$5$2,
+var baseTimes = require$$5$3,
     isArguments = require$$4$4,
-    isArray = require$$0$24,
+    isArray = require$$0$25,
     isBuffer = require$$2$25,
     isIndex = require$$1$11,
     isTypedArray = require$$0$58;
@@ -6049,7 +4915,7 @@ function arraySome(array, predicate) {
 module.exports = arraySome;
 });
 
-var require$$1$30 = (_arraySome && typeof _arraySome === 'object' && 'default' in _arraySome ? _arraySome['default'] : _arraySome);
+var require$$1$29 = (_arraySome && typeof _arraySome === 'object' && 'default' in _arraySome ? _arraySome['default'] : _arraySome);
 
 var _setCacheHas = __commonjs(function (module) {
 /**
@@ -6092,11 +4958,11 @@ function setCacheAdd(value) {
 module.exports = setCacheAdd;
 });
 
-var require$$1$31 = (_setCacheAdd && typeof _setCacheAdd === 'object' && 'default' in _setCacheAdd ? _setCacheAdd['default'] : _setCacheAdd);
+var require$$1$30 = (_setCacheAdd && typeof _setCacheAdd === 'object' && 'default' in _setCacheAdd ? _setCacheAdd['default'] : _setCacheAdd);
 
 var _SetCache = __commonjs(function (module) {
 var MapCache = require$$0$35,
-    setCacheAdd = require$$1$31,
+    setCacheAdd = require$$1$30,
     setCacheHas = require$$0$66;
 
 /**
@@ -6128,7 +4994,7 @@ var require$$2$28 = (_SetCache && typeof _SetCache === 'object' && 'default' in 
 
 var _equalArrays = __commonjs(function (module) {
 var SetCache = require$$2$28,
-    arraySome = require$$1$30,
+    arraySome = require$$1$29,
     cacheHas = require$$0$65;
 
 /** Used to compose bitmasks for comparison styles. */
@@ -6216,7 +5082,7 @@ module.exports = equalArrays;
 var require$$2$27 = (_equalArrays && typeof _equalArrays === 'object' && 'default' in _equalArrays ? _equalArrays['default'] : _equalArrays);
 
 var _Uint8Array = __commonjs(function (module) {
-var root = require$$0$17;
+var root = require$$0$18;
 
 /** Built-in value references. */
 var Uint8Array = root.Uint8Array;
@@ -6342,7 +5208,7 @@ function equalByTag(object, other, tag, equalFunc, customizer, bitmask, stack) {
 module.exports = equalByTag;
 });
 
-var require$$5$3 = (_equalByTag && typeof _equalByTag === 'object' && 'default' in _equalByTag ? _equalByTag['default'] : _equalByTag);
+var require$$5$4 = (_equalByTag && typeof _equalByTag === 'object' && 'default' in _equalByTag ? _equalByTag['default'] : _equalByTag);
 
 var _stackSet = __commonjs(function (module) {
 var ListCache = require$$0$39,
@@ -6400,7 +5266,7 @@ function stackHas(key) {
 module.exports = stackHas;
 });
 
-var require$$1$32 = (_stackHas && typeof _stackHas === 'object' && 'default' in _stackHas ? _stackHas['default'] : _stackHas);
+var require$$1$31 = (_stackHas && typeof _stackHas === 'object' && 'default' in _stackHas ? _stackHas['default'] : _stackHas);
 
 var _stackGet = __commonjs(function (module) {
 /**
@@ -6469,7 +5335,7 @@ var ListCache = require$$0$39,
     stackClear = require$$4$8,
     stackDelete = require$$3$10,
     stackGet = require$$2$29,
-    stackHas = require$$1$32,
+    stackHas = require$$1$31,
     stackSet = require$$0$68;
 
 /**
@@ -6499,10 +5365,10 @@ var require$$15 = (_Stack && typeof _Stack === 'object' && 'default' in _Stack ?
 var _baseIsEqualDeep = __commonjs(function (module) {
 var Stack = require$$15,
     equalArrays = require$$2$27,
-    equalByTag = require$$5$3,
+    equalByTag = require$$5$4,
     equalObjects = require$$4$7,
     getTag = require$$7$2,
-    isArray = require$$0$24,
+    isArray = require$$0$25,
     isBuffer = require$$2$25,
     isTypedArray = require$$0$58;
 
@@ -6593,7 +5459,7 @@ var require$$2$23 = (_baseIsEqualDeep && typeof _baseIsEqualDeep === 'object' &&
 var _baseIsEqual = __commonjs(function (module) {
 var baseIsEqualDeep = require$$2$23,
     isObject = require$$1,
-    isObjectLike = require$$0$5;
+    isObjectLike = require$$0$6;
 
 /**
  * The base implementation of `_.isEqual` which supports partial comparisons
@@ -6627,7 +5493,7 @@ var require$$0$57 = (_baseIsEqual && typeof _baseIsEqual === 'object' && 'defaul
 
 var _baseMatchesProperty = __commonjs(function (module) {
 var baseIsEqual = require$$0$57,
-    get = require$$1$27,
+    get = require$$5$2,
     hasIn = require$$4$5,
     isKey = require$$2$21,
     isStrictComparable = require$$1$25,
@@ -6690,7 +5556,7 @@ function getMatchData(object) {
 module.exports = getMatchData;
 });
 
-var require$$1$33 = (_getMatchData && typeof _getMatchData === 'object' && 'default' in _getMatchData ? _getMatchData['default'] : _getMatchData);
+var require$$1$32 = (_getMatchData && typeof _getMatchData === 'object' && 'default' in _getMatchData ? _getMatchData['default'] : _getMatchData);
 
 var _baseIsMatch = __commonjs(function (module) {
 var Stack = require$$15,
@@ -6761,7 +5627,7 @@ var require$$2$30 = (_baseIsMatch && typeof _baseIsMatch === 'object' && 'defaul
 
 var _baseMatches = __commonjs(function (module) {
 var baseIsMatch = require$$2$30,
-    getMatchData = require$$1$33,
+    getMatchData = require$$1$32,
     matchesStrictComparable = require$$0$54;
 
 /**
@@ -6790,7 +5656,7 @@ var _baseIteratee = __commonjs(function (module) {
 var baseMatches = require$$4$9,
     baseMatchesProperty = require$$3$8,
     identity = require$$2$1,
-    isArray = require$$0$24,
+    isArray = require$$0$25,
     property = require$$0$52;
 
 /**
@@ -6831,11 +5697,11 @@ var getPrototype = overArg(Object.getPrototypeOf, Object);
 module.exports = getPrototype;
 });
 
-var require$$1$34 = (_getPrototype && typeof _getPrototype === 'object' && 'default' in _getPrototype ? _getPrototype['default'] : _getPrototype);
+var require$$1$33 = (_getPrototype && typeof _getPrototype === 'object' && 'default' in _getPrototype ? _getPrototype['default'] : _getPrototype);
 
 var _initCloneObject = __commonjs(function (module) {
 var baseCreate = require$$2$7,
-    getPrototype = require$$1$34,
+    getPrototype = require$$1$33,
     isPrototype = require$$0$50;
 
 /**
@@ -6919,7 +5785,7 @@ function cloneSymbol(symbol) {
 module.exports = cloneSymbol;
 });
 
-var require$$1$35 = (_cloneSymbol && typeof _cloneSymbol === 'object' && 'default' in _cloneSymbol ? _cloneSymbol['default'] : _cloneSymbol);
+var require$$1$34 = (_cloneSymbol && typeof _cloneSymbol === 'object' && 'default' in _cloneSymbol ? _cloneSymbol['default'] : _cloneSymbol);
 
 var _arrayReduce = __commonjs(function (module) {
 /**
@@ -6950,7 +5816,7 @@ function arrayReduce(array, iteratee, accumulator, initAccum) {
 module.exports = arrayReduce;
 });
 
-var require$$1$36 = (_arrayReduce && typeof _arrayReduce === 'object' && 'default' in _arrayReduce ? _arrayReduce['default'] : _arrayReduce);
+var require$$1$35 = (_arrayReduce && typeof _arrayReduce === 'object' && 'default' in _arrayReduce ? _arrayReduce['default'] : _arrayReduce);
 
 var _addSetEntry = __commonjs(function (module) {
 /**
@@ -6974,7 +5840,7 @@ var require$$2$32 = (_addSetEntry && typeof _addSetEntry === 'object' && 'defaul
 
 var _cloneSet = __commonjs(function (module) {
 var addSetEntry = require$$2$32,
-    arrayReduce = require$$1$36,
+    arrayReduce = require$$1$35,
     setToArray = require$$0$63;
 
 /**
@@ -7040,7 +5906,7 @@ var require$$2$33 = (_addMapEntry && typeof _addMapEntry === 'object' && 'defaul
 
 var _cloneMap = __commonjs(function (module) {
 var addMapEntry = require$$2$33,
-    arrayReduce = require$$1$36,
+    arrayReduce = require$$1$35,
     mapToArray = require$$0$64;
 
 /**
@@ -7081,15 +5947,15 @@ function cloneDataView(dataView, isDeep) {
 module.exports = cloneDataView;
 });
 
-var require$$5$5 = (_cloneDataView && typeof _cloneDataView === 'object' && 'default' in _cloneDataView ? _cloneDataView['default'] : _cloneDataView);
+var require$$5$6 = (_cloneDataView && typeof _cloneDataView === 'object' && 'default' in _cloneDataView ? _cloneDataView['default'] : _cloneDataView);
 
 var _initCloneByTag = __commonjs(function (module) {
 var cloneArrayBuffer = require$$0$71,
-    cloneDataView = require$$5$5,
+    cloneDataView = require$$5$6,
     cloneMap = require$$4$11,
     cloneRegExp = require$$3$11,
     cloneSet = require$$2$31,
-    cloneSymbol = require$$1$35,
+    cloneSymbol = require$$1$34,
     cloneTypedArray = require$$0$70;
 
 /** `Object#toString` result references. */
@@ -7166,7 +6032,7 @@ function initCloneByTag(object, tag, cloneFunc, isDeep) {
 module.exports = initCloneByTag;
 });
 
-var require$$5$4 = (_initCloneByTag && typeof _initCloneByTag === 'object' && 'default' in _initCloneByTag ? _initCloneByTag['default'] : _initCloneByTag);
+var require$$5$5 = (_initCloneByTag && typeof _initCloneByTag === 'object' && 'default' in _initCloneByTag ? _initCloneByTag['default'] : _initCloneByTag);
 
 var _initCloneArray = __commonjs(function (module) {
 /** Used for built-in method references. */
@@ -7250,7 +6116,7 @@ var require$$0$72 = (_getSymbols && typeof _getSymbols === 'object' && 'default'
 
 var _baseGetAllKeys = __commonjs(function (module) {
 var arrayPush = require$$1$21,
-    isArray = require$$0$24;
+    isArray = require$$0$25;
 
 /**
  * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
@@ -7295,7 +6161,7 @@ module.exports = getAllKeys;
 var require$$8$2 = (_getAllKeys && typeof _getAllKeys === 'object' && 'default' in _getAllKeys ? _getAllKeys['default'] : _getAllKeys);
 
 var _baseAssignValue = __commonjs(function (module) {
-var defineProperty = require$$0$13;
+var defineProperty = require$$0$14;
 
 /**
  * The base implementation of `assignValue` and `assignMergeValue` without
@@ -7322,10 +6188,10 @@ function baseAssignValue(object, key, value) {
 module.exports = baseAssignValue;
 });
 
-var require$$1$38 = (_baseAssignValue && typeof _baseAssignValue === 'object' && 'default' in _baseAssignValue ? _baseAssignValue['default'] : _baseAssignValue);
+var require$$1$37 = (_baseAssignValue && typeof _baseAssignValue === 'object' && 'default' in _baseAssignValue ? _baseAssignValue['default'] : _baseAssignValue);
 
 var _assignValue = __commonjs(function (module) {
-var baseAssignValue = require$$1$38,
+var baseAssignValue = require$$1$37,
     eq = require$$0$42;
 
 /** Used for built-in method references. */
@@ -7355,11 +6221,11 @@ function assignValue(object, key, value) {
 module.exports = assignValue;
 });
 
-var require$$1$39 = (_assignValue && typeof _assignValue === 'object' && 'default' in _assignValue ? _assignValue['default'] : _assignValue);
+var require$$1$38 = (_assignValue && typeof _assignValue === 'object' && 'default' in _assignValue ? _assignValue['default'] : _assignValue);
 
 var _copyObject = __commonjs(function (module) {
-var assignValue = require$$1$39,
-    baseAssignValue = require$$1$38;
+var assignValue = require$$1$38,
+    baseAssignValue = require$$1$37;
 
 /**
  * Copies properties of `source` to `object`.
@@ -7400,10 +6266,10 @@ function copyObject(source, props, object, customizer) {
 module.exports = copyObject;
 });
 
-var require$$1$37 = (_copyObject && typeof _copyObject === 'object' && 'default' in _copyObject ? _copyObject['default'] : _copyObject);
+var require$$1$36 = (_copyObject && typeof _copyObject === 'object' && 'default' in _copyObject ? _copyObject['default'] : _copyObject);
 
 var _copySymbols = __commonjs(function (module) {
-var copyObject = require$$1$37,
+var copyObject = require$$1$36,
     getSymbols = require$$0$72;
 
 /**
@@ -7421,10 +6287,10 @@ function copySymbols(source, object) {
 module.exports = copySymbols;
 });
 
-var require$$9 = (_copySymbols && typeof _copySymbols === 'object' && 'default' in _copySymbols ? _copySymbols['default'] : _copySymbols);
+var require$$9$1 = (_copySymbols && typeof _copySymbols === 'object' && 'default' in _copySymbols ? _copySymbols['default'] : _copySymbols);
 
 var _cloneBuffer = __commonjs(function (module, exports) {
-var root = require$$0$17;
+var root = require$$0$18;
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -7464,7 +6330,7 @@ module.exports = cloneBuffer;
 var require$$11 = (_cloneBuffer && typeof _cloneBuffer === 'object' && 'default' in _cloneBuffer ? _cloneBuffer['default'] : _cloneBuffer);
 
 var _baseAssign = __commonjs(function (module) {
-var copyObject = require$$1$37,
+var copyObject = require$$1$36,
     keys = require$$0$61;
 
 /**
@@ -7488,17 +6354,17 @@ var require$$12 = (_baseAssign && typeof _baseAssign === 'object' && 'default' i
 var _baseClone = __commonjs(function (module) {
 var Stack = require$$15,
     arrayEach = require$$14,
-    assignValue = require$$1$39,
+    assignValue = require$$1$38,
     baseAssign = require$$12,
     cloneBuffer = require$$11,
     copyArray = require$$10,
-    copySymbols = require$$9,
+    copySymbols = require$$9$1,
     getAllKeys = require$$8$2,
     getTag = require$$7$2,
     initCloneArray = require$$6$3,
-    initCloneByTag = require$$5$4,
+    initCloneByTag = require$$5$5,
     initCloneObject = require$$4$10,
-    isArray = require$$0$24,
+    isArray = require$$0$25,
     isBuffer = require$$2$25,
     isObject = require$$1,
     keys = require$$0$61;
@@ -7717,7 +6583,7 @@ module.exports = clone;
 var require$$10$1 = (clone && typeof clone === 'object' && 'default' in clone ? clone['default'] : clone);
 
 var ary = __commonjs(function (module) {
-var createWrap = require$$0;
+var createWrap = require$$0$1;
 
 /** Used to compose bitmasks for function metadata. */
 var ARY_FLAG = 128;
@@ -7755,15 +6621,15 @@ module.exports = {
   'ary': require$$12$1,
   'assign': require$$12,
   'clone': require$$10$1,
-  'curry': _curry,
+  'curry': require$$9,
   'forEach': require$$14,
-  'isArray': require$$0$24,
+  'isArray': require$$0$25,
   'isFunction': require$$1$5,
   'iteratee': require$$5$1,
   'keys': require$$1$23,
   'rearg': require$$3$6,
   'spread': require$$2$18,
-  'toInteger': require$$0$1,
+  'toInteger': require$$0$2,
   'toPath': require$$0$28
 };
 });
@@ -8140,12 +7006,12 @@ exports.skipRearg = {
 };
 });
 
-var require$$1$41 = (_mapping && typeof _mapping === 'object' && 'default' in _mapping ? _mapping['default'] : _mapping);
+var require$$1$40 = (_mapping && typeof _mapping === 'object' && 'default' in _mapping ? _mapping['default'] : _mapping);
 
 var _baseConvert = __commonjs(function (module) {
-var mapping = require$$1$41,
+var mapping = require$$1$40,
     mutateMap = mapping.mutate,
-    fallbackHolder = require$$0$26;
+    fallbackHolder = require$$0;
 
 /**
  * Creates a function, with an arity of `n`, that invokes `func` with the
@@ -8680,10 +7546,10 @@ function baseConvert(util, name, func, options) {
 module.exports = baseConvert;
 });
 
-var require$$1$40 = (_baseConvert && typeof _baseConvert === 'object' && 'default' in _baseConvert ? _baseConvert['default'] : _baseConvert);
+var require$$1$39 = (_baseConvert && typeof _baseConvert === 'object' && 'default' in _baseConvert ? _baseConvert['default'] : _baseConvert);
 
 var convert = __commonjs(function (module) {
-var baseConvert = require$$1$40,
+var baseConvert = require$$1$39,
     util = require$$0$27;
 
 /**
@@ -8705,520 +7571,226 @@ module.exports = convert;
 
 var require$$2$12 = (convert && typeof convert === 'object' && 'default' in convert ? convert['default'] : convert);
 
-var curry$1 = __commonjs(function (module) {
+var curry = __commonjs(function (module) {
 var convert = require$$2$12,
-    func = convert('curry', _curry);
+    func = convert('curry', require$$9);
 
-func.placeholder = require$$0$26;
+func.placeholder = require$$0;
 module.exports = func;
 });
 
-var _curry$1 = (curry$1 && typeof curry$1 === 'object' && 'default' in curry$1 ? curry$1['default'] : curry$1);
+var _curry = (curry && typeof curry === 'object' && 'default' in curry ? curry['default'] : curry);
 
-var get$2 = __commonjs(function (module) {
-var convert = require$$2$12,
-    func = convert('get', require$$1$27);
-
-func.placeholder = require$$0$26;
-module.exports = func;
-});
-
-var _get = (get$2 && typeof get$2 === 'object' && 'default' in get$2 ? get$2['default'] : get$2);
-
-// Creates a new object with properties of the old one
-// ovewritten by properties of the new object.
-// No new properties of the new Object are added.
-// overshadow Object -> Object -> Object
-function overshadow(oldObj, newObj) {
-  return Object.keys(oldObj).reduce(function (result, key) {
-    // We want to use values from newObj even if the value is set to undefined,
-    // but not use it if it is not set at all. That's why we use hasOwnProperty.
-    result[key] = newObj.hasOwnProperty(key) ? newObj[key] : oldObj[key]; // eslint-disable-line no-param-reassign, max-len
-    return result;
-  }, {});
-}
-
-var ifEnterPressed = _curry$1(function (f, e) {
-  if (event.key === 'Enter') {
-    f(e);
-  }
-});
-
-var validate = function validate(state) {
-  if (!Array.isArray(state.options)) {
-    throw new Error('Invalid "options" property. Not an array.');
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
   }
 
-  var allOptionsHaveCaption = state.options.reduce(function (result, option) {
-    return result && option.caption !== undefined;
-  }, true);
+  function AsyncGenerator(gen) {
+    var front, back;
 
-  if (!allOptionsHaveCaption) {
-    throw new Error('Invalid option in options array.');
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
   }
-};
 
-// Remove the last option
-var removeOption = function removeOption(state, update) {
-  var options = state.options.slice(0, state.options.length - 1);
-  var newState = overshadow(state, { options: options });
-  update(newState);
-};
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
 
-// Add the option in the config input fields
-var addOption = function addOption(initialState, state, update) {
-  var newOption = {
-    value: state.newOptionValue.trim(),
-    caption: state.newOptionCaption.trim()
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
   };
 
-  var optionIsEmpty = !newOption.caption;
-  var valueIsEmpty = !newOption.value;
-  var valueAlreadyExists = state.options.map(_get('value')).indexOf(newOption.value) !== -1;
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
 
-  if (optionIsEmpty || valueIsEmpty || valueAlreadyExists) {
-    return;
-  }
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
 
-  // Add option and remove default option
-  var defaultOptionCaption = initialState().options[0].caption;
-  var options = state.options.filter(function (o) {
-    return o.caption !== defaultOptionCaption;
-  }) // Remove default option
-  .concat([newOption]); // Add new option
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
 
-  var newState = overshadow(state, {
-    options: options,
-    newOptionValue: '',
-    newOptionCaption: ''
-  });
-  update(newState);
-};
 
-// Updated the caption text of an existing option
-var updateOption = _curry$1(function (state, update, optionIndex, event) {
-  var caption = event.target.value;
-  var options = Array.from(state.options);
-  options[optionIndex] = overshadow(options[optionIndex], { caption: caption });
 
-  var newState = overshadow(state, { options: options });
-  update(newState);
-});
 
-var removeIfOptionIsNull = _curry$1(function (state, update, optionIndex, event) {
-  var caption = event.target.value;
-  if (caption) {
-    return;
-  }
-  var optionsBefore = state.options.slice(0, optionIndex);
-  var optionsAfter = state.options.slice(optionIndex + 1, state.options.length);
-  var options = optionsBefore.concat(optionsAfter);
-  var newState = overshadow(state, { options: options });
-  update(newState);
-});
 
-var updateProperty = _curry$1(function (initialState, state, update, propName, event) {
-  var value = event.target.value;
-  var newValue = value || initialState()[propName];
-  var newState = overshadow(state, defineProperty({}, propName, newValue));
-  update(newState);
-});
 
-var renderRadioOrCheckboxOptions = function renderRadioOrCheckboxOptions(state, update) {
-  if (state.configShowing) {
-    return state.options.map(function (option, optionIndex) {
-      return React.createElement(
-        'div',
-        { className: 'fl-fb-Field-option' },
-        React.createElement('input', { type: state.htmlInputType, value: option.value }),
-        React.createElement(
-          'span',
-          { className: 'text-muted' },
-          option.value
-        ),
-        React.createElement('input', {
-          type: 'text',
-          className: 'fl-fb-Field-option-text fl-fb-Field-editable',
-          value: option.caption,
-          onKeyPress: ifEnterPressed(removeIfOptionIsNull(state, update, optionIndex)),
-          onChange: updateOption(state, update, optionIndex)
-        })
-      );
+
+
+
+
+
+
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
     });
+  } else {
+    obj[key] = value;
   }
 
-  return state.options.map(function (option) {
-    return React.createElement(
-      'div',
-      { className: 'fl-fb-Field-option' },
-      React.createElement('input', { type: state.htmlInputType, value: option.value }),
-      React.createElement(
-        'span',
-        { className: 'fl-fb-Field-option-text' },
-        ' ',
-        option.caption,
-        ' '
-      )
-    );
-  });
+  return obj;
 };
 
-var renderDropdownOptions = function renderDropdownOptions(state, update) {
-  if (state.configShowing) {
-    return state.options.map(function (option, optionIndex) {
-      return React.createElement(
-        'div',
-        { className: 'fl-fb-Field-option' },
-        React.createElement(
-          'span',
-          { className: 'text-muted' },
-          option.value
-        ),
-        React.createElement('input', {
-          className: 'fl-fb-Field-editable',
-          type: 'text',
-          value: option.caption,
-          onKeyPress: ifEnterPressed(removeIfOptionIsNull(state, update, optionIndex)),
-          onChange: updateOption(state, update, optionIndex)
-        })
-      );
-    });
+var get$1 = function get$1(object, property, receiver) {
+  if (object === null) object = Function.prototype;
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent === null) {
+      return undefined;
+    } else {
+      return get$1(parent, property, receiver);
+    }
+  } else if ("value" in desc) {
+    return desc.value;
+  } else {
+    var getter = desc.get;
+
+    if (getter === undefined) {
+      return undefined;
+    }
+
+    return getter.call(receiver);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var set = function set(object, property, value, receiver) {
+  var desc = Object.getOwnPropertyDescriptor(object, property);
+
+  if (desc === undefined) {
+    var parent = Object.getPrototypeOf(object);
+
+    if (parent !== null) {
+      set(parent, property, value, receiver);
+    }
+  } else if ("value" in desc && desc.writable) {
+    desc.value = value;
+  } else {
+    var setter = desc.set;
+
+    if (setter !== undefined) {
+      setter.call(receiver, value);
+    }
   }
 
-  return React.createElement(
-    'select',
-    { className: 'form-control' },
-    state.options.map(function (option) {
-      return React.createElement(
-        'option',
-        { value: option.value },
-        ' ',
-        option.caption,
-        ' '
-      );
-    })
-  );
+  return value;
 };
 
-/**
- * When configuration is open, this is what is going to be displayed
- * @method RenderConfigMode
- * @param  {Object} state : State
- * @param  {Function} update : State -> void // Will trigger a re-render
- */
-var RenderConfigMode = _curry$1(function (initialState, renderOptions, _ref) {
-  var state = _ref.state;
-  var update = _ref.update;
-
-  validate(state);
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      React.createElement('input', {
-        type: 'text',
-        className: 'fl-fb-Field-editable',
-        onChange: updateProperty(initialState, state, update, 'title'),
-        defaultValue: state.title
-      })
-    ),
-    renderOptions(state, update),
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-config' },
-      React.createElement('button', {
-        onMouseDown: function onMouseDown() {
-          return removeOption(state, update);
-        },
-        className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn'
-      }),
-      React.createElement('button', {
-        onMouseDown: function onMouseDown() {
-          return addOption(initialState, state, update);
-        },
-        className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn'
-      }),
-      React.createElement('input', {
-        className: 'fl-fb-Field-config-valueInput',
-        type: 'text',
-        value: state.newOptionValue,
-        placeholder: 'Value',
-        onChange: updateProperty(initialState, state, update, 'newOptionValue'),
-        onKeyPress: ifEnterPressed(function () {
-          return addOption(initialState, state, update);
-        })
-      }),
-      React.createElement('input', {
-        className: 'fl-fb-Field-config-captionInput',
-        type: 'text',
-        value: state.newOptionCaption,
-        placeholder: 'Type a new option caption',
-        onChange: updateProperty(initialState, state, update, 'newOptionCaption'),
-        onKeyPress: ifEnterPressed(function () {
-          return addOption(initialState, state, update);
-        })
-      })
-    )
-  );
-});
-
-// Renders the element without the config being open
-var RenderFormMode = function RenderFormMode(renderOptions, _ref2) {
-  var state = _ref2.state;
-  var update = _ref2.update;
-
-  validate(state);
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      state.title
-    ),
-    renderOptions(state, update)
-  );
-};
-
-function buildOptionsFieldConstructor(typeInfo, renderOptions) {
-
-  // These are the fields that will end up being
-  // changed on updates
-  var componentFields = {
-    // Compulsory fields
-    required: false,
-    // Component specific fields
-    title: 'Add a title',
-    options: [{ value: 0, caption: 'Insert an option' }],
-
-    // states needed to handle UI
-    newOptionValue: '',
-    newOptionCaption: ''
-  };
-
-  // For Text Fields the initialState function will only return an object.
-  var initialState = function initialState() {
-    return Object.assign({}, typeInfo, componentFields);
-  };
-
-  var RenderEditor = function RenderEditor(_ref3) {
-    var state = _ref3.state;
-    var update = _ref3.update;
-
-    return state.configShowing ? RenderConfigMode(initialState, renderOptions, { state: state, update: update }) // eslint-disable-line new-cap
-    : RenderFormMode(renderOptions, { state: state, update: update }); // eslint-disable-line new-cap
-  };
-
-  var OptionsField = {
-    info: typeInfo,
-    initialState: initialState,
-    RenderEditor: RenderEditor
-  };
-
-  return OptionsField;
-}
-
-var typeInfo = {
-  // Compulsory
-  type: 'RadioButtons',
-  displayName: 'Radio Button',
-  group: 'Options Components',
-
-  // Field type specific
-  htmlInputType: 'radio'
-};
-
-var RadioButtons = buildOptionsFieldConstructor(typeInfo, renderRadioOrCheckboxOptions);
-
-var typeInfo$1 = {
-  // Compulsory
-  type: 'Checkboxes',
-  displayName: 'Checkboxes',
-  group: 'Options Components',
-
-  // Field type specific
-  htmlInputType: 'checkbox'
-};
-
-var RadioButtons$2 = buildOptionsFieldConstructor(typeInfo$1, renderRadioOrCheckboxOptions);
-
-var typeInfo$2 = {
-  // Compulsory
-  type: 'Dropdown',
-  displayName: 'Dropdown',
-  group: 'Options Components'
-};
-
-var Dropdown = buildOptionsFieldConstructor(typeInfo$2, renderDropdownOptions);
-
-/**
- *
- *
- * This is a group of functions to build a Text Field Constructor.
- * It is not supposed to be used as a FieldConstructor, but used to build one.
- *
- *
- */
-
-// ========== UTILS =================== //
-
-var updateField$2 = _curry(function (update, state, initialState, fieldName, event) {
-  var value = event.target.value;
-  // Update or fallback to default value
-  var newValue = value || initialState[fieldName];
-  var newState = overshadow(state, defineProperty({}, fieldName, newValue));
-  update(newState);
-});
-
-// ========== END OF UTILS ============ //
-
-var templateTypeInfo = {
-  // Compulsory
-  type: 'TextField',
-  group: 'Text Components',
-  displayName: 'Text field',
-
-  // Field type specific
-  htmlInputType: 'text',
-  htmlElement: 'input'
-};
-
-// These are the fields that will end up being
-// changed on updates
-var componentFields = {
-  // Compulsory fields
-  required: false,
-  // Component specific fields
-  title: 'Add a title',
-  placeholder: 'Add a placeholder'
-};
-
-// For Text Fields the initialState function will only return an object.
-var createInitialState = function createInitialState(typeSpecific, componentSpecific) {
-  return function () {
-    return Object.assign({}, typeSpecific, componentSpecific);
-  };
-};
-
-// When configuration is open, this is what is going to be displayed
-/**
- * @method RenderConfigMode
- * @param  {Object} state : State
- * @param  {Function} update : State -> void // Will trigger a re-render
- */
-var createRenderConfigMode = _curry(function (initialState, _ref) {
-  var state = _ref.state;
-  var update = _ref.update;
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      React.createElement('input', {
-        type: 'text',
-        className: 'fl-fb-Field-editable',
-        onChange: updateField$2(update, state, initialState, 'title'),
-        defaultValue: state.title
-      })
-    ),
-    React.createElement(state.htmlElement, {
-      type: 'text',
-      className: 'form-control',
-      defaultValue: state.placeholder,
-      onChange: updateField$2(update, state, initialState, 'placeholder')
-    })
-  );
-});
-
-var RenderFormMode$1 = function RenderFormMode$1(_ref2) {
-  var state = _ref2.state;
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(
-      'h2',
-      null,
-      state.title
-    ),
-    React.createElement(state.htmlElement, {
-      type: state.htmlInputType,
-      className: 'form-control',
-      placeholder: state.placeholder,
-      defaultValue: '',
-      // Give it a unique random key so it always applies the default value
-      key: Date.now() + Math.random()
-    })
-  );
-};
-
-function buildTextFieldConstructor(customTypeInfo) {
-  var typeInfo = overshadow(templateTypeInfo, customTypeInfo);
-
-  var initialState = createInitialState(typeInfo, componentFields);
-
-  var RenderConfigMode = createRenderConfigMode(initialState());
-
-  var RenderEditor = function RenderEditor(_ref3) {
-    var state = _ref3.state;
-    var update = _ref3.update;
-
-    return state.configShowing ? RenderConfigMode({ state: state, update: update }) // eslint-disable-line new-cap
-    : RenderFormMode$1({ state: state, update: update }); // eslint-disable-line new-cap
-  };
-
-  var FieldConstructor = {
-    info: typeInfo,
-    initialState: initialState,
-    RenderEditor: RenderEditor
-  };
-
-  return FieldConstructor;
-}
-
-var TextBox = buildTextFieldConstructor({
-  type: 'TextBox',
-  displayName: 'Text Box',
-  htmlInputType: 'text'
-});
-
-var TextBox$2 = buildTextFieldConstructor({
-  type: 'TextArea',
-  displayName: 'Text Area',
-  htmlElement: 'textarea'
-});
-
-var EmailBox = buildTextFieldConstructor({
-  type: 'EmailBox',
-  displayName: 'Email Box',
-  htmlInputType: 'email'
-});
-
-var TextBox$3 = buildTextFieldConstructor({
-  type: 'NumberBox',
-  displayName: 'Number Box',
-  htmlInputType: 'number'
-});
-
-var TextBox$4 = buildTextFieldConstructor({
-  type: 'TelephoneBox',
-  displayName: 'Telephone Box',
-  htmlInputType: 'tel'
-});
-
-var updateField$3 = _curry$1(function (update, state, initialState, fieldName, e) {
+var updateField = _curry(function (update, state, initialState, fieldName, e) {
   var value = e.target.value || initialState[fieldName];
   var newState = Object.assign({}, state, defineProperty({}, fieldName, value));
   update(newState);
 });
 
-var updateDate = _curry$1(function (numCount, propName, state, update, e) {
+var updateDate = _curry(function (numCount, propName, state, update, e) {
   var value = e.target.value.toString().replace(/[^0-9]/g, '') // remove non-numeric characters
   .replace(/^0*/, '') // remove leading zeroes
   .slice(-numCount); // we only case about the last `numCount` digits
@@ -9235,11 +7807,11 @@ var updateDate = _curry$1(function (numCount, propName, state, update, e) {
   }
 });
 
-var typeInfo$3 = {
+var typeInfo = {
   // Compulsory
   type: 'DateField',
   displayName: 'Date Field',
-  group: 'Text Components',
+  group: 'Custom Components',
   required: false,
 
   // Component specific fields
@@ -9251,7 +7823,7 @@ var typeInfo$3 = {
 
 // For Text Fields the initialState function will only return an object.
 var initialState = function initialState() {
-  return Object.assign({}, typeInfo$3);
+  return Object.assign({}, typeInfo);
 };
 
 // When configuration is open, this is what is going to be displayed
@@ -9274,7 +7846,7 @@ var RenderEditor = function RenderEditor(_ref) {
       React.createElement('input', {
         type: 'text',
         className: 'fl-fb-Field-editable',
-        onChange: updateField$3(update, state, initialState, 'title'),
+        onChange: updateField(update, state, initialState, 'title'),
         defaultValue: state.title
       })
     ) : React.createElement(
@@ -9284,7 +7856,6 @@ var RenderEditor = function RenderEditor(_ref) {
     ),
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
       placeholder: 'DD',
       value: state.day,
       onChange: updateDate(2, 'day', state, update)
@@ -9292,7 +7863,6 @@ var RenderEditor = function RenderEditor(_ref) {
     '/',
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
       placeholder: 'MM',
       value: state.month,
       onChange: updateDate(2, 'month', state, update)
@@ -9300,7 +7870,6 @@ var RenderEditor = function RenderEditor(_ref) {
     '/',
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
       placeholder: 'YYYY',
       value: state.year,
       onChange: updateDate(4, 'year', state, update)
@@ -9309,45 +7878,13 @@ var RenderEditor = function RenderEditor(_ref) {
 };
 
 var ImageCards = {
-  info: typeInfo$3,
+  info: typeInfo,
   initialState: initialState,
   RenderEditor: RenderEditor
 };
 
-/* globals xController */
-//
-// Field Types
-function FormBuilder(container) {
-  var components = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-  assert(container && container.nodeName, 'Invalid contianer: ' + container + '. Container must be an HTML element.');
-
-  var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2, ImageCards];
-
-  var customFieldTypes = defaultTypes.concat(components);
-
-  var exportFunc = void 0;
-  var importFunc = void 0;
-  ReactDOM.render(React.createElement(FormBuilder$2, {
-    fieldTypes: customFieldTypes,
-    exportState: function exportState(f) {
-      return exportFunc = f;
-    },
-    importState: function importState(f) {
-      return importFunc = f;
-    }
-  }), container);
-
-  this.exportState = function () {
-    return exportFunc();
-  };
-  this.importState = function (s) {
-    return importFunc(s);
-  };
-}
-
-return FormBuilder;
+return ImageCards;
 
 })));
 
-//# sourceMappingURL=fl-form-builder.js.map
+//# sourceMappingURL=DateField.js.map

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Builder - DEMO</title>
+  <link rel="icon" href="builder.png" sizes="16x16" type="image/png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"> </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!--  Don't forget the module's style -->
+  <link rel="stylesheet" href="../../dist/fl-form-builder.css">
+
+
+  <!-- Implementation without RequireJS -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js'></script>
+  <script src="../../dist/fl-form-builder.js"></script>
+  <script src="dist/DateField.js"></script>
+
+
+
+  <!-- RequireJS -->
+
+  <!--
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+    <script>
+      requirejs.config({
+        paths: {
+          'react': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min',
+          'react-dom': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min',
+          'fl-form-builder': '../../dist/fl-form-builder',
+          'ImageCards': '../../dist/ImageCards',
+        },
+      });
+  </script> -->
+
+</head>
+<body>
+  <!-- Fork me on github ribbon -->
+  <a href="https://github.com/fourlabsldn/fl-form-builder"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 9" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+  <div class="container">
+    <div class="row navbar greyed-out"></div>
+    <div class="row">
+      <div class="col-sm-3 sidebar greyed-out">
+        Try exporting the current state to the console. <br>
+        <button id="exportBtn" class="btn btn-default">Print state</button>
+      </div>
+
+      <div class="col-sm-9">
+        <h1 class="main-title">fl-Form-Builder</h1>
+
+        <div class="form-builder-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // require(['fl-form-builder', 'ImageCards'], function (FormBuilder, ImageCards) {
+
+    // Our custom components array:
+    const customComponents = [DateField];
+
+    const container = document.querySelector('.form-builder-container');
+
+    window.fb = new FormBuilder(container, customComponents);
+
+    const btn = document.querySelector('#exportBtn');
+    btn.addEventListener('click', function () {
+      console.log(fb.exportState())
+    });
+  // })
+  </script>
+</body>
+</html>

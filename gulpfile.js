@@ -23,10 +23,15 @@ organiser.registerAll('./gulp-tasks', {
       dest,
       config: Object.assign({}, reactConfig, { moduleName: 'FormBuilder' }),
     },
-    demo: {
-      src: './demo/custom-type/src/ImageCards.js',
-      dest: './demo/custom-type/dist',
+    'demo-image-type': {
+      src: './examples/custom-type/src/ImageCards.js',
+      dest: './examples/custom-type/dist',
       config: Object.assign({}, reactConfig, { moduleName: 'ImageCards' }),
+    },
+    'demo-date-type': {
+      src: './examples/date-type/src/DateField.js',
+      dest: './examples/date-type/dist',
+      config: Object.assign({}, reactConfig, { moduleName: 'DateField' }),
     },
     tests: {
       src: path.join(src, 'js', '**/*.js'),
