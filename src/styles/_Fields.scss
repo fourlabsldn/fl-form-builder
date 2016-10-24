@@ -262,6 +262,20 @@
 }
 
 
+.fl-fb-Field-dateslot-day,
+.fl-fb-Field-dateslot-month,
+.fl-fb-Field-dateslot-year {
+  width: 1.7em;
+  display: inline-block;
+  min-width: 0;
+  margin: 0 .1em;
+  text-align: center;
+}
+
+.fl-fb-Field-dateslot-year {
+  width: 2.8em;
+}
+
 // ============================================================
 //   SWITCH
 // ============================================================

@@ -9284,7 +9284,7 @@ var RenderEditor = function RenderEditor(_ref) {
     ),
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
+      className: 'fl-fb-Field-editable fl-fb-Field-dateslot-day',
       placeholder: 'DD',
       value: state.day,
       onChange: updateDate(2, 'day', state, update)
@@ -9292,7 +9292,7 @@ var RenderEditor = function RenderEditor(_ref) {
     '/',
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
+      className: 'fl-fb-Field-editable fl-fb-Field-dateslot-month',
       placeholder: 'MM',
       value: state.month,
       onChange: updateDate(2, 'month', state, update)
@@ -9300,7 +9300,7 @@ var RenderEditor = function RenderEditor(_ref) {
     '/',
     React.createElement('input', {
       type: 'text',
-      className: 'fl-fb-Field-editable',
+      className: 'fl-fb-Field-editable fl-fb-Field-dateslot-year',
       placeholder: 'YYYY',
       value: state.year,
       onChange: updateDate(4, 'year', state, update)
