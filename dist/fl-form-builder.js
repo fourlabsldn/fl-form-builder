@@ -8978,10 +8978,11 @@ var componentFields = {
   required: false,
   // Component specific fields
   title: 'Add a title',
-  options: ['Insert an option'],
+  options: [{ value: 0, caption: 'Insert an option' }],
 
   // states needed to handle UI
-  newOptionText: ''
+  newOptionValue: '',
+  newOptionCaption: ''
 };
 
 // For Text Fields the initialState function will only return an object.
@@ -9007,31 +9008,46 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
   };
 
   var addOption = function addOption() {
-    if (!state.newOptionText.trim()) {
+    var newOption = {
+      value: state.newOptionValue.trim(),
+      caption: state.newOptionCaption.trim()
+    };
+
+    var optionIsEmpty = !newOption.caption;
+    var valueIsEmpty = !newOption.value;
+    var valueAlreadyExists = state.options.map(_get('value')).indexOf(newOption.value) !== -1;
+
+    if (optionIsEmpty || valueIsEmpty || valueAlreadyExists) {
       return;
     }
 
+    // Add option and remove default option
+    var defaultOptionCaption = initialState().options[0].caption;
     var options = state.options.filter(function (o) {
-      return !initialState().options.includes(o);
+      return o.caption !== defaultOptionCaption;
     }) // Remove default option
-    .concat([state.newOptionText]); // Add new option
-    var newOptionText = '';
-    var newState = overshadow(state, { options: options, newOptionText: newOptionText });
+    .concat([newOption]); // Add new option
+
+    var newState = overshadow(state, {
+      options: options,
+      newOptionValue: '',
+      newOptionCaption: ''
+    });
     update(newState);
   };
 
-  var updateOption = _curry(function (optionIndex, event) {
-    var value = event.target.value;
+  var updateOption = _curry$1(function (optionIndex, event) {
+    var caption = event.target.value;
     var options = Array.from(state.options);
-    options[optionIndex] = value;
+    options[optionIndex] = overshadow(options[optionIndex], { caption: caption });
 
     var newState = overshadow(state, { options: options });
     update(newState);
   });
 
-  var removeIfOptionIsNull = _curry(function (optionIndex, event) {
-    var value = event.target.value;
-    if (value) {
+  var removeIfOptionIsNull = _curry$1(function (optionIndex, event) {
+    var caption = event.target.value;
+    if (caption) {
       return;
     }
     var optionsBefore = state.options.slice(0, optionIndex);
@@ -9041,14 +9057,14 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     update(newState);
   });
 
-  var updateProperty = _curry(function (propName, event) {
+  var updateProperty = _curry$1(function (propName, event) {
     var value = event.target.value;
     var newValue = value || initialState()[propName];
     var newState = overshadow(state, defineProperty({}, propName, newValue));
     update(newState);
   });
 
-  var ifEnterPressed = _curry(function (f, e) {
+  var ifEnterPressed = _curry$1(function (f, e) {
     if (event.key === 'Enter') {
       f(e);
     }
@@ -9070,14 +9086,19 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
     React.createElement(
       'div',
       { className: 'form-control', style: { height: 'auto' } },
-      state.options.map(function (optionText, optionIndex) {
+      state.options.map(function (option, optionIndex) {
         return React.createElement(
           'div',
           { className: 'fl-fb-Field-option' },
+          React.createElement(
+            'span',
+            { className: 'text-muted' },
+            option.value
+          ),
           React.createElement('input', {
             className: 'fl-fb-Field-editable',
             type: 'text',
-            value: optionText,
+            value: option.caption,
             onKeyPress: ifEnterPressed(removeIfOptionIsNull(optionIndex)),
             onChange: updateOption(optionIndex)
           })
@@ -9090,11 +9111,19 @@ var RenderConfigMode = function RenderConfigMode(_ref) {
       React.createElement('button', { onMouseDown: removeOption, className: 'glyphicon-minus-sign glyphicon fl-fb-Field-config-btn' }),
       React.createElement('button', { onMouseDown: addOption, className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn' }),
       React.createElement('input', {
+        className: 'fl-fb-Field-config-valueInput',
         type: 'text',
-        className: 'fl-fb-Field-config-input',
-        placeholder: 'Type a new option',
-        value: state.newOptionText,
-        onChange: updateProperty('newOptionText'),
+        value: state.newOptionValue,
+        placeholder: 'Value',
+        onChange: updateProperty('newOptionValue'),
+        onKeyPress: ifEnterPressed(addOption)
+      }),
+      React.createElement('input', {
+        className: 'fl-fb-Field-config-captionInput',
+        type: 'text',
+        value: state.newOptionCaption,
+        placeholder: 'Type a new option caption',
+        onChange: updateProperty('newOptionCaption'),
         onKeyPress: ifEnterPressed(addOption)
       })
     )
@@ -9115,12 +9144,12 @@ var RenderFormMode = function RenderFormMode(_ref2) {
     React.createElement(
       'select',
       { className: 'form-control' },
-      state.options.map(function (optionText) {
+      state.options.map(function (option) {
         return React.createElement(
           'option',
-          null,
+          { value: option.value },
           ' ',
-          optionText,
+          option.caption,
           ' '
         );
       })
