@@ -9218,17 +9218,38 @@ var updateField$3 = _curry$1(function (update, state, initialState, fieldName, e
   update(newState);
 });
 
-var updateDate = _curry$1(function (numCount, propName, state, update, e) {
-  var value = e.target.value.toString().replace(/[^0-9]/g, '') // remove non-numeric characters
-  .replace(/^0*/, '') // remove leading zeroes
-  .slice(-numCount); // we only case about the last `numCount` digits
+var leadingZeroes = function leadingZeroes(zeroCount, num) {
+  var zeroes = Math.max(0, zeroCount); // make sure never negative
+  return Array(zeroes).fill(0).join('') + num.toString();
+};
 
-  var newValue = value;
+var betweenLimits = _curry$1(function (min, max, propName, state, update, e) {
+  var charCount = max.toString().length;
+  var value = e.target.value.toString().replace(/[^0-9]/g, '') // remove non-numeric characters
+  .slice(-charCount); // we only case about the last `charCount` digits
+
+  var valueInt = parseInt(value, 10);
+  // min < valueInt < max
+  var withinLimits = isNaN(valueInt) ? min : Math.max(min, Math.min(max, valueInt));
+  var newValue = leadingZeroes(charCount - withinLimits.toString().length, withinLimits);
+  var newState = Object.assign({}, state, defineProperty({}, propName, newValue));
+  update(newState);
+});
+
+var updateDate = _curry$1(function (min, max, propName, state, update, e) {
+  var charCount = max.toString().length;
+
+  var value = e.target.value.toString().replace(/[^0-9]/g, '') // remove non-numeric characters
+  .slice(-charCount); // we only case about the last `charCount` digits
+
+  var valueInt = parseInt(value, 10);
+  var newValue = value.length < charCount ? value : leadingZeroes(charCount - valueInt.toString().length, Math.max(min, Math.min(max, valueInt)) // min < valueInt < max
+  );
 
   var newState = Object.assign({}, state, defineProperty({}, propName, newValue));
   update(newState);
 
-  var fieldFilled = newValue.length === numCount;
+  var fieldFilled = newValue.toString().length === charCount;
   var nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;
   if (fieldFilled && nextField && nextField.nodeName === 'INPUT') {
     nextField.focus();
@@ -9287,7 +9308,9 @@ var RenderEditor = function RenderEditor(_ref) {
       className: 'fl-fb-Field-editable fl-fb-Field-dateslot-day',
       placeholder: 'DD',
       value: state.day,
-      onChange: updateDate(2, 'day', state, update)
+      onChange: updateDate(1, 31, 'day', state, update),
+      onBlur: betweenLimits(1, 31, 'day', state, update),
+      required: state.required
     }),
     '/',
     React.createElement('input', {
@@ -9295,7 +9318,9 @@ var RenderEditor = function RenderEditor(_ref) {
       className: 'fl-fb-Field-editable fl-fb-Field-dateslot-month',
       placeholder: 'MM',
       value: state.month,
-      onChange: updateDate(2, 'month', state, update)
+      onChange: updateDate(1, 12, 'month', state, update),
+      onBlur: betweenLimits(1, 12, 'month', state, update),
+      required: state.required
     }),
     '/',
     React.createElement('input', {
@@ -9303,7 +9328,9 @@ var RenderEditor = function RenderEditor(_ref) {
       className: 'fl-fb-Field-editable fl-fb-Field-dateslot-year',
       placeholder: 'YYYY',
       value: state.year,
-      onChange: updateDate(4, 'year', state, update)
+      onChange: updateDate(1, 2050, 'year', state, update),
+      onBlur: betweenLimits(1900, 2050, 'year', state, update),
+      required: state.required
     })
   );
 };

@@ -8,19 +8,46 @@ const updateField = curry((update, state, initialState, fieldName, e) => {
   update(newState);
 });
 
-const updateDate = curry((numCount, propName, state, update, e) => {
+const leadingZeroes = (zeroCount, num) => {
+  const zeroes = Math.max(0, zeroCount); // make sure never negative
+  return Array(zeroes).fill(0).join('') + num.toString();
+};
+
+const betweenLimits = curry((min, max, propName, state, update, e) => {
+  const charCount = max.toString().length;
   const value = e.target.value
     .toString()
     .replace(/[^0-9]/g, '') // remove non-numeric characters
-    .replace(/^0*/, '') // remove leading zeroes
-    .slice(-numCount); // we only case about the last `numCount` digits
+    .slice(-charCount); // we only case about the last `charCount` digits
 
-  const newValue = value;
+  const valueInt = parseInt(value, 10);
+  // min < valueInt < max
+  const withinLimits = isNaN(valueInt) ? min : Math.max(min, Math.min(max, valueInt));
+  const newValue = leadingZeroes(charCount - withinLimits.toString().length, withinLimits);
+  const newState = Object.assign({}, state, { [propName]: newValue });
+  update(newState);
+});
+
+const updateDate = curry((min, max, propName, state, update, e) => {
+  const charCount = max.toString().length;
+
+  const value = e.target.value
+    .toString()
+    .replace(/[^0-9]/g, '') // remove non-numeric characters
+    .slice(-charCount); // we only case about the last `charCount` digits
+
+  const valueInt = parseInt(value, 10);
+  const newValue = value.length < charCount
+    ? value
+    : leadingZeroes(
+        charCount - valueInt.toString().length,
+        Math.max(min, Math.min(max, valueInt)) // min < valueInt < max
+      );
 
   const newState = Object.assign({}, state, { [propName]: newValue });
   update(newState);
 
-  const fieldFilled = newValue.length === numCount;
+  const fieldFilled = newValue.toString().length === charCount;
   const nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;
   if (fieldFilled && nextField && nextField.nodeName === 'INPUT') {
     nextField.focus();
@@ -74,7 +101,9 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-day"
         placeholder="DD"
         value={state.day}
-        onChange={updateDate(2, 'day', state, update)}
+        onChange={updateDate(1, 31, 'day', state, update)}
+        onBlur={betweenLimits(1, 31, 'day', state, update)}
+        required={state.required}
       />
       /
       <input
@@ -82,7 +111,9 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-month"
         placeholder="MM"
         value={state.month}
-        onChange={updateDate(2, 'month', state, update)}
+        onChange={updateDate(1, 12, 'month', state, update)}
+        onBlur={betweenLimits(1, 12, 'month', state, update)}
+        required={state.required}
       />
       /
       <input
@@ -90,7 +121,9 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-year"
         placeholder="YYYY"
         value={state.year}
-        onChange={updateDate(4, 'year', state, update)}
+        onChange={updateDate(1, 2050, 'year', state, update)}
+        onBlur={betweenLimits(1900, 2050, 'year', state, update)}
+        required={state.required}
       />
     </div>
   );
