@@ -29,7 +29,11 @@ const tests = [
       "htmlInputType": "checkbox",
       "required": false,
       "title": "Add a title",
-      "options": ["One option", "Another option", "even another"],
+      "options": [
+        { value: 0, caption: "One option" },
+        { value: 1, caption: "Another option" },
+        { value: 2, caption: "even another" },
+      ],
       "newOptionText": "",
       "id": 1476867938770,
       "configShowing": false
@@ -43,7 +47,11 @@ const tests = [
       "group": "Options Components",
       "required": true,
       "title": "Add a title",
-      "options": ["One option", "Another option", "another another option"],
+      "options": [
+        { value: 0, caption: "One option" },
+        { value: 1, caption: "Another option" },
+        { value: 2, caption: "even another" },
+      ],
       "newOptionText": "one fourth option",
       "id": 1476867939975,
       "configShowing": false
@@ -58,7 +66,11 @@ const tests = [
       "htmlInputType": "radio",
       "required": true,
       "title": "Add a title",
-      "options": ["something", "something else", "another something"],
+      "options": [
+        { value: 0, caption: "One option" },
+        { value: 1, caption: "Another option" },
+        { value: 2, caption: "even another" },
+      ],
       "newOptionText": "",
       "id": 1476867937327,
       "configShowing": false

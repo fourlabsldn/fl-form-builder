@@ -66,7 +66,145 @@ describe('The FormBuilder', () => {
       })
     );
 
-    const initialState = [{"type":"TextBox","group":"Text Components","displayName":"Text Box","htmlInputType":"text","htmlElement":"input","required":false,"title":"asdasdfasdf asdfasdf ","placeholder":"Add a placeholdeasdfasdfr","id":1476724219155,"configShowing":false},{"type":"RadioButtons","displayName":"Radio Button","group":"Options Components","htmlInputType":"radio","required":false,"title":"Add a title","options":["asdfasdf","fdfsf","dsfd fsasdf "],"newOptionText":"","id":1476724207216,"configShowing":false}];
+    const initialState = [
+      {
+        "type": "RadioButtons",
+        "displayName": "Radio Button",
+        "group": "Options Components",
+        "htmlInputType": "radio",
+        "required": true,
+        "title": "Checkbox fields",
+        "options": [
+          {
+            "value": "0",
+            "caption": "Option 1"
+          },
+          {
+            "value": "1",
+            "caption": "Option 2"
+          },
+          {
+            "value": "2",
+            "caption": "Third option"
+          }
+        ],
+        "newOptionValue": "",
+        "newOptionCaption": "",
+        "id": 1477307308469,
+        "configShowing": false
+      },
+      {
+        "type": "Checkboxes",
+        "displayName": "Checkboxes",
+        "group": "Options Components",
+        "htmlInputType": "checkbox",
+        "required": false,
+        "title": "A Radio button component",
+        "options": [
+          {
+            "value": "12",
+            "caption": "An option"
+          },
+          {
+            "value": "13",
+            "caption": "Another option"
+          },
+          {
+            "value": "14",
+            "caption": "One third option"
+          }
+        ],
+        "newOptionValue": "",
+        "newOptionCaption": "",
+        "id": 1477307309997,
+        "configShowing": false
+      },
+      {
+        "type": "Dropdown",
+        "displayName": "Dropdown",
+        "group": "Options Components",
+        "required": false,
+        "title": "A dropdown option",
+        "options": [
+          {
+            "value": "2",
+            "caption": "number 1 option"
+          },
+          {
+            "value": "3",
+            "caption": "small op"
+          },
+          {
+            "value": "4",
+            "caption": "anoth sm op"
+          }
+        ],
+        "newOptionValue": "",
+        "newOptionCaption": "",
+        "id": 1477307311438,
+        "configShowing": false
+      },
+      {
+        "type": "TextBox",
+        "group": "Text Components",
+        "displayName": "Text Box",
+        "htmlInputType": "text",
+        "htmlElement": "input",
+        "required": true,
+        "title": "A Text Box",
+        "placeholder": "With placeholder and required",
+        "id": 1477307312709,
+        "configShowing": false
+      },
+      {
+        "type": "EmailBox",
+        "group": "Text Components",
+        "displayName": "Email Box",
+        "htmlInputType": "email",
+        "htmlElement": "input",
+        "required": true,
+        "title": "No Placeholder",
+        "placeholder": " ",
+        "id": 1477307314077,
+        "configShowing": false
+      },
+      {
+        "type": "TelephoneBox",
+        "group": "Text Components",
+        "displayName": "Telephone Box",
+        "htmlInputType": "tel",
+        "htmlElement": "input",
+        "required": false,
+        "title": "Telephone bbbbox",
+        "placeholder": "0123456",
+        "id": 1477307315510,
+        "configShowing": false
+      },
+      {
+        "type": "NumberBox",
+        "group": "Text Components",
+        "displayName": "Number Box",
+        "htmlInputType": "number",
+        "htmlElement": "input",
+        "required": false,
+        "title": "Number field",
+        "placeholder": "nnnnumber placeholder",
+        "id": 1477307316947,
+        "configShowing": false
+      },
+      {
+        "type": "TextArea",
+        "group": "Text Components",
+        "displayName": "Text Area",
+        "htmlInputType": "text",
+        "htmlElement": "textarea",
+        "required": true,
+        "title": "A text area",
+        "placeholder": "Add a placeholder",
+        "id": 1477307318522,
+        "configShowing": false
+      }
+    ];
     importFunc(initialState);
     const exported = exportFunc();
     expect(exported).toEqual(initialState);
