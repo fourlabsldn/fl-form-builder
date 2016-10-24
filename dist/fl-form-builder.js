@@ -8749,7 +8749,7 @@ function buildOptionsFieldConstructor(typeInfo) {
     options: [{ value: 0, caption: 'Insert an option' }],
 
     // states needed to handle UI
-    newOptionValue: '1',
+    newOptionValue: '',
     newOptionCaption: ''
   };
 
@@ -8856,6 +8856,11 @@ function buildOptionsFieldConstructor(typeInfo) {
           'div',
           { className: 'fl-fb-Field-option' },
           React.createElement('input', { type: state.htmlInputType, value: option.value }),
+          React.createElement(
+            'span',
+            { className: 'text-muted' },
+            option.value
+          ),
           React.createElement('input', {
             type: 'text',
             className: 'fl-fb-Field-option-text fl-fb-Field-editable',
@@ -8874,7 +8879,7 @@ function buildOptionsFieldConstructor(typeInfo) {
           className: 'fl-fb-Field-config-valueInput',
           type: 'text',
           value: state.newOptionValue,
-          placeholder: 'Type a new option value',
+          placeholder: 'Value',
           onChange: updateProperty('newOptionValue'),
           onKeyPress: ifEnterPressed(addOption)
         }),

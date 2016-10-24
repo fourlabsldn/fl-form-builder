@@ -64,10 +64,13 @@
 
 .fl-fb-Field-option {
   display: block;
+
+  > * {
+    margin-left: 10px;
+  }
 }
 
 .fl-fb-Field-option-text {
-  margin-left: 10px;
   font-weight: bold;
 }
 
@@ -255,19 +258,9 @@
   width: 50px;
   display: inline-block;
   padding: 2px 5px;
+  margin-right: 5px;
 }
 
-.fl-fb-Field-configuration-options-captionInput {
-  min-width: 50%;
-  text-indent: 5px;
-}
-
-
-.fl-fb-Field-configuration-options-valueInput {
-  width: 25;
-  text-indent: 5px;
-  text-align: center;
-}
 
 // ============================================================
 //   SWITCH

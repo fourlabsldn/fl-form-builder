@@ -15,7 +15,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
     ],
 
     // states needed to handle UI
-    newOptionValue: '1',
+    newOptionValue: '',
     newOptionCaption: '',
   };
 
@@ -117,6 +117,9 @@ export default function buildOptionsFieldConstructor(typeInfo) {
         {state.options.map((option, optionIndex) => (
           <div className="fl-fb-Field-option">
             <input type={state.htmlInputType} value={option.value} />
+            <span className="text-muted">
+              {option.value}
+            </span>
             <input
               type="text"
               className="fl-fb-Field-option-text fl-fb-Field-editable"
@@ -134,7 +137,7 @@ export default function buildOptionsFieldConstructor(typeInfo) {
             className="fl-fb-Field-config-valueInput"
             type="text"
             value={state.newOptionValue}
-            placeholder="Type a new option value"
+            placeholder="Value"
             onChange={updateProperty('newOptionValue')}
             onKeyPress={ifEnterPressed(addOption)}
           />
