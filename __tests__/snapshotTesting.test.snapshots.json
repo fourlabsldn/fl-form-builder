@@ -183,305 +183,6 @@
 															"href": "#"
 														},
 														"children": [
-															"Checkboxes"
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						]
-					},
-					{
-						"type": "button",
-						"props": {
-							"className": "btn btn-primary"
-						},
-						"children": [
-							" Undo "
-						]
-					}
-				]
-			},
-			{
-				"type": "div",
-				"props": {
-					"className": "fl-fb-Fields"
-				},
-				"children": [
-					{
-						"type": "div",
-						"props": {
-							"className": "fl-fb-Field",
-							"data-id": 1476867938770
-						},
-						"children": [
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-content"
-								},
-								"children": [
-									{
-										"type": "div",
-										"props": {},
-										"children": [
-											{
-												"type": "h2",
-												"props": {},
-												"children": [
-													"Add a title"
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "checkbox"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"One option",
-															" "
-														]
-													}
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "checkbox"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"Another option",
-															" "
-														]
-													}
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "checkbox"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"even another",
-															" "
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-sidebar"
-								},
-								"children": [
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true",
-											"type": "button"
-										},
-										"children": null
-									},
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
-											"type": "button"
-										},
-										"children": null
-									},
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
-											"type": "button"
-										},
-										"children": null
-									}
-								]
-							},
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-configuration"
-								},
-								"children": [
-									{
-										"type": "div",
-										"props": {
-											"className": "fl-fb-Field-configuration-buttons"
-										},
-										"children": [
-											{
-												"type": "label",
-												"props": {
-													"className": "fl-fb-Field-configuration-switch-required"
-												},
-												"children": [
-													"Required",
-													{
-														"type": "div",
-														"props": {
-															"className": "fl-fb-ui-switch"
-														},
-														"children": [
-															{
-																"type": "input",
-																"props": {
-																	"className": "fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round",
-																	"type": "checkbox",
-																	"id": "fl-fb-ui-switch-1476867938770",
-																	"checked": false
-																},
-																"children": null
-															},
-															{
-																"type": "label",
-																"props": {
-																	"htmlFor": "fl-fb-ui-switch-1476867938770"
-																},
-																"children": [
-																	" "
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"type": "span",
-												"props": {
-													"className": "fl-fb-Field-configuration-elementName"
-												},
-												"children": [
-													"Checkboxes"
-												]
-											},
-											{
-												"type": "button",
-												"props": {
-													"className": "fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok",
-													"type": "button"
-												},
-												"children": null
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		]
-	},
-	"3": {
-		"type": "div",
-		"props": {
-			"className": "fl-fb"
-		},
-		"children": [
-			{
-				"type": "div",
-				"props": {
-					"className": "fl-fb-ControlBar"
-				},
-				"children": [
-					{
-						"type": "div",
-						"props": {
-							"className": "btn-group"
-						},
-						"children": [
-							{
-								"type": "div",
-								"props": {
-									"className": "btn-group"
-								},
-								"children": [
-									{
-										"type": "button",
-										"props": {
-											"className": "btn btn-default dropdown-toggle",
-											"data-toggle": "dropdown"
-										},
-										"children": [
-											"Options Components",
-											{
-												"type": "span",
-												"props": {
-													"className": "caret"
-												},
-												"children": null
-											}
-										]
-									},
-									{
-										"type": "ul",
-										"props": {
-											"className": "dropdown-menu"
-										},
-										"children": [
-											{
-												"type": "li",
-												"props": {},
-												"children": [
-													{
-														"type": "a",
-														"props": {
-															"href": "#"
-														},
-														"children": [
 															"Dropdown"
 														]
 													}
@@ -513,7 +214,7 @@
 			}
 		]
 	},
-	"4": {
+	"3": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -633,7 +334,6 @@
 														"props": {},
 														"children": [
 															" ",
-															"One option",
 															" "
 														]
 													},
@@ -642,7 +342,6 @@
 														"props": {},
 														"children": [
 															" ",
-															"Another option",
 															" "
 														]
 													},
@@ -651,7 +350,6 @@
 														"props": {},
 														"children": [
 															" ",
-															"another another option",
 															" "
 														]
 													}
@@ -769,7 +467,7 @@
 			}
 		]
 	},
-	"5": {
+	"4": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -857,306 +555,7 @@
 			}
 		]
 	},
-	"6": {
-		"type": "div",
-		"props": {
-			"className": "fl-fb"
-		},
-		"children": [
-			{
-				"type": "div",
-				"props": {
-					"className": "fl-fb-ControlBar"
-				},
-				"children": [
-					{
-						"type": "div",
-						"props": {
-							"className": "btn-group"
-						},
-						"children": [
-							{
-								"type": "div",
-								"props": {
-									"className": "btn-group"
-								},
-								"children": [
-									{
-										"type": "button",
-										"props": {
-											"className": "btn btn-default dropdown-toggle",
-											"data-toggle": "dropdown"
-										},
-										"children": [
-											"Options Components",
-											{
-												"type": "span",
-												"props": {
-													"className": "caret"
-												},
-												"children": null
-											}
-										]
-									},
-									{
-										"type": "ul",
-										"props": {
-											"className": "dropdown-menu"
-										},
-										"children": [
-											{
-												"type": "li",
-												"props": {},
-												"children": [
-													{
-														"type": "a",
-														"props": {
-															"href": "#"
-														},
-														"children": [
-															"Radio Button"
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							}
-						]
-					},
-					{
-						"type": "button",
-						"props": {
-							"className": "btn btn-primary"
-						},
-						"children": [
-							" Undo "
-						]
-					}
-				]
-			},
-			{
-				"type": "div",
-				"props": {
-					"className": "fl-fb-Fields"
-				},
-				"children": [
-					{
-						"type": "div",
-						"props": {
-							"className": "fl-fb-Field",
-							"data-id": 1476867937327
-						},
-						"children": [
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-content"
-								},
-								"children": [
-									{
-										"type": "div",
-										"props": {},
-										"children": [
-											{
-												"type": "h2",
-												"props": {},
-												"children": [
-													"Add a title"
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "radio"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"something",
-															" "
-														]
-													}
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "radio"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"something else",
-															" "
-														]
-													}
-												]
-											},
-											{
-												"type": "div",
-												"props": {
-													"className": "fl-fb-Field-option"
-												},
-												"children": [
-													{
-														"type": "input",
-														"props": {
-															"type": "radio"
-														},
-														"children": null
-													},
-													{
-														"type": "span",
-														"props": {
-															"className": "fl-fb-Field-option-text"
-														},
-														"children": [
-															" ",
-															"another something",
-															" "
-														]
-													}
-												]
-											}
-										]
-									}
-								]
-							},
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-sidebar"
-								},
-								"children": [
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-menu-hamburger fl-fb-Field-sidebar-btn",
-											"draggable": "true",
-											"type": "button"
-										},
-										"children": null
-									},
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config",
-											"type": "button"
-										},
-										"children": null
-									},
-									{
-										"type": "button",
-										"props": {
-											"className": "glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete",
-											"type": "button"
-										},
-										"children": null
-									}
-								]
-							},
-							{
-								"type": "div",
-								"props": {
-									"className": "fl-fb-Field-configuration"
-								},
-								"children": [
-									{
-										"type": "div",
-										"props": {
-											"className": "fl-fb-Field-configuration-buttons"
-										},
-										"children": [
-											{
-												"type": "label",
-												"props": {
-													"className": "fl-fb-Field-configuration-switch-required"
-												},
-												"children": [
-													"Required",
-													{
-														"type": "div",
-														"props": {
-															"className": "fl-fb-ui-switch"
-														},
-														"children": [
-															{
-																"type": "input",
-																"props": {
-																	"className": "fl-fb-ui-switch-toggle fl-fb-ui-switch-toggle-round",
-																	"type": "checkbox",
-																	"id": "fl-fb-ui-switch-1476867937327",
-																	"checked": true
-																},
-																"children": null
-															},
-															{
-																"type": "label",
-																"props": {
-																	"htmlFor": "fl-fb-ui-switch-1476867937327"
-																},
-																"children": [
-																	" "
-																]
-															}
-														]
-													}
-												]
-											},
-											{
-												"type": "span",
-												"props": {
-													"className": "fl-fb-Field-configuration-elementName"
-												},
-												"children": [
-													"Radio Button"
-												]
-											},
-											{
-												"type": "button",
-												"props": {
-													"className": "fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok",
-													"type": "button"
-												},
-												"children": null
-											}
-										]
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		]
-	},
-	"7": {
+	"5": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -1244,7 +643,7 @@
 			}
 		]
 	},
-	"8": {
+	"6": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -1475,7 +874,7 @@
 			}
 		]
 	},
-	"9": {
+	"7": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -1563,7 +962,7 @@
 			}
 		]
 	},
-	"10": {
+	"8": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -1794,7 +1193,7 @@
 			}
 		]
 	},
-	"11": {
+	"9": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -1882,7 +1281,7 @@
 			}
 		]
 	},
-	"12": {
+	"10": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -2113,7 +1512,7 @@
 			}
 		]
 	},
-	"13": {
+	"11": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -2201,7 +1600,7 @@
 			}
 		]
 	},
-	"14": {
+	"12": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -2432,7 +1831,7 @@
 			}
 		]
 	},
-	"15": {
+	"13": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
@@ -2520,7 +1919,7 @@
 			}
 		]
 	},
-	"16": {
+	"14": {
 		"type": "div",
 		"props": {
 			"className": "fl-fb"
