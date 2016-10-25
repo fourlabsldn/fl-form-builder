@@ -9524,6 +9524,15 @@ var RenderEditor = function RenderEditor(_ref) {
     updateState(defineProperty({}, minMax, newConstrain));
   });
 
+  var configurationBar = React.createElement(
+    'div',
+    { className: 'fl-fb-Field-config' },
+    'From ',
+    React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), className: 'fl-fb-Field-config-btn' }),
+    'To ',
+    React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), className: 'fl-fb-Field-config-btn' })
+  );
+
   return React.createElement(
     'div',
     null,
@@ -9573,14 +9582,7 @@ var RenderEditor = function RenderEditor(_ref) {
       pattern: '^.{4}$' // two characters required
       , required: state.required
     }),
-    React.createElement(
-      'div',
-      { className: 'fl-fb-Field-config' },
-      'From ',
-      React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), className: 'fl-fb-Field-config-btn' }),
-      'To ',
-      React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), className: 'fl-fb-Field-config-btn' })
-    )
+    state.configShowing ? configurationBar : null
   );
 };
 

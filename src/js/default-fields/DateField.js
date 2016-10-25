@@ -203,6 +203,14 @@ const RenderEditor = ({ state, update }) => {
   });
 
 
+  const configurationBar = (
+    <div className="fl-fb-Field-config">
+       From <input type="date" onChange={setDateConstrain('minDate')} className="fl-fb-Field-config-btn" />
+       To <input type="date" onChange={setDateConstrain('maxDate')} className="fl-fb-Field-config-btn" />
+    </div>
+  )
+
+
   return (
     <div>
       {state.configShowing
@@ -252,11 +260,8 @@ const RenderEditor = ({ state, update }) => {
         required={state.required}
       />
 
+      {state.configShowing ? configurationBar : null}
 
-      <div className="fl-fb-Field-config">
-         From <input type="date" onChange={setDateConstrain('minDate')} className="fl-fb-Field-config-btn" />
-         To <input type="date" onChange={setDateConstrain('maxDate')} className="fl-fb-Field-config-btn" />
-      </div>
     </div>
   );
 };
