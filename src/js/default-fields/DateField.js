@@ -188,6 +188,13 @@ const RenderEditor = ({ state, update }) => {
     )(e);
   });
 
+  const setDateConstrain = curry((minMax, e) => {
+    const value = e.target.value;
+    const dateInMs = Date.parse(value);
+    const newConstrain = isNaN(dateInMs) ? undefined : dateInMs;
+    updateState({ [minMax] : newConstrain })
+  });
+
 
   return (
     <div>
@@ -237,6 +244,12 @@ const RenderEditor = ({ state, update }) => {
         pattern="^.{4}$" // two characters required
         required={state.required}
       />
+
+
+      <div className="fl-fb-Field-config">
+         From <input type="date" onChange={setDateConstrain('minDate')} style="fl-fb-Field-config-btn" />
+         To <input type="date" onChange={setDateConstrain('maxDate')} style="fl-fb-Field-config-btn" />
+      </div>
     </div>
   );
 };

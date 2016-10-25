@@ -9515,6 +9515,13 @@ var RenderEditor = function RenderEditor(_ref) {
     })(e);
   });
 
+  var setDateConstrain = _curry$1(function (minMax, e) {
+    var value = e.target.value;
+    var dateInMs = Date.parse(value);
+    var newConstrain = isNaN(dateInMs) ? undefined : dateInMs;
+    updateState(defineProperty({}, minMax, newConstrain));
+  });
+
   return React.createElement(
     'div',
     null,
@@ -9563,7 +9570,15 @@ var RenderEditor = function RenderEditor(_ref) {
       onBlur: dateOnBlur(1900, 2050, 'year'),
       pattern: '^.{4}$' // two characters required
       , required: state.required
-    })
+    }),
+    React.createElement(
+      'div',
+      { className: 'fl-fb-Field-config' },
+      'From ',
+      React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), style: 'fl-fb-Field-config-btn' }),
+      'To ',
+      React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), style: 'fl-fb-Field-config-btn' })
+    )
   );
 };
 
