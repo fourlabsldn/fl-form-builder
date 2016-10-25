@@ -1,58 +1,127 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { curry } from 'lodash/fp';
+import { curry, flow, get } from 'lodash/fp';
+import assert from 'fl-assert';
 
-const updateField = curry((update, state, initialState, fieldName, e) => {
-  const value = e.target.value || initialState[fieldName];
-  const newState = Object.assign({}, state, { [fieldName]: value });
-  update(newState);
+// Returns a number. If num is NaN, returns min
+// between : Number -> Number -> Number
+const between = curry((min, max, num) => {
+  const constrained = Math.max(min, Math.min(num, max));
+  return isNaN(constrained)
+    ? min
+    : constrained;
 });
 
-const leadingZeroes = (zeroCount, num) => {
-  const zeroes = Math.max(0, zeroCount); // make sure never negative
-  return Array(zeroes).fill(0).join('') + num.toString();
-};
-
-const betweenLimits = curry((min, max, propName, state, update, e) => {
-  const charCount = max.toString().length;
-  const value = e.target.value
-    .toString()
-    .replace(/[^0-9]/g, '') // remove non-numeric characters
-    .slice(-charCount); // we only case about the last `charCount` digits
-
-  const valueInt = parseInt(value, 10);
-  // min < valueInt < max
-  const withinLimits = isNaN(valueInt) ? min : Math.max(min, Math.min(max, valueInt));
-  const newValue = leadingZeroes(charCount - withinLimits.toString().length, withinLimits);
-  const newState = Object.assign({}, state, { [propName]: newValue });
-  update(newState);
+// toDigits : Number -> Number -> String
+const toDigits = curry((digitCount, num) => {
+  const charCount = num.toString().length;
+  const zeroesCount = Math.max(0, digitCount - charCount); // make sure never negative
+  return Array(zeroesCount).fill(0).join('') + num.toString();
 });
 
-const updateDate = curry((min, max, propName, state, update, e) => {
-  const charCount = max.toString().length;
+// validate : Number -> Number -> String -> String
+const validateAndPrettify = curry((min, max, stringValue) => {
+  const maxChars = max.toString().length;
+  return flow(
+    s => parseInt(s, 10),
+    between(min, max),
+    toDigits(maxChars),
+  )(stringValue);
+});
 
-  const value = e.target.value
-    .toString()
-    .replace(/[^0-9]/g, '') // remove non-numeric characters
-    .slice(-charCount); // we only case about the last `charCount` digits
 
-  const valueInt = parseInt(value, 10);
-  const newValue = value.length < charCount
-    ? value
-    : leadingZeroes(
-        charCount - valueInt.toString().length,
-        Math.max(min, Math.min(max, valueInt)) // min < valueInt < max
-      );
+// updateDate : Number -> Number -> String -> String
+const validate = curry((min, max, stringValue) => {
+  const maxChars = max.toString().length;
+  const value = stringValue.replace(/[^0-9]/g, '').slice(-maxChars);
 
-  const newState = Object.assign({}, state, { [propName]: newValue });
-  update(newState);
+  const isFieldFilled = value.length === maxChars;
+  // If it doesn't even have enough characters, it's below max and the
+  // person might not have finished typing yet, so let's only really validate and
+  // prettify if maxChars is reached
+  return isFieldFilled
+    ? validateAndPrettify(min, max, stringValue)
+    : value;
+});
 
-  const fieldFilled = newValue.toString().length === charCount;
-  const nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;
-  if (fieldFilled && nextField && nextField.nodeName === 'INPUT') {
-    nextField.focus();
+// focusNextWhenFilled : Number -> Event -> Nothing
+const focusNextIfFilled = curry((max, e) => {
+  const maxChars = max.toString().length;
+  const isFieldFilled = e.target.value.toString().length === maxChars;
+
+  if (isFieldFilled) {
+    const nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;
+    if (nextField && nextField.nodeName === 'INPUT') {
+      nextField.focus();
+    }
   }
 });
+
+// parseAndConstrain : Number -> Number -> String -> Number
+const parseAndConstrain = (min, max, numString) => {
+  const parsed = parseInt(numString, 10);
+  const constrained = between(0, max, parsed);
+  assert.warn(!isNaN(constrained), `Error parsing ${numString}`);
+  return min;
+};
+
+
+// Returns the amount of milliseconds since January 1, 1970, 00:00:00 UTC
+// parseDate : (String | Number) -> (String | Number) -> (String | Number) -> Number
+function parseDate(dayString, monthString, yearString) {
+  const day = parseAndConstrain(1, 31, dayString);
+  const month = parseAndConstrain(1, 12, monthString);
+  const year = parseAndConstrain(1, 2500, yearString);
+
+  const dateInMilliseconds = Date.parse(`${year}-${month}-${day}`);
+
+  if (isNaN(dateInMilliseconds)) {
+    // All values have been constrined to their allowed values, the only case
+    // in which date could be NaN is the one where the day value is greater than
+    // the maximum possible day value of the specified month. Like Feb 31
+    // So we will decrease the day and try to parse again. If the day is already
+    // quite low, then throw the error.
+    assert(
+      day > 25,
+      `An unknown error occurred parsing the date ${
+      dayString}/${monthString}/${yearString}`
+    );
+    return parseDate(day - 1, month, year);
+  }
+
+  return dateInMilliseconds;
+}
+
+const millisecondsToBreakdownDate = (ms) => {
+  const date = new Date(ms);
+  return {
+    day: date.getDate(),
+    month: date.getMonth() + 1,
+    year: date.getFullYear(),
+  };
+};
+
+const validateWholeDate = (state, update) => {
+  const allFieldsFilled = (state.day + state.month + state.year).length === 8;
+
+  if (!allFieldsFilled) {
+    return;
+  }
+
+  const dateInMilliseconds = parseDate(state.day, state.month, state.year);
+  const minDate = state.minDate || -2208988800000; // 1900-01-01
+  const maxDate = state.maxDate || 4102444800000; // 2100-01-01
+  const constrainedDate = between(minDate, maxDate, dateInMilliseconds);
+  const brokenDownDate = millisecondsToBreakdownDate(constrainedDate);
+  const finalDate = {
+    day: toDigits(2, brokenDownDate.day),
+    month: toDigits(2, brokenDownDate.month),
+    year: toDigits(4, brokenDownDate.year),
+  };
+
+  const newState = Object.assign({}, state, finalDate);
+  update(newState);
+};
 
 const typeInfo = {
   // Compulsory
@@ -80,15 +149,46 @@ const initialState = () => Object.assign({}, typeInfo);
  */
 const RenderEditor = ({ state, update }) => {
 
+  // updateField : Object -> Nothing
+  const updateState = changedState => {
+    const newState = Object.assign({}, state, changedState);
+    update(newState);
+  };
+
+  // updateField : Object -> Event -> Nothing
+  const updateField = curry((fieldName, e) => {
+    const value = e.target.value || initialState()[fieldName];
+    updateState({ [fieldName]: value });
+  });
+
+
+  const dateOnChange = curry((min, max, datePart, e) => {
+    flow(
+      get('target.value'),
+      validate(min, max),
+      v => updateState({ [datePart]: v }),
+    )(e);
+
+    focusNextIfFilled(max, e);
+  });
+
+  const dateOnBlur = curry((min, max, datePart, e) => {
+    flow(
+      get('target.value'),
+      validateAndPrettify(min, max),
+      v => updateState({ [datePart]: v }),
+    )(e);
+  });
+
   return (
-    <div>
+    <div onBlur={() => validateWholeDate(state, update)}>
       {state.configShowing
         ? (
             <h2>
               <input
                 type="text"
                 className="fl-fb-Field-editable"
-                onChange={updateField(update, state, initialState, 'title')}
+                onChange={updateField('title')}
                 defaultValue={state.title}
               />
             </h2>
@@ -101,8 +201,8 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-day"
         placeholder="DD"
         value={state.day}
-        onChange={updateDate(1, 31, 'day', state, update)}
-        onBlur={betweenLimits(1, 31, 'day', state, update)}
+        onChange={dateOnChange(1, 31, 'day')}
+        onBlur={dateOnBlur(1, 31, 'day')}
         required={state.required}
       />
       /
@@ -111,8 +211,8 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-month"
         placeholder="MM"
         value={state.month}
-        onChange={updateDate(1, 12, 'month', state, update)}
-        onBlur={betweenLimits(1, 12, 'month', state, update)}
+        onChange={dateOnChange(1, 12, 'month')}
+        onBlur={dateOnBlur(1, 12, 'month')}
         required={state.required}
       />
       /
@@ -121,8 +221,8 @@ const RenderEditor = ({ state, update }) => {
         className="fl-fb-Field-editable fl-fb-Field-dateslot-year"
         placeholder="YYYY"
         value={state.year}
-        onChange={updateDate(1, 2050, 'year', state, update)}
-        onBlur={betweenLimits(1900, 2050, 'year', state, update)}
+        onChange={dateOnChange(1900, 2050, 'year')}
+        onBlur={dateOnBlur(1900, 2050, 'year')}
         required={state.required}
       />
     </div>
