@@ -60,37 +60,10 @@ const focusNextIfFilled = curry((max, e) => {
 // parseAndConstrain : Number -> Number -> String -> Number
 const parseAndConstrain = (min, max, numString) => {
   const parsed = parseInt(numString, 10);
-  const constrained = between(0, max, parsed);
+  const constrained = between(min, max, parsed);
   assert.warn(!isNaN(constrained), `Error parsing ${numString}`);
-  return min;
+  return constrained;
 };
-
-
-// Returns the amount of milliseconds since January 1, 1970, 00:00:00 UTC
-// parseDate : (String | Number) -> (String | Number) -> (String | Number) -> Number
-function parseDate(dayString, monthString, yearString) {
-  const day = parseAndConstrain(1, 31, dayString);
-  const month = parseAndConstrain(1, 12, monthString);
-  const year = parseAndConstrain(1, 2500, yearString);
-
-  const dateInMilliseconds = Date.parse(`${year}-${month}-${day}`);
-
-  if (isNaN(dateInMilliseconds)) {
-    // All values have been constrined to their allowed values, the only case
-    // in which date could be NaN is the one where the day value is greater than
-    // the maximum possible day value of the specified month. Like Feb 31
-    // So we will decrease the day and try to parse again. If the day is already
-    // quite low, then throw the error.
-    assert(
-      day > 25,
-      `An unknown error occurred parsing the date ${
-      dayString}/${monthString}/${yearString}`
-    );
-    return parseDate(day - 1, month, year);
-  }
-
-  return dateInMilliseconds;
-}
 
 const millisecondsToBreakdownDate = (ms) => {
   const date = new Date(ms);
@@ -101,26 +74,58 @@ const millisecondsToBreakdownDate = (ms) => {
   };
 };
 
-const validateWholeDate = (state, update) => {
-  const allFieldsFilled = (state.day + state.month + state.year).length === 8;
-
-  if (!allFieldsFilled) {
-    return;
-  }
-
-  const dateInMilliseconds = parseDate(state.day, state.month, state.year);
-  const minDate = state.minDate || -2208988800000; // 1900-01-01
-  const maxDate = state.maxDate || 4102444800000; // 2100-01-01
-  const constrainedDate = between(minDate, maxDate, dateInMilliseconds);
-  const brokenDownDate = millisecondsToBreakdownDate(constrainedDate);
-  const finalDate = {
-    day: toDigits(2, brokenDownDate.day),
-    month: toDigits(2, brokenDownDate.month),
-    year: toDigits(4, brokenDownDate.year),
+// parseDate : (String | Number) -> (String | Number) -> (String | Number) -> { day, month, year }
+function parseDate(dayString, monthString, yearString) {
+  const initialDate = {
+    day: parseAndConstrain(1, 31, dayString),
+    month: parseAndConstrain(1, 12, monthString),
+    year: parseAndConstrain(1, 2500, yearString),
   };
 
-  const newState = Object.assign({}, state, finalDate);
-  update(newState);
+  const dateIsValid = flow(
+    d => Date.parse(`${d.year}-${d.month}-${d.day}`),
+    millisecondsToBreakdownDate,
+    parsed => JSON.stringify(initialDate) === JSON.stringify(parsed),
+  )(initialDate);
+
+  if (!dateIsValid) {
+    // All values have been constrined to their allowed values, the only case
+    // in which date could be NaN is the one where the day value is greater than
+    // the maximum possible day value of the specified month. Like Feb 31
+    // So we will decrease the day and try to parse again. If the day is already
+    // quite low, then throw the error.
+    assert(
+      initialDate.day > 25,
+      `An unknown error occurred parsing the date ${
+      dayString}/${monthString}/${yearString}`
+    );
+    return parseDate(initialDate.day - 1, initialDate.month, initialDate.year);
+  }
+
+  return initialDate;
+}
+
+// Returns an object with date components that form a valid date
+// String -> String -> String -> { day, month, year }
+const validateDateComponents = (day, month, year) => {
+  const areAllFieldsFilled = day.length === 2
+    && month.length === 2
+    && year.length === 4;
+
+  if (!areAllFieldsFilled) {
+    return { day, month, year };
+  }
+  // const minDate = state.minDate || -2208988800000; // 1900-01-01
+  // const maxDate = state.maxDate || 4102444800000; // 2100-01-01
+
+  return flow(
+    () => parseDate(day, month, year),
+    d => ({
+      day: toDigits(2, d.day),
+      month: toDigits(2, d.month),
+      year: toDigits(4, d.year),
+    })
+  )();
 };
 
 const typeInfo = {
@@ -149,16 +154,17 @@ const initialState = () => Object.assign({}, typeInfo);
  */
 const RenderEditor = ({ state, update }) => {
 
-  // updateField : Object -> Nothing
+  // updateField : Object -> Object(the new state)
   const updateState = changedState => {
     const newState = Object.assign({}, state, changedState);
     update(newState);
+    return newState;
   };
 
-  // updateField : Object -> Event -> Nothing
+  // updateField : Object -> Event -> Object(the new state)
   const updateField = curry((fieldName, e) => {
     const value = e.target.value || initialState()[fieldName];
-    updateState({ [fieldName]: value });
+    return updateState({ [fieldName]: value });
   });
 
 
@@ -176,12 +182,15 @@ const RenderEditor = ({ state, update }) => {
     flow(
       get('target.value'),
       validateAndPrettify(min, max),
-      v => updateState({ [datePart]: v }),
+      v => Object.assign({}, state, { [datePart]: v }),
+      s => validateDateComponents(s.day, s.month, s.year),
+      s => updateState(s)
     )(e);
   });
 
+
   return (
-    <div onBlur={() => validateWholeDate(state, update)}>
+    <div>
       {state.configShowing
         ? (
             <h2>
