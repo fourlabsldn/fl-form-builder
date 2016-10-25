@@ -14,6 +14,7 @@ const TextArea = require('../dist/__test-files__/TextArea');
 const EmailBox = require('../dist/__test-files__/EmailBox');
 const NumberBox = require('../dist/__test-files__/NumberBox');
 const TelephoneBox = require('../dist/__test-files__/TelephoneBox');
+// const DateField = require('../dist/__test-files__/DateField');
 
 // const shots = new UiSnapshots('SET'); // Use this mode to register changes
 const shots = new UiSnapshots('CHECK');
@@ -150,6 +151,23 @@ const tests = [
       "id": 1476868021663,
       "configShowing": false
     },
+  // }, { Can't do snapshot tests of DateField because ReactDOM clashes with 'react-test-renderer'
+  //   type: DateField,
+  //   name: 'DateField',
+  //   state: {
+  //   "type": "DateField",
+  //   "displayName": "Date Field",
+  //   "group": "Text Components",
+  //   "required": false,
+  //   "title": "My date component",
+  //   "day": "",
+  //   "month": "",
+  //   "year": "",
+  //   "id": 1477402985935,
+  //   "configShowing": true,
+  //   "minDate": 1475798400000,
+  //   "maxDate": 1476921600000
+  //   },
   }
 ];
 
