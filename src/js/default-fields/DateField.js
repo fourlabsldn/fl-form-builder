@@ -74,6 +74,10 @@ const millisecondsToBreakdownDate = (ms) => {
   };
 };
 
+const toMilliseconds = (d) => {
+  return Date.parse(`${d.year}-${d.month}-${d.day}`);
+}
+
 // parseDate : (String | Number) -> (String | Number) -> (String | Number) -> { day, month, year }
 function parseDate(dayString, monthString, yearString) {
   const initialDate = {
@@ -83,7 +87,7 @@ function parseDate(dayString, monthString, yearString) {
   };
 
   const dateIsValid = flow(
-    d => Date.parse(`${d.year}-${d.month}-${d.day}`),
+    toMilliseconds,
     millisecondsToBreakdownDate,
     parsed => JSON.stringify(initialDate) === JSON.stringify(parsed),
   )(initialDate);
@@ -106,8 +110,8 @@ function parseDate(dayString, monthString, yearString) {
 }
 
 // Returns an object with date components that form a valid date
-// String -> String -> String -> { day, month, year }
-const validateDateComponents = (day, month, year) => {
+// Int -> Int -> String -> String -> String -> { day, month, year }
+const validateDateComponents = (appMinDate, appMaxDate, day, month, year) => {
   const areAllFieldsFilled = day.length === 2
     && month.length === 2
     && year.length === 4;
@@ -115,11 +119,14 @@ const validateDateComponents = (day, month, year) => {
   if (!areAllFieldsFilled) {
     return { day, month, year };
   }
-  // const minDate = state.minDate || -2208988800000; // 1900-01-01
-  // const maxDate = state.maxDate || 4102444800000; // 2100-01-01
+  const minDate = appMinDate || -2208988800000; // 1900-01-01
+  const maxDate = appMaxDate || 4102444800000; // 2100-01-01
 
   return flow(
     () => parseDate(day, month, year),
+    toMilliseconds,
+    between(minDate, maxDate),
+    millisecondsToBreakdownDate,
     d => ({
       day: toDigits(2, d.day),
       month: toDigits(2, d.month),
@@ -178,12 +185,12 @@ const RenderEditor = ({ state, update }) => {
     focusNextIfFilled(max, e);
   });
 
-  const dateOnBlur = curry((min, max, datePart, e) => {
+  const dateOnBlur = curry((appState, min, max, datePart, e) => {
     flow(
       get('target.value'),
       validateAndPrettify(min, max),
-      v => Object.assign({}, state, { [datePart]: v }),
-      s => validateDateComponents(s.day, s.month, s.year),
+      v => Object.assign({}, appState, { [datePart]: v }),
+      s => validateDateComponents(s.minDate, s.maxDate, s.day, s.month, s.year),
       s => updateState(s)
     )(e);
   });
@@ -192,7 +199,7 @@ const RenderEditor = ({ state, update }) => {
     const value = e.target.value;
     const dateInMs = Date.parse(value);
     const newConstrain = isNaN(dateInMs) ? undefined : dateInMs;
-    updateState({ [minMax] : newConstrain })
+    updateState({ [minMax]: newConstrain })
   });
 
 
@@ -218,7 +225,7 @@ const RenderEditor = ({ state, update }) => {
         placeholder="DD"
         value={state.day}
         onChange={dateOnChange(1, 31, 'day')}
-        onBlur={dateOnBlur(1, 31, 'day')}
+        onBlur={dateOnBlur(state, 1, 31, 'day')}
         pattern="^.{2}$" // two characters required
         required={state.required}
       />
@@ -229,7 +236,7 @@ const RenderEditor = ({ state, update }) => {
         placeholder="MM"
         value={state.month}
         onChange={dateOnChange(1, 12, 'month')}
-        onBlur={dateOnBlur(1, 12, 'month')}
+        onBlur={dateOnBlur(state, 1, 12, 'month')}
         pattern="^.{2}$" // two characters required
         required={state.required}
       />
@@ -240,15 +247,15 @@ const RenderEditor = ({ state, update }) => {
         placeholder="YYYY"
         value={state.year}
         onChange={dateOnChange(1900, 2050, 'year')}
-        onBlur={dateOnBlur(1900, 2050, 'year')}
+        onBlur={dateOnBlur(state, 1900, 2050, 'year')}
         pattern="^.{4}$" // two characters required
         required={state.required}
       />
 
 
       <div className="fl-fb-Field-config">
-         From <input type="date" onChange={setDateConstrain('minDate')} style="fl-fb-Field-config-btn" />
-         To <input type="date" onChange={setDateConstrain('maxDate')} style="fl-fb-Field-config-btn" />
+         From <input type="date" onChange={setDateConstrain('minDate')} className="fl-fb-Field-config-btn" />
+         To <input type="date" onChange={setDateConstrain('maxDate')} className="fl-fb-Field-config-btn" />
       </div>
     </div>
   );

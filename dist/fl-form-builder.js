@@ -9405,6 +9405,10 @@ var millisecondsToBreakdownDate = function millisecondsToBreakdownDate(ms) {
   };
 };
 
+var toMilliseconds = function toMilliseconds(d) {
+  return Date.parse(d.year + '-' + d.month + '-' + d.day);
+};
+
 // parseDate : (String | Number) -> (String | Number) -> (String | Number) -> { day, month, year }
 function parseDate(dayString, monthString, yearString) {
   var initialDate = {
@@ -9413,9 +9417,7 @@ function parseDate(dayString, monthString, yearString) {
     year: parseAndConstrain(1, 2500, yearString)
   };
 
-  var dateIsValid = _flow(function (d) {
-    return Date.parse(d.year + '-' + d.month + '-' + d.day);
-  }, millisecondsToBreakdownDate, function (parsed) {
+  var dateIsValid = _flow(toMilliseconds, millisecondsToBreakdownDate, function (parsed) {
     return JSON.stringify(initialDate) === JSON.stringify(parsed);
   })(initialDate);
 
@@ -9433,19 +9435,19 @@ function parseDate(dayString, monthString, yearString) {
 }
 
 // Returns an object with date components that form a valid date
-// String -> String -> String -> { day, month, year }
-var validateDateComponents = function validateDateComponents(day, month, year) {
+// Int -> Int -> String -> String -> String -> { day, month, year }
+var validateDateComponents = function validateDateComponents(appMinDate, appMaxDate, day, month, year) {
   var areAllFieldsFilled = day.length === 2 && month.length === 2 && year.length === 4;
 
   if (!areAllFieldsFilled) {
     return { day: day, month: month, year: year };
   }
-  // const minDate = state.minDate || -2208988800000; // 1900-01-01
-  // const maxDate = state.maxDate || 4102444800000; // 2100-01-01
+  var minDate = appMinDate || -2208988800000; // 1900-01-01
+  var maxDate = appMaxDate || 4102444800000; // 2100-01-01
 
   return _flow(function () {
     return parseDate(day, month, year);
-  }, function (d) {
+  }, toMilliseconds, between(minDate, maxDate), millisecondsToBreakdownDate, function (d) {
     return {
       day: toDigits(2, d.day),
       month: toDigits(2, d.month),
@@ -9505,11 +9507,11 @@ var RenderEditor = function RenderEditor(_ref) {
     focusNextIfFilled(max, e);
   });
 
-  var dateOnBlur = _curry$1(function (min, max, datePart, e) {
+  var dateOnBlur = _curry$1(function (appState, min, max, datePart, e) {
     _flow(_get('target.value'), validateAndPrettify(min, max), function (v) {
-      return Object.assign({}, state, defineProperty({}, datePart, v));
+      return Object.assign({}, appState, defineProperty({}, datePart, v));
     }, function (s) {
-      return validateDateComponents(s.day, s.month, s.year);
+      return validateDateComponents(s.minDate, s.maxDate, s.day, s.month, s.year);
     }, function (s) {
       return updateState(s);
     })(e);
@@ -9545,7 +9547,7 @@ var RenderEditor = function RenderEditor(_ref) {
       placeholder: 'DD',
       value: state.day,
       onChange: dateOnChange(1, 31, 'day'),
-      onBlur: dateOnBlur(1, 31, 'day'),
+      onBlur: dateOnBlur(state, 1, 31, 'day'),
       pattern: '^.{2}$' // two characters required
       , required: state.required
     }),
@@ -9556,7 +9558,7 @@ var RenderEditor = function RenderEditor(_ref) {
       placeholder: 'MM',
       value: state.month,
       onChange: dateOnChange(1, 12, 'month'),
-      onBlur: dateOnBlur(1, 12, 'month'),
+      onBlur: dateOnBlur(state, 1, 12, 'month'),
       pattern: '^.{2}$' // two characters required
       , required: state.required
     }),
@@ -9567,7 +9569,7 @@ var RenderEditor = function RenderEditor(_ref) {
       placeholder: 'YYYY',
       value: state.year,
       onChange: dateOnChange(1900, 2050, 'year'),
-      onBlur: dateOnBlur(1900, 2050, 'year'),
+      onBlur: dateOnBlur(state, 1900, 2050, 'year'),
       pattern: '^.{4}$' // two characters required
       , required: state.required
     }),
@@ -9575,9 +9577,9 @@ var RenderEditor = function RenderEditor(_ref) {
       'div',
       { className: 'fl-fb-Field-config' },
       'From ',
-      React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), style: 'fl-fb-Field-config-btn' }),
+      React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), className: 'fl-fb-Field-config-btn' }),
       'To ',
-      React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), style: 'fl-fb-Field-config-btn' })
+      React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), className: 'fl-fb-Field-config-btn' })
     )
   );
 };
