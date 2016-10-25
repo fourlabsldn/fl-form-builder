@@ -212,6 +212,7 @@ const RenderEditor = ({ state, update }) => {
         value={state.day}
         onChange={dateOnChange(1, 31, 'day')}
         onBlur={dateOnBlur(1, 31, 'day')}
+        pattern="^.{2}$" // two characters required
         required={state.required}
       />
       /
@@ -222,6 +223,7 @@ const RenderEditor = ({ state, update }) => {
         value={state.month}
         onChange={dateOnChange(1, 12, 'month')}
         onBlur={dateOnBlur(1, 12, 'month')}
+        pattern="^.{2}$" // two characters required
         required={state.required}
       />
       /
@@ -232,6 +234,7 @@ const RenderEditor = ({ state, update }) => {
         value={state.year}
         onChange={dateOnChange(1900, 2050, 'year')}
         onBlur={dateOnBlur(1900, 2050, 'year')}
+        pattern="^.{4}$" // two characters required
         required={state.required}
       />
     </div>

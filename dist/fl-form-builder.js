@@ -9539,7 +9539,8 @@ var RenderEditor = function RenderEditor(_ref) {
       value: state.day,
       onChange: dateOnChange(1, 31, 'day'),
       onBlur: dateOnBlur(1, 31, 'day'),
-      required: state.required
+      pattern: '^.{2}$' // two characters required
+      , required: state.required
     }),
     '/',
     React.createElement('input', {
@@ -9549,7 +9550,8 @@ var RenderEditor = function RenderEditor(_ref) {
       value: state.month,
       onChange: dateOnChange(1, 12, 'month'),
       onBlur: dateOnBlur(1, 12, 'month'),
-      required: state.required
+      pattern: '^.{2}$' // two characters required
+      , required: state.required
     }),
     '/',
     React.createElement('input', {
@@ -9559,7 +9561,8 @@ var RenderEditor = function RenderEditor(_ref) {
       value: state.year,
       onChange: dateOnChange(1900, 2050, 'year'),
       onBlur: dateOnBlur(1900, 2050, 'year'),
-      required: state.required
+      pattern: '^.{4}$' // two characters required
+      , required: state.required
     })
   );
 };
