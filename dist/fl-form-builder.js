@@ -119,6 +119,7 @@ var FieldCreatorPropType = {
     displayName: React.PropTypes.string
   }),
   initialState: React.PropTypes.func,
+  processStateToExport: React.PropTypes.func,
   RenderEditor: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
@@ -9341,6 +9342,9 @@ module.exports = func;
 
 var _flow = (flow && typeof flow === 'object' && 'default' in flow ? flow['default'] : flow);
 
+var minDateDefault = -2208988800000;
+var maxDateDefault = 4102444800000;
+
 // Returns a number. If num is NaN, returns min
 // between : Number -> Number -> Number
 var between = _curry$1(function (min, max, num) {
@@ -9405,8 +9409,12 @@ var millisecondsToBreakdownDate = function millisecondsToBreakdownDate(ms) {
   };
 };
 
+var toDateString = function toDateString(d) {
+  return toDigits(4, d.year) + '-' + toDigits(2, d.month) + '-' + toDigits(2, d.day);
+};
+
 var toMilliseconds = function toMilliseconds(d) {
-  return Date.parse(d.year + '-' + d.month + '-' + d.day);
+  return _flow(toDateString, Date.parse)(d);
 };
 
 // parseDate : (String | Number) -> (String | Number) -> (String | Number) -> { day, month, year }
@@ -9442,8 +9450,8 @@ var validateDateComponents = function validateDateComponents(appMinDate, appMaxD
   if (!areAllFieldsFilled) {
     return { day: day, month: month, year: year };
   }
-  var minDate = appMinDate || -2208988800000; // 1900-01-01
-  var maxDate = appMaxDate || 4102444800000; // 2100-01-01
+  var minDate = appMinDate || minDateDefault; // 1900-01-01
+  var maxDate = appMaxDate || maxDateDefault; // 2100-01-01
 
   return _flow(function () {
     return parseDate(day, month, year);
@@ -9467,7 +9475,9 @@ var typeInfo$3 = {
   title: 'My date component',
   day: '',
   month: '',
-  year: ''
+  year: '',
+  minDate: minDateDefault,
+  maxDate: maxDateDefault
 };
 
 // For Text Fields the initialState function will only return an object.
@@ -9524,13 +9534,27 @@ var RenderEditor = function RenderEditor(_ref) {
     updateState(defineProperty({}, minMax, newConstrain));
   });
 
+  var msToDateString = _flow(millisecondsToBreakdownDate, toDateString);
+  var defaultMin = msToDateString(minDateDefault);
+  var defaultMax = msToDateString(maxDateDefault);
+
   var configurationBar = React.createElement(
     'div',
     { className: 'fl-fb-Field-config' },
-    'From ',
-    React.createElement('input', { type: 'date', onChange: setDateConstrain('minDate'), className: 'fl-fb-Field-config-btn' }),
-    'To ',
-    React.createElement('input', { type: 'date', onChange: setDateConstrain('maxDate'), className: 'fl-fb-Field-config-btn' })
+    'From',
+    React.createElement('input', {
+      type: 'date',
+      onChange: setDateConstrain('minDate'),
+      className: 'fl-fb-Field-config-btn',
+      defaultValue: defaultMin
+    }),
+    'To',
+    React.createElement('input', {
+      type: 'date',
+      onChange: setDateConstrain('maxDate'),
+      className: 'fl-fb-Field-config-btn',
+      defaultValue: defaultMax
+    })
   );
 
   return React.createElement(

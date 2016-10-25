@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { curry, flow, get } from 'lodash/fp';
 import assert from 'fl-assert';
 
+const minDateDefault = -2208988800000;
+const maxDateDefault = 4102444800000;
+
 // Returns a number. If num is NaN, returns min
 // between : Number -> Number -> Number
 const between = curry((min, max, num) => {
@@ -74,8 +77,14 @@ const millisecondsToBreakdownDate = (ms) => {
   };
 };
 
+const toDateString = d =>
+  `${toDigits(4, d.year)}-${toDigits(2, d.month)}-${toDigits(2, d.day)}`;
+
 const toMilliseconds = (d) => {
-  return Date.parse(`${d.year}-${d.month}-${d.day}`);
+  return flow(
+    toDateString,
+    Date.parse
+  )(d);
 }
 
 // parseDate : (String | Number) -> (String | Number) -> (String | Number) -> { day, month, year }
@@ -119,8 +128,8 @@ const validateDateComponents = (appMinDate, appMaxDate, day, month, year) => {
   if (!areAllFieldsFilled) {
     return { day, month, year };
   }
-  const minDate = appMinDate || -2208988800000; // 1900-01-01
-  const maxDate = appMaxDate || 4102444800000; // 2100-01-01
+  const minDate = appMinDate || minDateDefault; // 1900-01-01
+  const maxDate = appMaxDate || maxDateDefault; // 2100-01-01
 
   return flow(
     () => parseDate(day, month, year),
@@ -147,6 +156,8 @@ const typeInfo = {
   day: '',
   month: '',
   year: '',
+  minDate: minDateDefault,
+  maxDate: maxDateDefault,
 };
 
 
@@ -202,13 +213,28 @@ const RenderEditor = ({ state, update }) => {
     updateState({ [minMax]: newConstrain })
   });
 
+  const msToDateString = flow(millisecondsToBreakdownDate, toDateString);
+  const defaultMin = msToDateString(minDateDefault);
+  const defaultMax = msToDateString(maxDateDefault);
 
   const configurationBar = (
     <div className="fl-fb-Field-config">
-       From <input type="date" onChange={setDateConstrain('minDate')} className="fl-fb-Field-config-btn" />
-       To <input type="date" onChange={setDateConstrain('maxDate')} className="fl-fb-Field-config-btn" />
+       From
+       <input
+          type="date"
+          onChange={setDateConstrain('minDate')}
+          className="fl-fb-Field-config-btn"
+          defaultValue={defaultMin}
+        />
+       To
+       <input
+          type="date"
+          onChange={setDateConstrain('maxDate')}
+          className="fl-fb-Field-config-btn"
+          defaultValue={defaultMax}
+        />
     </div>
-  )
+  );
 
 
   return (

@@ -8,6 +8,7 @@ const FieldCreatorPropType = {
     displayName: React.PropTypes.string,
   }),
   initialState: React.PropTypes.func,
+  processStateToExport: React.PropTypes.func,
   RenderEditor: React.PropTypes.func, // React render function
 };
 
