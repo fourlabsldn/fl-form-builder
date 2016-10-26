@@ -9372,17 +9372,17 @@ var validate$1 = _curry$1(function (min, max, stringValue) {
   var maxChars = max.toString().length;
   var value = stringValue.replace(/[^0-9]/g, '').slice(-maxChars);
 
-  var isFieldFilled = value.length === maxChars;
+  var isFieldFilled = value.length >= maxChars;
   // If it doesn't even have enough characters, it's below max and the
   // person might not have finished typing yet, so let's only really validate and
   // prettify if maxChars is reached
-  return isFieldFilled ? validateAndPrettify(min, max, stringValue) : value;
+  return isFieldFilled ? validateAndPrettify(min, max, value) : value;
 });
 
 // focusNextWhenFilled : Number -> Event -> Nothing
 var focusNextIfFilled = _curry$1(function (max, e) {
   var maxChars = max.toString().length;
-  var isFieldFilled = e.target.value.toString().length === maxChars;
+  var isFieldFilled = e.target.value.toString().length >= maxChars;
 
   if (isFieldFilled) {
     var nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;

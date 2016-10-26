@@ -40,19 +40,19 @@ const validate = curry((min, max, stringValue) => {
   const maxChars = max.toString().length;
   const value = stringValue.replace(/[^0-9]/g, '').slice(-maxChars);
 
-  const isFieldFilled = value.length === maxChars;
+  const isFieldFilled = value.length >= maxChars;
   // If it doesn't even have enough characters, it's below max and the
   // person might not have finished typing yet, so let's only really validate and
   // prettify if maxChars is reached
   return isFieldFilled
-    ? validateAndPrettify(min, max, stringValue)
+    ? validateAndPrettify(min, max, value)
     : value;
 });
 
 // focusNextWhenFilled : Number -> Event -> Nothing
 const focusNextIfFilled = curry((max, e) => {
   const maxChars = max.toString().length;
-  const isFieldFilled = e.target.value.toString().length === maxChars;
+  const isFieldFilled = e.target.value.toString().length >= maxChars;
 
   if (isFieldFilled) {
     const nextField = ReactDOM.findDOMNode(e.target).nextElementSibling;
