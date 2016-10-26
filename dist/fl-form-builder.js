@@ -119,7 +119,7 @@ var FieldCreatorPropType = {
     displayName: React.PropTypes.string
   }),
   initialState: React.PropTypes.func,
-  processStateToExport: React.PropTypes.func,
+  // processStateToExport: React.PropTypes.func,
   RenderEditor: React.PropTypes.func };
 
 var ButtonDropdownOption = function ButtonDropdownOption(_ref) {
@@ -9362,7 +9362,7 @@ var toDigits = _curry$1(function (digitCount, num) {
 // validate : Number -> Number -> String -> String
 var validateAndPrettify = _curry$1(function (min, max, stringValue) {
   var maxChars = max.toString().length;
-  return _flow(function (s) {
+  return stringValue.length === 0 ? stringValue : _flow(function (s) {
     return parseInt(s, 10);
   }, between(min, max), toDigits(maxChars))(stringValue);
 });
@@ -9391,6 +9391,22 @@ var focusNextIfFilled = _curry$1(function (max, e) {
     }
   }
 });
+
+// focusPreviousIfEmpty : Event -> Nothing
+var focusPreviousIfEmpty = function focusPreviousIfEmpty(e) {
+  var backspaceKeyCode = 8;
+  var backspacePressed = e.keyCode === backspaceKeyCode;
+  var fieldEmpty = e.target.value.length === 0;
+  if (!(backspacePressed && fieldEmpty)) {
+    return;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+  var prevField = ReactDOM.findDOMNode(e.target).previousElementSibling;
+  if (prevField && prevField.nodeName === 'INPUT') {
+    prevField.focus();
+  }
+};
 
 // parseAndConstrain : Number -> Number -> String -> Number
 var parseAndConstrain = function parseAndConstrain(min, max, numString) {
@@ -9593,7 +9609,8 @@ var RenderEditor = function RenderEditor(_ref) {
       onChange: dateOnChange(1, 12, 'month'),
       onBlur: dateOnBlur(state, 1, 12, 'month'),
       pattern: '^.{2}$' // two characters required
-      , required: state.required
+      , required: state.required,
+      onKeyDown: focusPreviousIfEmpty
     }),
     '/',
     React.createElement('input', {
@@ -9604,7 +9621,8 @@ var RenderEditor = function RenderEditor(_ref) {
       onChange: dateOnChange(1900, 2050, 'year'),
       onBlur: dateOnBlur(state, 1900, 2050, 'year'),
       pattern: '^.{4}$' // two characters required
-      , required: state.required
+      , required: state.required,
+      onKeyDown: focusPreviousIfEmpty
     }),
     state.configShowing ? configurationBar : null
   );

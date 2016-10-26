@@ -25,11 +25,13 @@ const toDigits = curry((digitCount, num) => {
 // validate : Number -> Number -> String -> String
 const validateAndPrettify = curry((min, max, stringValue) => {
   const maxChars = max.toString().length;
-  return flow(
-    s => parseInt(s, 10),
-    between(min, max),
-    toDigits(maxChars),
-  )(stringValue);
+  return stringValue.length === 0
+    ? stringValue
+    : flow(
+        s => parseInt(s, 10),
+        between(min, max),
+        toDigits(maxChars),
+      )(stringValue);
 });
 
 
@@ -59,6 +61,22 @@ const focusNextIfFilled = curry((max, e) => {
     }
   }
 });
+
+// focusPreviousIfEmpty : Event -> Nothing
+const focusPreviousIfEmpty = (e) => {
+  const backspaceKeyCode = 8;
+  const backspacePressed = e.keyCode === backspaceKeyCode;
+  const fieldEmpty = e.target.value.length === 0;
+  if (!(backspacePressed && fieldEmpty)) {
+    return;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+  const prevField = ReactDOM.findDOMNode(e.target).previousElementSibling;
+  if (prevField && prevField.nodeName === 'INPUT') {
+    prevField.focus();
+  }
+};
 
 // parseAndConstrain : Number -> Number -> String -> Number
 const parseAndConstrain = (min, max, numString) => {
@@ -210,7 +228,7 @@ const RenderEditor = ({ state, update }) => {
     const value = e.target.value;
     const dateInMs = Date.parse(value);
     const newConstrain = isNaN(dateInMs) ? undefined : dateInMs;
-    updateState({ [minMax]: newConstrain })
+    updateState({ [minMax]: newConstrain });
   });
 
   const msToDateString = flow(millisecondsToBreakdownDate, toDateString);
@@ -219,20 +237,20 @@ const RenderEditor = ({ state, update }) => {
 
   const configurationBar = (
     <div className="fl-fb-Field-config">
-       From
-       <input
-          type="date"
-          onChange={setDateConstrain('minDate')}
-          className="fl-fb-Field-config-btn"
-          defaultValue={defaultMin}
-        />
-       To
-       <input
-          type="date"
-          onChange={setDateConstrain('maxDate')}
-          className="fl-fb-Field-config-btn"
-          defaultValue={defaultMax}
-        />
+      From
+      <input
+        type="date"
+        onChange={setDateConstrain('minDate')}
+        className="fl-fb-Field-config-btn"
+        defaultValue={defaultMin}
+      />
+      To
+      <input
+        type="date"
+        onChange={setDateConstrain('maxDate')}
+        className="fl-fb-Field-config-btn"
+        defaultValue={defaultMax}
+      />
     </div>
   );
 
@@ -273,6 +291,7 @@ const RenderEditor = ({ state, update }) => {
         onBlur={dateOnBlur(state, 1, 12, 'month')}
         pattern="^.{2}$" // two characters required
         required={state.required}
+        onKeyUp={focusPreviousIfEmpty}
       />
       /
       <input
@@ -284,6 +303,7 @@ const RenderEditor = ({ state, update }) => {
         onBlur={dateOnBlur(state, 1900, 2050, 'year')}
         pattern="^.{4}$" // two characters required
         required={state.required}
+        onKeyUp={focusPreviousIfEmpty}
       />
 
       {state.configShowing ? configurationBar : null}
