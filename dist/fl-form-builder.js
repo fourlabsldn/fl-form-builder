@@ -9610,7 +9610,7 @@ var RenderEditor = function RenderEditor(_ref) {
       onBlur: dateOnBlur(state, 1, 12, 'month'),
       pattern: '^.{2}$' // two characters required
       , required: state.required,
-      onKeyDown: focusPreviousIfEmpty
+      onKeyUp: focusPreviousIfEmpty
     }),
     '/',
     React.createElement('input', {
@@ -9622,7 +9622,7 @@ var RenderEditor = function RenderEditor(_ref) {
       onBlur: dateOnBlur(state, 1900, 2050, 'year'),
       pattern: '^.{4}$' // two characters required
       , required: state.required,
-      onKeyDown: focusPreviousIfEmpty
+      onKeyUp: focusPreviousIfEmpty
     }),
     state.configShowing ? configurationBar : null
   );

@@ -30,7 +30,7 @@ const validateAndPrettify = curry((min, max, stringValue) => {
     : flow(
         s => parseInt(s, 10),
         between(min, max),
-        toDigits(maxChars),
+        toDigits(maxChars)
       )(stringValue);
 });
 
@@ -116,7 +116,7 @@ function parseDate(dayString, monthString, yearString) {
   const dateIsValid = flow(
     toMilliseconds,
     millisecondsToBreakdownDate,
-    parsed => JSON.stringify(initialDate) === JSON.stringify(parsed),
+    parsed => JSON.stringify(initialDate) === JSON.stringify(parsed)
   )(initialDate);
 
   if (!dateIsValid) {
@@ -208,7 +208,7 @@ const RenderEditor = ({ state, update }) => {
     flow(
       get('target.value'),
       validate(min, max),
-      v => updateState({ [datePart]: v }),
+      v => updateState({ [datePart]: v })
     )(e);
 
     focusNextIfFilled(max, e);
