@@ -3353,23 +3353,30 @@ var FormBuilder$2 = function (_React$Component) {
   createClass(FormBuilder, [{
     key: 'createField',
     value: function createField(fieldType) {
+      var _this2 = this;
+
       var typeConstructor = this.state.fieldTypes.find(function (f) {
         return f.info.type === fieldType;
       });
 
       assert(typeConstructor, 'Field "' + fieldType + '" does not exist.');
 
-      var initialState = typeConstructor.initialState();
-      initialState.id = createId();
-      initialState.configShowing = true;
+      // HACK: This is a quick hack so that we can handle initial state if
+      // it is a promise and if it isn't.
+      Promise.resolve().then(function () {
+        return typeConstructor.initialState();
+      }).then(function (initialState) {
+        initialState.id = createId(); // eslint-disable-line no-param-reassign
+        initialState.configShowing = true; // eslint-disable-line no-param-reassign
 
-      // Make all other fields have config hidden
-      var otherFieldsStates = this.state.fieldStates.map(function (s) {
-        return Object.assign({}, s, { configShowing: false });
+        // Make all other fields have config hidden
+        var otherFieldsStates = _this2.state.fieldStates.map(function (s) {
+          return Object.assign({}, s, { configShowing: false });
+        });
+
+        var fieldStates = otherFieldsStates.concat([initialState]);
+        _this2.pushHistoryState(fieldStates);
       });
-
-      var fieldStates = otherFieldsStates.concat([initialState]);
-      this.pushHistoryState(fieldStates);
     }
   }, {
     key: 'deleteField',
@@ -3408,10 +3415,10 @@ var FormBuilder$2 = function (_React$Component) {
   }, {
     key: 'reorderFields',
     value: function reorderFields(newFieldsIdOrder) {
-      var _this2 = this;
+      var _this3 = this;
 
       var fieldStates = newFieldsIdOrder.map(function (id) {
-        return _this2.state.fieldStates.find(function (s) {
+        return _this3.state.fieldStates.find(function (s) {
           return s.id.toString() === id;
         });
       });

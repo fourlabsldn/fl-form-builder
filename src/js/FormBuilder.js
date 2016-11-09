@@ -73,17 +73,24 @@ export default class FormBuilder extends React.Component {
 
     assert(typeConstructor, `Field "${fieldType}" does not exist.`);
 
-    const initialState = typeConstructor.initialState();
-    initialState.id = createId();
-    initialState.configShowing = true;
+    // HACK: This is a quick hack so that we can handle initial state if
+    // it is a promise and if it isn't.
+    Promise.resolve()
+    .then(() => {
+      return typeConstructor.initialState();
+    })
+    .then(initialState => {
+      initialState.id = createId(); // eslint-disable-line no-param-reassign
+      initialState.configShowing = true; // eslint-disable-line no-param-reassign
 
-    // Make all other fields have config hidden
-    const otherFieldsStates = this.state.fieldStates.map(s =>
-      Object.assign({}, s, { configShowing: false })
-    );
+      // Make all other fields have config hidden
+      const otherFieldsStates = this.state.fieldStates.map(s =>
+        Object.assign({}, s, { configShowing: false })
+      );
 
-    const fieldStates = otherFieldsStates.concat([initialState]);
-    this.pushHistoryState(fieldStates);
+      const fieldStates = otherFieldsStates.concat([initialState]);
+      this.pushHistoryState(fieldStates);
+    });
   }
 
   deleteField(fieldState) {
