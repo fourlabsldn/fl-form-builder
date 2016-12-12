@@ -91,7 +91,11 @@ export const renderRadioOrCheckboxOptions = (state, update) => {
   if (state.configShowing) {
     return state.options.map((option, optionIndex) => (
       <div className="fl-fb-Field-option">
-        <input type={state.htmlInputType} value={option.value} />
+        <input
+          type={state.htmlInputType}
+          value={option.value}
+          name={state.title}
+        />
         <span className="text-muted">
           {option.value}
         </span>
@@ -108,7 +112,11 @@ export const renderRadioOrCheckboxOptions = (state, update) => {
 
   return state.options.map(option => (
     <div className="fl-fb-Field-option">
-      <input type={state.htmlInputType} value={option.value} />
+      <input
+        type={state.htmlInputType}
+        value={option.value}
+        name={state.title}
+      />
       <span className="fl-fb-Field-option-text"> {option.caption} </span>
     </div>
   ));

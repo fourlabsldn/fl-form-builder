@@ -8838,7 +8838,11 @@ var renderRadioOrCheckboxOptions = function renderRadioOrCheckboxOptions(state, 
       return React.createElement(
         'div',
         { className: 'fl-fb-Field-option' },
-        React.createElement('input', { type: state.htmlInputType, value: option.value }),
+        React.createElement('input', {
+          type: state.htmlInputType,
+          value: option.value,
+          name: state.title
+        }),
         React.createElement(
           'span',
           { className: 'text-muted' },
@@ -8859,7 +8863,11 @@ var renderRadioOrCheckboxOptions = function renderRadioOrCheckboxOptions(state, 
     return React.createElement(
       'div',
       { className: 'fl-fb-Field-option' },
-      React.createElement('input', { type: state.htmlInputType, value: option.value }),
+      React.createElement('input', {
+        type: state.htmlInputType,
+        value: option.value,
+        name: state.title
+      }),
       React.createElement(
         'span',
         { className: 'fl-fb-Field-option-text' },
