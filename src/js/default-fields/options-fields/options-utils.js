@@ -32,17 +32,15 @@ export const removeOption = (state, update) => {
 // Add the option in the config input fields
 export const addOption = (initialState, state, update) => {
   const newOption = {
-    value: state.newOptionValue.trim(),
     caption: state.newOptionCaption.trim(),
   };
 
   const optionIsEmpty = !newOption.caption;
-  const valueIsEmpty = !newOption.value;
   const valueAlreadyExists = state.options
-    .map(get('value'))
-    .indexOf(newOption.value) !== -1;
+    .map(get('caption'))
+    .indexOf(newOption.caption) !== -1;
 
-  if (optionIsEmpty || valueIsEmpty || valueAlreadyExists) {
+  if (optionIsEmpty || valueAlreadyExists) {
     return;
   }
 
@@ -54,7 +52,6 @@ export const addOption = (initialState, state, update) => {
 
   const newState = overshadow(state, {
     options,
-    newOptionValue: '',
     newOptionCaption: '',
   });
   update(newState);
@@ -93,12 +90,9 @@ export const renderRadioOrCheckboxOptions = (state, update) => {
       <div className="fl-fb-Field-option">
         <input
           type={state.htmlInputType}
-          value={option.value}
+          value={option.caption}
           name={state.title}
         />
-        <span className="text-muted">
-          {option.value}
-        </span>
         <input
           type="text"
           className="fl-fb-Field-option-text fl-fb-Field-editable"
@@ -114,7 +108,7 @@ export const renderRadioOrCheckboxOptions = (state, update) => {
     <div className="fl-fb-Field-option">
       <input
         type={state.htmlInputType}
-        value={option.value}
+        value={option.caption}
         name={state.title}
       />
       <span className="fl-fb-Field-option-text"> {option.caption} </span>
@@ -127,9 +121,6 @@ export const renderDropdownOptions = (state, update) => {
   if (state.configShowing) {
     return state.options.map((option, optionIndex) => (
       <div className="fl-fb-Field-option">
-        <span className="text-muted">
-          {option.value}
-        </span>
         <input
           className="fl-fb-Field-editable"
           type="text"
@@ -144,7 +135,7 @@ export const renderDropdownOptions = (state, update) => {
   return (
     <select className="form-control">
       {state.options.map(option => (
-        <option value={option.value}> {option.caption} </option>
+        <option value={option.caption}> {option.caption} </option>
       ))}
     </select>
   );

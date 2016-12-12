@@ -40,14 +40,6 @@ const RenderConfigMode = curry((initialState, renderOptions, { state, update }) 
           className="glyphicon-plus-sign glyphicon fl-fb-Field-config-btn"
         />
         <input
-          className="fl-fb-Field-config-valueInput"
-          type="text"
-          value={state.newOptionValue}
-          placeholder="Value"
-          onChange={updateProperty(initialState, state, update, 'newOptionValue')}
-          onKeyPress={ifEnterPressed(() => addOption(initialState, state, update))}
-        />
-        <input
           className="fl-fb-Field-config-captionInput"
           type="text"
           value={state.newOptionCaption}
@@ -82,11 +74,10 @@ export default function buildOptionsFieldConstructor(typeInfo, renderOptions) {
     // Component specific fields
     title: 'Add a title',
     options: [
-      { value: 0, caption: 'Insert an option' },
+      { caption: 'Insert an option' },
     ],
 
     // states needed to handle UI
-    newOptionValue: '',
     newOptionCaption: '',
   };
 

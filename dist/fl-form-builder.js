@@ -8776,15 +8776,13 @@ var removeOption = function removeOption(state, update) {
 // Add the option in the config input fields
 var addOption = function addOption(initialState, state, update) {
   var newOption = {
-    value: state.newOptionValue.trim(),
     caption: state.newOptionCaption.trim()
   };
 
   var optionIsEmpty = !newOption.caption;
-  var valueIsEmpty = !newOption.value;
-  var valueAlreadyExists = state.options.map(_get('value')).indexOf(newOption.value) !== -1;
+  var valueAlreadyExists = state.options.map(_get('caption')).indexOf(newOption.caption) !== -1;
 
-  if (optionIsEmpty || valueIsEmpty || valueAlreadyExists) {
+  if (optionIsEmpty || valueAlreadyExists) {
     return;
   }
 
@@ -8797,7 +8795,6 @@ var addOption = function addOption(initialState, state, update) {
 
   var newState = overshadow(state, {
     options: options,
-    newOptionValue: '',
     newOptionCaption: ''
   });
   update(newState);
@@ -8840,14 +8837,9 @@ var renderRadioOrCheckboxOptions = function renderRadioOrCheckboxOptions(state, 
         { className: 'fl-fb-Field-option' },
         React.createElement('input', {
           type: state.htmlInputType,
-          value: option.value,
+          value: option.caption,
           name: state.title
         }),
-        React.createElement(
-          'span',
-          { className: 'text-muted' },
-          option.value
-        ),
         React.createElement('input', {
           type: 'text',
           className: 'fl-fb-Field-option-text fl-fb-Field-editable',
@@ -8865,7 +8857,7 @@ var renderRadioOrCheckboxOptions = function renderRadioOrCheckboxOptions(state, 
       { className: 'fl-fb-Field-option' },
       React.createElement('input', {
         type: state.htmlInputType,
-        value: option.value,
+        value: option.caption,
         name: state.title
       }),
       React.createElement(
@@ -8885,11 +8877,6 @@ var renderDropdownOptions = function renderDropdownOptions(state, update) {
       return React.createElement(
         'div',
         { className: 'fl-fb-Field-option' },
-        React.createElement(
-          'span',
-          { className: 'text-muted' },
-          option.value
-        ),
         React.createElement('input', {
           className: 'fl-fb-Field-editable',
           type: 'text',
@@ -8907,7 +8894,7 @@ var renderDropdownOptions = function renderDropdownOptions(state, update) {
     state.options.map(function (option) {
       return React.createElement(
         'option',
-        { value: option.value },
+        { value: option.caption },
         ' ',
         option.caption,
         ' '
@@ -8958,16 +8945,6 @@ var RenderConfigMode = _curry$1(function (initialState, renderOptions, _ref) {
         className: 'glyphicon-plus-sign glyphicon fl-fb-Field-config-btn'
       }),
       React.createElement('input', {
-        className: 'fl-fb-Field-config-valueInput',
-        type: 'text',
-        value: state.newOptionValue,
-        placeholder: 'Value',
-        onChange: updateProperty(initialState, state, update, 'newOptionValue'),
-        onKeyPress: ifEnterPressed(function () {
-          return addOption(initialState, state, update);
-        })
-      }),
-      React.createElement('input', {
         className: 'fl-fb-Field-config-captionInput',
         type: 'text',
         value: state.newOptionCaption,
@@ -9009,10 +8986,9 @@ function buildOptionsFieldConstructor(typeInfo, renderOptions) {
     required: false,
     // Component specific fields
     title: 'Add a title',
-    options: [{ value: 0, caption: 'Insert an option' }],
+    options: [{ caption: 'Insert an option' }],
 
     // states needed to handle UI
-    newOptionValue: '',
     newOptionCaption: ''
   };
 

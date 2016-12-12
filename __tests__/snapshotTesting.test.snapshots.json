@@ -245,7 +245,8 @@
 														"type": "input",
 														"props": {
 															"type": "checkbox",
-															"value": 0
+															"value": "One option",
+															"name": "Add a title"
 														},
 														"children": null
 													},
@@ -272,7 +273,8 @@
 														"type": "input",
 														"props": {
 															"type": "checkbox",
-															"value": 1
+															"value": "Another option",
+															"name": "Add a title"
 														},
 														"children": null
 													},
@@ -299,7 +301,8 @@
 														"type": "input",
 														"props": {
 															"type": "checkbox",
-															"value": 2
+															"value": "even another",
+															"name": "Add a title"
 														},
 														"children": null
 													},
@@ -634,7 +637,7 @@
 													{
 														"type": "option",
 														"props": {
-															"value": 0
+															"value": "One option"
 														},
 														"children": [
 															" ",
@@ -645,7 +648,7 @@
 													{
 														"type": "option",
 														"props": {
-															"value": 1
+															"value": "Another option"
 														},
 														"children": [
 															" ",
@@ -656,7 +659,7 @@
 													{
 														"type": "option",
 														"props": {
-															"value": 2
+															"value": "even another"
 														},
 														"children": [
 															" ",
@@ -985,7 +988,8 @@
 														"type": "input",
 														"props": {
 															"type": "radio",
-															"value": 0
+															"value": "One option",
+															"name": "Add a title"
 														},
 														"children": null
 													},
@@ -1012,7 +1016,8 @@
 														"type": "input",
 														"props": {
 															"type": "radio",
-															"value": 1
+															"value": "Another option",
+															"name": "Add a title"
 														},
 														"children": null
 													},
@@ -1039,7 +1044,8 @@
 														"type": "input",
 														"props": {
 															"type": "radio",
-															"value": 2
+															"value": "even another",
+															"name": "Add a title"
 														},
 														"children": null
 													},
