@@ -1,31 +1,35 @@
+body {
+    max-width: 800px;
+    margin: auto;
+    background-color: #f7f7f7;
+}
+
+.container {
+    padding-bottom: 5em;
+}
+
 .navbar {
-  height: 40px;
+    height: 40px;
 }
+
 .greyed-out {
-  background-color: #eee;
-  padding: 2em;
+    background-color: #eee;
+    padding: 2em;
 }
-.sidebar {
-  min-height: 1000px;
-  max-height: 100%;
-}
-@media (max-width: 750px) {
-  .sidebar {
-    display: none;
-  }
-}
+
 .main-title {
-  padding: 15px;
-  margin-bottom: 10px;
-  font-weight: bold;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
+
 
 /* Custom component styling */
-.ImageCards-cards {
 
-}
+.ImageCards-cards {}
+
 .ImageCards-card {
-  width: 150px;
-  border: 10px solid #ddd;
-  margin: 10px;
+    width: 150px;
+    border: 10px solid #ddd;
+    margin: 10px;
 }

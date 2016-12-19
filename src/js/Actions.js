@@ -2,7 +2,9 @@
 //    ACTION CREATORS
 //
 
+const prefix = 'FBUILDER_';
+
 export const undo = _ =>
 ({
-  type: 'FBUILDER_undo',
+  type: `${prefix}undo`,
 });
