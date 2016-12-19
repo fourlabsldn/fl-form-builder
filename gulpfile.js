@@ -20,8 +20,9 @@ organiser.registerAll('./gulp-tasks', {
   'transpile-react': {
     watch: path.join(src, '/**/*.js'),
     'application': {
-      src: path.join(src, 'js', 'fl-form-builder.js'),
+      src: path.join(src, 'js', 'index.js'),
       dest,
+      rename: 'fl-form-builder.js',
       config: Object.assign({}, reactConfig, { moduleName: 'FormBuilder' }),
     },
     'demo-image-type': {
@@ -51,6 +52,10 @@ organiser.registerAll('./gulp-tasks', {
   },
   'watch': {
     'flow': {
+      src: '.',
+      taskNames: ['run-cmd:flow'],
+    },
+    'transpile-react:application': {
       src: '.',
       taskNames: ['run-cmd:flow'],
     },
