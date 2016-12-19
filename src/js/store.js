@@ -1,9 +1,10 @@
 // @flow
-import { createStore } from 'redux';
-import update from './Update';
+import { createStore } from "redux";
+import update from "./Update";
+import defaultTypes from "./default-types";
 
 const initialState = {
-  fieldTypes: [],
+  fieldTypes: defaultTypes,
   fieldsState: [],
   fieldsStateHistory: [], // array of fieldStates
 };
