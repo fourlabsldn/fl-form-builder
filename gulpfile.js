@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 // List all available tasks
 
 const src = 'src';
@@ -18,7 +19,7 @@ organiser.registerAll('./gulp-tasks', {
   },
   'transpile-react': {
     watch: path.join(src, '/**/*.js'),
-    application: {
+    'application': {
       src: path.join(src, 'js', 'fl-form-builder.js'),
       dest,
       config: Object.assign({}, reactConfig, { moduleName: 'FormBuilder' }),
@@ -47,5 +48,18 @@ organiser.registerAll('./gulp-tasks', {
   },
   'test-headless': {
     src: '__tests__/*.test.js',
+  },
+  'watch': {
+    'flow': {
+      src: '.',
+      taskNames: ['run-cmd:flow'],
+    },
+  },
+  'run-cmd': {
+    'flow': {
+      watch: path.join('src', 'js/**/*.js'),
+      src: '.',
+      cmd: 'flow',
+    },
   },
 });
