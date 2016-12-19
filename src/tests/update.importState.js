@@ -5,15 +5,41 @@ import { importState } from "../js/Actions";
 import update from "../js/Update";
 
 const typesArray = [{
-  "type": "RadioButtons",
+  "info": {
+    "type": "RadioButtons",
+  },
 }, {
-  "type": "EmailBox",
+  "info": {
+    "type": "Checkboxes",
+  },
 }, {
-  "type": "EmailBox",
+  "info": {
+    "type": "Dropdown",
+  },
 }, {
-  "type": "Dropdown",
+  "info": {
+    "type": "TextBox",
+  },
 }, {
-  "type": "Checkboxes",
+  "info": {
+    "type": "EmailBox",
+  },
+}, {
+  "info": {
+    "type": "TelephoneBox",
+  },
+}, {
+  "info": {
+    "type": "NumberBox",
+  },
+}, {
+  "info": {
+    "type": "TextArea",
+  },
+}, {
+  "info": {
+    "type": "DateField",
+  },
 }];
 
 const mockCurrentState = ["a", "b"];
@@ -66,8 +92,11 @@ describe("Update.importState", () => {
 
   it("Sets the new state as current", () => {
     const updated = update(mockState, importState(newValidState));
-    expect(updated.fieldsState.type).toEqual(newValidState.type);
-    expect(updated.fieldsState.displayName).toEqual(newValidState.displayName);
-    expect(updated.fieldsState.group).toEqual(newValidState.group);
+    expect(updated.fieldsState[0].type).toEqual(newValidState[0].type);
+    expect(updated.fieldsState[0].type).not.toEqual(undefined);
+    expect(updated.fieldsState[0].displayName).toEqual(newValidState[0].displayName);
+    expect(updated.fieldsState[0].displayName).not.toEqual(undefined);
+    expect(updated.fieldsState[0].group).toEqual(newValidState[0].group);
+    expect(updated.fieldsState[0].group).not.toEqual(undefined);
   });
 });

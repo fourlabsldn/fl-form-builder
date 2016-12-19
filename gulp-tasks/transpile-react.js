@@ -43,7 +43,7 @@ const DEFAULT_CONFIG = {
       exclude: 'node_modules/**',
       babelrc: false,
       presets: ['es2017', 'react'],
-      plugins: ['ramda'],
+      plugins: ['ramda', 'lodash'],
     }),
     // TODO: Change this from 'development' to 'production' during production
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),

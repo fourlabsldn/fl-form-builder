@@ -1,7 +1,7 @@
 /* @flow weak */
 /* eslint-disable new-cap */
 import { pushHistoryState, createId } from "./utils";
-import { curry, eqProps, traverse, identity } from "ramda";
+import { curry, equals, traverse, identity, path } from "ramda";
 import Either from "data.either";
 
 // [a] => Either String [a]
@@ -11,7 +11,7 @@ const isArray = arr =>
     : Either.Left(`Invalid states sent with importState. Expected Array but received ${typeof arr}`); // eslint-disable-line max-len
 
 const fieldTypeIsValid = curry((validTypes, field) =>
-  validTypes.find(eqProps("type", field))
+  validTypes.find(equals(field.type))
     ? Either.Right(field)
     : Either.Left(`Invalid field type ${field.type}`)
 );
@@ -25,7 +25,7 @@ const validFieldTypes = curry((validTypes, fieldsState) =>
 const validateFieldsState = curry((fieldsState, state) =>
   Either.of(fieldsState)
     .chain(isArray)
-    .chain(validFieldTypes(state.fieldTypes))
+    .chain(validFieldTypes(state.fieldTypes.map(path(["info","type"]))))
 );
 
 
