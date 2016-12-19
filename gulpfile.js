@@ -18,8 +18,8 @@ organiser.registerAll("./gulp-tasks", {
     dest,
   },
   "transpile-react": {
-    watch: path.join(src, "/**/*.js"),
     "application": {
+      watch: path.join(src, "js/**/*.js"),
       src: path.join(src, "js", "index.js"),
       dest,
       rename: "fl-form-builder.js",
@@ -36,7 +36,7 @@ organiser.registerAll("./gulp-tasks", {
       config: Object.assign({}, reactConfig, { moduleName: "DateField" }),
     },
     tests: {
-      watch: path.join(src, "tests", "**/*.js"),
+      watch: path.join(src, "**/*.js"),
       src: path.join(src, "tests", "index.js"),
       dest,
       rename: "fl-form-builder-tests.js",
@@ -53,13 +53,9 @@ organiser.registerAll("./gulp-tasks", {
     src: "__tests__/*.test.js",
   },
   "watch": {
-    "flow": {
+    "dev": {
       src: ".",
-      taskNames: ["run-cmd:flow"],
-    },
-    "transpile-react:application": {
-      src: ".",
-      taskNames: ["run-cmd:flow"],
+      taskNames: ["run-cmd:flow", "transpile-react:tests", "transpile-react:application"],
     },
   },
   "run-cmd": {
