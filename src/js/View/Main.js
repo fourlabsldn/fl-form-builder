@@ -1,6 +1,6 @@
-import React from 'react';
-import ControlBar from './ControlBar';
-import Fields from './Fields';
+import React from "react";
+import ControlBar from "./ControlBar";
+import Fields from "./Fields";
 
 const Main = ({ fieldTypes, fieldsState }) =>
 (
@@ -11,6 +11,7 @@ const Main = ({ fieldTypes, fieldsState }) =>
 );
 
 Main.propTypes = {
+  store: React.PropTypes.object.required,
   fieldTypes: React.PropTypes.array.required,
   fieldsState: React.PropTypes.array.required,
 };

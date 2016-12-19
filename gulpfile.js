@@ -55,14 +55,7 @@ organiser.registerAll("./gulp-tasks", {
   "watch": {
     "dev": {
       src: ".",
-      taskNames: ["run-cmd:flow", "transpile-react:tests", "transpile-react:application"],
-    },
-  },
-  "run-cmd": {
-    "flow": {
-      watch: path.join("src", "js/**/*.js"),
-      src: ".",
-      cmd: "flow",
+      taskNames: ["transpile-react:tests", "transpile-react:application"],
     },
   },
   "copy-static": {

@@ -1,5 +1,7 @@
 import store from "./store";
 import React from "react";
+// This is used to make the store available to all components
+import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
 import assert from "fl-assert";
 import View from "./View";
@@ -11,7 +13,7 @@ function FormBuilder(container, components = []) {
     `Invalid contianer: ${container}. Container must be an HTML element.`
   );
 
-  ReactDOM.render(<View store={store} />, container);
+  ReactDOM.render(<Provider store={store}><View /></Provider>, container);
 
   // TODO: Import custom components
   this.exportState = _ => store.getState().fieldsState;
