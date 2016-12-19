@@ -17,15 +17,17 @@ const fieldGroups = pipe(
   ))
 );
 
-const ControlBar = ({ fieldTypes }) =>
+const ControlBar = ({ fieldTypes, fieldsStateHistory }) =>
 (
   <div className="fl-fb-ControlBar">
     <div className="btn-group">
       {fieldGroups(fieldTypes)}
     </div>
+
     <button
       className="btn btn-primary"
       onClick={() => store.dispatch(undo())}
+      disabled={fieldsStateHistory.length === 0}
     > Undo </button>
   </div>
 );
@@ -33,6 +35,7 @@ const ControlBar = ({ fieldTypes }) =>
 ControlBar.propTypes = {
   store: React.PropTypes.object.required,
   fieldTypes: React.PropTypes.array.required,
+  fieldsStateHistory: React.PropTypes.array.required,
 };
 
 export default ControlBar;

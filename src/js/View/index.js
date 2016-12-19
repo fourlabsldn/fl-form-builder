@@ -5,15 +5,16 @@
 
 
  */
-import Main from './Main';
-import { connect } from 'react-redux';
-// import {} from '../Update';
+import Main from "./Main";
+import { connect } from "react-redux";
+// import {} from "../Update";
 
 // Hook things up here.
 const mapStateToProps = state =>
 ({
   fieldTypes: state.fieldTypes,
   fieldsState: state.fieldsState,
+  fieldsStateHistory: state.fieldsStateHistory,
 });
 
 const mapDispatchToProps = () => ({});
