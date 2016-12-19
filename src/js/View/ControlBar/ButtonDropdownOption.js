@@ -1,11 +1,13 @@
 import React from "react";
+import store from "../../store";
+import { createField } from "../../Actions";
 
 const ButtonDropdownOption = ({ info }) =>
 (
   <li>
     <a
       href="#"
-      onClick={() => console.log("To be implemented")}
+      onClick={() => store.dispatch(createField(info.type))}
     >
       {info.displayName}
     </a>

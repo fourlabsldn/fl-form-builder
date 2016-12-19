@@ -2,10 +2,14 @@
 import assert from "fl-assert";
 import undo from "./undo";
 import importState from "./importState";
+import createField from "./createField";
+import fieldCreated from "./fieldCreated";
 
 const actionHandlers = {
   undo,
   importState,
+  createField,
+  fieldCreated,
 };
 
 const isExpectedAction = a => a && a.type && actionHandlers[a.type];

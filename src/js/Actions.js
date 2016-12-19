@@ -12,3 +12,15 @@ export const importState = newFieldsState =>
   type: "importState",
   newFieldsState,
 });
+
+export const createField = fieldType =>
+({
+  type: "createField",
+  fieldType,
+});
+
+export const fieldCreated = createdFieldState =>
+({
+  type: "createField",
+  createdFieldState,
+});

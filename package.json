@@ -26,6 +26,7 @@
     "colors": "^1.1.2",
     "data.either": "^1.4.0",
     "data.maybe": "^1.2.2",
+    "data.task": "^3.1.1",
     "diff": "^3.1.0",
     "gulp": "^3.9.1",
     "gulp-flatmap": "^1.0.0",

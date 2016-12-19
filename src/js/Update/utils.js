@@ -30,3 +30,12 @@ export const pushHistoryState = curry((state, newHistoryState) => pipe(
   // Make new State the current
   set(StateLenses.fieldsState, newHistoryState)
 )(state));
+
+
+// State -> State
+export const hideConfigs = state =>
+  set(
+    StateLenses.fieldsState,
+    state.fieldsState.map(s => Object.assign(s, { configShowing: false })),
+    state
+  );
