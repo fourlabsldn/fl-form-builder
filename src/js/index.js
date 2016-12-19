@@ -1,8 +1,9 @@
-import store from './store';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import assert from 'fl-assert';
-import View from './View';
+import store from "./store";
+import React from "react";
+import ReactDOM from "react-dom";
+import assert from "fl-assert";
+import View from "./View";
+import { importState } from "./Actions";
 
 function FormBuilder(container, components = []) {
   assert(
@@ -12,9 +13,9 @@ function FormBuilder(container, components = []) {
 
   ReactDOM.render(<View store={store} />, container);
 
-  // Import custom components
-  // this.exportState = () => { return exportFunc(); };
-  // this.importState = (s) => { return importFunc(s); };
+  // TODO: Import custom components
+  this.exportState = _ => store.getState().fieldsState;
+  this.importState = s => store.dispatch(importState(s));
 }
 
 export default FormBuilder;
