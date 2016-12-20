@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-
+import store from "../../store";
+import { toggleConfig } from "../../Actions";
 const toggleRequired = () => null;
-const toggleConfig = () => null;
 
 const ConfigBar = ({ fieldState }) => (
   <div className="fl-fb-Field-configuration">
@@ -29,7 +29,7 @@ const ConfigBar = ({ fieldState }) => (
 
       <button
         className="fl-fb-Field-configuration-btn-ok btn btn-sm btn-default glyphicon glyphicon-ok"
-        onClick={() => toggleConfig(fieldState)}
+        onClick={() => store.dispatch(toggleConfig(fieldState))}
         type="button"
       />
     </div >

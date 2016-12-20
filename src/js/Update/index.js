@@ -4,12 +4,14 @@ import undo from "./undo";
 import importState from "./importState";
 import createField from "./createField";
 import fieldCreated from "./fieldCreated";
+import toggleConfig from "./field.toggleConfig";
 
 const actionHandlers = {
   undo,
   importState,
   createField,
   fieldCreated,
+  toggleConfig,
 };
 
 const isExpectedAction = a => a && a.type && actionHandlers[a.type];

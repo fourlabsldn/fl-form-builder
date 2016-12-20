@@ -24,3 +24,9 @@ export const fieldCreated = createdFieldState =>
   type: "fieldCreated",
   createdFieldState,
 });
+
+export const toggleConfig = fieldState =>
+({
+  type: "toggleConfig",
+  fieldState,
+});

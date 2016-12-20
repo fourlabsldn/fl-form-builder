@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
+import store from "../../store";
+import { toggleConfig } from "../../Actions";
+
 const onDragStart = () => null;
-const toggleConfig = () => null;
 const deleteField = () => null;
 
 const Sidebar = ({ fieldState }) => (
@@ -14,7 +16,7 @@ const Sidebar = ({ fieldState }) => (
     />
     <button
       className="glyphicon glyphicon-cog fl-fb-Field-sidebar-btn-config"
-      onClick={() => toggleConfig(fieldState)}
+      onClick={() => store.dispatch(toggleConfig(fieldState))}
       type="button"
     />
     <button

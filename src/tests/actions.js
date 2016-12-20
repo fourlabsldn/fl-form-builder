@@ -5,6 +5,7 @@ import {
   importState,
   createField,
   fieldCreated,
+  toggleConfig,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -54,6 +55,20 @@ describe("Action", () => {
     it("Creates the correct variables", () => {
       const action = fieldCreated(createdFieldState);
       expect(action.createdFieldState).toEqual(createdFieldState);
+    });
+  });
+
+  describe("toggleConfig", () => {
+    const fieldState = {};
+
+    it("returns the correct action type", () => {
+      const action = toggleConfig(fieldState);
+      expect(action.type).toEqual("toggleConfig");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = toggleConfig(fieldState);
+      expect(action.fieldState).toEqual(fieldState);
     });
   });
 });

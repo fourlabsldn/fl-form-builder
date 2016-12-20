@@ -23,6 +23,10 @@ body {
     font-weight: bold;
 }
 
+.form-builder-container {
+    margin-bottom: 5em;
+}
+
 
 /* Custom component styling */
 
