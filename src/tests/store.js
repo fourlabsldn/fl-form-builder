@@ -16,14 +16,17 @@ describe("The asyncDispatchMiddleware", () => {
 
 
   it("asyncDispatch triggers a store dispatch", (done) => {
+    const fakeAsyncAction = { type: "fakeAsyncAction" };
+
     const fakeStore = {
-      dispatch: _ => "randomThing",
+      dispatch: action => {
+        expect(action.type).toEqual(fakeAsyncAction.type);
+        done();
+      },
     };
 
-    const next = returnedAction => {
-      expect(returnedAction.asyncDispatch()).toEqual(fakeStore.dispatch());
-      done();
-    };
+    const next = returnedAction =>
+      returnedAction.asyncDispatch(fakeAsyncAction);
 
     asyncDispatchMiddleware(fakeStore)(next)(fakeAction);
   });

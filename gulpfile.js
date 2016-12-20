@@ -57,6 +57,10 @@ organiser.registerAll("./gulp-tasks", {
       src: ".",
       taskNames: ["transpile-react:tests", "transpile-react:application"],
     },
+    "transpile-react:application": {
+      src: ".",
+      taskNames: ["transpile-react:application"],
+    },
   },
   "copy-static": {
     src: "node_modules/jasmine-core/**/*",

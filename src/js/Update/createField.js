@@ -8,7 +8,6 @@ import { fieldCreated } from "../Actions";
 
 // State -> String -> Either String Function
 const typeConstructor = (state, fieldType) => {
-  console.log("PIECE OF FUCK!", fieldType);
   return Either.of(state)
     .map(prop("fieldTypes"))
     .map(find(v => v.info.type === fieldType))
@@ -18,14 +17,27 @@ const typeConstructor = (state, fieldType) => {
 
 // { initialState: Function } -> Task String Object
 const createField = constr =>
-  new Task((reject, resolve) =>
-    // This is a quick hack so that we can handle initial state if
-    // it is a promise and if it isn"t.
-    Promise.resolve()
-    .then(() => constr.initialState())
-    .then(resolve)
-    .catch(reject)
-  );
+  new Task((reject, resolve) => {
+    // Make sure the promise is only resolved once
+    let called = false;
+    const fieldState = constr.initialState();
+
+    if (!(fieldState instanceof Promise)) {
+      resolve(fieldState);
+    } else {
+      fieldState
+      .then(v => {
+        if (called) { return; }
+        called = true;
+        resolve(v);
+      })
+      .catch(v => {
+        if (called) { throw v; }
+        called = true;
+        reject(v);
+      });
+    }
+  });
 
 // Object -> Object
 const insertRequiredProps = field =>
@@ -36,20 +48,21 @@ const insertRequiredProps = field =>
     deep: true,
   });
 
+
+const createFieldAsynchronously = (state, fieldType, asyncDispatch) =>
+  typeConstructor(state, fieldType)
+  .map(createField) // Either String (Task String Object)
+  .leftMap(Task.rejected)
+  .merge() // Task String Object
+  .map(insertRequiredProps)
+  .fork( // execute task
+    err => console.error("Task rejected", err),
+    succ => (console.log("Success", succ) || pipe(fieldCreated, asyncDispatch)(succ))
+  );
+
 // This is an async action. When it is finished it will trigger the
 // field created action
-export default (state, { fieldType }) =>
-( console.log('here?') ||
-  (v => console.log('Called with', v))
-)
-
-
-// (asyncDispatch =>
-//   typeConstructor(state, fieldType)
-//   .map(createField) // Either String (Task String Object)
-//   .fold(Task.rejected, identity) // Task String Object
-//   .map(insertRequiredProps)
-//   .fork( // execute task
-//     console.error,
-//     pipe(fieldCreated)
-//   ))
+export default (state, { fieldType, asyncDispatch }) => {
+  createFieldAsynchronously(state, fieldType, asyncDispatch);
+  return state;
+};

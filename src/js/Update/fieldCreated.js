@@ -10,6 +10,8 @@ const historyStateWithNewField = curry((state, newField) => pipe(
 
 export default (state, { createdFieldState }) =>
   Maybe.of(createdFieldState)
+  .map(v => (console.log('called') || v))
   .map(historyStateWithNewField(state))
   .map(prop("fieldsState"))
-  .map(pushHistoryState(state));
+  .map(pushHistoryState(state))
+  .getOrElse(state);
