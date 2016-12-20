@@ -1,5 +1,5 @@
 /* eslint-env jasmine */
-import { asyncDispatchMiddleware } from "../js/store";
+import { asyncDispatchMiddleware } from "../js/utils/asyncDispatchMiddleware";
 
 const fakeAction = { type: "fake action" };
 

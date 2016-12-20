@@ -1,4 +1,4 @@
 import "./actions";
-import "./store";
+import "./utils.asyncDispatchMiddleware";
 import "./update.undo";
 import "./update.importState";
