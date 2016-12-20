@@ -48,7 +48,6 @@ const insertRequiredProps = field =>
     deep: true,
   });
 
-
 const createFieldAsynchronously = (state, fieldType, asyncDispatch) =>
   typeConstructor(state, fieldType)
   .map(createField) // Either String (Task String Object)
@@ -57,7 +56,7 @@ const createFieldAsynchronously = (state, fieldType, asyncDispatch) =>
   .map(insertRequiredProps)
   .fork( // execute task
     err => console.error("Task rejected", err),
-    succ => (console.log("Success", succ) || pipe(fieldCreated, asyncDispatch)(succ))
+    pipe(fieldCreated, asyncDispatch)
   );
 
 // This is an async action. When it is finished it will trigger the

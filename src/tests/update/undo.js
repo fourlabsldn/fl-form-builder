@@ -1,7 +1,7 @@
 /* eslint-env jasmine */
 
-import { undo as undoAction } from "../js/Actions";
-import update from "../js/Update";
+import { undo as undoAction } from "../../js/Actions";
+import update from "../../js/Update";
 
 const currentFieldsState = ["current"];
 const oldFieldsState = ["old"];

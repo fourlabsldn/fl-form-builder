@@ -3,7 +3,7 @@ import Immutable from "seamless-immutable";
 
 // This middleware will just add the property "async dispatch"
 // to actions with the "async" propperty set to true
-export const asyncDispatchMiddleware = store => next => action => {
+const asyncDispatchMiddleware = store => next => action => {
   let syncActivityFinished = false;
   let actionQueue = [];
 
@@ -27,3 +27,5 @@ export const asyncDispatchMiddleware = store => next => action => {
   syncActivityFinished = true;
   flushQueue();
 };
+
+export default asyncDispatchMiddleware;

@@ -1,8 +1,8 @@
 /* eslint-env jasmine */
 /* eslint-disable quote-props */
 
-import { importState } from "../js/Actions";
-import update from "../js/Update";
+import { importState } from "../../js/Actions";
+import update from "../../js/Update";
 
 const typesArray = [{
   "info": {
