@@ -5,7 +5,6 @@ import Either from "data.either";
 import Task from "data.task";
 import Immutable from "seamless-immutable";
 import { fieldCreated } from "../Actions";
-import store from "../store";
 
 // State -> String -> Either String Function
 const typeConstructor = (state, fieldType) => {
@@ -39,15 +38,18 @@ const insertRequiredProps = field =>
 
 // This is an async action. When it is finished it will trigger the
 // field created action
-export default (state, { fieldType }) => {
-  typeConstructor(state, fieldType)
-  .map(createField) // Either String (Task String Object)
-  .fold(Task.rejected, identity) // Task String Object
-  .map(insertRequiredProps)
-  .fork( // execute task
-    console.error,
-    pipe(fieldCreated, store.dispatch)
-  );
+export default (state, { fieldType }) =>
+( console.log('here?') ||
+  (v => console.log('Called with', v))
+)
 
-  return state;
-};
+
+// (asyncDispatch =>
+//   typeConstructor(state, fieldType)
+//   .map(createField) // Either String (Task String Object)
+//   .fold(Task.rejected, identity) // Task String Object
+//   .map(insertRequiredProps)
+//   .fork( // execute task
+//     console.error,
+//     pipe(fieldCreated)
+//   ))

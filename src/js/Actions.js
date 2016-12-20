@@ -16,6 +16,7 @@ export const importState = newFieldsState =>
 export const createField = fieldType =>
 ({
   type: "createField",
+  async: true,
   fieldType,
 });
 
