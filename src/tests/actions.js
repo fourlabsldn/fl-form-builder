@@ -4,6 +4,7 @@ import {
   undo,
   importState,
   createField,
+  fieldCreated,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -42,17 +43,17 @@ describe("Action", () => {
     });
   });
 
-  // describe("fieldCreated", () => {
-  //   const createdFieldState = {};
-  //
-  //   it("returns the correct action type", () => {
-  //     const action = fieldCreated(createdFieldState);
-  //     expect(action.type).toEqual("fieldCreated");
-  //   });
-  //
-  //   it("Creates the correct variables", () => {
-  //     const action = fieldCreated(createdFieldState);
-  //     expect(action.createdFieldState).toEqual(createdFieldState);
-  //   });
-  // });
+  describe("fieldCreated", () => {
+    const createdFieldState = {};
+
+    it("returns the correct action type", () => {
+      const action = fieldCreated(createdFieldState);
+      expect(action.type).toEqual("fieldCreated");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = fieldCreated(createdFieldState);
+      expect(action.createdFieldState).toEqual(createdFieldState);
+    });
+  });
 });

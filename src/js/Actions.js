@@ -16,12 +16,11 @@ export const importState = newFieldsState =>
 export const createField = fieldType =>
 ({
   type: "createField",
-  async: true,
   fieldType,
 });
 
 export const fieldCreated = createdFieldState =>
 ({
-  type: "createField",
+  type: "fieldCreated",
   createdFieldState,
 });
