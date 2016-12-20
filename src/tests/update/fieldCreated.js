@@ -36,4 +36,13 @@ describe("Update.fieldCreated", () => {
     expect(sameState.fieldsState.length).toEqual(mockState.fieldsState.length);
     expect(sameState.fieldsStateHistory.length).toEqual(mockState.fieldsStateHistory.length);
   });
+
+  it("does not break the state after creating one object", () => {
+    const changed1 = update(mockState, fieldCreated(createdFieldState));
+    const changed2 = update(changed1, fieldCreated(createdFieldState));
+    const changed3 = update(changed2, fieldCreated(createdFieldState));
+    expect(changed3.fieldTypes.length).toEqual(mockState.fieldTypes.length);
+    expect(changed3.fieldsState.length).toEqual(mockCurrentState.length + 3);
+    expect(changed3.fieldsStateHistory.length).toEqual(3);
+  });
 });
