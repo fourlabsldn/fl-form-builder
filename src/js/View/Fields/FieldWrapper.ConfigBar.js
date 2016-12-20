@@ -1,15 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import store from "../../store";
-import { toggleConfig } from "../../Actions";
-const toggleRequired = () => null;
+import { toggleConfig, toggleRequired } from "../../Actions";
 
 const ConfigBar = ({ fieldState }) => (
   <div className="fl-fb-Field-configuration">
     <div className="fl-fb-Field-configuration-buttons">
       <label
         className="fl-fb-Field-configuration-switch-required"
-        onMouseDown={() => toggleRequired(fieldState)}
+        onMouseDown={() => store.dispatch(toggleRequired(fieldState))}
       >
         Required
         <div className="fl-fb-ui-switch">

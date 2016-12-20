@@ -30,3 +30,9 @@ export const toggleConfig = fieldState =>
   type: "toggleConfig",
   fieldState,
 });
+
+export const toggleRequired = fieldState =>
+({
+  type: "toggleRequired",
+  fieldState,
+});

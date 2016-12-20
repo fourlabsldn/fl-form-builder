@@ -6,6 +6,7 @@ import {
   createField,
   fieldCreated,
   toggleConfig,
+  toggleRequired,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -68,6 +69,20 @@ describe("Action", () => {
 
     it("Creates the correct variables", () => {
       const action = toggleConfig(fieldState);
+      expect(action.fieldState).toEqual(fieldState);
+    });
+  });
+
+  describe("toggleRequired", () => {
+    const fieldState = {};
+
+    it("returns the correct action type", () => {
+      const action = toggleRequired(fieldState);
+      expect(action.type).toEqual("toggleRequired");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = toggleRequired(fieldState);
       expect(action.fieldState).toEqual(fieldState);
     });
   });
