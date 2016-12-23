@@ -52,8 +52,8 @@ const propertyTypeCheck = curry((propertyName, type, obj) =>
 // Checks that a field has its essential properties
 // Object -> Either String Object
 export const validateField = fieldState =>
-  Either.fromNulleble(fieldState)
-    .leftMap("A field State cannot be empty")
+  Either.fromNullable(fieldState)
+    .leftMap(fs => `A field State cannot be empty ${typeof fs}`)
     .chain(propertyTypeCheck("required", "boolean"))
     .chain(propertyTypeCheck("configShowing", "boolean"))
     .chain(propertyTypeCheck("id", "string"));

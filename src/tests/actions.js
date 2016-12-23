@@ -116,5 +116,4 @@ describe("Action", () => {
       expect(action.newFieldState).toEqual(newFieldState);
     });
   });
-
 });

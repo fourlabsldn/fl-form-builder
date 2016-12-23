@@ -2,8 +2,8 @@ import React from "react";
 
 import ConfigBar from "./FieldWrapper.ConfigBar";
 import Sidebar from "./FieldWrapper.Sidebar";
-
-const updateField = () => null;
+import store from "../../store";
+import { updateField } from "../../Actions";
 
 const Field = ({ fieldState, fieldConstructor }) =>
 (
@@ -17,7 +17,10 @@ const Field = ({ fieldState, fieldConstructor }) =>
 
       {React.createElement(
         fieldConstructor.RenderEditor,
-        { state: fieldState, update: updateField }
+        {
+          state: fieldState,
+          update: newState => store.dispatch(updateField(newState)),
+        }
       )}
 
     </div>
