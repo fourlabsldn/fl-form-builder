@@ -7,6 +7,7 @@ import fieldCreated from "./fieldCreated";
 import toggleConfig from "./field.toggleConfig";
 import toggleRequired from "./field.toggleRequired";
 import deleteField from "./field.deleteField";
+import updateField from "./field.updateField";
 
 const actionHandlers = {
   undo,
@@ -16,6 +17,7 @@ const actionHandlers = {
   toggleConfig,
   toggleRequired,
   deleteField,
+  updateField,
 };
 
 const isExpectedAction = a => a && a.type && actionHandlers[a.type];

@@ -8,6 +8,7 @@ import {
   toggleConfig,
   toggleRequired,
   deleteField,
+  updateField,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -101,4 +102,19 @@ describe("Action", () => {
       expect(action.fieldState).toEqual(fieldState);
     });
   });
+
+  describe("updateField", () => {
+    const newFieldState = {};
+
+    it("returns the correct action type", () => {
+      const action = updateField(newFieldState);
+      expect(action.type).toEqual("updateField");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = updateField(newFieldState);
+      expect(action.newFieldState).toEqual(newFieldState);
+    });
+  });
+
 });

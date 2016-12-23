@@ -42,3 +42,9 @@ export const deleteField = fieldState =>
   type: "deleteField",
   fieldState,
 });
+
+export const updateField = newFieldState =>
+({
+  type: "updateField",
+  newFieldState,
+});
