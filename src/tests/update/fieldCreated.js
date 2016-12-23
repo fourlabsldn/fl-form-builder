@@ -17,7 +17,7 @@ const fieldCreatedAction = fieldCreated(createdFieldState);
 const newState = update(mockState, fieldCreatedAction);
 
 describe("Update.fieldCreated", () => {
-  it("outputs a field with the new state included", () => {
+  it("outputs a state with the new field included", () => {
     expect(newState.fieldsState.length).toEqual(mockState.fieldsState.length + 1);
     expect(
       newState.fieldsState

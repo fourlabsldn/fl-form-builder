@@ -36,3 +36,9 @@ export const toggleRequired = fieldState =>
   type: "toggleRequired",
   fieldState,
 });
+
+export const deleteField = fieldState =>
+({
+  type: "deleteField",
+  fieldState,
+});
