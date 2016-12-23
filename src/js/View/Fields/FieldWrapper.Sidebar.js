@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import store from "../../store";
-import { toggleConfig } from "../../Actions";
+import { toggleConfig, deleteField } from "../../Actions";
 
 const onDragStart = () => null;
-const deleteField = () => null;
 
 const Sidebar = ({ fieldState }) => (
   <div className="fl-fb-Field-sidebar">
@@ -21,7 +20,7 @@ const Sidebar = ({ fieldState }) => (
     />
     <button
       className="glyphicon glyphicon-trash fl-fb-Field-sidebar-btn-delete"
-      onClick={() => deleteField(fieldState)}
+      onClick={() => store.dispatch(deleteField(fieldState))}
       type="button"
     />
   </div>
