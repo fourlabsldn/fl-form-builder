@@ -9,6 +9,7 @@ import {
   toggleRequired,
   deleteField,
   updateField,
+  reorderFields,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -116,4 +117,19 @@ describe("Action", () => {
       expect(action.newFieldState).toEqual(newFieldState);
     });
   });
+
+  describe("reorderFields", () => {
+    const newFieldsOrder = {};
+
+    it("returns the correct action type", () => {
+      const action = reorderFields(newFieldsOrder);
+      expect(action.type).toEqual("reorderFields");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = reorderFields(newFieldsOrder);
+      expect(action.newFieldsOrder).toEqual(newFieldsOrder);
+    });
+  });
+
 });

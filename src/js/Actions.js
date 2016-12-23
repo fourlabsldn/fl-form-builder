@@ -48,3 +48,9 @@ export const updateField = newFieldState =>
   type: "updateField",
   newFieldState,
 });
+
+export const reorderFields = newFieldsOrder =>
+({
+  type: "reorderFields",
+  newFieldsOrder,
+});

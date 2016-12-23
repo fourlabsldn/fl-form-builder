@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types, no-nested-ternary */
 import React from "react";
 import store from "../../store";
-import { toggleConfig, deleteField } from "../../Actions";
+import { toggleConfig, deleteField, reorderFields } from "../../Actions";
 import { curry } from "ramda";
 import addListenerOnce from "../../utils/addListenerOnce";
 import trackReorderDrag from "../../utils/trackReorderDrag";
@@ -54,6 +54,7 @@ const onDragStart = event => {
       .map(f => f.dataset.id);
 
     // EventHub.trigger('fieldsReorder', reorderedIds);
+    store.dispatch(reorderFields(reorderedIds));
     console.log("Reorder ids like this:", reorderedIds);
   });
 };
