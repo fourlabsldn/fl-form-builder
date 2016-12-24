@@ -25,16 +25,6 @@ organiser.registerAll("./gulp-tasks", {
       rename: "fl-form-builder.js",
       config: Object.assign({}, reactConfig, { moduleName: "FormBuilder" }),
     },
-    "demo-image-type": {
-      src: "./examples/custom-type/src/ImageCards.js",
-      dest: "./examples/custom-type/dist",
-      config: Object.assign({}, reactConfig, { moduleName: "ImageCards" }),
-    },
-    "demo-date-type": {
-      src: "./examples/date-type/src/DateField.js",
-      dest: "./examples/date-type/dist",
-      config: Object.assign({}, reactConfig, { moduleName: "DateField" }),
-    },
     tests: {
       watch: path.join(src, "**/*.js"),
       src: path.join(src, "tests", "index.js"),

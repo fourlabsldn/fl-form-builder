@@ -29,9 +29,9 @@ const newState = update(mockState, importCustomComponentsAction);
 describe("Update.importCustomComponents", () => {
   it("Appends the new valid custom types to the end of the existing types", () => {
     expect(newState.fieldTypes.length).toEqual(mockState.fieldTypes.length + customTypes.length);
-    // expect(newState.fieldTypes[1].info.type).toEqual(customTypes[0].info.type);
-    // expect(newState.fieldTypes[2].info.type).toEqual(customTypes[1].info.type);
-    // expect(newState.fieldTypes[3].info.type).toEqual(customTypes[2].info.type);
+    expect(newState.fieldTypes[1].info.type).toEqual(customTypes[0].info.type);
+    expect(newState.fieldTypes[2].info.type).toEqual(customTypes[1].info.type);
+    expect(newState.fieldTypes[3].info.type).toEqual(customTypes[2].info.type);
   });
 
   it("Returns an unchanged array if customTypes is invalid", () => {

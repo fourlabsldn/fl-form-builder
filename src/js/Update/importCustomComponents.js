@@ -1,7 +1,7 @@
 /* @flow weak */
 /* eslint-disable new-cap */
 import { StateLenses, propertyTypeCheck } from "./utils";
-import { over, traverse, curry, map } from "ramda";
+import { over, traverse, curry } from "ramda";
 import Either from "data.either";
 
 // [a] => Either String [a]
@@ -28,10 +28,10 @@ const isComponentValid = customComponents =>
 const validateComponents = customComponents =>
   Either.Right(customComponents)
     .chain(isArray)
-    .chain(map(isComponentValid));
+    .chain(isComponentValid);
 
 const addToFieldTypes = curry((state, customComponents) =>
-  over(StateLenses.fieldsState, s => s.concat(customComponents), state)
+  over(StateLenses.fieldTypes, s => s.concat(customComponents), state)
 );
 
 // If there are any problems with the import, the same state
