@@ -25,7 +25,7 @@
   <script type="text/javascript" src="../jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
   <script type="text/javascript" src="../jasmine-core/lib/jasmine-core/boot.js"></script>
   <!-- Tests  -->
-  <script type="text/javascript" src="../../dist/fl-form-builder-tests.js"></script>
+  <!-- <script type="text/javascript" src="../../dist/fl-form-builder-tests.js"></script> -->
 </head>
 <body>
   <!-- Fork me on github ribbon -->
@@ -50,7 +50,7 @@
     window.fb = new FormBuilder(container, customComponents);
 
     const customState = [{"configShowing":false,"id":1481804801041,"required":true,"type":"TextBox","group":"Text Components","displayName":"Text Box","htmlInputType":"text","htmlElement":"input","title":"Your full name","placeholder":"Add a placeholder"},{"configShowing":false,"id":1481804855474,"required":true,"type":"DateField","displayName":"Date Field","group":"Text Components","title":"Your date of birth","day":"01","month":"01","year":"1900","minDate":-2208988800000,"maxDate":4102444800000},{"type":"NumberBox","group":"Text Components","displayName":"Number Box","htmlInputType":"number","htmlElement":"input","required":true,"title":"Insurance policy number","placeholder":"This number is usually written on each page of your policy","id":1481818520013,"configShowing":false},{"type":"TextBox","group":"Text Components","displayName":"Text Box","htmlInputType":"text","htmlElement":"input","required":true,"title":"Insurance provider","placeholder":"This is the name of your carrier","id":1481818536512,"configShowing":false},{"type":"TelephoneBox","group":"Text Components","displayName":"Telephone Box","htmlInputType":"tel","htmlElement":"input","required":true,"title":"24-hour support line number","placeholder":"This phone number will be in your policy","id":1481818611011,"configShowing":false}]
-    // fb.importState(customState);
+    fb.importState(customState);
 
     const btn = document.querySelector('#exportBtn');
     btn.addEventListener('click', function () {

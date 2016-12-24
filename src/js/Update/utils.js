@@ -46,7 +46,7 @@ export const hideConfigs = state =>
 const propertyTypeCheck = curry((propertyName, type, obj) =>
   typeof obj[propertyName] === type
     ? Either.Right(obj)
-    : Either.Left(`Property 'required' cannot be of type ${typeof obj.required}`)
+    : Either.Left(`Property '${propertyName}' cannot be of type ${typeof obj[propertyName]}`)
 );
 
 // Checks that a field has its essential properties
