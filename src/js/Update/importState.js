@@ -25,7 +25,7 @@ const validFieldTypes = curry((validTypes, fieldsState) =>
 const validateFieldsState = curry((fieldsState, state) =>
   Either.of(fieldsState)
     .chain(isArray)
-    .chain(validFieldTypes(state.fieldTypes.map(path(["info","type"]))))
+    .chain(validFieldTypes(state.fieldTypes.map(path(["info", "type"]))))
 );
 
 
@@ -38,9 +38,10 @@ const addRequiredProperties = fieldStates =>
     .map(s => Object.assign(
       {
         configShowing: false,
-        id: createId(),
         required: false,
-      }, s
+      },
+      s,
+      { id: createId() }
     ));
 
 

@@ -22,7 +22,7 @@ export const StateLenses = {
 
 // _ => String
 export const createId = _ =>
-  Date.now().toString();
+  (Date.now() + Math.random()).toString();
 
 // State -> [fieldsState] -> State
 export const pushHistoryState = curry((state, newHistoryState) => pipe(

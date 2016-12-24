@@ -55,7 +55,6 @@ const onDragStart = event => {
 
     // EventHub.trigger('fieldsReorder', reorderedIds);
     store.dispatch(reorderFields(reorderedIds));
-    console.log("Reorder ids like this:", reorderedIds);
   });
 };
 

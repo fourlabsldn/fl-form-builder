@@ -56,6 +56,7 @@ const newValidState = [{
   "group": "Options Components",
   "htmlInputType": "checkbox",
   "title": "Add a title",
+  "id": 2,
   "options": [{
     "caption": "Insert an option",
   }],
@@ -98,5 +99,12 @@ describe("Update.importState", () => {
     expect(updated.fieldsState[0].displayName).not.toEqual(undefined);
     expect(updated.fieldsState[0].group).toEqual(newValidState[0].group);
     expect(updated.fieldsState[0].group).not.toEqual(undefined);
+  });
+
+  it("Makes sure all ids are strings", () => {
+    const validState2 = newValidState
+      .map((v, idx) => idx !== 0 ? v : Object.assign({}, v, { id: 2 }));
+    const updated = update(mockState, importState(validState2));
+    expect(typeof updated.fieldsState[0].id).toEqual("string");
   });
 });
