@@ -1,3 +1,6 @@
+import onDrag from "./onDrag";
+import dragEnd from "./dragEnd";
+
 export const effectsManager = (initialModel, updateFunction) => {
   let model = initialModel;
   return {
