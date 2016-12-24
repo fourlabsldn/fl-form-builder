@@ -1,214 +1,154 @@
-import throttle from './throttle';
+/* eslint-disable no-nested-ternary */
+//
+// This algorythm assumes that  elements do not change size during the drag.
+//
+import documentOffset from "document-offset";
+import { pipe, prop, zip } from "ramda";
+import Maybe from "data.maybe";
+import addListenerOnce from "./addListenerOnce";
+import throttle from "./throttle";
+
+function setTranslation(el, val) {
+  el.style.transform = `translate3d(0, ${val}px, 0)`; //  eslint-disable-line no-param-reassign
+}
+
+// An element's height is considered the difference between it's top value
+// and the top value of the element after it. If there is no element after it
+// the clientHeight is used instead.
+// Array HTMLElement -> HTLMElement -> ElementInfo
+const elementInfo = (previousElements, el) =>
+({
+  element: el,
+  initalTop: documentOffset(el).top,
+  height:
+    Maybe.fromNullable(previousElements[0])
+      .map(prop("initialTop"))
+      .map(prevTop => prevTop - documentOffset(el).top)
+      .getOrElse(el.clientHeight),
+});
+
+// Array HTMLElement -> Array ElementInfo
+const elementsInfo = elements =>
+  elements.reduceRight(
+      (acc, el) => [elementInfo(acc, el)].concat(acc)
+    , []
+  );
+
+
+// elementsInfo does not include the draggedElInfo
+// Array ElementInfo -> ElementInfo -> Int -> Array Int
+const calculateDisplacement = (elsInfo, draggedElInfo, draggedElTranslation) =>
+  elsInfo.map(elInfo => {
+    const originallyAboveDraggedEl = elInfo.initialTop < draggedElInfo.initialTop;
+    const currentlyAboveDraggedEl =
+      elInfo.initialTop < (draggedElInfo.initialTop + draggedElTranslation);
+
+    return (originallyAboveDraggedEl && !currentlyAboveDraggedEl) ? draggedElInfo.height
+      : (!originallyAboveDraggedEl && currentlyAboveDraggedEl) ? -draggedElInfo.height
+      : 0;
+  });
+
+
+
+// Set translation of all elements
+// Int -> Array ElementInfo -> ElementInfo -> Model
+const onDrag = (model, { eventY }) => {
+  const { isDragging, initialY, draggedElInfo, nonDraggedElsInfo } = model;
+  if (!isDragging) { return model; }
+
+  const draggedElDisplacement = eventY - initialY;
+  const elsDisplacement =
+    calculateDisplacement(nonDraggedElsInfo, draggedElInfo, draggedElDisplacement);
+
+  zip(
+    [draggedElInfo, ...nonDraggedElsInfo],
+    [draggedElDisplacement, ...elsDisplacement]
+  )
+  .forEach(([elInfo, elDisplacement]) =>
+      setTranslation(elInfo.element, elDisplacement)
+  );
+
+  // Does not change model
+  return model;
+};
+
+const dragEnd = model => {
+  const { draggedElInfo, nonDraggedElsInfo } = model;
+
+  [draggedElInfo, ...nonDraggedElsInfo]
+    .map(prop("element"))
+    .forEach(elem => setTranslation(elem, 0));
+  // insertTargetInRightPlace(elements, initialTops, elIndex);
+
+  return Object.assign({}, model, { isDragging: false });
+};
+
+// ============================================================================
+
+const effectsManager = (initialModel, updateFunction) => {
+  let model = initialModel;
+  return {
+    update: action => {
+      model = updateFunction(model, action);
+    },
+  };
+};
+
+const actionCreators = {
+  dragEnd: _ => ({ type: "dragEnd" }),
+  drag: e => ({ type: "drag", eventY: e.pageY }),
+};
+
+const updateFunction = (model, action) => {
+  switch (action.type) {
+  case "dragEnd":
+    return dragEnd(model, action);
+  case "drag":
+    onDrag(model, action);
+    return model;
+  default:
+    throw new Error(`Unexpected action in trackReorderDrag: ${action.type}`);
+  }
+};
+
+// ============================================================================
+
+
+
 /**
- * Will take care of the dragging and reordering a list for one drag.
- * @function trackReorderDrag
- * @param  {event} paramE        The dragstart event, from which this should be called.
- * @param  {HTMLElement} paramEl       The main Element being dragged
- * @param  {Array<HTMLElement>} paramElements Array of elements to be tracked.
+ * [init description]
+ * @method init
+ * @param  {Event} e - The dragStart event, which will have been triggered on the
+ *                   drag icon of a element to be reordered
+ * @param  {HTMLElement} el - The main element to be dragged up and down
+ * @param  {Array<HTMLElement>} elements - The main element plus all of its
+ *                                       siblings that will be reordered
  * @return {void}
  */
-export default function trackReorderDrag(paramE, paramEl, paramElements) {
-  function setTranslation(el, val) {
-    el.style.transform = `translate3d(0, ${val}px, 0)`; //  eslint-disable-line no-param-reassign
-  }
+export default function trackReorderDrag(e, el, elements) {
+  const allInfos = elementsInfo(elements)
+    .sort((elInfo1, elInfo2) => elInfo1.initialTop - elInfo2.initialTop);
 
-  /**
-   * @function resetElementsPositions
-   * @param {Array<HTMLElement>} els Elements being tracked
-   */
-  function resetElementsPositions(els) {
-    els.forEach((el) => {
-      setTranslation(el, 0);
-    });
-  }
+  const draggedElInfo = allInfos.find(elInfo => elInfo.element === el);
+  const nonDraggedElsInfo = allInfos.filter(elInfo => elInfo !== draggedElInfo);
 
-  /**
-   * @function calculateElementHeight
-   * @param  {Array<HTMLElement>} els    Elements ordered by vertical position
-   * @param  {Integer} elIndex
-   * @return {void}
-   */
-  function calculateElementHeight(els, elIndex) {
-    let spaceOccupied;
+  const initialModel = {
+    initialY: e.pageY,
+    draggedElInfo,
+    nonDraggedElsInfo,
+    isDragging: true,
+  };
 
-    // If not the last element
-    if (elIndex < els.length - 1) {
-      const elTop = els[elIndex].getBoundingClientRect().top;
-      const nextElTop = els[elIndex + 1].getBoundingClientRect().top;
-      spaceOccupied = nextElTop - elTop;
-    } else {
-      // let's estimate the general vertical distance between elements by
-      // subtracting the size of the first element from the distance between
-      // its top and the next element.
-      const firstElSpaceOccupied =
-          els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
-      const verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
-      const height = els[elIndex].clientHeight;
-      spaceOccupied = height + verticalDistance;
-    }
+  const localStore = effectsManager(initialModel, updateFunction);
 
-    return spaceOccupied;
-  }
+  // Listen to drags
+  const eventTarget = e.target;
+  const throttledOnDrag = throttle(50, pipe(actionCreators.drag, localStore.update));
 
-  /**
-   * @function createDragMover
-   * @param  {Array<HTMLElement>} els
-   * @param  {Array<Integer>} tops        Initial tops
-   * @param  {Integer} targetIndex Index of element being dragged around
-   * @return {function}             The function to translate elements in the
-   *                                  list to make room for the dragged element
-   */
-  function createDragMover(els, tops, targetIndex) {
-    const target = els[targetIndex];
-    const targetInitialTop = tops[targetIndex];
-    const targetHeight = calculateElementHeight(els, targetIndex);
-    return function doDragMove() {
-      const targetTop = target.getBoundingClientRect().top;
-      const movedUp = (targetTop < targetInitialTop);
-
-      let i;
-      for (i = 0; i < tops.length; i++) {
-        if (i === targetIndex) {
-          continue;
-        } else
-        if (!movedUp && targetTop > tops[i] && tops[i] > targetInitialTop) {
-          setTranslation(els[i], -targetHeight);
-        } else if (movedUp && targetTop < tops[i + 1] && tops[i] < targetInitialTop) {
-          setTranslation(els[i], targetHeight);
-        } else {
-          setTranslation(els[i], 0);
-        }
-      }
-    };
-  }
-
-  function createDragListener(els, tops, targetIndex, initialY) {
-    const target = els[targetIndex];
-    const doDragMove = createDragMover(els, tops, targetIndex);
-    let shouldStopListening;
-    function dragListener(e) {
-      if (shouldStopListening) { return; }
-
-      doDragMove();
-      const newY = e.pageY;
-      if (newY === 0) { return; } // correct weird behaviour when mouse goes up
-
-      const diff = newY - initialY;
-      setTranslation(target, diff);
-    }
-
-    dragListener.stop = () => {
-      shouldStopListening = true;
-    };
-
-    return dragListener;
-  }
-
-  function getElementsCurrentTop(els) {
-    const tops = [];
-    els.forEach((el) => { tops.push(el.getBoundingClientRect().top); });
-
-    return tops;
-  }
-
-  // function adjustElementsToTops(els, tops) {
-  //   const currentTops = getElementsCurrentTop(els);
-  //   els.forEach(function (el, i) {
-  //     const diff =  currentTops[i] - tops[i];
-  //     setTranslation(el, diff);
-  //   });
-  // }
-
-  function insertTargetInRightPlace(els, initialTops, targetIndex) {
-    const target = els[targetIndex];
-    const topsBeforeInsertion = getElementsCurrentTop(els);
-    const targetTop = topsBeforeInsertion[targetIndex];
-    let i = 0;
-
-    // Pass by all elements that are above the target
-    while ((topsBeforeInsertion[i] && topsBeforeInsertion[i] < targetTop) ||
-              (i === targetIndex)) {
-      i++;
-    }
-
-    // Take away transitions from all elements and save them
-    const initialTransitions = [];
-    els.forEach((anEl) => {
-      initialTransitions.push(anEl.style.transition);
-      anEl.style.transition = 'none'; // eslint-disable-line no-param-reassign
-    });
-
-    // Put everyone at translate3d(0,0,0) without transitions
-    resetElementsPositions(els);
-
-    // Add the element in the appropriate place. This will displace everyone else.
-    const parent = (els[i]) ? els[i].parentElement : els[els.length - 1].parentElement;
-    if (!parent || !parent.appendChild) {
-      throw new Error('trackReorderDrag(): No parent found in element list.');
-    } else if (els[i]) {
-      parent.insertBefore(target, els[i]);
-    } else {
-      const lastEl = els[els.length - 1];
-      parent.insertBefore(target, lastEl);
-      parent.insertBefore(lastEl, target);
-    }
-
-    // Now let's translate it to where it was just before it was repositioned
-    // All without transitions. It will seem like it never left that spot.
-    const futureTop = target.getBoundingClientRect().top;
-    const displacement = targetTop - futureTop;
-    setTranslation(target, displacement);
-
-    // Let's add a timeout to get the last place in the UI queue and let the
-    // CSS renderer to process the fact that all these elements do not have
-    // transitions and should appear wherever their coordinates say immediately.
-    setTimeout(() => {
-      // Restore all transitions
-      els.forEach((anEl, k) => {
-        anEl.style.transition = initialTransitions[k]; // eslint-disable-line no-param-reassign
-      });
-
-      // Now transition the target can transition smoothly from where it
-      // was dropped to its final position at translate value 0.
-      setTranslation(target, 0);
-    }, 15);
-
-    //  adjustElementsToTops(els, topsBeforeInsertion);
-  }
-
-  function init(e, el, elements) {
-    if (typeof el !== 'object') {
-      throw new Error('trackReorderDrag(): Invalid parameter');
-    }
-
-    // Reorder elements
-    elements.sort((el1, el2) => {
-      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
-    });
-
-    // Set initial states
-    const initialTops = [];
-    elements.forEach((element) => {
-      initialTops.push(element.getBoundingClientRect().top);
-    });
-
-    const elIndex = elements.indexOf(el);
-
-    // Create throttled drag listener
-    const initialY = e.pageY;
-    const dragListener = createDragListener(elements, initialTops, elIndex, initialY);
-    const throttledDragListener = throttle(50, dragListener);
-
-    // Listen to drags
-    const eventTarget = e.target;
-    eventTarget.addEventListener('drag', throttledDragListener);
-    eventTarget.addEventListener('dragend', function dragEndListener() {
-      dragListener.stop();
-      insertTargetInRightPlace(elements, initialTops, elIndex);
-      eventTarget.removeEventListener('drag', throttledDragListener);
-      eventTarget.removeEventListener('dragend', dragEndListener);
-    });
-  }
-
-  init(paramE, paramEl, paramElements);
+  eventTarget.addEventListener("drag", throttledOnDrag);
+  addListenerOnce("dragend", eventTarget, _ => {
+    console.log("dragend");
+    localStore.update(actionCreators.dragEnd());
+    eventTarget.removeEventListener("drag", throttledOnDrag);
+  });
 }
