@@ -57,7 +57,6 @@ export default function trackReorderDrag(e, el, elements) {
 
   eventTarget.addEventListener("drag", throttledOnDrag);
   addListenerOnce("dragend", eventTarget, _ => {
-    console.log("dragend");
     localStore.update(actionCreators.dragEnd());
     eventTarget.removeEventListener("drag", throttledOnDrag);
   });

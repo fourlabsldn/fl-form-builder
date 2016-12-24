@@ -18,11 +18,12 @@ const calculateDisplacement = (elsInfo, draggedElInfo, draggedElTranslation) =>
 
 // Set translation of all elements
 // Int -> Array ElementInfo -> ElementInfo -> Model
-const onDrag = (model, { eventY, e }) => {
+const onDrag = (model, { e }) => {
   const { isDragging, initialY, draggedElInfo, nonDraggedElsInfo } = model;
-  if (!isDragging || e.clientY === 0) { return model; }
+  if (!isDragging) { return model; }
+  if (e.clientY === 0) { return model; } // account for a chrome bug
 
-  const draggedElDisplacement = eventY - initialY;
+  const draggedElDisplacement = e.pageY - initialY;
   const elsDisplacement =
     calculateDisplacement(nonDraggedElsInfo, draggedElInfo, draggedElDisplacement);
 

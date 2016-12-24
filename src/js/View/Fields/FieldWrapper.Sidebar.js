@@ -47,14 +47,14 @@ const onDragStart = event => {
     // remove dragging class after animation finishes
     setTimeout(() => mainField.classList.remove("fl-fb-Field--dragging"), 250);
 
-    // const reorderedIds = Array.from(trackedFields)
-    //   .sort((el1, el2) => {
-    //     return documentOffset(el1).top -
-    //            documentOffset(el2).top;
-    //   })
-    //   .map(f => f.dataset.id);
-    //
-    // store.dispatch(reorderFields(reorderedIds));
+    const reorderedIds = Array.from(trackedFields)
+      .sort((el1, el2) => {
+        return documentOffset(el1).top -
+               documentOffset(el2).top;
+      })
+      .map(f => f.dataset.id);
+
+    store.dispatch(reorderFields(reorderedIds));
   });
 };
 
