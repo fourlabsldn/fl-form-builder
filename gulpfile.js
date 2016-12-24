@@ -50,7 +50,7 @@ organiser.registerAll("./gulp-tasks", {
     baseDir: "./",
   },
   "test-headless": {
-    src: "__tests__/*.test.js",
+    src: path.join(dest, "fl-form-builder-tests.js"),
   },
   "watch": {
     "dev": {

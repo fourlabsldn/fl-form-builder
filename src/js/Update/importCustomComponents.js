@@ -26,7 +26,7 @@ const isComponentValid = customComponents =>
 
 // [a] -> [a] -> Either String [a]
 const validateComponents = customComponents =>
-  Either.of(customComponents)
+  Either.Right(customComponents)
     .chain(isArray)
     .chain(map(isComponentValid));
 
