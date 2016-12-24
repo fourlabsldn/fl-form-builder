@@ -9,6 +9,7 @@ import toggleRequired from "./field.toggleRequired";
 import deleteField from "./field.deleteField";
 import updateField from "./field.updateField";
 import reorderFields from "./reorderFields";
+import importCustomComponents from "./importCustomComponents";
 
 const actionHandlers = {
   undo,
@@ -20,6 +21,7 @@ const actionHandlers = {
   deleteField,
   updateField,
   reorderFields,
+  importCustomComponents,
 };
 
 const isExpectedAction = a => a && a.type && actionHandlers[a.type];

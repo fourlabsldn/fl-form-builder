@@ -9,3 +9,4 @@ import "./update/field.toggleRequired";
 import "./update/field.deleteField";
 import "./update/field.updateField";
 import "./update/reorderFields";
+import "./update/importCustomComponents";

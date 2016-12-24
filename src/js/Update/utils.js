@@ -43,7 +43,7 @@ export const hideConfigs = state =>
 
 
 // String -> String -> Object -> Either String Object
-const propertyTypeCheck = curry((propertyName, type, obj) =>
+export const propertyTypeCheck = curry((propertyName, type, obj) =>
   typeof obj[propertyName] === type
     ? Either.Right(obj)
     : Either.Left(`Property '${propertyName}' cannot be of type ${typeof obj[propertyName]}`)

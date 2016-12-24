@@ -7,6 +7,13 @@ export const undo = _ =>
   type: "undo",
 });
 
+export const importCustomComponents = customComponents =>
+({
+  type: "importCustomComponents",
+  customComponents,
+});
+
+
 export const importState = newFieldsState =>
 ({
   type: "importState",

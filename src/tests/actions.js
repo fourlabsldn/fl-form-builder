@@ -10,6 +10,7 @@ import {
   deleteField,
   updateField,
   reorderFields,
+  importCustomComponents,
 } from "../js/Actions";
 
 describe("Action", () => {
@@ -132,4 +133,17 @@ describe("Action", () => {
     });
   });
 
+  describe("importCustomComponents", () => {
+    const customComponents = [];
+
+    it("returns the correct action type", () => {
+      const action = importCustomComponents(customComponents);
+      expect(action.type).toEqual("importCustomComponents");
+    });
+
+    it("Creates the correct variables", () => {
+      const action = importCustomComponents(customComponents);
+      expect(action.customComponents).toEqual(customComponents);
+    });
+  });
 });
