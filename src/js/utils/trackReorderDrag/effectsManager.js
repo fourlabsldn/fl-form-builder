@@ -12,7 +12,7 @@ export const effectsManager = (initialModel, updateFunction) => {
 
 export const actionCreators = {
   dragEnd: _ => ({ type: "dragEnd" }),
-  drag: e => ({ type: "drag", eventY: e.pageY }),
+  drag: e => ({ type: "drag", eventY: e.pageY, e }),
 };
 
 export const updateFunction = (model, action) => {

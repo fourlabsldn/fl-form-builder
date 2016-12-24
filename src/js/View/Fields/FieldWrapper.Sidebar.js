@@ -5,6 +5,7 @@ import { toggleConfig, deleteField, reorderFields } from "../../Actions";
 import { curry } from "ramda";
 import addListenerOnce from "../../utils/addListenerOnce";
 import trackReorderDrag from "../../utils/trackReorderDrag";
+import documentOffset from "document-offset";
 
 // String -> HTMLElement -> HTMLElement
 const getParentWithClass = curry((className, el) =>
@@ -46,15 +47,14 @@ const onDragStart = event => {
     // remove dragging class after animation finishes
     setTimeout(() => mainField.classList.remove("fl-fb-Field--dragging"), 250);
 
-    const reorderedIds = Array.from(trackedFields)
-      .sort((el1, el2) => {
-        return el1.getBoundingClientRect().top >
-               el2.getBoundingClientRect().top;
-      })
-      .map(f => f.dataset.id);
-
-    // EventHub.trigger('fieldsReorder', reorderedIds);
-    store.dispatch(reorderFields(reorderedIds));
+    // const reorderedIds = Array.from(trackedFields)
+    //   .sort((el1, el2) => {
+    //     return documentOffset(el1).top -
+    //            documentOffset(el2).top;
+    //   })
+    //   .map(f => f.dataset.id);
+    //
+    // store.dispatch(reorderFields(reorderedIds));
   });
 };
 

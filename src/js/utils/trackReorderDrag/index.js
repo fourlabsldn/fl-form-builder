@@ -12,7 +12,7 @@ import throttle from "../throttle";
 const elementInfo = (previousElements, el) =>
 ({
   element: el,
-  initalTop: documentOffset(el).top,
+  initialTop: documentOffset(el).top,
   height:
     Maybe.fromNullable(previousElements[0])
       .map(prop("initialTop"))

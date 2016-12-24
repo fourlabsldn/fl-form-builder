@@ -18,9 +18,9 @@ const calculateDisplacement = (elsInfo, draggedElInfo, draggedElTranslation) =>
 
 // Set translation of all elements
 // Int -> Array ElementInfo -> ElementInfo -> Model
-const onDrag = (model, { eventY }) => {
+const onDrag = (model, { eventY, e }) => {
   const { isDragging, initialY, draggedElInfo, nonDraggedElsInfo } = model;
-  if (!isDragging) { return model; }
+  if (!isDragging || e.clientY === 0) { return model; }
 
   const draggedElDisplacement = eventY - initialY;
   const elsDisplacement =

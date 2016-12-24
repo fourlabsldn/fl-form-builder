@@ -1,3 +1,4 @@
+import documentOffset from "document-offset";
 import throttle from './throttle';
 /**
  * Will take care of the dragging and reordering a list for one drag.
@@ -33,15 +34,15 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
     // If not the last element
     if (elIndex < els.length - 1) {
-      const elTop = els[elIndex].getBoundingClientRect().top;
-      const nextElTop = els[elIndex + 1].getBoundingClientRect().top;
+      const elTop = documentOffset(els[elIndex]).top;
+      const nextElTop = documentOffset(els[elIndex + 1]).top;
       spaceOccupied = nextElTop - elTop;
     } else {
       // let's estimate the general vertical distance between elements by
       // subtracting the size of the first element from the distance between
       // its top and the next element.
       const firstElSpaceOccupied =
-          els[1].getBoundingClientRect().top - els[0].getBoundingClientRect().top;
+          documentOffset(els[1]).top - documentOffset(els[0]).top;
       const verticalDistance = firstElSpaceOccupied - els[0].clientHeight;
       const height = els[elIndex].clientHeight;
       spaceOccupied = height + verticalDistance;
@@ -63,7 +64,7 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
     const targetInitialTop = tops[targetIndex];
     const targetHeight = calculateElementHeight(els, targetIndex);
     return function doDragMove() {
-      const targetTop = target.getBoundingClientRect().top;
+      const targetTop = documentOffset(target).top;
       const movedUp = (targetTop < targetInitialTop);
 
       let i;
@@ -106,7 +107,7 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
   function getElementsCurrentTop(els) {
     const tops = [];
-    els.forEach((el) => { tops.push(el.getBoundingClientRect().top); });
+    els.forEach((el) => { tops.push(documentOffset(el).top); });
 
     return tops;
   }
@@ -155,7 +156,7 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
     // Now let's translate it to where it was just before it was repositioned
     // All without transitions. It will seem like it never left that spot.
-    const futureTop = target.getBoundingClientRect().top;
+    const futureTop = documentOffset(target).top;
     const displacement = targetTop - futureTop;
     setTranslation(target, displacement);
 
@@ -183,13 +184,13 @@ export default function trackReorderDrag(paramE, paramEl, paramElements) {
 
     // Reorder elements
     elements.sort((el1, el2) => {
-      return el1.getBoundingClientRect().top > el2.getBoundingClientRect().top;
+      return documentOffset(el1).top > documentOffset(el2).top;
     });
 
     // Set initial states
     const initialTops = [];
     elements.forEach((element) => {
-      initialTops.push(element.getBoundingClientRect().top);
+      initialTops.push(documentOffset(element).top);
     });
 
     const elIndex = elements.indexOf(el);
