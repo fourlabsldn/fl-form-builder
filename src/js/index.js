@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
 import assert from "fl-assert";
 import View from "./View";
-import { importState } from "./Actions";
+import { importState, importCustomComponents } from "./Actions";
 
 function FormBuilder(container, components = []) {
   assert(
@@ -15,7 +15,7 @@ function FormBuilder(container, components = []) {
 
   ReactDOM.render(<Provider store={store}><View /></Provider>, container);
 
-  // TODO: Import custom components
+  store.dispatch(importCustomComponents(components));
   this.exportState = _ => store.getState().fieldsState;
   this.importState = s => store.dispatch(importState(s));
 }
