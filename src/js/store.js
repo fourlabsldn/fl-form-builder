@@ -4,7 +4,7 @@ import defaultTypes from "./default-types";
 import asyncDispatchMiddleware from "./utils/asyncDispatchMiddleware";
 
 const initialState = {
-  fieldTypes: defaultTypes,
+  fieldTypes: [],
   fieldsState: [],
   fieldsStateHistory: [], // array of fieldStates
 };
