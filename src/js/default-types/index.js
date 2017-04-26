@@ -7,7 +7,7 @@ import TextArea from "./text-fields/TextArea";
 import EmailBox from "./text-fields/EmailBox";
 import NumberBox from "./text-fields/NumberBox";
 import TelephoneBox from "./text-fields/TelephoneBox";
-import DateField from "./DateField";
+import DateField from "./text-fields/DateField";
 
 export default [
   RadioButtons,
