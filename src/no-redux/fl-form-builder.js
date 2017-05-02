@@ -16,7 +16,7 @@ import TextArea from './default-fields/text-fields/TextArea';
 import EmailBox from './default-fields/text-fields/EmailBox';
 import NumberBox from './default-fields/text-fields/NumberBox';
 import TelephoneBox from './default-fields/text-fields/TelephoneBox';
-import DateField from './default-fields/DateField';
+import DateField from './default-fields/text-fields/DateField';
 
 function FormBuilder(container, components = []) {
   assert(

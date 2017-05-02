@@ -1,6 +1,7 @@
 # fl-form-builder
 
 [![Build Status](https://travis-ci.org/fourlabsldn/fl-form-builder.svg?branch=master)](https://travis-ci.org/fourlabsldn/fl-form-builder)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/fourlabsldn/fl-form-builder/master/LICENSE)
 
 A JS form builder **inspired by Google Forms**.
 
