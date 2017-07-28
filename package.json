@@ -1,6 +1,6 @@
 {
   "name": "fl-form-builder",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "A vanilla JS form builder",
   "main": "dist/fl-form-builder.js",
   "scripts": {
