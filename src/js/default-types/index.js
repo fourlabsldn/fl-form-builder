@@ -8,6 +8,7 @@ import EmailBox from "./text-fields/EmailBox";
 import NumberBox from "./text-fields/NumberBox";
 import TelephoneBox from "./text-fields/TelephoneBox";
 import DateField from "./text-fields/DateField";
+import TimeField from "./text-fields/TimeField";
 
 export default [
   RadioButtons,
@@ -19,4 +20,5 @@ export default [
   NumberBox,
   TextArea,
   DateField,
+  TimeField,
 ];

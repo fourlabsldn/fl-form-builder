@@ -12378,8 +12378,14 @@ var DateField = buildTextFieldConstructor({
   htmlInputType: 'date'
 });
 
+var TimeField = buildTextFieldConstructor({
+    type: 'TimeField',
+    displayName: 'Time Field',
+    htmlInputType: 'time'
+});
+
 // Field Types
-var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2, DateField];
+var defaultTypes = [RadioButtons, RadioButtons$2, Dropdown, TextBox, EmailBox, TextBox$4, TextBox$3, TextBox$2, DateField, TimeField];
 
 /* eslint-disable new-cap */
 // This middleware will just add the property "async dispatch"
