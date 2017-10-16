@@ -53,9 +53,7 @@
     // fb.importState(customState);
 
     const btn = document.querySelector('#exportBtn');
-    btn.addEventListener('click', function () {
-      console.log(fb.exportState().map(v => v.id))
-    });
+    btn.addEventListener('click', () => console.log(fb.exportState()));
   // })
   </script>
 </body>
