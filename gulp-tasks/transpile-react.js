@@ -42,8 +42,9 @@ const DEFAULT_CONFIG = {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
-      presets: ['es2015-rollup', 'es2017', 'react'],
+      presets: [['env', { targets: { 'ie': 8 }, modules: false }], 'react'],
       plugins: ['ramda', 'lodash'],
+
     }),
     // TODO: Change this from 'development' to 'production' during production
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
