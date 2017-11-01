@@ -11277,7 +11277,8 @@ var RenderConfigMode = curry$2(function (initialState, renderOptions, _ref) {
         type: 'text',
         className: 'fl-fb-Field-editable',
         onChange: updateProperty(initialState, state, update, 'title'),
-        defaultValue: state.title
+        defaultValue: state.title,
+        placeholder: 'Add a title'
       })
     ),
     renderOptions(state, update),
@@ -11337,7 +11338,7 @@ function buildOptionsFieldConstructor(typeInfo, renderOptions) {
     // Compulsory fields
     required: false,
     // Component specific fields
-    title: 'Add a title',
+    title: '',
     options: [{ caption: 'Insert an option' }],
 
     // states needed to handle UI

@@ -25,6 +25,7 @@ const RenderConfigMode = curry((initialState, renderOptions, { state, update }) 
           className="fl-fb-Field-editable"
           onChange={updateProperty(initialState, state, update, 'title')}
           defaultValue={state.title}
+          placeholder="Add a title"
         />
       </h2>
 
@@ -72,7 +73,7 @@ export default function buildOptionsFieldConstructor(typeInfo, renderOptions) {
     // Compulsory fields
     required: false,
     // Component specific fields
-    title: 'Add a title',
+    title: '',
     options: [
       { caption: 'Insert an option' },
     ],
