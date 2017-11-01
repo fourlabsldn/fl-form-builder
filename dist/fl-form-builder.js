@@ -11439,8 +11439,8 @@ var componentFields = {
   // Compulsory fields
   required: false,
   // Component specific fields
-  title: 'Add a title',
-  placeholder: 'Add a placeholder'
+  title: '',
+  placeholder: ''
 };
 
 // For Text Fields the initialState function will only return an object.
@@ -11470,13 +11470,15 @@ var createRenderConfigMode = curry_1$1(function (initialState, _ref) {
         type: 'text',
         className: 'fl-fb-Field-editable',
         onChange: updateField$2(update, state, initialState, 'title'),
-        defaultValue: state.title
+        defaultValue: state.title,
+        placeholder: 'Add a title'
       })
     ),
     React__default.createElement(state.htmlElement, {
       type: 'text',
       className: 'form-control',
       defaultValue: state.placeholder,
+      placeholder: 'Add a placeholder',
       onChange: updateField$2(update, state, initialState, 'placeholder')
     })
   );
