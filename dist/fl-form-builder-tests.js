@@ -1000,7 +1000,44 @@ var asyncDispatchMiddleware = function asyncDispatchMiddleware(store) {
   };
 };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
 
 /* eslint-env jasmine */
 var fakeAction = { type: "fake action" };
@@ -1375,7 +1412,7 @@ var always = _curry1(function always(val) {
  *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
  *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
  */
-var set = _curry3(function set(lens, v, x) {
+var set$1 = _curry3(function set(lens, v, x) {
   return over(lens, always(v), x);
 });
 
@@ -2541,15 +2578,11 @@ Left.prototype.leftMap = function(f) {
 
 var lib = either;
 
-var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /* eslint-disable new-cap */
 
 var updateAt = curry$1(function (keyArray, newVal, obj) {
   var deepNewVal = keyArray.reduceRight(function (result, key) {
-    return _defineProperty({}, key, result);
+    return defineProperty({}, key, result);
   }, newVal);
 
   return seamlessImmutable(obj).merge(deepNewVal, { deep: true });
@@ -2573,26 +2606,26 @@ var pushHistoryState = curry$1(function (state, newHistoryState) {
   // Add current state to history
   over(StateLenses.fieldsStateHistory, prepend(state.fieldsState)),
   // Make new State the current
-  set(StateLenses.fieldsState, newHistoryState))(state);
+  set$1(StateLenses.fieldsState, newHistoryState))(state);
 });
 
 // State -> State
 var hideConfigs = function hideConfigs(state) {
-  return set(StateLenses.fieldsState, state.fieldsState.map(function (s) {
+  return set$1(StateLenses.fieldsState, state.fieldsState.map(function (s) {
     return Object.assign({}, s, { configShowing: false });
   }), state);
 };
 
 // String -> String -> Object -> Either String Object
 var propertyTypeCheck = curry$1(function (propertyName, type, obj) {
-  return _typeof$1(obj[propertyName]) === type ? lib.Right(obj) : lib.Left("Property '" + propertyName + "' cannot be of type " + _typeof$1(obj[propertyName]));
+  return _typeof(obj[propertyName]) === type ? lib.Right(obj) : lib.Left("Property '" + propertyName + "' cannot be of type " + _typeof(obj[propertyName]));
 });
 
 // Checks that a field has its essential properties
 // Object -> Either String Object
 var validateField = function validateField(fieldState) {
   return lib.fromNullable(fieldState).leftMap(function (fs) {
-    return "A field State cannot be empty " + (typeof fs === "undefined" ? "undefined" : _typeof$1(fs));
+    return "A field State cannot be empty " + (typeof fs === "undefined" ? "undefined" : _typeof(fs));
   }).chain(propertyTypeCheck("required", "boolean")).chain(propertyTypeCheck("configShowing", "boolean")).chain(propertyTypeCheck("id", "string"));
 };
 
@@ -2603,7 +2636,7 @@ var lastHistoryState = function lastHistoryState(state) {
 var undo$1 = function undo(state, _) {
   return pipe(
   // Make last history last state the current one
-  set(StateLenses.fieldsState, lastHistoryState(state)),
+  set$1(StateLenses.fieldsState, lastHistoryState(state)),
   // Remove last history state from the history array
   over(StateLenses.fieldsStateHistory, slice(1, Infinity)))(state);
 };
@@ -3003,13 +3036,11 @@ var equals = _curry2(function equals(a, b) {
   return _equals(a, b, [], []);
 });
 
-var _typeof$2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*  weak */
 /* eslint-disable new-cap */
 // [a] => Either String [a]
 var isArray = function isArray(arr) {
-  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Invalid states sent with importState. Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof$2(arr)));
+  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Invalid states sent with importState. Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof(arr)));
 }; // eslint-disable-line max-len
 
 var fieldTypeIsValid = curry$1(function (validTypes, field) {
@@ -4115,8 +4146,6 @@ var sort = _curry2(function sort(comparator, list) {
   return _slice(list).sort(comparator);
 });
 
-var _typeof$3 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // State -> Object -> State
 var historyStateWithNewOrder = curry$1(function (state, newOrder) {
   return pipe(hideConfigs, over(StateLenses.fieldsState, sort(function (f1, f2) {
@@ -4126,7 +4155,7 @@ var historyStateWithNewOrder = curry$1(function (state, newOrder) {
 
 var reorderFields$1 = (function (state, _ref) {
   var newFieldsOrder = _ref.newFieldsOrder;
-  return (newFieldsOrder && Array.isArray(newFieldsOrder) ? lib.Right(newFieldsOrder) : lib.Left("newFieldsOrder must be an array but received " + (typeof newFieldsOrder === "undefined" ? "undefined" : _typeof$3(newFieldsOrder)))).chain(function (o) {
+  return (newFieldsOrder && Array.isArray(newFieldsOrder) ? lib.Right(newFieldsOrder) : lib.Left("newFieldsOrder must be an array but received " + (typeof newFieldsOrder === "undefined" ? "undefined" : _typeof(newFieldsOrder)))).chain(function (o) {
     return o.length === state.fieldsState.length ? lib.Right(o) : lib.Left("newFieldsOrder has " + o.length + " elements, but the current state has " + state.fieldsState.length + " elements");
   } // eslint-disable-line max-len
   ).chain(function (o) {
@@ -4140,13 +4169,11 @@ var reorderFields$1 = (function (state, _ref) {
   }).getOrElse(state);
 });
 
-var _typeof$4 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*  weak */
 /* eslint-disable new-cap */
 // [a] => Either String [a]
 var isArray$1 = function isArray(arr) {
-  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof$4(arr)));
+  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof(arr)));
 }; // eslint-disable-line max-len
 
 // Object -> Either String Object
@@ -4250,8 +4277,6 @@ describe("Update.undo", function () {
     expect(modifiedState.fieldsState.length).toEqual(0);
   });
 });
-
-var _typeof$5 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /* eslint-env jasmine */
 /* eslint-disable quote-props */
@@ -4358,11 +4383,9 @@ describe("Update.importState", function () {
       return idx !== 0 ? v : Object.assign({}, v, { id: 2 });
     });
     var updated = update(mockState$1, importState(validState2));
-    expect(_typeof$5(updated.fieldsState[0].id)).toEqual("string");
+    expect(_typeof(updated.fieldsState[0].id)).toEqual("string");
   });
 });
-
-var _typeof$6 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 /* eslint-env jasmine */
 /* eslint-disable quote-props */
@@ -4442,7 +4465,7 @@ describe("Update.createField", function () {
   it("adds required fields to instance", function (done) {
     var asyncDispatch = function asyncDispatch(action) {
       expect(action.createdFieldState.id).not.toEqual(undefined);
-      expect(_typeof$6(action.createdFieldState.configShowing)).toEqual("boolean");
+      expect(_typeof(action.createdFieldState.configShowing)).toEqual("boolean");
       done();
     };
 

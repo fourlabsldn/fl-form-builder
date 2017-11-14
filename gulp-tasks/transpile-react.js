@@ -43,7 +43,7 @@ const DEFAULT_CONFIG = {
       exclude: 'node_modules/**',
       babelrc: false,
       presets: [['env', { targets: { 'ie': 8 }, modules: false }], 'react'],
-      plugins: ['ramda', 'lodash'],
+      plugins: ['ramda', 'lodash', 'external-helpers'],
 
     }),
     // TODO: Change this from 'development' to 'production' during production

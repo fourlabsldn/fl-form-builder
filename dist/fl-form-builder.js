@@ -2915,15 +2915,130 @@ Left.prototype.leftMap = function(f) {
 
 var lib = either;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+
+
+
+
+
+
+
+
+
+
+
+
+var toConsumableArray = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+};
 
 /* eslint-disable new-cap */
 
 var updateAt = curry$1(function (keyArray, newVal, obj) {
   var deepNewVal = keyArray.reduceRight(function (result, key) {
-    return _defineProperty({}, key, result);
+    return defineProperty({}, key, result);
   }, newVal);
 
   return seamlessImmutable(obj).merge(deepNewVal, { deep: true });
@@ -3377,13 +3492,11 @@ var equals = _curry2(function equals(a, b) {
   return _equals(a, b, [], []);
 });
 
-var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*  weak */
 /* eslint-disable new-cap */
 // [a] => Either String [a]
 var isArray = function isArray(arr) {
-  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Invalid states sent with importState. Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof$1(arr)));
+  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Invalid states sent with importState. Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof(arr)));
 }; // eslint-disable-line max-len
 
 var fieldTypeIsValid = curry$1(function (validTypes, field) {
@@ -4562,8 +4675,6 @@ var sort = _curry2(function sort(comparator, list) {
   return _slice(list).sort(comparator);
 });
 
-var _typeof$2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 // State -> Object -> State
 var historyStateWithNewOrder = curry$1(function (state, newOrder) {
   return pipe$1(hideConfigs, over(StateLenses.fieldsState, sort(function (f1, f2) {
@@ -4573,7 +4684,7 @@ var historyStateWithNewOrder = curry$1(function (state, newOrder) {
 
 var reorderFields$1 = (function (state, _ref) {
   var newFieldsOrder = _ref.newFieldsOrder;
-  return (newFieldsOrder && Array.isArray(newFieldsOrder) ? lib.Right(newFieldsOrder) : lib.Left("newFieldsOrder must be an array but received " + (typeof newFieldsOrder === "undefined" ? "undefined" : _typeof$2(newFieldsOrder)))).chain(function (o) {
+  return (newFieldsOrder && Array.isArray(newFieldsOrder) ? lib.Right(newFieldsOrder) : lib.Left("newFieldsOrder must be an array but received " + (typeof newFieldsOrder === "undefined" ? "undefined" : _typeof(newFieldsOrder)))).chain(function (o) {
     return o.length === state.fieldsState.length ? lib.Right(o) : lib.Left("newFieldsOrder has " + o.length + " elements, but the current state has " + state.fieldsState.length + " elements");
   } // eslint-disable-line max-len
   ).chain(function (o) {
@@ -4587,13 +4698,11 @@ var reorderFields$1 = (function (state, _ref) {
   }).getOrElse(state);
 });
 
-var _typeof$3 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 /*  weak */
 /* eslint-disable new-cap */
 // [a] => Either String [a]
 var isArray$1 = function isArray(arr) {
-  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof$3(arr)));
+  return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof(arr)));
 }; // eslint-disable-line max-len
 
 // Object -> Either String Object
@@ -6673,7 +6782,7 @@ function constant(value) {
 
 var constant_1 = constant;
 
-var defineProperty = (function() {
+var defineProperty$1 = (function() {
   try {
     var func = _getNative(Object, 'defineProperty');
     func({}, '', {});
@@ -6681,7 +6790,7 @@ var defineProperty = (function() {
   } catch (e) {}
 }());
 
-var _defineProperty$1 = defineProperty;
+var _defineProperty = defineProperty$1;
 
 /**
  * The base implementation of `setToString` without support for hot loop shorting.
@@ -6691,8 +6800,8 @@ var _defineProperty$1 = defineProperty;
  * @param {Function} string The `toString` result.
  * @returns {Function} Returns `func`.
  */
-var baseSetToString = !_defineProperty$1 ? identity_1 : function(func, string) {
-  return _defineProperty$1(func, 'toString', {
+var baseSetToString = !_defineProperty ? identity_1 : function(func, string) {
+  return _defineProperty(func, 'toString', {
     'configurable': true,
     'enumerable': false,
     'value': constant_1(string),
@@ -7590,8 +7699,8 @@ var ary_1 = ary;
  * @param {*} value The value to assign.
  */
 function baseAssignValue(object, key, value) {
-  if (key == '__proto__' && _defineProperty$1) {
-    _defineProperty$1(object, key, {
+  if (key == '__proto__' && _defineProperty) {
+    _defineProperty(object, key, {
       'configurable': true,
       'enumerable': true,
       'value': value,
@@ -10616,12 +10725,12 @@ var _baseGet = baseGet;
  * _.get(object, 'a.b.c', 'default');
  * // => 'default'
  */
-function get(object, path, defaultValue) {
+function get$1(object, path, defaultValue) {
   var result = object == null ? undefined : _baseGet(object, path);
   return result === undefined ? defaultValue : result;
 }
 
-var get_1 = get;
+var get_1 = get$1;
 
 /**
  * The base implementation of `_.hasIn` without support for deep paths.
@@ -11081,7 +11190,7 @@ var curry$2 = func;
 var func$1 = convert_1('get', get_1);
 
 func$1.placeholder = placeholder;
-var get$1 = func$1;
+var get$2 = func$1;
 
 // Creates a new object with properties of the old one
 // ovewritten by properties of the new object.
@@ -11095,8 +11204,6 @@ function overshadow(oldObj, newObj) {
     return result;
   }, {});
 }
-
-function _defineProperty$3(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var ifEnterPressed = curry$2(function (f, e) {
   if (event.key === 'Enter') {
@@ -11132,7 +11239,7 @@ var addOption = function addOption(initialState, state, update) {
   };
 
   var optionIsEmpty = !newOption.caption;
-  var valueAlreadyExists = state.options.map(get$1('caption')).indexOf(newOption.caption) !== -1;
+  var valueAlreadyExists = state.options.map(get$2('caption')).indexOf(newOption.caption) !== -1;
 
   if (optionIsEmpty || valueAlreadyExists) {
     return;
@@ -11177,7 +11284,7 @@ var removeIfOptionIsNull = curry$2(function (state, update, optionIndex, event) 
 var updateProperty = curry$2(function (initialState, state, update, propName, event) {
   var value = event.target.value;
   var newValue = value || initialState()[propName];
-  var newState = overshadow(state, _defineProperty$3({}, propName, newValue));
+  var newState = overshadow(state, defineProperty({}, propName, newValue));
   update(newState);
 });
 
@@ -11400,8 +11507,6 @@ var typeInfo$2 = {
 
 var Dropdown = buildOptionsFieldConstructor(typeInfo$2, renderDropdownOptions);
 
-function _defineProperty$4(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /**
  *
  *
@@ -11417,7 +11522,7 @@ var updateField$2 = curry_1$1(function (update, state, initialState, fieldName, 
   var value = event.target.value;
   // Update or fallback to default value
   var newValue = value || initialState[fieldName];
-  var newState = overshadow(state, _defineProperty$4({}, fieldName, newValue));
+  var newState = overshadow(state, defineProperty({}, fieldName, newValue));
   update(newState);
 });
 
@@ -12588,7 +12693,7 @@ var KNOWN_STATICS = {
   arity: true
 };
 
-var defineProperty$2 = Object.defineProperty;
+var defineProperty$3 = Object.defineProperty;
 var getOwnPropertyNames = Object.getOwnPropertyNames;
 var getOwnPropertySymbols$1 = Object.getOwnPropertySymbols;
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
@@ -12616,7 +12721,7 @@ var hoistNonReactStatics = function hoistNonReactStatics(targetComponent, source
             if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
                 var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
                 try { // Avoid failures from read-only properties
-                    defineProperty$2(targetComponent, key, descriptor);
+                    defineProperty$3(targetComponent, key, descriptor);
                 } catch (e) {}
             }
         }
@@ -12770,7 +12875,7 @@ var Subscription = function () {
   return Subscription;
 }();
 
-var _extends$1 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck$1(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -12852,7 +12957,7 @@ selectorFactory) {
 
     var displayName = getDisplayName(wrappedComponentName);
 
-    var selectorFactoryOptions = _extends$1({}, connectOptions, {
+    var selectorFactoryOptions = _extends$2({}, connectOptions, {
       getDisplayName: getDisplayName,
       methodName: methodName,
       renderCountProp: renderCountProp,
@@ -12991,7 +13096,7 @@ selectorFactory) {
         // this is especially important for 'ref' since that's a reference back to the component
         // instance. a singleton memoized selector would then be holding a reference to the
         // instance, preventing the instance from being garbage collected, and that would be bad
-        var withExtras = _extends$1({}, props);
+        var withExtras = _extends$2({}, props);
         if (withRef) withExtras.ref = this.setWrappedInstance;
         if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
         if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
@@ -13186,10 +13291,10 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 
 var defaultMapStateToPropsFactories = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
 
-var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function defaultMergeProps(stateProps, dispatchProps, ownProps) {
-  return _extends$3({}, ownProps, stateProps, dispatchProps);
+  return _extends$4({}, ownProps, stateProps, dispatchProps);
 }
 
 function wrapMergePropsFunc(mergeProps) {
@@ -13347,7 +13452,7 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
   return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
 }
 
-var _extends$2 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties$1(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
@@ -13416,7 +13521,7 @@ function createConnect() {
     var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
     var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
 
-    return connectHOC(selectorFactory, _extends$2({
+    return connectHOC(selectorFactory, _extends$3({
       // used in error messages
       methodName: 'connect',
 
@@ -13662,11 +13767,9 @@ ButtonGroupDropdown.propTypes = {
   groupButtons: React__default.PropTypes.array
 };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 // FieldTypes -> [React.Component]
 var fieldGroups = pipe$1(map$1(prop$1("info")), groupBy$1(prop$1("group")), toPairs, map$1(function (_ref) {
-  var _ref2 = _slicedToArray(_ref, 2),
+  var _ref2 = slicedToArray(_ref, 2),
       groupName = _ref2[0],
       groupButtons = _ref2[1];
 
@@ -14251,10 +14354,6 @@ function setTranslation(el, val) {
   el.style.transform = "translate3d(0, " + val + "px, 0)"; //  eslint-disable-line no-param-reassign
 }
 
-var _slicedToArray$1 = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 /* eslint-disable no-nested-ternary */
 // elementsInfo does not include the draggedElInfo
 // Array ElementInfo -> ElementInfo -> Int -> Array Int
@@ -14286,8 +14385,8 @@ var onDrag = function onDrag(model, _ref) {
   var draggedElDisplacement = e.pageY - initialY;
   var elsDisplacement = calculateDisplacement(nonDraggedElsInfo, draggedElInfo, draggedElDisplacement);
 
-  zip([draggedElInfo].concat(_toConsumableArray(nonDraggedElsInfo)), [draggedElDisplacement].concat(_toConsumableArray(elsDisplacement))).forEach(function (_ref2) {
-    var _ref3 = _slicedToArray$1(_ref2, 2),
+  zip([draggedElInfo].concat(toConsumableArray(nonDraggedElsInfo)), [draggedElDisplacement].concat(toConsumableArray(elsDisplacement))).forEach(function (_ref2) {
+    var _ref3 = slicedToArray(_ref2, 2),
         elInfo = _ref3[0],
         elDisplacement = _ref3[1];
 
@@ -14297,8 +14396,6 @@ var onDrag = function onDrag(model, _ref) {
   // Does not change model
   return model;
 };
-
-function _toConsumableArray$1(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function insertTargetInRightPlace(els, initialTops, targetIndex) {
   var target = els[targetIndex];
@@ -14368,7 +14465,7 @@ var dragEnd = function dragEnd(model) {
   //   .map(info => info.element)
   //   .forEach(element => setTranslation(element, 0));
 
-  var sorted = [draggedElInfo].concat(_toConsumableArray$1(nonDraggedElsInfo)).sort(function (e1, e2) {
+  var sorted = [draggedElInfo].concat(toConsumableArray(nonDraggedElsInfo)).sort(function (e1, e2) {
     return e1.initialTop - e2.initialTop;
   });
   var elements = sorted.map(function (info) {
