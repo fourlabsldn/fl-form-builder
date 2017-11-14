@@ -84,6 +84,7 @@
   border: 1px solid transparent;
   -webkit-transition: -webkit-transform .2s ease-out;
   transition: -webkit-transform .2s ease-out;
+  -o-transition: transform .2s ease-out;
   transition: transform .2s ease-out;
   transition: transform .2s ease-out, -webkit-transform .2s ease-out;
   z-index: 1; }
@@ -179,6 +180,7 @@
   visibility: hidden;
   opacity: 0;
   -webkit-transition: all .2s ease, visibility 0s;
+  -o-transition: all .2s ease, visibility 0s;
   transition: all .2s ease, visibility 0s; }
 
 .fl-fb-Field-configuration {
@@ -191,6 +193,7 @@
   visibility: hidden;
   opacity: 0;
   -webkit-transition: all 0.2s ease, visibility 0s;
+  -o-transition: all 0.2s ease, visibility 0s;
   transition: all 0.2s ease, visibility 0s;
   position: absolute;
   right: -1px;
@@ -339,6 +342,7 @@
     -webkit-border-radius: 20px;
             border-radius: 20px;
     -webkit-transition: background 0.4s;
+    -o-transition: background 0.4s;
     transition: background 0.4s; }
   .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round + label:after {
     width: -webkit-calc( 20px - 2px);
@@ -349,6 +353,7 @@
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     -webkit-transition: margin 0.4s;
+    -o-transition: margin 0.4s;
     transition: margin 0.4s; }
   .fl-fb-ui-switch input.fl-fb-ui-switch-toggle-round:checked + label:before {
     background-color: #63A8EB; }
