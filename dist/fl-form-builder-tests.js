@@ -1156,72 +1156,37 @@ assert.warn = function warn(condition, errorMessage) {
  *      _isArray({}); //=> false
  */
 var _isArray = Array.isArray || function _isArray(val) {
-  return (val != null &&
-          val.length >= 0 &&
-          Object.prototype.toString.call(val) === '[object Array]');
+  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
 };
 
 /**
- * An optimized, private array `slice` implementation.
- *
- * @private
- * @param {Arguments|Array} args The array or arguments object to consider.
- * @param {Number} [from=0] The array index to slice from, inclusive.
- * @param {Number} [to=args.length] The array index to slice to, exclusive.
- * @return {Array} A new, sliced array.
- * @example
- *
- *      _slice([1, 2, 3, 4, 5], 1, 3); //=> [2, 3]
- *
- *      var firstThreeArgs = function(a, b, c, d) {
- *        return _slice(arguments, 0, 3);
- *      };
- *      firstThreeArgs(1, 2, 3, 4); //=> [1, 2, 3]
- */
-var _slice = function _slice(args, from, to) {
-  switch (arguments.length) {
-    case 1: return _slice(args, 0, args.length);
-    case 2: return _slice(args, from, args.length);
-    default:
-      var list = [];
-      var idx = 0;
-      var len = Math.max(0, Math.min(args.length, to) - from);
-      while (idx < len) {
-        list[idx] = args[from + idx];
-        idx += 1;
-      }
-      return list;
-  }
-};
-
-/**
- * Similar to hasMethod, this checks whether a function has a [methodname]
- * function. If it isn't an array it will execute that function otherwise it
- * will default to the ramda implementation.
+ * This checks whether a function has a [methodname] function. If it isn't an
+ * array it will execute that function otherwise it will default to the ramda
+ * implementation.
  *
  * @private
  * @param {Function} fn ramda implemtation
  * @param {String} methodname property to check for a custom implementation
  * @return {Object} Whatever the return value of the method is.
  */
-var _checkForMethod = function _checkForMethod(methodname, fn) {
-  return function() {
+
+
+function _checkForMethod(methodname, fn) {
+  return function () {
     var length = arguments.length;
     if (length === 0) {
       return fn();
     }
     var obj = arguments[length - 1];
-    return (_isArray(obj) || typeof obj[methodname] !== 'function') ?
-      fn.apply(this, arguments) :
-      obj[methodname].apply(obj, _slice(arguments, 0, length - 1));
+    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
   };
-};
+}
+var _checkForMethod_1 = _checkForMethod;
 
-var _isPlaceholder = function _isPlaceholder(a) {
-  return a != null &&
-         typeof a === 'object' &&
-         a['@@functional/placeholder'] === true;
-};
+function _isPlaceholder(a) {
+       return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
+}
+var _isPlaceholder_1 = _isPlaceholder;
 
 /**
  * Optimized internal one-arity curry function.
@@ -1231,15 +1196,18 @@ var _isPlaceholder = function _isPlaceholder(a) {
  * @param {Function} fn The function to curry.
  * @return {Function} The curried function.
  */
-var _curry1 = function _curry1(fn) {
+
+
+function _curry1(fn) {
   return function f1(a) {
-    if (arguments.length === 0 || _isPlaceholder(a)) {
+    if (arguments.length === 0 || _isPlaceholder_1(a)) {
       return f1;
     } else {
       return fn.apply(this, arguments);
     }
   };
-};
+}
+var _curry1_1 = _curry1;
 
 /**
  * Optimized internal two-arity curry function.
@@ -1249,22 +1217,27 @@ var _curry1 = function _curry1(fn) {
  * @param {Function} fn The function to curry.
  * @return {Function} The curried function.
  */
-var _curry2 = function _curry2(fn) {
+
+
+function _curry2(fn) {
   return function f2(a, b) {
     switch (arguments.length) {
       case 0:
         return f2;
       case 1:
-        return _isPlaceholder(a) ? f2
-             : _curry1(function(_b) { return fn(a, _b); });
+        return _isPlaceholder_1(a) ? f2 : _curry1_1(function (_b) {
+          return fn(a, _b);
+        });
       default:
-        return _isPlaceholder(a) && _isPlaceholder(b) ? f2
-             : _isPlaceholder(a) ? _curry1(function(_a) { return fn(_a, b); })
-             : _isPlaceholder(b) ? _curry1(function(_b) { return fn(a, _b); })
-             : fn(a, b);
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f2 : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
+          return fn(_a, b);
+        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
+          return fn(a, _b);
+        }) : fn(a, b);
     }
   };
-};
+}
+var _curry2_1 = _curry2;
 
 /**
  * Optimized internal three-arity curry function.
@@ -1274,31 +1247,43 @@ var _curry2 = function _curry2(fn) {
  * @param {Function} fn The function to curry.
  * @return {Function} The curried function.
  */
-var _curry3 = function _curry3(fn) {
+
+
+function _curry3(fn) {
   return function f3(a, b, c) {
     switch (arguments.length) {
       case 0:
         return f3;
       case 1:
-        return _isPlaceholder(a) ? f3
-             : _curry2(function(_b, _c) { return fn(a, _b, _c); });
+        return _isPlaceholder_1(a) ? f3 : _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        });
       case 2:
-        return _isPlaceholder(a) && _isPlaceholder(b) ? f3
-             : _isPlaceholder(a) ? _curry2(function(_a, _c) { return fn(_a, b, _c); })
-             : _isPlaceholder(b) ? _curry2(function(_b, _c) { return fn(a, _b, _c); })
-             : _curry1(function(_c) { return fn(a, b, _c); });
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) ? f3 : _isPlaceholder_1(a) ? _curry2_1(function (_a, _c) {
+          return fn(_a, b, _c);
+        }) : _isPlaceholder_1(b) ? _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        }) : _curry1_1(function (_c) {
+          return fn(a, b, _c);
+        });
       default:
-        return _isPlaceholder(a) && _isPlaceholder(b) && _isPlaceholder(c) ? f3
-             : _isPlaceholder(a) && _isPlaceholder(b) ? _curry2(function(_a, _b) { return fn(_a, _b, c); })
-             : _isPlaceholder(a) && _isPlaceholder(c) ? _curry2(function(_a, _c) { return fn(_a, b, _c); })
-             : _isPlaceholder(b) && _isPlaceholder(c) ? _curry2(function(_b, _c) { return fn(a, _b, _c); })
-             : _isPlaceholder(a) ? _curry1(function(_a) { return fn(_a, b, c); })
-             : _isPlaceholder(b) ? _curry1(function(_b) { return fn(a, _b, c); })
-             : _isPlaceholder(c) ? _curry1(function(_c) { return fn(a, b, _c); })
-             : fn(a, b, c);
+        return _isPlaceholder_1(a) && _isPlaceholder_1(b) && _isPlaceholder_1(c) ? f3 : _isPlaceholder_1(a) && _isPlaceholder_1(b) ? _curry2_1(function (_a, _b) {
+          return fn(_a, _b, c);
+        }) : _isPlaceholder_1(a) && _isPlaceholder_1(c) ? _curry2_1(function (_a, _c) {
+          return fn(_a, b, _c);
+        }) : _isPlaceholder_1(b) && _isPlaceholder_1(c) ? _curry2_1(function (_b, _c) {
+          return fn(a, _b, _c);
+        }) : _isPlaceholder_1(a) ? _curry1_1(function (_a) {
+          return fn(_a, b, c);
+        }) : _isPlaceholder_1(b) ? _curry1_1(function (_b) {
+          return fn(a, _b, c);
+        }) : _isPlaceholder_1(c) ? _curry1_1(function (_c) {
+          return fn(a, b, _c);
+        }) : fn(a, b, c);
     }
   };
-};
+}
+var _curry3_1 = _curry3;
 
 /**
  * Returns the elements of the given list or string (or object with a `slice`
@@ -1324,9 +1309,22 @@ var _curry3 = function _curry3(fn) {
  *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
  *      R.slice(0, 3, 'ramda');                     //=> 'ram'
  */
-var slice = _curry3(_checkForMethod('slice', function slice(fromIndex, toIndex, list) {
+
+
+var slice = /*#__PURE__*/_curry3_1( /*#__PURE__*/_checkForMethod_1('slice', function slice(fromIndex, toIndex, list) {
   return Array.prototype.slice.call(list, fromIndex, toIndex);
 }));
+var slice_1 = slice;
+
+// `Identity` is a functor that holds a single value, where `map` simply
+// transforms the held value with the provided function.
+
+
+var Identity = function (x) {
+  return { value: x, map: function (f) {
+      return Identity(f(x));
+    } };
+};
 
 /**
  * Returns the result of "setting" the portion of the given data structure
@@ -1350,20 +1348,15 @@ var slice = _curry3(_checkForMethod('slice', function slice(fromIndex, toIndex, 
  *
  *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
  */
-var over = (function() {
-  // `Identity` is a functor that holds a single value, where `map` simply
-  // transforms the held value with the provided function.
-  var Identity = function(x) {
-    return {value: x, map: function(f) { return Identity(f(x)); }};
-  };
-
-  return _curry3(function over(lens, f, x) {
-    // The value returned by the getter function is first transformed with `f`,
-    // then set as the value of an `Identity`. This is then mapped over with the
-    // setter function of the lens.
-    return lens(function(y) { return Identity(f(y)); })(x).value;
-  });
-}());
+var over = /*#__PURE__*/_curry3_1(function over(lens, f, x) {
+  // The value returned by the getter function is first transformed with `f`,
+  // then set as the value of an `Identity`. This is then mapped over with the
+  // setter function of the lens.
+  return lens(function (y) {
+    return Identity(f(y));
+  })(x).value;
+});
+var over_1 = over;
 
 /**
  * Returns a function that always returns the given value. Note that for
@@ -1384,11 +1377,14 @@ var over = (function() {
  *      var t = R.always('Tee');
  *      t(); //=> 'Tee'
  */
-var always = _curry1(function always(val) {
-  return function() {
+
+
+var always = /*#__PURE__*/_curry1_1(function always(val) {
+  return function () {
     return val;
   };
 });
+var always_1 = always;
 
 /**
  * Returns the result of "setting" the portion of the given data structure
@@ -1412,48 +1408,144 @@ var always = _curry1(function always(val) {
  *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
  *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
  */
-var set$1 = _curry3(function set(lens, v, x) {
-  return over(lens, always(v), x);
-});
 
-var _arity = function _arity(n, fn) {
+
+var set$1 = /*#__PURE__*/_curry3_1(function set(lens, v, x) {
+  return over_1(lens, always_1(v), x);
+});
+var set_1 = set$1;
+
+function _arity(n, fn) {
   /* eslint-disable no-unused-vars */
   switch (n) {
-    case 0: return function() { return fn.apply(this, arguments); };
-    case 1: return function(a0) { return fn.apply(this, arguments); };
-    case 2: return function(a0, a1) { return fn.apply(this, arguments); };
-    case 3: return function(a0, a1, a2) { return fn.apply(this, arguments); };
-    case 4: return function(a0, a1, a2, a3) { return fn.apply(this, arguments); };
-    case 5: return function(a0, a1, a2, a3, a4) { return fn.apply(this, arguments); };
-    case 6: return function(a0, a1, a2, a3, a4, a5) { return fn.apply(this, arguments); };
-    case 7: return function(a0, a1, a2, a3, a4, a5, a6) { return fn.apply(this, arguments); };
-    case 8: return function(a0, a1, a2, a3, a4, a5, a6, a7) { return fn.apply(this, arguments); };
-    case 9: return function(a0, a1, a2, a3, a4, a5, a6, a7, a8) { return fn.apply(this, arguments); };
-    case 10: return function(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) { return fn.apply(this, arguments); };
-    default: throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
+    case 0:
+      return function () {
+        return fn.apply(this, arguments);
+      };
+    case 1:
+      return function (a0) {
+        return fn.apply(this, arguments);
+      };
+    case 2:
+      return function (a0, a1) {
+        return fn.apply(this, arguments);
+      };
+    case 3:
+      return function (a0, a1, a2) {
+        return fn.apply(this, arguments);
+      };
+    case 4:
+      return function (a0, a1, a2, a3) {
+        return fn.apply(this, arguments);
+      };
+    case 5:
+      return function (a0, a1, a2, a3, a4) {
+        return fn.apply(this, arguments);
+      };
+    case 6:
+      return function (a0, a1, a2, a3, a4, a5) {
+        return fn.apply(this, arguments);
+      };
+    case 7:
+      return function (a0, a1, a2, a3, a4, a5, a6) {
+        return fn.apply(this, arguments);
+      };
+    case 8:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
+        return fn.apply(this, arguments);
+      };
+    case 9:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+        return fn.apply(this, arguments);
+      };
+    case 10:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+        return fn.apply(this, arguments);
+      };
+    default:
+      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
   }
-};
+}
+var _arity_1 = _arity;
 
-var _pipe = function _pipe(f, g) {
-  return function() {
+function _pipe(f, g) {
+  return function () {
     return g.call(this, f.apply(this, arguments));
   };
-};
+}
+var _pipe_1 = _pipe;
 
-var _xwrap = (function() {
+function _isString(x) {
+  return Object.prototype.toString.call(x) === '[object String]';
+}
+var _isString_1 = _isString;
+
+/**
+ * Tests whether or not an object is similar to an array.
+ *
+ * @private
+ * @category Type
+ * @category List
+ * @sig * -> Boolean
+ * @param {*} x The object to test.
+ * @return {Boolean} `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
+ * @example
+ *
+ *      _isArrayLike([]); //=> true
+ *      _isArrayLike(true); //=> false
+ *      _isArrayLike({}); //=> false
+ *      _isArrayLike({length: 10}); //=> false
+ *      _isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
+ */
+
+
+var _isArrayLike = /*#__PURE__*/_curry1_1(function isArrayLike(x) {
+  if (_isArray(x)) {
+    return true;
+  }
+  if (!x) {
+    return false;
+  }
+  if (typeof x !== 'object') {
+    return false;
+  }
+  if (_isString_1(x)) {
+    return false;
+  }
+  if (x.nodeType === 1) {
+    return !!x.length;
+  }
+  if (x.length === 0) {
+    return true;
+  }
+  if (x.length > 0) {
+    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
+  }
+  return false;
+});
+var _isArrayLike_1 = _isArrayLike;
+
+var XWrap = /*#__PURE__*/function () {
   function XWrap(fn) {
     this.f = fn;
   }
-  XWrap.prototype['@@transducer/init'] = function() {
+  XWrap.prototype['@@transducer/init'] = function () {
     throw new Error('init not implemented on XWrap');
   };
-  XWrap.prototype['@@transducer/result'] = function(acc) { return acc; };
-  XWrap.prototype['@@transducer/step'] = function(acc, x) {
+  XWrap.prototype['@@transducer/result'] = function (acc) {
+    return acc;
+  };
+  XWrap.prototype['@@transducer/step'] = function (acc, x) {
     return this.f(acc, x);
   };
 
-  return function _xwrap(fn) { return new XWrap(fn); };
-}());
+  return XWrap;
+}();
+
+function _xwrap(fn) {
+  return new XWrap(fn);
+}
+var _xwrap_1 = _xwrap;
 
 /**
  * Creates a function that is bound to a context.
@@ -1475,101 +1567,73 @@ var _xwrap = (function() {
  *      var log = R.bind(console.log, console);
  *      R.pipe(R.assoc('a', 2), R.tap(log), R.assoc('a', 3))({a: 1}); //=> {a: 3}
  *      // logs {a: 2}
+ * @symb R.bind(f, o)(a, b) = f.call(o, a, b)
  */
-var bind = _curry2(function bind(fn, thisObj) {
-  return _arity(fn.length, function() {
+
+
+var bind = /*#__PURE__*/_curry2_1(function bind(fn, thisObj) {
+  return _arity_1(fn.length, function () {
     return fn.apply(thisObj, arguments);
   });
 });
+var bind_1 = bind;
 
-var _isString = function _isString(x) {
-  return Object.prototype.toString.call(x) === '[object String]';
-};
-
-/**
- * Tests whether or not an object is similar to an array.
- *
- * @func
- * @memberOf R
- * @since v0.5.0
- * @category Type
- * @category List
- * @sig * -> Boolean
- * @param {*} x The object to test.
- * @return {Boolean} `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
- * @example
- *
- *      R.isArrayLike([]); //=> true
- *      R.isArrayLike(true); //=> false
- *      R.isArrayLike({}); //=> false
- *      R.isArrayLike({length: 10}); //=> false
- *      R.isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
- */
-var isArrayLike = _curry1(function isArrayLike(x) {
-  if (_isArray(x)) { return true; }
-  if (!x) { return false; }
-  if (typeof x !== 'object') { return false; }
-  if (_isString(x)) { return false; }
-  if (x.nodeType === 1) { return !!x.length; }
-  if (x.length === 0) { return true; }
-  if (x.length > 0) {
-    return x.hasOwnProperty(0) && x.hasOwnProperty(x.length - 1);
-  }
-  return false;
-});
-
-var _reduce = (function() {
-  function _arrayReduce(xf, acc, list) {
-    var idx = 0;
-    var len = list.length;
-    while (idx < len) {
-      acc = xf['@@transducer/step'](acc, list[idx]);
-      if (acc && acc['@@transducer/reduced']) {
-        acc = acc['@@transducer/value'];
-        break;
-      }
-      idx += 1;
+function _arrayReduce(xf, acc, list) {
+  var idx = 0;
+  var len = list.length;
+  while (idx < len) {
+    acc = xf['@@transducer/step'](acc, list[idx]);
+    if (acc && acc['@@transducer/reduced']) {
+      acc = acc['@@transducer/value'];
+      break;
     }
-    return xf['@@transducer/result'](acc);
+    idx += 1;
   }
+  return xf['@@transducer/result'](acc);
+}
 
-  function _iterableReduce(xf, acc, iter) {
-    var step = iter.next();
-    while (!step.done) {
-      acc = xf['@@transducer/step'](acc, step.value);
-      if (acc && acc['@@transducer/reduced']) {
-        acc = acc['@@transducer/value'];
-        break;
-      }
-      step = iter.next();
+function _iterableReduce(xf, acc, iter) {
+  var step = iter.next();
+  while (!step.done) {
+    acc = xf['@@transducer/step'](acc, step.value);
+    if (acc && acc['@@transducer/reduced']) {
+      acc = acc['@@transducer/value'];
+      break;
     }
-    return xf['@@transducer/result'](acc);
+    step = iter.next();
+  }
+  return xf['@@transducer/result'](acc);
+}
+
+function _methodReduce(xf, acc, obj, methodName) {
+  return xf['@@transducer/result'](obj[methodName](bind_1(xf['@@transducer/step'], xf), acc));
+}
+
+var symIterator = typeof Symbol !== 'undefined' ? Symbol.iterator : '@@iterator';
+
+function _reduce(fn, acc, list) {
+  if (typeof fn === 'function') {
+    fn = _xwrap_1(fn);
+  }
+  if (_isArrayLike_1(list)) {
+    return _arrayReduce(fn, acc, list);
+  }
+  if (typeof list['fantasy-land/reduce'] === 'function') {
+    return _methodReduce(fn, acc, list, 'fantasy-land/reduce');
+  }
+  if (list[symIterator] != null) {
+    return _iterableReduce(fn, acc, list[symIterator]());
+  }
+  if (typeof list.next === 'function') {
+    return _iterableReduce(fn, acc, list);
+  }
+  if (typeof list.reduce === 'function') {
+    return _methodReduce(fn, acc, list, 'reduce');
   }
 
-  function _methodReduce(xf, acc, obj) {
-    return xf['@@transducer/result'](obj.reduce(bind(xf['@@transducer/step'], xf), acc));
-  }
-
-  var symIterator = (typeof Symbol !== 'undefined') ? Symbol.iterator : '@@iterator';
-  return function _reduce(fn, acc, list) {
-    if (typeof fn === 'function') {
-      fn = _xwrap(fn);
-    }
-    if (isArrayLike(list)) {
-      return _arrayReduce(fn, acc, list);
-    }
-    if (typeof list.reduce === 'function') {
-      return _methodReduce(fn, acc, list);
-    }
-    if (list[symIterator] != null) {
-      return _iterableReduce(fn, acc, list[symIterator]());
-    }
-    if (typeof list.next === 'function') {
-      return _iterableReduce(fn, acc, list);
-    }
-    throw new TypeError('reduce: list must be array or iterable');
-  };
-}());
+  throw new TypeError('reduce: list must be array or iterable');
+}
+var _reduce_1 = _reduce;
 
 /**
  * Returns a single item by iterating through the list, successively calling
@@ -1577,14 +1641,19 @@ var _reduce = (function() {
  * value from the array, and then passing the result to the next call.
  *
  * The iterator function receives two values: *(acc, value)*. It may use
- * `R.reduced` to shortcut the iteration.
+ * [`R.reduced`](#reduced) to shortcut the iteration.
+ *
+ * The arguments' order of [`reduceRight`](#reduceRight)'s iterator function
+ * is *(value, acc)*.
  *
  * Note: `R.reduce` does not skip deleted or unassigned indices (sparse
  * arrays), unlike the native `Array.prototype.reduce` method. For more details
  * on this behavior, see:
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce#Description
  *
- * Dispatches to the `reduce` method of the third argument, if present.
+ * Dispatches to the `reduce` method of the third argument, if present. When
+ * doing so, it is up to the user to handle the [`R.reduced`](#reduced)
+ * shortcuting, as this is not implemented by `reduce`.
  *
  * @func
  * @memberOf R
@@ -1596,15 +1665,26 @@ var _reduce = (function() {
  * @param {*} acc The accumulator value.
  * @param {Array} list The list to iterate over.
  * @return {*} The final, accumulated value.
- * @see R.reduced, R.addIndex
+ * @see R.reduced, R.addIndex, R.reduceRight
  * @example
  *
- *      var numbers = [1, 2, 3];
- *      var plus = (a, b) => a + b;
+ *      R.reduce(R.subtract, 0, [1, 2, 3, 4]) // => ((((0 - 1) - 2) - 3) - 4) = -10
+ *      //          -               -10
+ *      //         / \              / \
+ *      //        -   4           -6   4
+ *      //       / \              / \
+ *      //      -   3   ==>     -3   3
+ *      //     / \              / \
+ *      //    -   2           -1   2
+ *      //   / \              / \
+ *      //  0   1            0   1
  *
- *      R.reduce(plus, 10, numbers); //=> 16
+ * @symb R.reduce(f, a, [b, c, d]) = f(f(f(a, b), c), d)
  */
-var reduce = _curry3(_reduce);
+
+
+var reduce = /*#__PURE__*/_curry3_1(_reduce_1);
+var reduce_1 = reduce;
 
 /**
  * Returns all but the first element of the given list or string (or object
@@ -1633,7 +1713,10 @@ var reduce = _curry3(_reduce);
  *      R.tail('a');    //=> ''
  *      R.tail('');     //=> ''
  */
-var tail = _checkForMethod('tail', slice(1, Infinity));
+
+
+var tail = /*#__PURE__*/_curry1_1( /*#__PURE__*/_checkForMethod_1('tail', /*#__PURE__*/slice_1(1, Infinity)));
+var tail_1 = tail;
 
 /**
  * Performs left-to-right function composition. The leftmost function may have
@@ -1656,14 +1739,17 @@ var tail = _checkForMethod('tail', slice(1, Infinity));
  *      var f = R.pipe(Math.pow, R.negate, R.inc);
  *
  *      f(3, 4); // -(3^4) + 1
+ * @symb R.pipe(f, g, h)(a, b) = h(g(f(a, b)))
  */
-var pipe = function pipe() {
+
+
+function pipe() {
   if (arguments.length === 0) {
     throw new Error('pipe requires at least one argument');
   }
-  return _arity(arguments[0].length,
-                reduce(_pipe, arguments[0], tail(arguments)));
-};
+  return _arity_1(arguments[0].length, reduce_1(_pipe_1, arguments[0], tail_1(arguments)));
+}
+var pipe_1 = pipe;
 
 /**
  * Private `concat` function to merge two array-like objects.
@@ -1676,7 +1762,7 @@ var pipe = function pipe() {
  *
  *      _concat([4, 5, 6], [1, 2, 3]); //=> [4, 5, 6, 1, 2, 3]
  */
-var _concat = function _concat(set1, set2) {
+function _concat(set1, set2) {
   set1 = set1 || [];
   set2 = set2 || [];
   var idx;
@@ -1695,7 +1781,8 @@ var _concat = function _concat(set1, set2) {
     idx += 1;
   }
   return result;
-};
+}
+var _concat_1 = _concat;
 
 /**
  * Returns a new list with the given element at the front, followed by the
@@ -1714,9 +1801,46 @@ var _concat = function _concat(set1, set2) {
  *
  *      R.prepend('fee', ['fi', 'fo', 'fum']); //=> ['fee', 'fi', 'fo', 'fum']
  */
-var prepend = _curry2(function prepend(el, list) {
-  return _concat([el], list);
+
+
+var prepend = /*#__PURE__*/_curry2_1(function prepend(el, list) {
+  return _concat_1([el], list);
 });
+var prepend_1 = prepend;
+
+/**
+ * Retrieve the value at a given path.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.2.0
+ * @category Object
+ * @typedefn Idx = String | Int
+ * @sig [Idx] -> {a} -> a | Undefined
+ * @param {Array} path The path to use.
+ * @param {Object} obj The object to retrieve the nested property from.
+ * @return {*} The data at `path`.
+ * @see R.prop
+ * @example
+ *
+ *      R.path(['a', 'b'], {a: {b: 2}}); //=> 2
+ *      R.path(['a', 'b'], {c: {b: 2}}); //=> undefined
+ */
+
+
+var path = /*#__PURE__*/_curry2_1(function path(paths, obj) {
+  var val = obj;
+  var idx = 0;
+  while (idx < paths.length) {
+    if (val == null) {
+      return;
+    }
+    val = val[paths[idx]];
+    idx += 1;
+  }
+  return val;
+});
+var path_1 = path;
 
 /**
  * Returns a function that when supplied an object returns the indicated
@@ -1736,48 +1860,59 @@ var prepend = _curry2(function prepend(el, list) {
  *      R.prop('x', {x: 100}); //=> 100
  *      R.prop('x', {}); //=> undefined
  */
-var prop$1 = _curry2(function prop(p, obj) { return obj[p]; });
 
-var _isTransformer = function _isTransformer(obj) {
+var prop = /*#__PURE__*/_curry2_1(function prop(p, obj) {
+  return path_1([p], obj);
+});
+var prop_1$1 = prop;
+
+function _isTransformer(obj) {
   return typeof obj['@@transducer/step'] === 'function';
-};
+}
+var _isTransformer_1 = _isTransformer;
 
 /**
  * Returns a function that dispatches with different strategies based on the
  * object in list position (last argument). If it is an array, executes [fn].
- * Otherwise, if it has a function with [methodname], it will execute that
- * function (functor case). Otherwise, if it is a transformer, uses transducer
- * [xf] to return a new transformer (transducer case). Otherwise, it will
- * default to executing [fn].
+ * Otherwise, if it has a function with one of the given method names, it will
+ * execute that function (functor case). Otherwise, if it is a transformer,
+ * uses transducer [xf] to return a new transformer (transducer case).
+ * Otherwise, it will default to executing [fn].
  *
  * @private
- * @param {String} methodname property to check for a custom implementation
+ * @param {Array} methodNames properties to check for a custom implementation
  * @param {Function} xf transducer to initialize if object is transformer
  * @param {Function} fn default ramda implementation
  * @return {Function} A function that dispatches on object in list position
  */
-var _dispatchable = function _dispatchable(methodname, xf, fn) {
-  return function() {
-    var length = arguments.length;
-    if (length === 0) {
+
+
+function _dispatchable(methodNames, xf, fn) {
+  return function () {
+    if (arguments.length === 0) {
       return fn();
     }
-    var obj = arguments[length - 1];
+    var args = Array.prototype.slice.call(arguments, 0);
+    var obj = args.pop();
     if (!_isArray(obj)) {
-      var args = _slice(arguments, 0, length - 1);
-      if (typeof obj[methodname] === 'function') {
-        return obj[methodname].apply(obj, args);
+      var idx = 0;
+      while (idx < methodNames.length) {
+        if (typeof obj[methodNames[idx]] === 'function') {
+          return obj[methodNames[idx]].apply(obj, args);
+        }
+        idx += 1;
       }
-      if (_isTransformer(obj)) {
+      if (_isTransformer_1(obj)) {
         var transducer = xf.apply(null, args);
         return transducer(obj);
       }
     }
     return fn.apply(this, arguments);
   };
-};
+}
+var _dispatchable_1 = _dispatchable;
 
-var _map = function _map(fn, functor) {
+function _map(fn, functor) {
   var idx = 0;
   var len = functor.length;
   var result = Array(len);
@@ -1786,30 +1921,37 @@ var _map = function _map(fn, functor) {
     idx += 1;
   }
   return result;
-};
+}
+var _map_1 = _map;
 
 var _xfBase = {
-  init: function() {
+  init: function () {
     return this.xf['@@transducer/init']();
   },
-  result: function(result) {
+  result: function (result) {
     return this.xf['@@transducer/result'](result);
   }
 };
 
-var _xmap = (function() {
+var XMap = /*#__PURE__*/function () {
+
   function XMap(f, xf) {
     this.xf = xf;
     this.f = f;
   }
   XMap.prototype['@@transducer/init'] = _xfBase.init;
   XMap.prototype['@@transducer/result'] = _xfBase.result;
-  XMap.prototype['@@transducer/step'] = function(result, input) {
+  XMap.prototype['@@transducer/step'] = function (result, input) {
     return this.xf['@@transducer/step'](result, this.f(input));
   };
 
-  return _curry2(function _xmap(f, xf) { return new XMap(f, xf); });
-}());
+  return XMap;
+}();
+
+var _xmap = /*#__PURE__*/_curry2_1(function _xmap(f, xf) {
+  return new XMap(f, xf);
+});
+var _xmap_1 = _xmap;
 
 /**
  * Internal curryN function.
@@ -1821,32 +1963,32 @@ var _xmap = (function() {
  * @param {Function} fn The function to curry.
  * @return {Function} The curried function.
  */
-var _curryN = function _curryN(length, received, fn) {
-  return function() {
+
+
+function _curryN(length, received, fn) {
+  return function () {
     var combined = [];
     var argsIdx = 0;
     var left = length;
     var combinedIdx = 0;
     while (combinedIdx < received.length || argsIdx < arguments.length) {
       var result;
-      if (combinedIdx < received.length &&
-          (!_isPlaceholder(received[combinedIdx]) ||
-           argsIdx >= arguments.length)) {
+      if (combinedIdx < received.length && (!_isPlaceholder_1(received[combinedIdx]) || argsIdx >= arguments.length)) {
         result = received[combinedIdx];
       } else {
         result = arguments[argsIdx];
         argsIdx += 1;
       }
       combined[combinedIdx] = result;
-      if (!_isPlaceholder(result)) {
+      if (!_isPlaceholder_1(result)) {
         left -= 1;
       }
       combinedIdx += 1;
     }
-    return left <= 0 ? fn.apply(this, combined)
-                     : _arity(left, _curryN(length, combined, fn));
+    return left <= 0 ? fn.apply(this, combined) : _arity_1(left, _curryN(length, combined, fn));
   };
-};
+}
+var _curryN_1 = _curryN;
 
 /**
  * Returns a curried equivalent of the provided function, with the specified
@@ -1859,10 +2001,10 @@ var _curryN = function _curryN(length, received, fn) {
  *   - `g(1, 2)(3)`
  *   - `g(1, 2, 3)`
  *
- * Secondly, the special placeholder value `R.__` may be used to specify
+ * Secondly, the special placeholder value [`R.__`](#__) may be used to specify
  * "gaps", allowing partial application of any combination of arguments,
- * regardless of their positions. If `g` is as above and `_` is `R.__`, the
- * following are equivalent:
+ * regardless of their positions. If `g` is as above and `_` is [`R.__`](#__),
+ * the following are equivalent:
  *
  *   - `g(1, 2, 3)`
  *   - `g(_, 2, 3)(1)`
@@ -1890,23 +2032,54 @@ var _curryN = function _curryN(length, received, fn) {
  *      var g = f(3);
  *      g(4); //=> 10
  */
-var curryN = _curry2(function curryN(length, fn) {
-  if (length === 1) {
-    return _curry1(fn);
-  }
-  return _arity(length, _curryN(length, [], fn));
-});
 
-var _has = function _has(prop, obj) {
+
+var curryN = /*#__PURE__*/_curry2_1(function curryN(length, fn) {
+  if (length === 1) {
+    return _curry1_1(fn);
+  }
+  return _arity_1(length, _curryN_1(length, [], fn));
+});
+var curryN_1 = curryN;
+
+function _has(prop, obj) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+var _has_1 = _has;
+
+var toString = Object.prototype.toString;
+var _isArguments = function () {
+  return toString.call(arguments) === '[object Arguments]' ? function _isArguments(x) {
+    return toString.call(x) === '[object Arguments]';
+  } : function _isArguments(x) {
+    return _has_1('callee', x);
+  };
 };
 
-var _isArguments = (function() {
-  var toString = Object.prototype.toString;
-  return toString.call(arguments) === '[object Arguments]' ?
-    function _isArguments(x) { return toString.call(x) === '[object Arguments]'; } :
-    function _isArguments(x) { return _has('callee', x); };
-}());
+var _isArguments_1 = _isArguments;
+
+// cover IE < 9 keys issues
+
+
+var hasEnumBug = ! /*#__PURE__*/{ toString: null }.propertyIsEnumerable('toString');
+var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+// Safari bug
+var hasArgsEnumBug = /*#__PURE__*/function () {
+  'use strict';
+
+  return arguments.propertyIsEnumerable('length');
+}();
+
+var contains = function contains(list, item) {
+  var idx = 0;
+  while (idx < list.length) {
+    if (list[idx] === item) {
+      return true;
+    }
+    idx += 1;
+  }
+  return false;
+};
 
 /**
  * Returns a list containing the names of all the enumerable own properties of
@@ -1921,61 +2094,39 @@ var _isArguments = (function() {
  * @sig {k: v} -> [k]
  * @param {Object} obj The object to extract properties from
  * @return {Array} An array of the object's own properties.
+ * @see R.keysIn, R.values
  * @example
  *
  *      R.keys({a: 1, b: 2, c: 3}); //=> ['a', 'b', 'c']
  */
-var keys = (function() {
-  // cover IE < 9 keys issues
-  var hasEnumBug = !({toString: null}).propertyIsEnumerable('toString');
-  var nonEnumerableProps = ['constructor', 'valueOf', 'isPrototypeOf', 'toString',
-                            'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
-  // Safari bug
-  var hasArgsEnumBug = (function() {
-    'use strict';
-    return arguments.propertyIsEnumerable('length');
-  }());
-
-  var contains = function contains(list, item) {
-    var idx = 0;
-    while (idx < list.length) {
-      if (list[idx] === item) {
-        return true;
-      }
-      idx += 1;
+var _keys = typeof Object.keys === 'function' && !hasArgsEnumBug ? function keys(obj) {
+  return Object(obj) !== obj ? [] : Object.keys(obj);
+} : function keys(obj) {
+  if (Object(obj) !== obj) {
+    return [];
+  }
+  var prop, nIdx;
+  var ks = [];
+  var checkArgsLength = hasArgsEnumBug && _isArguments_1(obj);
+  for (prop in obj) {
+    if (_has_1(prop, obj) && (!checkArgsLength || prop !== 'length')) {
+      ks[ks.length] = prop;
     }
-    return false;
-  };
-
-  return typeof Object.keys === 'function' && !hasArgsEnumBug ?
-    _curry1(function keys(obj) {
-      return Object(obj) !== obj ? [] : Object.keys(obj);
-    }) :
-    _curry1(function keys(obj) {
-      if (Object(obj) !== obj) {
-        return [];
+  }
+  if (hasEnumBug) {
+    nIdx = nonEnumerableProps.length - 1;
+    while (nIdx >= 0) {
+      prop = nonEnumerableProps[nIdx];
+      if (_has_1(prop, obj) && !contains(ks, prop)) {
+        ks[ks.length] = prop;
       }
-      var prop, nIdx;
-      var ks = [];
-      var checkArgsLength = hasArgsEnumBug && _isArguments(obj);
-      for (prop in obj) {
-        if (_has(prop, obj) && (!checkArgsLength || prop !== 'length')) {
-          ks[ks.length] = prop;
-        }
-      }
-      if (hasEnumBug) {
-        nIdx = nonEnumerableProps.length - 1;
-        while (nIdx >= 0) {
-          prop = nonEnumerableProps[nIdx];
-          if (_has(prop, obj) && !contains(ks, prop)) {
-            ks[ks.length] = prop;
-          }
-          nIdx -= 1;
-        }
-      }
-      return ks;
-    });
-}());
+      nIdx -= 1;
+    }
+  }
+  return ks;
+};
+var keys = /*#__PURE__*/_curry1_1(_keys);
+var keys_1 = keys;
 
 /**
  * Takes a function and
@@ -2008,22 +2159,28 @@ var keys = (function() {
  *      R.map(double, [1, 2, 3]); //=> [2, 4, 6]
  *
  *      R.map(double, {x: 1, y: 2, z: 3}); //=> {x: 2, y: 4, z: 6}
+ * @symb R.map(f, [a, b]) = [f(a), f(b)]
+ * @symb R.map(f, { x: a, y: b }) = { x: f(a), y: f(b) }
+ * @symb R.map(f, functor_o) = functor_o.map(f)
  */
-var map = _curry2(_dispatchable('map', _xmap, function map(fn, functor) {
+
+
+var map = /*#__PURE__*/_curry2_1( /*#__PURE__*/_dispatchable_1(['fantasy-land/map', 'map'], _xmap_1, function map(fn, functor) {
   switch (Object.prototype.toString.call(functor)) {
     case '[object Function]':
-      return curryN(functor.length, function() {
+      return curryN_1(functor.length, function () {
         return fn.call(this, functor.apply(this, arguments));
       });
     case '[object Object]':
-      return _reduce(function(acc, key) {
+      return _reduce_1(function (acc, key) {
         acc[key] = fn(functor[key]);
         return acc;
-      }, {}, keys(functor));
+      }, {}, keys_1(functor));
     default:
-      return _map(fn, functor);
+      return _map_1(fn, functor);
   }
 }));
+var map_1 = map;
 
 /**
  * Returns a lens for the given getter and setter functions. The getter "gets"
@@ -2048,18 +2205,18 @@ var map = _curry2(_dispatchable('map', _xmap, function map(fn, functor) {
  *      R.set(xLens, 4, {x: 1, y: 2});          //=> {x: 4, y: 2}
  *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
  */
-var lens$1 = _curry2(function lens(getter, setter) {
-  return function(toFunctorFn) {
-    return function(target) {
-      return map(
-        function(focus) {
-          return setter(focus, target);
-        },
-        toFunctorFn(getter(target))
-      );
+
+
+var lens = /*#__PURE__*/_curry2_1(function lens(getter, setter) {
+  return function (toFunctorFn) {
+    return function (target) {
+      return map_1(function (focus) {
+        return setter(focus, target);
+      }, toFunctorFn(getter(target)));
     };
   };
 });
+var lens_1$1 = lens;
 
 /**
  * Returns a curried equivalent of the provided function. The curried function
@@ -2072,10 +2229,10 @@ var lens$1 = _curry2(function lens(getter, setter) {
  *   - `g(1, 2)(3)`
  *   - `g(1, 2, 3)`
  *
- * Secondly, the special placeholder value `R.__` may be used to specify
+ * Secondly, the special placeholder value [`R.__`](#__) may be used to specify
  * "gaps", allowing partial application of any combination of arguments,
- * regardless of their positions. If `g` is as above and `_` is `R.__`, the
- * following are equivalent:
+ * regardless of their positions. If `g` is as above and `_` is [`R.__`](#__),
+ * the following are equivalent:
  *
  *   - `g(1, 2, 3)`
  *   - `g(_, 2, 3)(1)`
@@ -2102,9 +2259,12 @@ var lens$1 = _curry2(function lens(getter, setter) {
  *      var g = f(3);
  *      g(4); //=> 10
  */
-var curry$1 = _curry1(function curry(fn) {
-  return curryN(fn.length, fn);
+
+
+var curry = /*#__PURE__*/_curry1_1(function curry(fn) {
+  return curryN_1(fn.length, fn);
 });
+var curry_1$1 = curry;
 
 // Copyright (c) 2013-2014 Quildreen Motta <quildreen@gmail.com>
 //
@@ -2580,7 +2740,7 @@ var lib = either;
 
 /* eslint-disable new-cap */
 
-var updateAt = curry$1(function (keyArray, newVal, obj) {
+var updateAt = curry_1$1(function (keyArray, newVal, obj) {
   var deepNewVal = keyArray.reduceRight(function (result, key) {
     return defineProperty({}, key, result);
   }, newVal);
@@ -2590,9 +2750,9 @@ var updateAt = curry$1(function (keyArray, newVal, obj) {
 
 // State lenses
 var StateLenses = {
-  fieldTypes: lens$1(prop$1("fieldTypes"), updateAt(["fieldTypes"])),
-  fieldsState: lens$1(prop$1("fieldsState"), updateAt(["fieldsState"])),
-  fieldsStateHistory: lens$1(prop$1("fieldsStateHistory"), updateAt(["fieldsStateHistory"]))
+  fieldTypes: lens_1$1(prop_1$1("fieldTypes"), updateAt(["fieldTypes"])),
+  fieldsState: lens_1$1(prop_1$1("fieldsState"), updateAt(["fieldsState"])),
+  fieldsStateHistory: lens_1$1(prop_1$1("fieldsStateHistory"), updateAt(["fieldsStateHistory"]))
 };
 
 // _ => String
@@ -2601,23 +2761,23 @@ var createId = function createId(_) {
 };
 
 // State -> [fieldsState] -> State
-var pushHistoryState = curry$1(function (state, newHistoryState) {
-  return pipe(
+var pushHistoryState = curry_1$1(function (state, newHistoryState) {
+  return pipe_1(
   // Add current state to history
-  over(StateLenses.fieldsStateHistory, prepend(state.fieldsState)),
+  over_1(StateLenses.fieldsStateHistory, prepend_1(state.fieldsState)),
   // Make new State the current
-  set$1(StateLenses.fieldsState, newHistoryState))(state);
+  set_1(StateLenses.fieldsState, newHistoryState))(state);
 });
 
 // State -> State
 var hideConfigs = function hideConfigs(state) {
-  return set$1(StateLenses.fieldsState, state.fieldsState.map(function (s) {
+  return set_1(StateLenses.fieldsState, state.fieldsState.map(function (s) {
     return Object.assign({}, s, { configShowing: false });
   }), state);
 };
 
 // String -> String -> Object -> Either String Object
-var propertyTypeCheck = curry$1(function (propertyName, type, obj) {
+var propertyTypeCheck = curry_1$1(function (propertyName, type, obj) {
   return _typeof(obj[propertyName]) === type ? lib.Right(obj) : lib.Left("Property '" + propertyName + "' cannot be of type " + _typeof(obj[propertyName]));
 });
 
@@ -2634,14 +2794,17 @@ var lastHistoryState = function lastHistoryState(state) {
 };
 
 var undo$1 = function undo(state, _) {
-  return pipe(
+  return pipe_1(
   // Make last history last state the current one
-  set$1(StateLenses.fieldsState, lastHistoryState(state)),
+  set_1(StateLenses.fieldsState, lastHistoryState(state)),
   // Remove last history state from the history array
-  over(StateLenses.fieldsStateHistory, slice(1, Infinity)))(state);
+  over_1(StateLenses.fieldsStateHistory, slice_1(1, Infinity)))(state);
 };
 
-var _identity = function _identity(x) { return x; };
+function _identity(x) {
+  return x;
+}
+var _identity_1 = _identity;
 
 /**
  * A function that does nothing but return the parameter supplied to it. Good
@@ -2660,38 +2823,12 @@ var _identity = function _identity(x) { return x; };
  *
  *      var obj = {};
  *      R.identity(obj) === obj; //=> true
+ * @symb R.identity(a) = a
  */
-var identity = _curry1(_identity);
 
-/**
- * Retrieve the value at a given path.
- *
- * @func
- * @memberOf R
- * @since v0.2.0
- * @category Object
- * @sig [String] -> {k: v} -> v | Undefined
- * @param {Array} path The path to use.
- * @param {Object} obj The object to retrieve the nested property from.
- * @return {*} The data at `path`.
- * @see R.prop
- * @example
- *
- *      R.path(['a', 'b'], {a: {b: 2}}); //=> 2
- *      R.path(['a', 'b'], {c: {b: 2}}); //=> undefined
- */
-var path = _curry2(function path(paths, obj) {
-  var val = obj;
-  var idx = 0;
-  while (idx < paths.length) {
-    if (val == null) {
-      return;
-    }
-    val = val[paths[idx]];
-    idx += 1;
-  }
-  return val;
-});
+
+var identity = /*#__PURE__*/_curry1_1(_identity_1);
+var identity_1 = identity;
 
 /**
  * ap applies a list of functions to a list of values.
@@ -2705,36 +2842,46 @@ var path = _curry2(function path(paths, obj) {
  * @category Function
  * @sig [a -> b] -> [a] -> [b]
  * @sig Apply f => f (a -> b) -> f a -> f b
- * @param {Array} fns An array of functions
- * @param {Array} vs An array of values
- * @return {Array} An array of results of applying each of `fns` to all of `vs` in turn.
+ * @sig (a -> b -> c) -> (a -> b) -> (a -> c)
+ * @param {*} applyF
+ * @param {*} applyX
+ * @return {*}
  * @example
  *
  *      R.ap([R.multiply(2), R.add(3)], [1,2,3]); //=> [2, 4, 6, 4, 5, 6]
+ *      R.ap([R.concat('tasty '), R.toUpper], ['pizza', 'salad']); //=> ["tasty pizza", "tasty salad", "PIZZA", "SALAD"]
+ *
+ *      // R.ap can also be used as S combinator
+ *      // when only two functions are passed
+ *      R.ap(R.concat, R.toUpper)('Ramda') //=> 'RamdaRAMDA'
+ * @symb R.ap([f, g], [a, b]) = [f(a), f(b), g(a), g(b)]
  */
-var ap = _curry2(function ap(applicative, fn) {
-  return (
-    typeof applicative.ap === 'function' ?
-      applicative.ap(fn) :
-    typeof applicative === 'function' ?
-      function(x) { return applicative(x)(fn(x)); } :
-    // else
-      _reduce(function(acc, f) { return _concat(acc, map(f, fn)); }, [], applicative)
-  );
+
+
+var ap = /*#__PURE__*/_curry2_1(function ap(applyF, applyX) {
+  return typeof applyX['fantasy-land/ap'] === 'function' ? applyX['fantasy-land/ap'](applyF) : typeof applyF.ap === 'function' ? applyF.ap(applyX) : typeof applyF === 'function' ? function (x) {
+    return applyF(x)(applyX(x));
+  } :
+  // else
+  _reduce_1(function (acc, f) {
+    return _concat_1(acc, map_1(f, applyX));
+  }, [], applyF);
 });
+var ap_1 = ap;
 
 /**
  * Returns a single item by iterating through the list, successively calling
  * the iterator function and passing it an accumulator value and the current
  * value from the array, and then passing the result to the next call.
  *
- * Similar to `reduce`, except moves through the input list from the right to
- * the left.
+ * Similar to [`reduce`](#reduce), except moves through the input list from the
+ * right to the left.
  *
- * The iterator function receives two values: *(acc, value)*
+ * The iterator function receives two values: *(value, acc)*, while the arguments'
+ * order of `reduce`'s iterator function is *(acc, value)*.
  *
  * Note: `R.reduceRight` does not skip deleted or unassigned indices (sparse
- * arrays), unlike the native `Array.prototype.reduce` method. For more details
+ * arrays), unlike the native `Array.prototype.reduceRight` method. For more details
  * on this behavior, see:
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight#Description
  *
@@ -2742,28 +2889,39 @@ var ap = _curry2(function ap(applicative, fn) {
  * @memberOf R
  * @since v0.1.0
  * @category List
- * @sig (a,b -> a) -> a -> [b] -> a
- * @param {Function} fn The iterator function. Receives two values, the accumulator and the
- *        current element from the array.
+ * @sig ((a, b) -> b) -> b -> [a] -> b
+ * @param {Function} fn The iterator function. Receives two values, the current element from the array
+ *        and the accumulator.
  * @param {*} acc The accumulator value.
  * @param {Array} list The list to iterate over.
  * @return {*} The final, accumulated value.
- * @see R.addIndex
+ * @see R.reduce, R.addIndex
  * @example
  *
- *      var pairs = [ ['a', 1], ['b', 2], ['c', 3] ];
- *      var flattenPairs = (acc, pair) => acc.concat(pair);
+ *      R.reduceRight(R.subtract, 0, [1, 2, 3, 4]) // => (1 - (2 - (3 - (4 - 0)))) = -2
+ *      //    -               -2
+ *      //   / \              / \
+ *      //  1   -            1   3
+ *      //     / \              / \
+ *      //    2   -     ==>    2  -1
+ *      //       / \              / \
+ *      //      3   -            3   4
+ *      //         / \              / \
+ *      //        4   0            4   0
  *
- *      R.reduceRight(flattenPairs, [], pairs); //=> [ 'c', 3, 'b', 2, 'a', 1 ]
+ * @symb R.reduceRight(f, a, [b, c, d]) = f(b, f(c, f(d, a)))
  */
-var reduceRight = _curry3(function reduceRight(fn, acc, list) {
+
+
+var reduceRight = /*#__PURE__*/_curry3_1(function reduceRight(fn, acc, list) {
   var idx = list.length - 1;
   while (idx >= 0) {
-    acc = fn(acc, list[idx]);
+    acc = fn(list[idx], acc);
     idx -= 1;
   }
   return acc;
 });
+var reduceRight_1 = reduceRight;
 
 /**
  * Transforms a [Traversable](https://github.com/fantasyland/fantasy-land#traversable)
@@ -2789,13 +2947,14 @@ var reduceRight = _curry3(function reduceRight(fn, acc, list) {
  *      R.sequence(R.of, Just([1, 2, 3])); //=> [Just(1), Just(2), Just(3)]
  *      R.sequence(R.of, Nothing());       //=> [Nothing()]
  */
-var sequence = _curry2(function sequence(of, traversable) {
-  return typeof traversable.sequence === 'function' ?
-    traversable.sequence(of) :
-    reduceRight(function(acc, x) { return ap(map(prepend, x), acc); },
-                of([]),
-                traversable);
+
+
+var sequence = /*#__PURE__*/_curry2_1(function sequence(of, traversable) {
+  return typeof traversable.sequence === 'function' ? traversable.sequence(of) : reduceRight_1(function (x, acc) {
+    return ap_1(map_1(prepend_1, x), acc);
+  }, of([]), traversable);
 });
+var sequence_1 = sequence;
 
 /**
  * Maps an [Applicative](https://github.com/fantasyland/fantasy-land#applicative)-returning
@@ -2803,7 +2962,7 @@ var sequence = _curry2(function sequence(of, traversable) {
  * then uses [`sequence`](#sequence) to transform the resulting Traversable of Applicative
  * into an Applicative of Traversable.
  *
- * Dispatches to the `sequence` method of the third argument, if present.
+ * Dispatches to the `traverse` method of the third argument, if present.
  *
  * @func
  * @memberOf R
@@ -2823,24 +2982,43 @@ var sequence = _curry2(function sequence(of, traversable) {
  *      R.traverse(Maybe.of, safeDiv(10), [2, 4, 5]); //=> Just([5, 2.5, 2])
  *      R.traverse(Maybe.of, safeDiv(10), [2, 0, 5]); //=> Nothing
  */
-var traverse = _curry3(function traverse(of, f, traversable) {
-  return sequence(of, map(f, traversable));
-});
 
-var _arrayFromIterator = function _arrayFromIterator(iter) {
+
+var traverse = /*#__PURE__*/_curry3_1(function traverse(of, f, traversable) {
+  return typeof traversable['fantasy-land/traverse'] === 'function' ? traversable['fantasy-land/traverse'](f, of) : sequence_1(of, map_1(f, traversable));
+});
+var traverse_1 = traverse;
+
+function _arrayFromIterator(iter) {
   var list = [];
   var next;
   while (!(next = iter.next()).done) {
     list.push(next.value);
   }
   return list;
-};
+}
+var _arrayFromIterator_1 = _arrayFromIterator;
 
-var _functionName = function _functionName(f) {
+function _containsWith(pred, x, list) {
+  var idx = 0;
+  var len = list.length;
+
+  while (idx < len) {
+    if (pred(x, list[idx])) {
+      return true;
+    }
+    idx += 1;
+  }
+  return false;
+}
+var _containsWith_1 = _containsWith;
+
+function _functionName(f) {
   // String(x => x) evaluates to "x => x", so the pattern may not match.
   var match = String(f).match(/^function (\w*)/);
   return match == null ? '' : match[1];
-};
+}
+var _functionName_1 = _functionName;
 
 /**
  * Returns true if its arguments are identical, false otherwise. Values are
@@ -2865,9 +3043,12 @@ var _functionName = function _functionName(f) {
  *      R.identical(0, -0); //=> false
  *      R.identical(NaN, NaN); //=> true
  */
-var identical = _curry2(function identical(a, b) {
+
+
+var identical = /*#__PURE__*/_curry2_1(function identical(a, b) {
   // SameValue algorithm
-  if (a === b) { // Steps 1-5, 7-10
+  if (a === b) {
+    // Steps 1-5, 7-10
     // Steps 6.b-6.e: +0 != -0
     return a !== 0 || 1 / a === 1 / b;
   } else {
@@ -2875,6 +3056,7 @@ var identical = _curry2(function identical(a, b) {
     return a !== a && b !== b;
   }
 });
+var identical_1 = identical;
 
 /**
  * Gives a single-word string description of the (native) type of a value,
@@ -2898,19 +3080,49 @@ var identical = _curry2(function identical(a, b) {
  *      R.type(null); //=> "Null"
  *      R.type([]); //=> "Array"
  *      R.type(/[A-z]/); //=> "RegExp"
+ *      R.type(() => {}); //=> "Function"
+ *      R.type(undefined); //=> "Undefined"
  */
-var type = _curry1(function type(val) {
-  return val === null      ? 'Null'      :
-         val === undefined ? 'Undefined' :
-         Object.prototype.toString.call(val).slice(8, -1);
-});
 
-var _equals = function _equals(a, b, stackA, stackB) {
-  if (identical(a, b)) {
+
+var type = /*#__PURE__*/_curry1_1(function type(val) {
+  return val === null ? 'Null' : val === undefined ? 'Undefined' : Object.prototype.toString.call(val).slice(8, -1);
+});
+var type_1 = type;
+
+/**
+ * private _uniqContentEquals function.
+ * That function is checking equality of 2 iterator contents with 2 assumptions
+ * - iterators lengths are the same
+ * - iterators values are unique
+ *
+ * false-positive result will be returned for comparision of, e.g.
+ * - [1,2,3] and [1,2,3,4]
+ * - [1,1,1] and [1,2,3]
+ * */
+
+function _uniqContentEquals(aIterator, bIterator, stackA, stackB) {
+  var a = _arrayFromIterator_1(aIterator);
+  var b = _arrayFromIterator_1(bIterator);
+
+  function eq(_a, _b) {
+    return _equals(_a, _b, stackA.slice(), stackB.slice());
+  }
+
+  // if *a* array contains any element that is not included in *b*
+  return !_containsWith_1(function (b, aItem) {
+    return !_containsWith_1(eq, aItem, b);
+  }, b, a);
+}
+
+function _equals(a, b, stackA, stackB) {
+  if (identical_1(a, b)) {
     return true;
   }
 
-  if (type(a) !== type(b)) {
+  var typeA = type_1(a);
+
+  if (typeA !== type_1(b)) {
     return false;
   }
 
@@ -2918,70 +3130,41 @@ var _equals = function _equals(a, b, stackA, stackB) {
     return false;
   }
 
-  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
-    return typeof a.equals === 'function' && a.equals(b) &&
-           typeof b.equals === 'function' && b.equals(a);
+  if (typeof a['fantasy-land/equals'] === 'function' || typeof b['fantasy-land/equals'] === 'function') {
+    return typeof a['fantasy-land/equals'] === 'function' && a['fantasy-land/equals'](b) && typeof b['fantasy-land/equals'] === 'function' && b['fantasy-land/equals'](a);
   }
 
-  switch (type(a)) {
+  if (typeof a.equals === 'function' || typeof b.equals === 'function') {
+    return typeof a.equals === 'function' && a.equals(b) && typeof b.equals === 'function' && b.equals(a);
+  }
+
+  switch (typeA) {
     case 'Arguments':
     case 'Array':
     case 'Object':
-      if (typeof a.constructor === 'function' &&
-          _functionName(a.constructor) === 'Promise') {
+      if (typeof a.constructor === 'function' && _functionName_1(a.constructor) === 'Promise') {
         return a === b;
       }
       break;
     case 'Boolean':
     case 'Number':
     case 'String':
-      if (!(typeof a === typeof b && identical(a.valueOf(), b.valueOf()))) {
+      if (!(typeof a === typeof b && identical_1(a.valueOf(), b.valueOf()))) {
         return false;
       }
       break;
     case 'Date':
-      if (!identical(a.valueOf(), b.valueOf())) {
+      if (!identical_1(a.valueOf(), b.valueOf())) {
         return false;
       }
       break;
     case 'Error':
       return a.name === b.name && a.message === b.message;
     case 'RegExp':
-      if (!(a.source === b.source &&
-            a.global === b.global &&
-            a.ignoreCase === b.ignoreCase &&
-            a.multiline === b.multiline &&
-            a.sticky === b.sticky &&
-            a.unicode === b.unicode)) {
+      if (!(a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline && a.sticky === b.sticky && a.unicode === b.unicode)) {
         return false;
       }
       break;
-    case 'Map':
-    case 'Set':
-      if (!_equals(_arrayFromIterator(a.entries()), _arrayFromIterator(b.entries()), stackA, stackB)) {
-        return false;
-      }
-      break;
-    case 'Int8Array':
-    case 'Uint8Array':
-    case 'Uint8ClampedArray':
-    case 'Int16Array':
-    case 'Uint16Array':
-    case 'Int32Array':
-    case 'Uint32Array':
-    case 'Float32Array':
-    case 'Float64Array':
-      break;
-    case 'ArrayBuffer':
-      break;
-    default:
-      // Values of other types are only equal if identical.
-      return false;
-  }
-
-  var keysA = keys(a);
-  if (keysA.length !== keys(b).length) {
-    return false;
   }
 
   var idx = stackA.length - 1;
@@ -2992,20 +3175,63 @@ var _equals = function _equals(a, b, stackA, stackB) {
     idx -= 1;
   }
 
-  stackA.push(a);
-  stackB.push(b);
+  switch (typeA) {
+    case 'Map':
+      if (a.size !== b.size) {
+        return false;
+      }
+
+      return _uniqContentEquals(a.entries(), b.entries(), stackA.concat([a]), stackB.concat([b]));
+    case 'Set':
+      if (a.size !== b.size) {
+        return false;
+      }
+
+      return _uniqContentEquals(a.values(), b.values(), stackA.concat([a]), stackB.concat([b]));
+    case 'Arguments':
+    case 'Array':
+    case 'Object':
+    case 'Boolean':
+    case 'Number':
+    case 'String':
+    case 'Date':
+    case 'Error':
+    case 'RegExp':
+    case 'Int8Array':
+    case 'Uint8Array':
+    case 'Uint8ClampedArray':
+    case 'Int16Array':
+    case 'Uint16Array':
+    case 'Int32Array':
+    case 'Uint32Array':
+    case 'Float32Array':
+    case 'Float64Array':
+    case 'ArrayBuffer':
+      break;
+    default:
+      // Values of other types are only equal if identical.
+      return false;
+  }
+
+  var keysA = keys_1(a);
+  if (keysA.length !== keys_1(b).length) {
+    return false;
+  }
+
+  var extendedStackA = stackA.concat([a]);
+  var extendedStackB = stackB.concat([b]);
+
   idx = keysA.length - 1;
   while (idx >= 0) {
     var key = keysA[idx];
-    if (!(_has(key, b) && _equals(b[key], a[key], stackA, stackB))) {
+    if (!(_has_1(key, b) && _equals(b[key], a[key], extendedStackA, extendedStackB))) {
       return false;
     }
     idx -= 1;
   }
-  stackA.pop();
-  stackB.pop();
   return true;
-};
+}
+var _equals_1 = _equals;
 
 /**
  * Returns `true` if its arguments are equivalent, `false` otherwise. Handles
@@ -3032,9 +3258,12 @@ var _equals = function _equals(a, b, stackA, stackB) {
  *      var b = {}; b.v = b;
  *      R.equals(a, b); //=> true
  */
-var equals = _curry2(function equals(a, b) {
-  return _equals(a, b, [], []);
+
+
+var equals = /*#__PURE__*/_curry2_1(function equals(a, b) {
+  return _equals_1(a, b, [], []);
 });
+var equals_1 = equals;
 
 /*  weak */
 /* eslint-disable new-cap */
@@ -3043,17 +3272,17 @@ var isArray = function isArray(arr) {
   return Array.isArray(arr) ? lib.Right(arr) : lib.Left("Invalid states sent with importState. Expected Array but received " + (typeof arr === "undefined" ? "undefined" : _typeof(arr)));
 }; // eslint-disable-line max-len
 
-var fieldTypeIsValid = curry$1(function (validTypes, field) {
-  return validTypes.find(equals(field.type)) ? lib.Right(field) : lib.Left("Invalid field type " + field.type);
+var fieldTypeIsValid = curry_1$1(function (validTypes, field) {
+  return validTypes.find(equals_1(field.type)) ? lib.Right(field) : lib.Left("Invalid field type " + field.type);
 });
 
-var validFieldTypes = curry$1(function (validTypes, fieldsState) {
-  return traverse(lib.of, fieldTypeIsValid(validTypes), fieldsState);
+var validFieldTypes = curry_1$1(function (validTypes, fieldsState) {
+  return traverse_1(lib.of, fieldTypeIsValid(validTypes), fieldsState);
 });
 
 // [a] -> [a] -> Either String [a]
-var validateFieldsState = curry$1(function (fieldsState, state) {
-  return lib.of(fieldsState).chain(isArray).chain(validFieldTypes(state.fieldTypes.map(path(["info", "type"]))));
+var validateFieldsState = curry_1$1(function (fieldsState, state) {
+  return lib.of(fieldsState).chain(isArray).chain(validFieldTypes(state.fieldTypes.map(path_1(["info", "type"]))));
 });
 
 // Add required properties that are not managed by the field
@@ -3073,40 +3302,46 @@ var addRequiredProperties = function addRequiredProperties(fieldStates) {
 // will be returned
 var importState$1 = (function (state, _ref) {
   var newFieldsState = _ref.newFieldsState;
-  return validateFieldsState(newFieldsState, state).map(addRequiredProperties).map(pushHistoryState(state)).bimap(console.error, identity).getOrElse(state);
+  return validateFieldsState(newFieldsState, state).map(addRequiredProperties).map(pushHistoryState(state)).bimap(console.error, identity_1).getOrElse(state);
 });
 
-var _reduced = function _reduced(x) {
-  return x && x['@@transducer/reduced'] ? x :
-    {
-      '@@transducer/value': x,
-      '@@transducer/reduced': true
-    };
-};
+function _reduced(x) {
+  return x && x['@@transducer/reduced'] ? x : {
+    '@@transducer/value': x,
+    '@@transducer/reduced': true
+  };
+}
+var _reduced_1 = _reduced;
 
-var _xfind = (function() {
+var XFind = /*#__PURE__*/function () {
+
   function XFind(f, xf) {
     this.xf = xf;
     this.f = f;
     this.found = false;
   }
   XFind.prototype['@@transducer/init'] = _xfBase.init;
-  XFind.prototype['@@transducer/result'] = function(result) {
+  XFind.prototype['@@transducer/result'] = function (result) {
     if (!this.found) {
       result = this.xf['@@transducer/step'](result, void 0);
     }
     return this.xf['@@transducer/result'](result);
   };
-  XFind.prototype['@@transducer/step'] = function(result, input) {
+  XFind.prototype['@@transducer/step'] = function (result, input) {
     if (this.f(input)) {
       this.found = true;
-      result = _reduced(this.xf['@@transducer/step'](result, input));
+      result = _reduced_1(this.xf['@@transducer/step'](result, input));
     }
     return result;
   };
 
-  return _curry2(function _xfind(f, xf) { return new XFind(f, xf); });
-}());
+  return XFind;
+}();
+
+var _xfind = /*#__PURE__*/_curry2_1(function _xfind(f, xf) {
+  return new XFind(f, xf);
+});
+var _xfind_1 = _xfind;
 
 /**
  * Returns the first element of the list which matches the predicate, or
@@ -3132,7 +3367,9 @@ var _xfind = (function() {
  *      R.find(R.propEq('a', 2))(xs); //=> {a: 2}
  *      R.find(R.propEq('a', 4))(xs); //=> undefined
  */
-var find = _curry2(_dispatchable('find', _xfind, function find(fn, list) {
+
+
+var find = /*#__PURE__*/_curry2_1( /*#__PURE__*/_dispatchable_1(['find'], _xfind_1, function find(fn, list) {
   var idx = 0;
   var len = list.length;
   while (idx < len) {
@@ -3142,6 +3379,7 @@ var find = _curry2(_dispatchable('find', _xfind, function find(fn, list) {
     idx += 1;
   }
 }));
+var find_1 = find;
 
 /**
  * A helper for delaying the execution of a function.
@@ -3498,11 +3736,11 @@ var lib$1 = task;
 
 // State -> String -> Either String Function
 var typeConstructor = function typeConstructor(state, fieldType) {
-  return lib.of(state).map(prop$1("fieldTypes")).map(find(function (v) {
+  return lib.of(state).map(prop_1$1("fieldTypes")).map(find_1(function (v) {
     return v.info.type === fieldType;
   })).chain(lib.fromNullable).bimap(function (_) {
     return "Field \"" + fieldType + "\" does not exist.";
-  }, identity);
+  }, identity_1);
 };
 
 // { initialState: Function } -> Task String Object
@@ -3548,7 +3786,7 @@ var createFieldAsynchronously = function createFieldAsynchronously(state, fieldT
   .map(insertRequiredProps).fork( // execute task
   function (err) {
     return console.error("Task rejected", err);
-  }, pipe(fieldCreated, asyncDispatch));
+  }, pipe_1(fieldCreated, asyncDispatch));
 };
 
 // This is an async action. When it is finished it will trigger the
@@ -3571,9 +3809,9 @@ var createField$2 = (function (state, _ref) {
  * @category List
  * @sig a -> [a] -> [a]
  * @param {*} el The element to add to the end of the new list.
- * @param {Array} list The list whose contents will be added to the beginning of the output
+ * @param {Array} list The list of elements to add a new item to.
  *        list.
- * @return {Array} A new list containing the contents of the old list followed by `el`.
+ * @return {Array} A new list containing the elements of the old list followed by `el`.
  * @see R.prepend
  * @example
  *
@@ -3581,9 +3819,12 @@ var createField$2 = (function (state, _ref) {
  *      R.append('tests', []); //=> ['tests']
  *      R.append(['tests'], ['write', 'more']); //=> ['write', 'more', ['tests']]
  */
-var append = _curry2(function append(el, list) {
-  return _concat(list, [el]);
+
+
+var append = /*#__PURE__*/_curry2_1(function append(el, list) {
+  return _concat_1(list, [el]);
 });
+var append_1 = append;
 
 // Copyright (c) 2013-2014 Quildreen Motta <quildreen@gmail.com>
 //
@@ -3986,20 +4227,20 @@ Just.prototype.toJSON = function() {
 var lib$2 = maybe;
 
 // State -> Object -> State
-var historyStateWithNewField = curry$1(function (state, newField) {
-  return pipe(hideConfigs, over(StateLenses.fieldsState, append(newField)))(state);
+var historyStateWithNewField = curry_1$1(function (state, newField) {
+  return pipe_1(hideConfigs, over_1(StateLenses.fieldsState, append_1(newField)))(state);
 });
 
 var fieldCreated$1 = (function (state, _ref) {
   var createdFieldState = _ref.createdFieldState;
-  return lib$2.fromNullable(createdFieldState).map(historyStateWithNewField(state)).map(prop$1("fieldsState")).map(pushHistoryState(state)).getOrElse(state);
+  return lib$2.fromNullable(createdFieldState).map(historyStateWithNewField(state)).map(prop_1$1("fieldsState")).map(pushHistoryState(state)).getOrElse(state);
 });
 
 var toggleConfig$1 = function toggleConfig(fieldState) {
   return seamlessImmutable(fieldState).set("configShowing", !fieldState.configShowing);
 };
 
-var replaceFieldState = curry$1(function (state, fieldState) {
+var replaceFieldState = curry_1$1(function (state, fieldState) {
   return state.fieldsState.map(function (aField) {
     return aField.id === fieldState.id ? fieldState : aField;
   });
@@ -4014,7 +4255,7 @@ var toggleRequired$1 = function toggleRequired(fieldState) {
   return seamlessImmutable(fieldState).set("required", !fieldState.required);
 };
 
-var replaceFieldState$1 = curry$1(function (state, fieldState) {
+var replaceFieldState$1 = curry_1$1(function (state, fieldState) {
   return state.fieldsState.map(function (aField) {
     return aField.id === fieldState.id ? fieldState : aField;
   });
@@ -4025,7 +4266,7 @@ var toggleRequired$2 = (function (state, _ref) {
   return lib$2.fromNullable(fieldState).map(toggleRequired$1).map(replaceFieldState$1(state)).map(pushHistoryState(state)).getOrElse(state);
 });
 
-var _filter = function _filter(fn, list) {
+function _filter(fn, list) {
   var idx = 0;
   var len = list.length;
   var result = [];
@@ -4037,30 +4278,39 @@ var _filter = function _filter(fn, list) {
     idx += 1;
   }
   return result;
-};
+}
+var _filter_1 = _filter;
 
-var _isObject = function _isObject(x) {
+function _isObject(x) {
   return Object.prototype.toString.call(x) === '[object Object]';
-};
+}
+var _isObject_1 = _isObject;
 
-var _xfilter = (function() {
+var XFilter = /*#__PURE__*/function () {
+
   function XFilter(f, xf) {
     this.xf = xf;
     this.f = f;
   }
   XFilter.prototype['@@transducer/init'] = _xfBase.init;
   XFilter.prototype['@@transducer/result'] = _xfBase.result;
-  XFilter.prototype['@@transducer/step'] = function(result, input) {
+  XFilter.prototype['@@transducer/step'] = function (result, input) {
     return this.f(input) ? this.xf['@@transducer/step'](result, input) : result;
   };
 
-  return _curry2(function _xfilter(f, xf) { return new XFilter(f, xf); });
-}());
+  return XFilter;
+}();
+
+var _xfilter = /*#__PURE__*/_curry2_1(function _xfilter(f, xf) {
+  return new XFilter(f, xf);
+});
+var _xfilter_1 = _xfilter;
 
 /**
- * Takes a predicate and a "filterable", and returns a new filterable of the
+ * Takes a predicate and a `Filterable`, and returns a new filterable of the
  * same type containing the members of the given filterable which satisfy the
- * given predicate.
+ * given predicate. Filterable objects include plain objects or any object
+ * that has a filter method such as `Array`.
  *
  * Dispatches to the `filter` method of the second argument, if present.
  *
@@ -4073,7 +4323,7 @@ var _xfilter = (function() {
  * @sig Filterable f => (a -> Boolean) -> f a -> f a
  * @param {Function} pred
  * @param {Array} filterable
- * @return {Array}
+ * @return {Array} Filterable
  * @see R.reject, R.transduce, R.addIndex
  * @example
  *
@@ -4083,35 +4333,35 @@ var _xfilter = (function() {
  *
  *      R.filter(isEven, {a: 1, b: 2, c: 3, d: 4}); //=> {b: 2, d: 4}
  */
-var filter = _curry2(_dispatchable('filter', _xfilter, function(pred, filterable) {
-  return (
-    _isObject(filterable) ?
-      _reduce(function(acc, key) {
-        if (pred(filterable[key])) {
-          acc[key] = filterable[key];
-        }
-        return acc;
-      }, {}, keys(filterable)) :
-    // else
-      _filter(pred, filterable)
-  );
+
+
+var filter = /*#__PURE__*/_curry2_1( /*#__PURE__*/_dispatchable_1(['filter'], _xfilter_1, function (pred, filterable) {
+  return _isObject_1(filterable) ? _reduce_1(function (acc, key) {
+    if (pred(filterable[key])) {
+      acc[key] = filterable[key];
+    }
+    return acc;
+  }, {}, keys_1(filterable)) :
+  // else
+  _filter_1(pred, filterable);
 }));
+var filter_1 = filter;
 
 // State -> Object -> State
-var historyStateWithoutField = curry$1(function (state, fieldState) {
-  return over(StateLenses.fieldsState, filter(function (fs) {
+var historyStateWithoutField = curry_1$1(function (state, fieldState) {
+  return over_1(StateLenses.fieldsState, filter_1(function (fs) {
     return fs.id !== fieldState.id;
   }), state);
 });
 
 var deleteField$1 = (function (state, _ref) {
   var fieldState = _ref.fieldState;
-  return lib$2.fromNullable(fieldState).map(historyStateWithoutField(state)).map(prop$1("fieldsState")).map(pushHistoryState(state)).getOrElse(state);
+  return lib$2.fromNullable(fieldState).map(historyStateWithoutField(state)).map(prop_1$1("fieldsState")).map(pushHistoryState(state)).getOrElse(state);
 });
 
 // State -> Object -> State
-var updateFieldState = curry$1(function (state, newFieldState) {
-  return over(StateLenses.fieldsState, map(function (fs) {
+var updateFieldState = curry_1$1(function (state, newFieldState) {
+  return over_1(StateLenses.fieldsState, map_1(function (fs) {
     return fs.id === newFieldState.id ? newFieldState : fs;
   }), state);
 });
@@ -4119,7 +4369,7 @@ var updateFieldState = curry$1(function (state, newFieldState) {
 var updateField$1 = (function (state, _ref) {
   var newFieldState = _ref.newFieldState;
   return validateField(newFieldState) // Either
-  .map(updateFieldState(state)).map(prop$1("fieldsState")).map(pushHistoryState(state)).leftMap(console.error).getOrElse(state);
+  .map(updateFieldState(state)).map(prop_1$1("fieldsState")).map(pushHistoryState(state)).leftMap(console.error).getOrElse(state);
 });
 
 /**
@@ -4133,7 +4383,7 @@ var updateField$1 = (function (state, _ref) {
  * @memberOf R
  * @since v0.1.0
  * @category List
- * @sig (a,a -> Number) -> [a] -> [a]
+ * @sig ((a, a) -> Number) -> [a] -> [a]
  * @param {Function} comparator A sorting function :: a -> b -> Int
  * @param {Array} list The list to sort
  * @return {Array} a new array with its elements sorted by the comparator function.
@@ -4142,13 +4392,16 @@ var updateField$1 = (function (state, _ref) {
  *      var diff = function(a, b) { return a - b; };
  *      R.sort(diff, [4,2,7,5]); //=> [2, 4, 5, 7]
  */
-var sort = _curry2(function sort(comparator, list) {
-  return _slice(list).sort(comparator);
+
+
+var sort = /*#__PURE__*/_curry2_1(function sort(comparator, list) {
+  return Array.prototype.slice.call(list, 0).sort(comparator);
 });
+var sort_1 = sort;
 
 // State -> Object -> State
-var historyStateWithNewOrder = curry$1(function (state, newOrder) {
-  return pipe(hideConfigs, over(StateLenses.fieldsState, sort(function (f1, f2) {
+var historyStateWithNewOrder = curry_1$1(function (state, newOrder) {
+  return pipe_1(hideConfigs, over_1(StateLenses.fieldsState, sort_1(function (f1, f2) {
     return newOrder.indexOf(f1.id) - newOrder.indexOf(f2.id);
   })))(state);
 });
@@ -4159,12 +4412,12 @@ var reorderFields$1 = (function (state, _ref) {
     return o.length === state.fieldsState.length ? lib.Right(o) : lib.Left("newFieldsOrder has " + o.length + " elements, but the current state has " + state.fieldsState.length + " elements");
   } // eslint-disable-line max-len
   ).chain(function (o) {
-    var stateIds = state.fieldsState.map(prop$1("id"));
+    var stateIds = state.fieldsState.map(prop_1$1("id"));
     var noMissingId = stateIds.reduce(function (acc, fId) {
       return acc && o.includes(fId);
     }, true);
     return noMissingId ? lib.Right(o) : lib.Left("Not all ids in the new order are matched in the existing state ids.");
-  }).map(historyStateWithNewOrder(state)).map(prop$1("fieldsState")).map(pushHistoryState(state)).leftMap(function (err) {
+  }).map(historyStateWithNewOrder(state)).map(prop_1$1("fieldsState")).map(pushHistoryState(state)).leftMap(function (err) {
     return console.error("Unable to reorder: " + err);
   }).getOrElse(state);
 });
@@ -4186,7 +4439,7 @@ var hasRequiredInfo = function hasRequiredInfo(component) {
 };
 
 var isComponentValid = function isComponentValid(customComponents) {
-  return traverse(lib.of, hasRequiredInfo, customComponents);
+  return traverse_1(lib.of, hasRequiredInfo, customComponents);
 };
 
 // [a] -> [a] -> Either String [a]
@@ -4194,8 +4447,8 @@ var validateComponents = function validateComponents(customComponents) {
   return lib.Right(customComponents).chain(isArray$1).chain(isComponentValid);
 };
 
-var addToFieldTypes = curry$1(function (state, customComponents) {
-  return over(StateLenses.fieldTypes, function (s) {
+var addToFieldTypes = curry_1$1(function (state, customComponents) {
+  return over_1(StateLenses.fieldTypes, function (s) {
     return s.concat(customComponents);
   }, state);
 });
