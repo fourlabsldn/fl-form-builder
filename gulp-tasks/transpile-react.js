@@ -25,6 +25,7 @@ const nodeResolve = require('rollup-plugin-node-resolve');
 const organiser = require('gulp-organiser');
 const rename = require('gulp-rename');
 const { curry } = require('lodash/fp');
+const extensions = require("./extensions");
 
 const DEFAULT_CONFIG = {
   sourceMap: true,
@@ -34,6 +35,8 @@ const DEFAULT_CONFIG = {
   // Let's use UMD format to serve our files to the front-end
   format: 'umd',
   plugins: [
+    // Reslver to allow importing .jsx files
+    extensions({ extensions: [".jsx", ".js"] }),
     // Import modules with jsnext:main
     nodeResolve({	jsnext: true, main: true }),
     // Allow importing commonjs modules
