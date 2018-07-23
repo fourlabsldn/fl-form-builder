@@ -38,7 +38,7 @@ const DEFAULT_CONFIG = {
     // Reslver to allow importing .jsx files
     extensions({ extensions: [".jsx", ".js"] }),
     // Import modules with jsnext:main
-    nodeResolve({	jsnext: true, main: true }),
+    nodeResolve({ jsnext: true, main: true }),
     // Allow importing commonjs modules
     commonjs(),
     // Transpile our code to ES5

@@ -6,6 +6,6 @@ const tasks = [
   require('./transpile-react'),
 ].map(t => t.name);
 
-module.exports = organiser.register((task) => {
+module.exports = organiser.register(task => {
   gulp.task(task.name, tasks);
 });

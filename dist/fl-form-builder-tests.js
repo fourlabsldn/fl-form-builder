@@ -705,7 +705,7 @@ function immutableInit(config) {
   var immutableEmptyObject = Immutable({});
 
   function objectSetIn(path, value, config) {
-    if (!(path instanceof Array) || path.length === 0) {
+    if (!(Array.isArray(path)) || path.length === 0) {
       throw new TypeError("The first argument to Immutable#setIn must be an array containing at least one \"key\" string.");
     }
 
@@ -833,6 +833,11 @@ function immutableInit(config) {
            obj instanceof File;
   }
 
+  function isBlobObject(obj) {
+    return typeof Blob !== 'undefined' &&
+           obj instanceof Blob;
+  }
+
   function isPromise(obj) {
     return typeof obj === 'object' &&
            typeof obj.then === 'function';
@@ -843,7 +848,7 @@ function immutableInit(config) {
   }
 
   function Immutable(obj, options, stackRemaining) {
-    if (isImmutable(obj) || isReactElement(obj) || isFileObject(obj) || isError(obj)) {
+    if (isImmutable(obj) || isReactElement(obj) || isFileObject(obj) || isBlobObject(obj) || isError(obj)) {
       return obj;
     } else if (isPromise(obj)) {
       return obj.then(Immutable);
@@ -1143,45 +1148,65 @@ assert.warn = function warn(condition, errorMessage) {
   }
 };
 
-/**
- * Tests whether or not an object is an array.
- *
- * @private
- * @param {*} val The object to test.
- * @return {Boolean} `true` if `val` is an array, `false` otherwise.
- * @example
- *
- *      _isArray([]); //=> true
- *      _isArray(null); //=> false
- *      _isArray({}); //=> false
- */
-var _isArray = Array.isArray || function _isArray(val) {
-  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
-};
+function _arity(n, fn) {
+  /* eslint-disable no-unused-vars */
+  switch (n) {
+    case 0:
+      return function () {
+        return fn.apply(this, arguments);
+      };
+    case 1:
+      return function (a0) {
+        return fn.apply(this, arguments);
+      };
+    case 2:
+      return function (a0, a1) {
+        return fn.apply(this, arguments);
+      };
+    case 3:
+      return function (a0, a1, a2) {
+        return fn.apply(this, arguments);
+      };
+    case 4:
+      return function (a0, a1, a2, a3) {
+        return fn.apply(this, arguments);
+      };
+    case 5:
+      return function (a0, a1, a2, a3, a4) {
+        return fn.apply(this, arguments);
+      };
+    case 6:
+      return function (a0, a1, a2, a3, a4, a5) {
+        return fn.apply(this, arguments);
+      };
+    case 7:
+      return function (a0, a1, a2, a3, a4, a5, a6) {
+        return fn.apply(this, arguments);
+      };
+    case 8:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
+        return fn.apply(this, arguments);
+      };
+    case 9:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
+        return fn.apply(this, arguments);
+      };
+    case 10:
+      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
+        return fn.apply(this, arguments);
+      };
+    default:
+      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
+  }
+}
+var _arity_1 = _arity;
 
-/**
- * This checks whether a function has a [methodname] function. If it isn't an
- * array it will execute that function otherwise it will default to the ramda
- * implementation.
- *
- * @private
- * @param {Function} fn ramda implemtation
- * @param {String} methodname property to check for a custom implementation
- * @return {Object} Whatever the return value of the method is.
- */
-
-
-function _checkForMethod(methodname, fn) {
+function _pipe$1(f, g) {
   return function () {
-    var length = arguments.length;
-    if (length === 0) {
-      return fn();
-    }
-    var obj = arguments[length - 1];
-    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
+    return g.call(this, f.apply(this, arguments));
   };
 }
-var _checkForMethod_1 = _checkForMethod;
+var _pipe_1 = _pipe$1;
 
 function _isPlaceholder(a) {
        return a != null && typeof a === 'object' && a['@@functional/placeholder'] === true;
@@ -1286,194 +1311,20 @@ function _curry3(fn) {
 var _curry3_1 = _curry3;
 
 /**
- * Returns the elements of the given list or string (or object with a `slice`
- * method) from `fromIndex` (inclusive) to `toIndex` (exclusive).
+ * Tests whether or not an object is an array.
  *
- * Dispatches to the `slice` method of the third argument, if present.
- *
- * @func
- * @memberOf R
- * @since v0.1.4
- * @category List
- * @sig Number -> Number -> [a] -> [a]
- * @sig Number -> Number -> String -> String
- * @param {Number} fromIndex The start index (inclusive).
- * @param {Number} toIndex The end index (exclusive).
- * @param {*} list
- * @return {*}
+ * @private
+ * @param {*} val The object to test.
+ * @return {Boolean} `true` if `val` is an array, `false` otherwise.
  * @example
  *
- *      R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
- *      R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
- *      R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
- *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
- *      R.slice(0, 3, 'ramda');                     //=> 'ram'
+ *      _isArray([]); //=> true
+ *      _isArray(null); //=> false
+ *      _isArray({}); //=> false
  */
-
-
-var slice = /*#__PURE__*/_curry3_1( /*#__PURE__*/_checkForMethod_1('slice', function slice(fromIndex, toIndex, list) {
-  return Array.prototype.slice.call(list, fromIndex, toIndex);
-}));
-var slice_1 = slice;
-
-// `Identity` is a functor that holds a single value, where `map` simply
-// transforms the held value with the provided function.
-
-
-var Identity = function (x) {
-  return { value: x, map: function (f) {
-      return Identity(f(x));
-    } };
+var _isArray = Array.isArray || function _isArray(val) {
+  return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
 };
-
-/**
- * Returns the result of "setting" the portion of the given data structure
- * focused by the given lens to the result of applying the given function to
- * the focused value.
- *
- * @func
- * @memberOf R
- * @since v0.16.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Lens s a -> (a -> a) -> s -> s
- * @param {Lens} lens
- * @param {*} v
- * @param {*} x
- * @return {*}
- * @see R.prop, R.lensIndex, R.lensProp
- * @example
- *
- *      var headLens = R.lensIndex(0);
- *
- *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
- */
-var over = /*#__PURE__*/_curry3_1(function over(lens, f, x) {
-  // The value returned by the getter function is first transformed with `f`,
-  // then set as the value of an `Identity`. This is then mapped over with the
-  // setter function of the lens.
-  return lens(function (y) {
-    return Identity(f(y));
-  })(x).value;
-});
-var over_1 = over;
-
-/**
- * Returns a function that always returns the given value. Note that for
- * non-primitives the value returned is a reference to the original value.
- *
- * This function is known as `const`, `constant`, or `K` (for K combinator) in
- * other languages and libraries.
- *
- * @func
- * @memberOf R
- * @since v0.1.0
- * @category Function
- * @sig a -> (* -> a)
- * @param {*} val The value to wrap in a function
- * @return {Function} A Function :: * -> val.
- * @example
- *
- *      var t = R.always('Tee');
- *      t(); //=> 'Tee'
- */
-
-
-var always = /*#__PURE__*/_curry1_1(function always(val) {
-  return function () {
-    return val;
-  };
-});
-var always_1 = always;
-
-/**
- * Returns the result of "setting" the portion of the given data structure
- * focused by the given lens to the given value.
- *
- * @func
- * @memberOf R
- * @since v0.16.0
- * @category Object
- * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
- * @sig Lens s a -> a -> s -> s
- * @param {Lens} lens
- * @param {*} v
- * @param {*} x
- * @return {*}
- * @see R.prop, R.lensIndex, R.lensProp
- * @example
- *
- *      var xLens = R.lensProp('x');
- *
- *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
- *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
- */
-
-
-var set$1 = /*#__PURE__*/_curry3_1(function set(lens, v, x) {
-  return over_1(lens, always_1(v), x);
-});
-var set_1 = set$1;
-
-function _arity(n, fn) {
-  /* eslint-disable no-unused-vars */
-  switch (n) {
-    case 0:
-      return function () {
-        return fn.apply(this, arguments);
-      };
-    case 1:
-      return function (a0) {
-        return fn.apply(this, arguments);
-      };
-    case 2:
-      return function (a0, a1) {
-        return fn.apply(this, arguments);
-      };
-    case 3:
-      return function (a0, a1, a2) {
-        return fn.apply(this, arguments);
-      };
-    case 4:
-      return function (a0, a1, a2, a3) {
-        return fn.apply(this, arguments);
-      };
-    case 5:
-      return function (a0, a1, a2, a3, a4) {
-        return fn.apply(this, arguments);
-      };
-    case 6:
-      return function (a0, a1, a2, a3, a4, a5) {
-        return fn.apply(this, arguments);
-      };
-    case 7:
-      return function (a0, a1, a2, a3, a4, a5, a6) {
-        return fn.apply(this, arguments);
-      };
-    case 8:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7) {
-        return fn.apply(this, arguments);
-      };
-    case 9:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8) {
-        return fn.apply(this, arguments);
-      };
-    case 10:
-      return function (a0, a1, a2, a3, a4, a5, a6, a7, a8, a9) {
-        return fn.apply(this, arguments);
-      };
-    default:
-      throw new Error('First argument to _arity must be a non-negative integer no greater than ten');
-  }
-}
-var _arity_1 = _arity;
-
-function _pipe(f, g) {
-  return function () {
-    return g.call(this, f.apply(this, arguments));
-  };
-}
-var _pipe_1 = _pipe;
 
 function _isString(x) {
   return Object.prototype.toString.call(x) === '[object String]';
@@ -1687,6 +1538,61 @@ var reduce = /*#__PURE__*/_curry3_1(_reduce_1);
 var reduce_1 = reduce;
 
 /**
+ * This checks whether a function has a [methodname] function. If it isn't an
+ * array it will execute that function otherwise it will default to the ramda
+ * implementation.
+ *
+ * @private
+ * @param {Function} fn ramda implemtation
+ * @param {String} methodname property to check for a custom implementation
+ * @return {Object} Whatever the return value of the method is.
+ */
+
+
+function _checkForMethod(methodname, fn) {
+  return function () {
+    var length = arguments.length;
+    if (length === 0) {
+      return fn();
+    }
+    var obj = arguments[length - 1];
+    return _isArray(obj) || typeof obj[methodname] !== 'function' ? fn.apply(this, arguments) : obj[methodname].apply(obj, Array.prototype.slice.call(arguments, 0, length - 1));
+  };
+}
+var _checkForMethod_1 = _checkForMethod;
+
+/**
+ * Returns the elements of the given list or string (or object with a `slice`
+ * method) from `fromIndex` (inclusive) to `toIndex` (exclusive).
+ *
+ * Dispatches to the `slice` method of the third argument, if present.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.4
+ * @category List
+ * @sig Number -> Number -> [a] -> [a]
+ * @sig Number -> Number -> String -> String
+ * @param {Number} fromIndex The start index (inclusive).
+ * @param {Number} toIndex The end index (exclusive).
+ * @param {*} list
+ * @return {*}
+ * @example
+ *
+ *      R.slice(1, 3, ['a', 'b', 'c', 'd']);        //=> ['b', 'c']
+ *      R.slice(1, Infinity, ['a', 'b', 'c', 'd']); //=> ['b', 'c', 'd']
+ *      R.slice(0, -1, ['a', 'b', 'c', 'd']);       //=> ['a', 'b', 'c']
+ *      R.slice(-3, -1, ['a', 'b', 'c', 'd']);      //=> ['b', 'c']
+ *      R.slice(0, 3, 'ramda');                     //=> 'ram'
+ */
+
+
+var slice = /*#__PURE__*/_curry3_1( /*#__PURE__*/_checkForMethod_1('slice', function slice(fromIndex, toIndex, list) {
+  return Array.prototype.slice.call(list, fromIndex, toIndex);
+}));
+var slice_1 = slice;
+
+/**
  * Returns all but the first element of the given list or string (or object
  * with a `tail` method).
  *
@@ -1750,6 +1656,105 @@ function pipe() {
   return _arity_1(arguments[0].length, reduce_1(_pipe_1, arguments[0], tail_1(arguments)));
 }
 var pipe_1 = pipe;
+
+// `Identity` is a functor that holds a single value, where `map` simply
+// transforms the held value with the provided function.
+
+
+var Identity = function (x) {
+  return { value: x, map: function (f) {
+      return Identity(f(x));
+    } };
+};
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the result of applying the given function to
+ * the focused value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> (a -> a) -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var headLens = R.lensIndex(0);
+ *
+ *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
+ */
+var over = /*#__PURE__*/_curry3_1(function over(lens, f, x) {
+  // The value returned by the getter function is first transformed with `f`,
+  // then set as the value of an `Identity`. This is then mapped over with the
+  // setter function of the lens.
+  return lens(function (y) {
+    return Identity(f(y));
+  })(x).value;
+});
+var over_1 = over;
+
+/**
+ * Returns a function that always returns the given value. Note that for
+ * non-primitives the value returned is a reference to the original value.
+ *
+ * This function is known as `const`, `constant`, or `K` (for K combinator) in
+ * other languages and libraries.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.1.0
+ * @category Function
+ * @sig a -> (* -> a)
+ * @param {*} val The value to wrap in a function
+ * @return {Function} A Function :: * -> val.
+ * @example
+ *
+ *      var t = R.always('Tee');
+ *      t(); //=> 'Tee'
+ */
+
+
+var always = /*#__PURE__*/_curry1_1(function always(val) {
+  return function () {
+    return val;
+  };
+});
+var always_1 = always;
+
+/**
+ * Returns the result of "setting" the portion of the given data structure
+ * focused by the given lens to the given value.
+ *
+ * @func
+ * @memberOf R
+ * @since v0.16.0
+ * @category Object
+ * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
+ * @sig Lens s a -> a -> s -> s
+ * @param {Lens} lens
+ * @param {*} v
+ * @param {*} x
+ * @return {*}
+ * @see R.prop, R.lensIndex, R.lensProp
+ * @example
+ *
+ *      var xLens = R.lensProp('x');
+ *
+ *      R.set(xLens, 4, {x: 1, y: 2});  //=> {x: 4, y: 2}
+ *      R.set(xLens, 8, {x: 1, y: 2});  //=> {x: 8, y: 2}
+ */
+
+
+var set$1 = /*#__PURE__*/_curry3_1(function set(lens, v, x) {
+  return over_1(lens, always_1(v), x);
+});
+var set_1 = set$1;
 
 /**
  * Private `concat` function to merge two array-like objects.
@@ -1912,7 +1917,7 @@ function _dispatchable(methodNames, xf, fn) {
 }
 var _dispatchable_1 = _dispatchable;
 
-function _map(fn, functor) {
+function _map$1(fn, functor) {
   var idx = 0;
   var len = functor.length;
   var result = Array(len);
@@ -1922,7 +1927,7 @@ function _map(fn, functor) {
   }
   return result;
 }
-var _map_1 = _map;
+var _map_1 = _map$1;
 
 var _xfBase = {
   init: function () {
@@ -2801,10 +2806,10 @@ var undo$1 = function undo(state, _) {
   over_1(StateLenses.fieldsStateHistory, slice_1(1, Infinity)))(state);
 };
 
-function _identity(x) {
+function _identity$1(x) {
   return x;
 }
-var _identity_1 = _identity;
+var _identity_1 = _identity$1;
 
 /**
  * A function that does nothing but return the parameter supplied to it. Good
@@ -3106,7 +3111,7 @@ function _uniqContentEquals(aIterator, bIterator, stackA, stackB) {
   var b = _arrayFromIterator_1(bIterator);
 
   function eq(_a, _b) {
-    return _equals(_a, _b, stackA.slice(), stackB.slice());
+    return _equals$1(_a, _b, stackA.slice(), stackB.slice());
   }
 
   // if *a* array contains any element that is not included in *b*
@@ -3115,7 +3120,7 @@ function _uniqContentEquals(aIterator, bIterator, stackA, stackB) {
   }, b, a);
 }
 
-function _equals(a, b, stackA, stackB) {
+function _equals$1(a, b, stackA, stackB) {
   if (identical_1(a, b)) {
     return true;
   }
@@ -3224,14 +3229,14 @@ function _equals(a, b, stackA, stackB) {
   idx = keysA.length - 1;
   while (idx >= 0) {
     var key = keysA[idx];
-    if (!(_has_1(key, b) && _equals(b[key], a[key], extendedStackA, extendedStackB))) {
+    if (!(_has_1(key, b) && _equals$1(b[key], a[key], extendedStackA, extendedStackB))) {
       return false;
     }
     idx -= 1;
   }
   return true;
 }
-var _equals_1 = _equals;
+var _equals_1 = _equals$1;
 
 /**
  * Returns `true` if its arguments are equivalent, `false` otherwise. Handles
@@ -4266,7 +4271,7 @@ var toggleRequired$2 = (function (state, _ref) {
   return lib$2.fromNullable(fieldState).map(toggleRequired$1).map(replaceFieldState$1(state)).map(pushHistoryState(state)).getOrElse(state);
 });
 
-function _filter(fn, list) {
+function _filter$1(fn, list) {
   var idx = 0;
   var len = list.length;
   var result = [];
@@ -4279,7 +4284,7 @@ function _filter(fn, list) {
   }
   return result;
 }
-var _filter_1 = _filter;
+var _filter_1 = _filter$1;
 
 function _isObject(x) {
   return Object.prototype.toString.call(x) === '[object Object]';
