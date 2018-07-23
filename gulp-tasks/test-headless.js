@@ -3,7 +3,7 @@ const organiser = require('gulp-organiser');
 const jasmine = require('gulp-jasmine');
 const jasmineReporters = require('jasmine-reporters');
 
-module.exports = organiser.register((task) => {
+module.exports = organiser.register(task => {
   gulp.task(task.name, () => {
     console.log(task.src);
     gulp.src(task.src)

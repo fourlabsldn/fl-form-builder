@@ -20,7 +20,7 @@ const typeInfo = {
   // Component specific fields
   title: 'My image component',
   options: [
-    'http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png',
+    'http://via.placeholder.com/350?text=You+rock!',
   ],
 
   newImageText: '',

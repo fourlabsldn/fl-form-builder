@@ -7,7 +7,7 @@ const autoprefixer = require('autoprefixer');
 const sourcemaps = require('gulp-sourcemaps');
 const organiser = require('gulp-organiser');
 
-module.exports = organiser.register((task) => {
+module.exports = organiser.register(task => {
   gulp.task(task.name, () => {
     gulp.src(task.src)
     .pipe(sourcemaps.init())
